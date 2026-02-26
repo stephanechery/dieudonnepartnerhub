@@ -1,0 +1,130 @@
+<svg width="1664" height="1024" viewBox="0 0 1664 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgRoom" x1="0" y1="0" x2="1664" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#32494B"/>
+      <stop offset="0.45" stop-color="#46575A"/>
+      <stop offset="0.8" stop-color="#6A5A4B"/>
+      <stop offset="1" stop-color="#7F664F"/>
+    </linearGradient>
+    <linearGradient id="table" x1="0" y1="856" x2="1664" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#80614C"/>
+      <stop offset="1" stop-color="#A07858"/>
+    </linearGradient>
+    <linearGradient id="tabletBody" x1="174" y1="86" x2="1488" y2="942" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A0F1A"/>
+      <stop offset="1" stop-color="#070B14"/>
+    </linearGradient>
+    <linearGradient id="screenBg" x1="256" y1="168" x2="1408" y2="856" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1A54"/>
+      <stop offset="1" stop-color="#0A2B77"/>
+    </linearGradient>
+    <radialGradient id="screenGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(836 540) rotate(90) scale(360 520)">
+      <stop stop-color="#4FC3FF" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#4FC3FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="arcMain" x1="416" y1="548" x2="1190" y2="264" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#68D7FF"/>
+      <stop offset="1" stop-color="#FFE6C0"/>
+    </linearGradient>
+    <linearGradient id="arcTrend" x1="464" y1="566" x2="1230" y2="284" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#BE8CFF"/>
+      <stop offset="1" stop-color="#86F4DB"/>
+    </linearGradient>
+    <linearGradient id="arcRight" x1="1104" y1="450" x2="1190" y2="626" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFC1DE"/>
+      <stop offset="1" stop-color="#F472B6"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#28457D"/>
+      <stop offset="1" stop-color="#1A315F"/>
+    </linearGradient>
+    <filter id="softBlur" x="0" y="0" width="1664" height="1024" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feBlend in="SourceGraphic" in2="blur" mode="screen"/>
+    </filter>
+  </defs>
+
+  <rect width="1664" height="1024" fill="url(#bgRoom)"/>
+  <rect y="860" width="1664" height="164" fill="url(#table)"/>
+
+  <rect x="168" y="80" width="1328" height="860" rx="62" fill="url(#tabletBody)"/>
+  <rect x="180" y="92" width="1304" height="836" rx="54" stroke="#2C3241" stroke-width="2"/>
+  <rect x="260" y="172" width="1144" height="692" rx="28" fill="url(#screenBg)"/>
+  <rect x="260" y="172" width="1144" height="692" rx="28" fill="url(#screenGlow)"/>
+
+  <g opacity="0.35" stroke="#4DA3FF" stroke-width="2">
+    <path d="M300 706L390 538L514 704L650 512L794 686L942 530L1080 684L1240 520L1360 646"/>
+    <path d="M320 438L420 572L542 430L690 602L842 456L1000 618L1180 470L1328 620"/>
+  </g>
+
+  <path d="M420 600C500 470 596 366 726 312C856 258 1020 276 1176 386" stroke="url(#arcMain)" stroke-width="13" stroke-linecap="round"/>
+  <path d="M452 644C522 566 590 516 688 520C786 524 854 606 944 604C1034 602 1090 516 1160 348" stroke="url(#arcTrend)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M1120 478C1142 510 1166 550 1172 600" stroke="url(#arcRight)" stroke-width="11" stroke-linecap="round"/>
+
+  <g filter="url(#softBlur)">
+    <circle cx="592" cy="562" r="12" fill="#D8B4FE"/>
+    <circle cx="910" cy="396" r="12" fill="#A7F3D0"/>
+    <circle cx="1024" cy="488" r="12" fill="#BAE6FD"/>
+  </g>
+  <line x1="592" y1="574" x2="592" y2="694" stroke="#9FB6E0" stroke-opacity="0.42" stroke-width="4"/>
+  <line x1="910" y1="408" x2="910" y2="692" stroke="#9FB6E0" stroke-opacity="0.42" stroke-width="4"/>
+  <line x1="1024" y1="500" x2="1024" y2="692" stroke="#9FB6E0" stroke-opacity="0.42" stroke-width="4"/>
+
+  <!-- father -->
+  <g>
+    <circle cx="746" cy="538" r="72" fill="#3A201D"/>
+    <path d="M684 656C684 607.399 723.399 568 772 568H800C848.601 568 888 607.399 888 656V790H684V656Z" fill="#DCEBFA"/>
+    <path d="M696 526C696 485.131 729.131 452 770 452H780C820.869 452 854 485.131 854 526V560H696V526Z" fill="#2A1815"/>
+    <path d="M706 566H850V612C850 650.66 818.66 682 780 682H776C737.34 682 706 650.66 706 612V566Z" fill="#AA6A4F"/>
+    <path d="M744 596C756 608 770 610 786 596" stroke="#6F3C2D" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- mother -->
+  <g>
+    <circle cx="932" cy="550" r="78" fill="#432633"/>
+    <path d="M858 674C858 620.981 900.981 578 954 578H1010C1063.02 578 1106 620.981 1106 674V810H858V674Z" fill="#F5B6A8"/>
+    <path d="M852 548C852 501.056 890.056 463 937 463H956C1002.94 463 1041 501.056 1041 548V586H852V548Z" fill="#2A1825"/>
+    <path d="M872 590H1032V636C1032 680.183 996.183 716 952 716C907.817 716 872 680.183 872 636V590Z" fill="#C78367"/>
+    <path d="M918 622C934 636 950 636 966 622" stroke="#7F4E40" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- tablet held -->
+  <g filter="url(#softBlur)">
+    <rect x="744" y="666" width="254" height="146" rx="20" fill="#CCD7EA"/>
+    <rect x="754" y="676" width="234" height="126" rx="15" fill="#8FA0C1"/>
+    <circle cx="868" cy="744" r="13" fill="#717E9F"/>
+    <circle cx="968" cy="692" r="4" fill="#717E9F"/>
+  </g>
+
+  <!-- chips left -->
+  <g>
+    <rect x="382" y="598" width="280" height="112" rx="20" fill="url(#chip)" stroke="#3F63A3"/>
+    <rect x="414" y="632" width="34" height="34" rx="8" fill="#163B74" stroke="#63E1FF"/>
+    <text x="474" y="651" fill="#F0F5FF" font-family="Inter,Arial,sans-serif" font-size="46" font-weight="700">Prenatal</text>
+    <text x="474" y="693" fill="#C6D5F1" font-family="Inter,Arial,sans-serif" font-size="44" font-weight="600">Care</text>
+  </g>
+
+  <g>
+    <rect x="382" y="730" width="280" height="112" rx="20" fill="url(#chip)" stroke="#3F63A3"/>
+    <rect x="414" y="764" width="34" height="34" rx="8" fill="#33246A" stroke="#C09AFF"/>
+    <text x="474" y="783" fill="#F0F5FF" font-family="Inter,Arial,sans-serif" font-size="46" font-weight="700">Labor</text>
+    <text x="474" y="825" fill="#C6D5F1" font-family="Inter,Arial,sans-serif" font-size="44" font-weight="600">Support</text>
+  </g>
+
+  <!-- chips right -->
+  <g>
+    <rect x="1002" y="598" width="292" height="112" rx="20" fill="url(#chip)" stroke="#3F63A3"/>
+    <rect x="1036" y="632" width="34" height="34" rx="8" fill="#352469" stroke="#F9A8D4"/>
+    <text x="1100" y="651" fill="#F0F5FF" font-family="Inter,Arial,sans-serif" font-size="46" font-weight="700">Fetal</text>
+    <text x="1100" y="693" fill="#C6D5F1" font-family="Inter,Arial,sans-serif" font-size="44" font-weight="600">Support</text>
+  </g>
+
+  <g>
+    <rect x="1002" y="730" width="292" height="112" rx="20" fill="url(#chip)" stroke="#3F63A3"/>
+    <rect x="1036" y="764" width="34" height="34" rx="8" fill="#1B3947" stroke="#A7F3D0"/>
+    <text x="1100" y="783" fill="#F0F5FF" font-family="Inter,Arial,sans-serif" font-size="46" font-weight="700">Postpartum</text>
+    <text x="1100" y="825" fill="#C6D5F1" font-family="Inter,Arial,sans-serif" font-size="44" font-weight="600">Recovery</text>
+  </g>
+
+  <rect x="744" y="852" width="176" height="8" rx="4" fill="#DCE9FF" fill-opacity="0.88"/>
+</svg>

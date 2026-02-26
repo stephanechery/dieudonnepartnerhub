@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
+  <title id="title">Dieudonne Logo</title>
+  <desc id="desc">Dieudonne empowering health and wellness</desc>
+  <defs>
+    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="50%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+    <pattern id="linePattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M0 24L24 0" stroke="url(#brandGradient)" stroke-width="2" opacity="0.2"/>
+      <path d="M-8 16L8 0" stroke="url(#brandGradient)" stroke-width="2" opacity="0.15"/>
+      <path d="M16 24L32 8" stroke="url(#brandGradient)" stroke-width="2" opacity="0.15"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="320" fill="none"/>
+
+  <text
+    x="80"
+    y="175"
+    font-family="Manrope, Avenir, Helvetica, Arial, sans-serif"
+    font-size="150"
+    font-weight="900"
+    letter-spacing="4"
+    fill="url(#linePattern)"
+    stroke="url(#brandGradient)"
+    stroke-width="4"
+  >DIEUDONNE</text>
+
+  <text
+    x="140"
+    y="255"
+    font-family="Manrope, Avenir, Helvetica, Arial, sans-serif"
+    font-size="52"
+    font-style="italic"
+    letter-spacing="5"
+    fill="#6366f1"
+  >EMPOWERING HEALTH AND WELLNESS</text>
+</svg>
