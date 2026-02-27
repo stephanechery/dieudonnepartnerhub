@@ -15,6 +15,7 @@ import { ensureUserProfile, saveProfile } from "../services/profileService";
 import {
   getModuleState,
   getNextRecommendedLesson,
+  getOverallQuizAverage,
   getOverallProgress,
   getQuizAverage,
   isLessonUnlocked,
@@ -254,6 +255,7 @@ export const PartnerDashboardProvider = ({ children }) => {
     });
 
     const overallProgress = getOverallProgress(partnerCurriculum.modules, profile);
+    const overallQuizAverage = getOverallQuizAverage(partnerCurriculum.modules, profile);
     const nextLesson = getNextRecommendedLesson(partnerCurriculum.modules, profile);
 
     const currentModule = modules.find((module) => module.unlocked && module.completion < 100) || modules[modules.length - 1];
@@ -271,6 +273,7 @@ export const PartnerDashboardProvider = ({ children }) => {
     return {
       modules,
       overallProgress,
+      overallQuizAverage,
       nextLesson,
       currentModule,
       recentlyCompleted,

@@ -47,6 +47,20 @@ export const getOverallProgress = (modules, profile) => {
   return roundPercent((completedLessons / totalLessons) * 100);
 };
 
+export const getOverallQuizAverage = (modules, profile) => {
+  const scores = modules.flatMap((module) => {
+    const moduleState = getModuleState(profile, module.id);
+    return Object.values(moduleState.quizScores || {});
+  });
+
+  if (!scores.length) {
+    return 0;
+  }
+
+  const total = scores.reduce((sum, score) => sum + Number(score || 0), 0);
+  return roundPercent(total / scores.length);
+};
+
 export const getModuleProgressList = (modules, profile) =>
   modules.map((module) => {
     const state = getModuleState(profile, module.id);

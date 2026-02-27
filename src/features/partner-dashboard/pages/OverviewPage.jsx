@@ -5,12 +5,6 @@ import ProgressBar from "../components/ProgressBar";
 
 export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpenLesson, darkMode = false, translateText = (value) => value }) {
   const tx = (value) => translateText(value);
-  const aggregateQuizAverage = metrics.modules.length
-    ? Math.round(
-        metrics.modules.reduce((sum, module) => sum + module.quizAverage, 0) /
-          metrics.modules.length
-      )
-    : 0;
   return (
     <div className="space-y-6">
       <section
@@ -85,7 +79,7 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
                 {tx("Quiz Avg")}
               </p>
               <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                {aggregateQuizAverage}%
+                {metrics.overallQuizAverage}%
               </p>
             </article>
             <article
