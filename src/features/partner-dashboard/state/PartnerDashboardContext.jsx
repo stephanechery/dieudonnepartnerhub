@@ -167,6 +167,10 @@ export const PartnerDashboardProvider = ({ children }) => {
     const score = roundPercent((correct / total) * 100);
 
     const moduleState = getModuleState(profile, moduleId);
+    const isAlreadyCompleted = moduleState.completedLessons.includes(lessonId);
+    const shouldAutoComplete = !isAlreadyCompleted && score >= 70;
+    const completedAt = new Date().toISOString();
+
     const nextProfile = {
       ...profile,
       modules: {
@@ -181,8 +185,21 @@ export const PartnerDashboardProvider = ({ children }) => {
             ...(moduleState.quizResponses || {}),
             [lessonId]: normalizedResponses,
           },
+          completedLessons: shouldAutoComplete
+            ? [...moduleState.completedLessons, lessonId]
+            : moduleState.completedLessons,
         },
       },
+      recentlyCompleted: shouldAutoComplete
+        ? sortRecent([
+            {
+              moduleId,
+              lessonId,
+              completedAt,
+            },
+            ...(profile.recentlyCompleted || []),
+          ]).slice(0, 8)
+        : profile.recentlyCompleted,
     };
 
     persistProfile(nextProfile);
