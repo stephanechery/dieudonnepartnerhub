@@ -1,6 +1,7 @@
 import { moduleOrder } from "../data/curriculum";
 
 export const roundPercent = (value) => Math.max(0, Math.min(100, Math.round(value)));
+const PASSING_SCORE = 70;
 
 export const getModuleState = (profile, moduleId) =>
   profile?.modules?.[moduleId] || {
@@ -12,9 +13,22 @@ export const getModuleState = (profile, moduleId) =>
 
 export const getModuleCompletion = (module, moduleState) => {
   const totalLessons = module.lessons.length || 1;
-  const completedCount = moduleState.completedLessons.length;
+  const completedCount = getCompletedLessonCount(module, moduleState);
   return roundPercent((completedCount / totalLessons) * 100);
 };
+
+export const isLessonComplete = (moduleState, lessonId) => {
+  if (moduleState.completedLessons.includes(lessonId)) {
+    return true;
+  }
+  const score = Number(moduleState.quizScores?.[lessonId]);
+  return Number.isFinite(score) && score >= PASSING_SCORE;
+};
+
+export const getCompletedLessonCount = (module, moduleState) =>
+  module.lessons.reduce((count, lesson) => {
+    return count + (isLessonComplete(moduleState, lesson.id) ? 1 : 0);
+  }, 0);
 
 export const isModuleUnlocked = (modules, profile, moduleId) => {
   const moduleIndex = modules.findIndex((module) => module.id === moduleId);
@@ -34,14 +48,14 @@ export const isLessonUnlocked = (module, moduleState, lessonId) => {
   }
 
   const previousLessonId = module.lessons[lessonIndex - 1].id;
-  return moduleState.completedLessons.includes(previousLessonId);
+  return isLessonComplete(moduleState, previousLessonId);
 };
 
 export const getOverallProgress = (modules, profile) => {
   const totalLessons = modules.reduce((sum, module) => sum + module.lessons.length, 0) || 1;
   const completedLessons = modules.reduce((sum, module) => {
     const moduleState = getModuleState(profile, module.id);
-    return sum + moduleState.completedLessons.length;
+    return sum + getCompletedLessonCount(module, moduleState);
   }, 0);
 
   return roundPercent((completedLessons / totalLessons) * 100);
@@ -64,13 +78,14 @@ export const getOverallQuizAverage = (modules, profile) => {
 export const getModuleProgressList = (modules, profile) =>
   modules.map((module) => {
     const state = getModuleState(profile, module.id);
+    const completedLessons = getCompletedLessonCount(module, state);
     return {
       id: module.id,
       title: module.title,
       unlocked: isModuleUnlocked(modules, profile, module.id),
       completion: getModuleCompletion(module, state),
       quizAverage: getQuizAverage(state.quizScores),
-      completedLessons: state.completedLessons.length,
+      completedLessons,
       totalLessons: module.lessons.length,
     };
   });
@@ -93,7 +108,7 @@ export const getNextRecommendedLesson = (modules, profile) => {
 
     const moduleState = getModuleState(profile, module.id);
     for (const lesson of module.lessons) {
-      if (!moduleState.completedLessons.includes(lesson.id)) {
+      if (!isLessonComplete(moduleState, lesson.id)) {
         return {
           moduleId: module.id,
           moduleTitle: module.title,

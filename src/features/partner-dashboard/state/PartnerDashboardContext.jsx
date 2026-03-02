@@ -14,6 +14,7 @@ import {
 import { ensureUserProfile, saveProfile } from "../services/profileService";
 import {
   getModuleState,
+  getCompletedLessonCount,
   getNextRecommendedLesson,
   getOverallQuizAverage,
   getOverallProgress,
@@ -258,7 +259,8 @@ export const PartnerDashboardProvider = ({ children }) => {
 
     const modules = partnerCurriculum.modules.map((module) => {
       const moduleState = getModuleState(profile, module.id);
-      const completion = roundPercent((moduleState.completedLessons.length / module.lessons.length) * 100);
+      const completedLessons = getCompletedLessonCount(module, moduleState);
+      const completion = roundPercent((completedLessons / module.lessons.length) * 100);
       return {
         id: module.id,
         title: module.title,
@@ -266,7 +268,7 @@ export const PartnerDashboardProvider = ({ children }) => {
         completion,
         unlocked: isModuleUnlocked(partnerCurriculum.modules, profile, module.id),
         quizAverage: getQuizAverage(moduleState.quizScores),
-        completedLessons: moduleState.completedLessons.length,
+        completedLessons,
         totalLessons: module.lessons.length,
       };
     });
