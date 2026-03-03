@@ -4167,7 +4167,7 @@ ${cleanedResult}`,
       </header>
 
       <section
-        className={`mx-auto mb-8 max-w-7xl overflow-hidden rounded-[2.25rem] border p-7 md:min-h-[74vh] md:p-12 ${
+        className={`hero-premium-section mx-auto mb-8 max-w-7xl overflow-hidden rounded-[2.25rem] border p-7 md:min-h-[78vh] md:p-12 ${
           darkMode ? 'border-slate-800 bg-slate-900' : 'border-slate-200 bg-white'
         }`}
       >
@@ -4183,10 +4183,10 @@ ${cleanedResult}`,
             }`}
           />
 
-          <div className="relative z-10 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-12">
-            <div className="space-y-7">
+          <div className="relative z-10 grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-12">
+            <div className="space-y-8">
               <div
-                className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] ${
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-[0.24em] ${
                   darkMode
                     ? 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
                     : 'border-cyan-300/70 bg-cyan-50 text-cyan-700'
@@ -4196,8 +4196,8 @@ ${cleanedResult}`,
                 {translateText('Mission-Driven Partner Training Platform')}
               </div>
 
-              <div className="space-y-3">
-                <h1 className={`text-4xl font-black leading-tight sm:text-5xl md:text-6xl ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              <div className="space-y-4">
+                <h1 className={`text-4xl font-black leading-[1.04] sm:text-5xl md:text-6xl ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                   {translateText('Built for partners. Designed for safer maternal outcomes.')}
                 </h1>
                 <p className={`max-w-2xl text-base leading-relaxed md:text-xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
@@ -4207,28 +4207,33 @@ ${cleanedResult}`,
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={handleHeroEnterPlatform}
-                  className={`inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-lg transition-all hover:scale-[1.01] active:scale-95 md:text-base ${
-                    darkMode ? 'bg-rose-600 shadow-rose-900/30 hover:bg-rose-500' : 'bg-rose-600 shadow-rose-200 hover:bg-rose-700'
-                  }`}
-                >
-                  <ClipboardList className="h-4 w-4" />
-                  {translateText('Enter Partner Platform')}
-                </button>
-
-                <button
-                  onClick={handleHeroExploreGuide}
-                  className={`inline-flex items-center gap-2 rounded-2xl border px-5 py-3 text-sm font-bold transition-colors md:text-base ${
-                    darkMode
-                      ? 'border-slate-700 bg-slate-800 text-slate-100 hover:border-slate-600'
-                      : 'border-slate-300 bg-slate-100 text-slate-800 hover:bg-slate-200'
-                  }`}
-                >
-                  <BookOpen className="h-4 w-4" />
-                  {translateText('Explore Main Guide')}
-                </button>
+              <div className="space-y-3">
+                {[
+                  {
+                    label: 'Clinically grounded playbooks',
+                    detail: 'Evidence-informed training content, warning-sign thresholds, and partner action checklists that convert uncertainty into confident support.'
+                  },
+                  {
+                    label: 'Interactive learning system',
+                    detail: 'Flip-card training, stage-based physiology guides, and dashboard progression reinforce what to do, when to do it, and why it matters.'
+                  },
+                  {
+                    label: 'Real-time partner support',
+                    detail: 'Use intelligent clarifier, labor coach, and recovery nutrition tools to get practical language and action plans in the moment.'
+                  }
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className={`rounded-2xl border px-4 py-3 ${darkMode ? 'border-slate-700/60 bg-slate-950/40' : 'border-slate-200 bg-slate-50/80'}`}
+                  >
+                    <p className={`text-sm font-black uppercase tracking-[0.14em] ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>
+                      {translateText(item.label)}
+                    </p>
+                    <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                      {translateText(item.detail)}
+                    </p>
+                  </div>
+                ))}
               </div>
 
               <p className={`text-sm font-medium ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
@@ -4236,12 +4241,12 @@ ${cleanedResult}`,
               </p>
             </div>
 
-            <div className="space-y-4">
-              <div className={`overflow-hidden rounded-3xl border ${darkMode ? 'border-slate-700 bg-slate-950/70' : 'border-slate-200 bg-slate-100'}`}>
+            <div className="relative">
+              <div className={`hero-media-card overflow-hidden rounded-[2rem] border ${darkMode ? 'border-slate-700 bg-slate-950/70' : 'border-slate-200 bg-slate-100'}`}>
                 <img
                   src={heroImageSrc}
                   alt={translateText('Partner support journey illustration')}
-                  className="block h-full w-full object-cover"
+                  className="block h-[640px] w-full object-cover"
                   loading="eager"
                   onError={() => {
                     if (heroImageSrc !== heroPartnerJourney) {
@@ -4249,20 +4254,65 @@ ${cleanedResult}`,
                     }
                   }}
                 />
+                <div className={`pointer-events-none absolute inset-0 ${darkMode ? 'bg-gradient-to-t from-slate-950/60 via-transparent to-transparent' : 'bg-gradient-to-t from-slate-100/60 via-transparent to-transparent'}`} />
               </div>
 
-              <div className={`rounded-3xl border p-5 md:p-6 ${darkMode ? 'border-slate-700 bg-slate-950/60' : 'border-slate-200 bg-slate-50/80'}`}>
-                <h3 className={`mb-4 text-lg font-black ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>{translateText('Why this platform works')}</h3>
-                <div className="space-y-3">
-                  <div className={`rounded-xl border p-3 ${darkMode ? 'border-emerald-700/30 bg-emerald-900/10' : 'border-emerald-200 bg-emerald-50'}`}>
-                    <p className={`text-sm font-black ${darkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>{translateText('Clinically grounded playbooks')}</p>
+              <div className={`hero-access-panel mt-5 rounded-3xl border p-5 md:p-6 ${darkMode ? 'border-slate-600/80 bg-slate-900/70 text-slate-100' : 'border-white/70 bg-white/75 text-slate-900'}`}>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <p className={`text-[10px] font-black uppercase tracking-[0.22em] ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`}>
+                      {translateText('Enter Partner Platform')}
+                    </p>
+                    <label className={`hero-focus-field ${darkMode ? 'border-slate-600/80 bg-slate-900/50' : 'border-slate-200 bg-white/80'}`}>
+                      <ClipboardList className={`h-4 w-4 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`} />
+                      <input
+                        type="email"
+                        className={`hero-focus-input-field ${darkMode ? 'text-slate-100 placeholder:text-slate-500' : 'text-slate-900 placeholder:text-slate-400'}`}
+                        placeholder={translateText('Email')}
+                        autoComplete="email"
+                      />
+                      <span className="hero-focus-underline" />
+                    </label>
                   </div>
-                  <div className={`rounded-xl border p-3 ${darkMode ? 'border-cyan-700/30 bg-cyan-900/10' : 'border-cyan-200 bg-cyan-50'}`}>
-                    <p className={`text-sm font-black ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`}>{translateText('Interactive learning system')}</p>
+
+                  <div className="space-y-2">
+                    <p className={`text-[10px] font-black uppercase tracking-[0.22em] ${darkMode ? 'text-indigo-300' : 'text-indigo-700'}`}>
+                      {translateText('Explore Main Guide')}
+                    </p>
+                    <label className={`hero-focus-field ${darkMode ? 'border-slate-600/80 bg-slate-900/50' : 'border-slate-200 bg-white/80'}`}>
+                      <Search className={`h-4 w-4 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`} />
+                      <input
+                        type="text"
+                        className={`hero-focus-input-field ${darkMode ? 'text-slate-100 placeholder:text-slate-500' : 'text-slate-900 placeholder:text-slate-400'}`}
+                        placeholder={translateText('Explore Main Guide')}
+                      />
+                      <span className="hero-focus-underline" />
+                    </label>
                   </div>
-                  <div className={`rounded-xl border p-3 ${darkMode ? 'border-indigo-700/30 bg-indigo-900/10' : 'border-indigo-200 bg-indigo-50'}`}>
-                    <p className={`text-sm font-black ${darkMode ? 'text-indigo-300' : 'text-indigo-700'}`}>{translateText('Real-time partner support')}</p>
-                  </div>
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button
+                    onClick={handleHeroEnterPlatform}
+                    className={`hero-cta-button hero-cta-primary inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-lg transition-all active:scale-95 md:text-base ${
+                      darkMode ? 'bg-rose-600 shadow-rose-900/30 hover:bg-rose-500' : 'bg-rose-600 shadow-rose-200 hover:bg-rose-700'
+                    }`}
+                  >
+                    <ClipboardList className="h-4 w-4" />
+                    {translateText('Enter Partner Platform')}
+                  </button>
+
+                  <button
+                    onClick={handleHeroExploreGuide}
+                    className={`hero-cta-button inline-flex items-center gap-2 rounded-2xl border px-5 py-3 text-sm font-bold transition-colors md:text-base ${
+                      darkMode
+                        ? 'border-slate-700 bg-slate-800/80 text-slate-100 hover:border-slate-500'
+                        : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
+                    }`}
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    {translateText('Explore Main Guide')}
+                  </button>
                 </div>
               </div>
             </div>
