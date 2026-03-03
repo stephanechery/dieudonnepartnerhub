@@ -95,6 +95,11 @@ body {
 
 .hero-media-card {
   position: relative;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(34, 211, 238, 0.14) 0%, transparent 42%),
+    radial-gradient(circle at 84% 15%, rgba(244, 63, 94, 0.18) 0%, transparent 38%),
+    radial-gradient(circle at 50% 75%, rgba(99, 102, 241, 0.14) 0%, transparent 46%),
+    #020617;
   box-shadow: 0 30px 80px rgba(2, 6, 23, 0.3);
 }
 
@@ -148,6 +153,56 @@ body {
   transform: scaleX(1);
 }
 
+.hero-media-image {
+  height: 700px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.hero-glow-box {
+  position: relative;
+  border-radius: 1rem;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.hero-glow-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from 0deg, rgba(34, 211, 238, 0.95), rgba(99, 102, 241, 0.85), rgba(244, 63, 94, 0.85), rgba(34, 211, 238, 0.95));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: hero-glow-spin 5.5s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.hero-glow-box--guide::before {
+  background: conic-gradient(from 0deg, rgba(129, 140, 248, 0.92), rgba(56, 189, 248, 0.9), rgba(168, 85, 247, 0.88), rgba(129, 140, 248, 0.92));
+}
+
+.hero-glow-box::after {
+  content: "";
+  position: absolute;
+  inset: -22%;
+  background: radial-gradient(circle at 25% 30%, rgba(34, 211, 238, 0.18) 0%, transparent 45%);
+  animation: hero-glow-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero-glow-box--guide::after {
+  background: radial-gradient(circle at 72% 28%, rgba(129, 140, 248, 0.2) 0%, transparent 48%);
+}
+
+.hero-glow-box-inner {
+  position: relative;
+  z-index: 1;
+}
+
 .hero-cta-button {
   transition: transform 160ms ease, box-shadow 220ms ease, background-color 220ms ease, border-color 220ms ease;
 }
@@ -161,13 +216,30 @@ body {
 }
 
 @media (max-width: 1024px) {
-  .hero-media-card img {
-    height: 520px;
+  .hero-media-image {
+    height: 560px;
   }
 }
 
 @media (max-width: 640px) {
-  .hero-media-card img {
-    height: 420px;
+  .hero-media-image {
+    height: 480px;
+  }
+}
+
+@keyframes hero-glow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hero-glow-pulse {
+  0%, 100% {
+    opacity: 0.45;
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    opacity: 0.82;
+    transform: translateX(4%) translateY(-2%);
   }
 }

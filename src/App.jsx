@@ -4246,7 +4246,7 @@ ${cleanedResult}`,
                 <img
                   src={heroImageSrc}
                   alt={translateText('Partner support journey illustration')}
-                  className="block h-[640px] w-full object-cover"
+                  className="hero-media-image block w-full"
                   loading="eager"
                   onError={() => {
                     if (heroImageSrc !== heroPartnerJourney) {
@@ -4257,65 +4257,46 @@ ${cleanedResult}`,
                 <div className={`pointer-events-none absolute inset-0 ${darkMode ? 'bg-gradient-to-t from-slate-950/60 via-transparent to-transparent' : 'bg-gradient-to-t from-slate-100/60 via-transparent to-transparent'}`} />
               </div>
 
-              <div className={`hero-access-panel mt-5 rounded-3xl border p-5 md:p-6 ${darkMode ? 'border-slate-600/80 bg-slate-900/70 text-slate-100' : 'border-white/70 bg-white/75 text-slate-900'}`}>
+              <div className={`hero-access-panel mt-5 rounded-3xl border p-4 md:p-5 ${darkMode ? 'border-slate-600/80 bg-slate-900/70 text-slate-100' : 'border-white/70 bg-white/75 text-slate-900'}`}>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <p className={`text-[10px] font-black uppercase tracking-[0.22em] ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`}>
-                      {translateText('Enter Partner Platform')}
-                    </p>
-                    <label className={`hero-focus-field ${darkMode ? 'border-slate-600/80 bg-slate-900/50' : 'border-slate-200 bg-white/80'}`}>
-                      <ClipboardList className={`h-4 w-4 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`} />
-                      <input
-                        type="email"
-                        className={`hero-focus-input-field ${darkMode ? 'text-slate-100 placeholder:text-slate-500' : 'text-slate-900 placeholder:text-slate-400'}`}
-                        placeholder={translateText('Email')}
-                        autoComplete="email"
-                      />
-                      <span className="hero-focus-underline" />
-                    </label>
+                  <div className="hero-glow-box">
+                    <div className={`hero-glow-box-inner rounded-2xl border p-3 ${darkMode ? 'border-slate-600/80 bg-slate-900/70' : 'border-slate-200 bg-white/90'}`}>
+                      <p className={`mb-3 text-[10px] font-black uppercase tracking-[0.24em] ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`}>
+                        {translateText('Enter Partner Platform')}
+                      </p>
+                      <button
+                        onClick={handleHeroEnterPlatform}
+                        className={`hero-cta-button hero-cta-primary inline-flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-lg transition-all active:scale-95 md:text-base ${
+                          darkMode ? 'bg-rose-600 shadow-rose-900/30 hover:bg-rose-500' : 'bg-rose-600 shadow-rose-200 hover:bg-rose-700'
+                        }`}
+                      >
+                        <ClipboardList className="h-4 w-4" />
+                        {translateText('Enter Partner Platform')}
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <p className={`text-[10px] font-black uppercase tracking-[0.22em] ${darkMode ? 'text-indigo-300' : 'text-indigo-700'}`}>
-                      {translateText('Explore Main Guide')}
-                    </p>
-                    <label className={`hero-focus-field ${darkMode ? 'border-slate-600/80 bg-slate-900/50' : 'border-slate-200 bg-white/80'}`}>
-                      <Search className={`h-4 w-4 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`} />
-                      <input
-                        type="text"
-                        className={`hero-focus-input-field ${darkMode ? 'text-slate-100 placeholder:text-slate-500' : 'text-slate-900 placeholder:text-slate-400'}`}
-                        placeholder={translateText('Explore Main Guide')}
-                      />
-                      <span className="hero-focus-underline" />
-                    </label>
+                  <div className="hero-glow-box hero-glow-box--guide">
+                    <div className={`hero-glow-box-inner rounded-2xl border p-3 ${darkMode ? 'border-slate-600/80 bg-slate-900/70' : 'border-slate-200 bg-white/90'}`}>
+                      <p className={`mb-3 text-[10px] font-black uppercase tracking-[0.24em] ${darkMode ? 'text-indigo-300' : 'text-indigo-700'}`}>
+                        {translateText('Explore Main Guide')}
+                      </p>
+                      <button
+                        onClick={handleHeroExploreGuide}
+                        className={`hero-cta-button inline-flex w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3 text-sm font-bold transition-colors md:text-base ${
+                          darkMode
+                            ? 'border-slate-700 bg-slate-800/80 text-slate-100 hover:border-slate-500'
+                            : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
+                        }`}
+                      >
+                        <BookOpen className="h-4 w-4" />
+                        {translateText('Explore Main Guide')}
+                      </button>
+                    </div>
                   </div>
                 </div>
-
-                <div className="mt-5 flex flex-wrap gap-3">
-                  <button
-                    onClick={handleHeroEnterPlatform}
-                    className={`hero-cta-button hero-cta-primary inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-lg transition-all active:scale-95 md:text-base ${
-                      darkMode ? 'bg-rose-600 shadow-rose-900/30 hover:bg-rose-500' : 'bg-rose-600 shadow-rose-200 hover:bg-rose-700'
-                    }`}
-                  >
-                    <ClipboardList className="h-4 w-4" />
-                    {translateText('Enter Partner Platform')}
-                  </button>
-
-                  <button
-                    onClick={handleHeroExploreGuide}
-                    className={`hero-cta-button inline-flex items-center gap-2 rounded-2xl border px-5 py-3 text-sm font-bold transition-colors md:text-base ${
-                      darkMode
-                        ? 'border-slate-700 bg-slate-800/80 text-slate-100 hover:border-slate-500'
-                        : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
-                    }`}
-                  >
-                    <BookOpen className="h-4 w-4" />
-                    {translateText('Explore Main Guide')}
-                  </button>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </section>
