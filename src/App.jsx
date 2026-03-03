@@ -4221,17 +4221,23 @@ ${cleanedResult}`,
                     label: 'Real-time partner support',
                     detail: 'Use intelligent clarifier, labor coach, and recovery nutrition tools to get practical language and action plans in the moment.'
                   }
-                ].map((item) => (
+                ].map((item, index) => (
                   <div
                     key={item.label}
-                    className={`rounded-2xl border px-4 py-3 ${darkMode ? 'border-slate-700/60 bg-slate-950/40' : 'border-slate-200 bg-slate-50/80'}`}
+                    className={`hero-feature-glow hero-feature-glow--${(index % 3) + 1}`}
                   >
-                    <p className={`text-sm font-black uppercase tracking-[0.14em] ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>
-                      {translateText(item.label)}
-                    </p>
-                    <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                      {translateText(item.detail)}
-                    </p>
+                    <div
+                      className={`hero-feature-glow-inner rounded-2xl border px-4 py-3 ${
+                        darkMode ? 'border-slate-700/60 bg-slate-950/60' : 'border-slate-200 bg-slate-50/92'
+                      }`}
+                    >
+                      <p className={`text-sm font-black uppercase tracking-[0.14em] ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>
+                        {translateText(item.label)}
+                      </p>
+                      <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                        {translateText(item.detail)}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
