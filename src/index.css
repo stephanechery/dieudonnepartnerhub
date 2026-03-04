@@ -206,28 +206,33 @@ body {
 .hero-feature-glow {
   position: relative;
   border-radius: 1rem;
+  padding: 1px;
   overflow: hidden;
   isolation: isolate;
+  background: conic-gradient(
+    from 0deg,
+    rgba(34, 211, 238, 0.95),
+    rgba(99, 102, 241, 0.9),
+    rgba(244, 63, 94, 0.9),
+    rgba(34, 211, 238, 0.95)
+  );
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.42),
+    0 0 22px rgba(56, 189, 248, 0.28),
+    0 0 42px rgba(99, 102, 241, 0.16);
+  animation: hero-glow-spin 10s linear infinite;
 }
 
 .hero-feature-glow::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -26%;
   border-radius: inherit;
-  padding: 1px;
-  background: conic-gradient(
-    from 0deg,
-    rgba(34, 211, 238, 0.85),
-    rgba(99, 102, 241, 0.78),
-    rgba(244, 63, 94, 0.82),
-    rgba(34, 211, 238, 0.85)
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: hero-glow-spin 9s linear infinite;
-  opacity: 0.45;
+  background: radial-gradient(circle at 22% 30%, rgba(34, 211, 238, 0.3), transparent 58%);
+  filter: blur(18px);
+  opacity: 0.55;
+  z-index: 0;
+  animation: hero-glow-pulse 4.6s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -235,35 +240,62 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(122deg, transparent 18%, rgba(56, 189, 248, 0.1) 36%, transparent 52%),
-    linear-gradient(28deg, transparent 35%, rgba(129, 140, 248, 0.1) 52%, transparent 72%);
-  animation: hero-feature-lines 7.4s linear infinite;
+  border-radius: inherit;
+  background: linear-gradient(118deg, transparent 34%, rgba(125, 211, 252, 0.28) 50%, transparent 66%);
+  transform: translateX(-70%);
+  opacity: 0.58;
+  z-index: 0;
+  animation: hero-feature-sweep 4.8s ease-in-out infinite;
   pointer-events: none;
 }
 
-.hero-feature-glow--2::before {
+.hero-feature-glow--2 {
   background: conic-gradient(
     from 0deg,
-    rgba(129, 140, 248, 0.82),
-    rgba(56, 189, 248, 0.8),
-    rgba(168, 85, 247, 0.75),
-    rgba(129, 140, 248, 0.82)
+    rgba(129, 140, 248, 0.95),
+    rgba(56, 189, 248, 0.9),
+    rgba(168, 85, 247, 0.88),
+    rgba(129, 140, 248, 0.95)
   );
+  box-shadow:
+    0 0 0 1px rgba(129, 140, 248, 0.45),
+    0 0 22px rgba(129, 140, 248, 0.26),
+    0 0 42px rgba(168, 85, 247, 0.14);
+}
+
+.hero-feature-glow--2::before {
+  background: radial-gradient(circle at 78% 20%, rgba(129, 140, 248, 0.32), transparent 56%);
+}
+
+.hero-feature-glow--2::after {
+  background: linear-gradient(128deg, transparent 34%, rgba(165, 180, 252, 0.28) 50%, transparent 66%);
+}
+
+.hero-feature-glow--3 {
+  background: conic-gradient(
+    from 0deg,
+    rgba(45, 212, 191, 0.94),
+    rgba(59, 130, 246, 0.9),
+    rgba(99, 102, 241, 0.85),
+    rgba(45, 212, 191, 0.94)
+  );
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.45),
+    0 0 22px rgba(45, 212, 191, 0.23),
+    0 0 42px rgba(59, 130, 246, 0.14);
 }
 
 .hero-feature-glow--3::before {
-  background: conic-gradient(
-    from 0deg,
-    rgba(45, 212, 191, 0.82),
-    rgba(59, 130, 246, 0.78),
-    rgba(99, 102, 241, 0.76),
-    rgba(45, 212, 191, 0.82)
-  );
+  background: radial-gradient(circle at 18% 74%, rgba(45, 212, 191, 0.3), transparent 58%);
+}
+
+.hero-feature-glow--3::after {
+  background: linear-gradient(116deg, transparent 33%, rgba(94, 234, 212, 0.25) 50%, transparent 67%);
 }
 
 .hero-feature-glow-inner {
   position: relative;
+  border-radius: calc(1rem - 1px);
   z-index: 1;
 }
 
@@ -308,17 +340,19 @@ body {
   }
 }
 
-@keyframes hero-feature-lines {
+@keyframes hero-feature-sweep {
   0% {
-    transform: translate3d(-3%, -2%, 0);
-    opacity: 0.35;
+    transform: translateX(-70%);
+    opacity: 0;
   }
-  50% {
-    transform: translate3d(3%, 2%, 0);
+  30% {
     opacity: 0.62;
   }
+  60% {
+    opacity: 0.42;
+  }
   100% {
-    transform: translate3d(-3%, -2%, 0);
-    opacity: 0.35;
+    transform: translateX(70%);
+    opacity: 0;
   }
 }
