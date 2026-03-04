@@ -3211,6 +3211,32 @@ ${JSON.stringify(keyedSource)}`,
     scrollToMainExperience();
   }, [scrollToMainExperience]);
 
+  const renderHeroHeadline = () => {
+    const headline = translateText('Built for partners. Designed for safer maternal outcomes.');
+    const emphasisByLanguage = {
+      en: 'partners',
+      es: 'parejas',
+      fr: 'partenaires',
+      ht: 'patnè'
+    };
+    const emphasis = emphasisByLanguage[language] || 'partners';
+    const lowerHeadline = headline.toLowerCase();
+    const start = lowerHeadline.indexOf(emphasis.toLowerCase());
+
+    if (start === -1) return headline;
+
+    const end = start + emphasis.length;
+    return (
+      <>
+        {headline.slice(0, start)}
+        <span className={`hero-partners-highlight ${darkMode ? 'hero-partners-highlight-dark' : 'hero-partners-highlight-light'}`}>
+          {headline.slice(start, end)}
+        </span>
+        {headline.slice(end)}
+      </>
+    );
+  };
+
   const formatAiText = (text) => {
     if (!text) return '';
     return text.replace(/\*/g, '');
@@ -4197,8 +4223,8 @@ ${cleanedResult}`,
               </div>
 
               <div className="space-y-4">
-                <h1 className={`text-4xl font-black leading-[1.04] sm:text-5xl md:text-6xl ${darkMode ? 'text-white' : 'text-slate-900'}`}>
-                  {translateText('Built for partners. Designed for safer maternal outcomes.')}
+                <h1 className={`text-[3.45rem] font-black leading-[1.01] sm:text-[4.35rem] md:text-[5.15rem] ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                  {renderHeroHeadline()}
                 </h1>
                 <p className={`max-w-2xl text-base leading-relaxed md:text-xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
                   {translateText(

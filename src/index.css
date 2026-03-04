@@ -176,7 +176,6 @@ body {
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  animation: hero-glow-spin 5.5s linear infinite;
   opacity: 0.85;
   pointer-events: none;
 }
@@ -220,7 +219,6 @@ body {
     0 0 0 1px rgba(56, 189, 248, 0.42),
     0 0 22px rgba(56, 189, 248, 0.28),
     0 0 42px rgba(99, 102, 241, 0.16);
-  animation: hero-glow-spin 10s linear infinite;
 }
 
 .hero-feature-glow::before {
@@ -299,6 +297,31 @@ body {
   z-index: 1;
 }
 
+.hero-partners-highlight {
+  display: inline-block;
+  font-size: 1.09em;
+  line-height: 0.95;
+  position: relative;
+}
+
+.hero-partners-highlight-dark {
+  color: #f8fafc;
+  text-shadow:
+    0 0 10px rgba(56, 189, 248, 0.45),
+    0 0 18px rgba(99, 102, 241, 0.34),
+    0 2px 24px rgba(14, 165, 233, 0.28);
+  filter: drop-shadow(0 3px 14px rgba(14, 165, 233, 0.35));
+}
+
+.hero-partners-highlight-light {
+  color: #0f172a;
+  text-shadow:
+    0 0 8px rgba(56, 189, 248, 0.28),
+    0 0 14px rgba(129, 140, 248, 0.2),
+    0 2px 16px rgba(59, 130, 246, 0.16);
+  filter: drop-shadow(0 2px 9px rgba(59, 130, 246, 0.22));
+}
+
 .hero-cta-button {
   transition: transform 160ms ease, box-shadow 220ms ease, background-color 220ms ease, border-color 220ms ease;
 }
@@ -320,12 +343,6 @@ body {
 @media (max-width: 640px) {
   .hero-media-image {
     height: 480px;
-  }
-}
-
-@keyframes hero-glow-spin {
-  to {
-    transform: rotate(360deg);
   }
 }
 
