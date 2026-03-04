@@ -235,16 +235,7 @@ body {
 }
 
 .hero-feature-glow::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(118deg, transparent 34%, rgba(125, 211, 252, 0.28) 50%, transparent 66%);
-  transform: translateX(-70%);
-  opacity: 0.58;
-  z-index: 0;
-  animation: hero-feature-sweep 4.8s ease-in-out infinite;
-  pointer-events: none;
+  content: none;
 }
 
 .hero-feature-glow--2 {
@@ -265,10 +256,6 @@ body {
   background: radial-gradient(circle at 78% 20%, rgba(129, 140, 248, 0.32), transparent 56%);
 }
 
-.hero-feature-glow--2::after {
-  background: linear-gradient(128deg, transparent 34%, rgba(165, 180, 252, 0.28) 50%, transparent 66%);
-}
-
 .hero-feature-glow--3 {
   background: conic-gradient(
     from 0deg,
@@ -287,16 +274,10 @@ body {
   background: radial-gradient(circle at 18% 74%, rgba(45, 212, 191, 0.3), transparent 58%);
 }
 
-.hero-feature-glow--3::after {
-  background: linear-gradient(116deg, transparent 33%, rgba(94, 234, 212, 0.25) 50%, transparent 67%);
-}
-
 .hero-feature-glow-inner {
   position: relative;
   border-radius: calc(1rem - 1px);
   z-index: 1;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 .hero-partners-highlight {
@@ -356,22 +337,5 @@ body {
   50% {
     opacity: 0.82;
     transform: translateX(4%) translateY(-2%);
-  }
-}
-
-@keyframes hero-feature-sweep {
-  0% {
-    transform: translateX(-70%);
-    opacity: 0;
-  }
-  30% {
-    opacity: 0.62;
-  }
-  60% {
-    opacity: 0.42;
-  }
-  100% {
-    transform: translateX(70%);
-    opacity: 0;
   }
 }
