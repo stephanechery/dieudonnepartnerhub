@@ -4254,7 +4254,7 @@ ${cleanedResult}`,
                   >
                     <div
                       className={`hero-feature-glow-inner rounded-2xl border px-4 py-3 ${
-                        darkMode ? 'border-transparent bg-transparent' : 'border-transparent bg-transparent'
+                        darkMode ? 'border-slate-800/70 bg-slate-950/78' : 'border-slate-200/80 bg-white/92'
                       }`}
                     >
                       <p className={`text-sm font-black uppercase tracking-[0.14em] ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>
