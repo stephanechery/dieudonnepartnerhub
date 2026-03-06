@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrowLeft, Lock, PlayCircle } from "lucide-react";
-import { getModuleState, isLessonUnlocked } from "../utils/progress";
+import { getModuleState, isLessonComplete, isLessonUnlocked } from "../utils/progress";
 import WarningSignsPanel from "../components/WarningSignsPanel";
 
 export default function ModulePage({
@@ -39,7 +39,7 @@ export default function ModulePage({
         <div className="space-y-3">
           {module.lessons.map((lesson, index) => {
             const unlocked = isLessonUnlocked(module, moduleState, lesson.id);
-            const completed = moduleState.completedLessons.includes(lesson.id);
+            const completed = isLessonComplete(moduleState, lesson.id);
             const score = moduleState.quizScores[lesson.id];
             const hasResponses = Boolean(moduleState.quizResponses?.[lesson.id]);
 

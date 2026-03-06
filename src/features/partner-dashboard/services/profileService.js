@@ -2,6 +2,7 @@ import { moduleOrder, partnerCurriculum } from "../data/curriculum";
 import { getCurrentAccessToken, isSupabaseAuthEnabled } from "./authService";
 
 const PROFILES_KEY = "dph_profiles_v1";
+const PASSING_SCORE = 70;
 const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || "").trim();
 const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || "").trim();
 const SUPABASE_PROFILES_TABLE =
@@ -31,17 +32,27 @@ const createEmptyModules = () =>
   }, {});
 
 const extendProfileModules = (profile) => {
+  if (!profile.modules) {
+    profile.modules = {};
+  }
+
   for (const module of partnerCurriculum.modules) {
-    if (!profile.modules[module.id]) {
-      profile.modules[module.id] = {
-        completedLessons: [],
-        quizScores: {},
-        quizResponses: {},
-        scenarioResponses: {},
-      };
-    } else if (!profile.modules[module.id].quizResponses) {
-      profile.modules[module.id].quizResponses = {};
-    }
+    const existingModule = profile.modules[module.id] || {};
+    const quizScores = existingModule.quizScores || {};
+    const completedLessons = new Set(existingModule.completedLessons || []);
+
+    Object.entries(quizScores).forEach(([lessonId, score]) => {
+      if (typeof score === "number" && score >= PASSING_SCORE) {
+        completedLessons.add(lessonId);
+      }
+    });
+
+    profile.modules[module.id] = {
+      completedLessons: Array.from(completedLessons),
+      quizScores,
+      quizResponses: existingModule.quizResponses || {},
+      scenarioResponses: existingModule.scenarioResponses || {},
+    };
   }
   return profile;
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, CheckCircle2, AlertTriangle } from "lucide-react";
-import { getModuleState } from "../utils/progress";
+import { getModuleState, isLessonComplete } from "../utils/progress";
 
 export default function LessonPage({
   module,
@@ -51,14 +51,14 @@ export default function LessonPage({
   const [submitted, setSubmitted] = useState(Boolean(savedQuizResponses));
   const [score, setScore] = useState(moduleState.quizScores[lesson.id] ?? null);
   const [completeStatus, setCompleteStatus] = useState(
-    moduleState.completedLessons.includes(lesson.id)
+    isLessonComplete(moduleState, lesson.id)
   );
 
   useEffect(() => {
     setAnswers(normalizeSavedAnswers(savedQuizResponses || {}));
     setSubmitted(Boolean(savedQuizResponses));
     setScore(moduleState.quizScores[lesson.id] ?? null);
-    setCompleteStatus(moduleState.completedLessons.includes(lesson.id));
+    setCompleteStatus(isLessonComplete(moduleState, lesson.id));
     setScenarioResponse(moduleState.scenarioResponses[lesson.id] || "");
   }, [lesson.id, moduleState, savedQuizResponses]);
 
