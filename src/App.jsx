@@ -4193,7 +4193,7 @@ ${cleanedResult}`,
       </header>
 
       <section
-        className={`hero-premium-section mx-auto mb-8 max-w-7xl overflow-hidden rounded-[2.25rem] border p-7 md:min-h-[78vh] md:p-12 ${
+        className={`hero-premium-section mx-auto mb-8 max-w-7xl overflow-hidden rounded-[1.75rem] border p-4 sm:p-7 md:min-h-[78vh] md:rounded-[2.25rem] md:p-10 lg:p-12 ${
           darkMode ? 'border-slate-800 bg-slate-900' : 'border-slate-200 bg-white'
         }`}
       >
@@ -4209,10 +4209,10 @@ ${cleanedResult}`,
             }`}
           />
 
-          <div className="relative z-10 grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-12">
-            <div className="space-y-8">
+          <div className="relative z-10 grid grid-cols-1 items-start gap-6 md:gap-8 lg:grid-cols-2 lg:gap-12">
+            <div className="space-y-5 sm:space-y-6 md:space-y-8">
               <div
-                className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-[0.24em] ${
+                className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] sm:px-4 sm:text-xs sm:tracking-[0.24em] ${
                   darkMode
                     ? 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
                     : 'border-cyan-300/70 bg-cyan-50 text-cyan-700'
@@ -4223,17 +4223,17 @@ ${cleanedResult}`,
               </div>
 
               <div className="space-y-4">
-                <h1 className={`text-[3.45rem] font-black leading-[1.01] sm:text-[4.35rem] md:text-[5.15rem] ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                <h1 className={`text-[2.45rem] font-black leading-[0.98] sm:text-[4rem] md:text-[5rem] ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                   {renderHeroHeadline()}
                 </h1>
-                <p className={`max-w-2xl text-base leading-relaxed md:text-xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                <p className={`max-w-2xl text-[15px] leading-relaxed sm:text-base md:text-xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
                   {translateText(
                     'Dieudonne Partner Hub equips fathers and support people with clinically grounded guidance, interactive training, and intelligent coaching across prenatal, labor, and postpartum recovery.'
                   )}
                 </p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3">
                 {[
                   {
                     label: 'Clinically grounded playbooks',
@@ -4250,17 +4250,19 @@ ${cleanedResult}`,
                 ].map((item, index) => (
                   <div
                     key={item.label}
-                    className={`hero-feature-glow hero-feature-glow--${(index % 3) + 1}`}
+                    className={`hero-feature-glow hero-feature-glow--${(index % 3) + 1} ${
+                      darkMode ? 'hero-feature-glow-dark' : 'hero-feature-glow-light'
+                    }`}
                   >
                     <div
-                      className={`hero-feature-glow-inner rounded-2xl border px-4 py-3 ${
-                        darkMode ? 'border-slate-700/75 bg-slate-900' : 'border-slate-200 bg-slate-50'
+                      className={`hero-feature-glow-inner rounded-2xl border px-4 py-3 sm:px-5 sm:py-4 ${
+                        darkMode ? 'hero-feature-glow-inner-dark border-slate-700/75' : 'hero-feature-glow-inner-light border-slate-200'
                       }`}
                     >
-                      <p className={`text-sm font-black uppercase tracking-[0.14em] ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>
+                      <p className={`text-[12px] font-black uppercase tracking-[0.14em] sm:text-sm ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>
                         {translateText(item.label)}
                       </p>
-                      <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                      <p className={`mt-1 text-[14px] leading-relaxed sm:text-sm ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                         {translateText(item.detail)}
                       </p>
                     </div>
@@ -4268,13 +4270,13 @@ ${cleanedResult}`,
                 ))}
               </div>
 
-              <p className={`text-sm font-medium ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              <p className={`text-[13px] font-medium sm:text-sm ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                 {translateText('No fluff. Practical, clinically aligned support for real families.')}
               </p>
             </div>
 
-            <div className="relative">
-              <div className={`hero-media-card overflow-hidden rounded-[2rem] border ${darkMode ? 'border-slate-700 bg-slate-950/70' : 'border-slate-200 bg-slate-100'}`}>
+            <div className="relative lg:self-stretch">
+              <div className={`hero-media-card overflow-hidden rounded-[1.6rem] border sm:rounded-[2rem] ${darkMode ? 'border-slate-700 bg-slate-950/70' : 'border-slate-200 bg-slate-100'}`}>
                 <img
                   src={heroImageSrc}
                   alt={translateText('Partner support journey illustration')}
@@ -4289,7 +4291,7 @@ ${cleanedResult}`,
                 <div className={`pointer-events-none absolute inset-0 ${darkMode ? 'bg-gradient-to-t from-slate-950/60 via-transparent to-transparent' : 'bg-gradient-to-t from-slate-100/60 via-transparent to-transparent'}`} />
               </div>
 
-              <div className={`hero-access-panel mt-5 rounded-3xl border p-4 md:p-5 ${darkMode ? 'border-slate-600/80 bg-slate-900/70 text-slate-100' : 'border-white/70 bg-white/75 text-slate-900'}`}>
+              <div className={`hero-access-panel mt-4 rounded-[1.6rem] border p-3.5 sm:mt-5 sm:rounded-3xl sm:p-4 md:p-5 ${darkMode ? 'border-slate-600/80 bg-slate-900/70 text-slate-100' : 'border-white/70 bg-white/75 text-slate-900'}`}>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="hero-glow-box">
                     <div className={`hero-glow-box-inner rounded-2xl border p-3 ${darkMode ? 'border-slate-600/80 bg-slate-900/70' : 'border-slate-200 bg-white/90'}`}>
@@ -4298,7 +4300,7 @@ ${cleanedResult}`,
                       </p>
                       <button
                         onClick={handleHeroEnterPlatform}
-                        className={`hero-cta-button hero-cta-primary inline-flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-lg transition-all active:scale-95 md:text-base ${
+                        className={`hero-cta-button hero-cta-primary inline-flex min-h-[60px] w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-base font-bold text-white shadow-lg transition-all active:scale-95 ${
                           darkMode ? 'bg-rose-600 shadow-rose-900/30 hover:bg-rose-500' : 'bg-rose-600 shadow-rose-200 hover:bg-rose-700'
                         }`}
                       >
@@ -4315,7 +4317,7 @@ ${cleanedResult}`,
                       </p>
                       <button
                         onClick={handleHeroExploreGuide}
-                        className={`hero-cta-button inline-flex w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3 text-sm font-bold transition-colors md:text-base ${
+                        className={`hero-cta-button inline-flex min-h-[60px] w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3.5 text-base font-bold transition-colors ${
                           darkMode
                             ? 'border-slate-700 bg-slate-800/80 text-slate-100 hover:border-slate-500'
                             : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
@@ -4334,8 +4336,8 @@ ${cleanedResult}`,
       </section>
 
       {experienceEntry && (
-      <main ref={mainContentRef} className="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-4">
-        <div className="space-y-6 lg:col-span-1">
+      <main ref={mainContentRef} className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:gap-8 lg:grid-cols-4">
+        <div className="order-2 space-y-6 lg:order-1 lg:col-span-1">
           <div className="relative">
             {winCelebration && (
               <div key={winCelebration.token} className="pointer-events-none z-20 mb-3 md:mb-0 md:absolute md:right-full md:top-4 md:mr-4 md:w-64">
@@ -4413,8 +4415,8 @@ ${cleanedResult}`,
           </div>
         </div>
 
-        <div className="space-y-8 lg:col-span-3">
-          <div className={`grid grid-cols-2 rounded-[2rem] border p-1.5 transition-colors md:grid-cols-5 ${darkMode ? 'border-slate-800 bg-slate-900 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
+        <div className="order-1 space-y-6 md:space-y-8 lg:order-2 lg:col-span-3">
+          <div className={`flex gap-2 overflow-x-auto rounded-[2rem] border p-1.5 transition-colors [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-5 md:overflow-visible ${darkMode ? 'border-slate-800 bg-slate-900 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
             {Object.entries(guideData).map(([key, data]) => (
               <button
                 key={key}
@@ -4425,7 +4427,7 @@ ${cleanedResult}`,
                   }
                   setActiveStage(key);
                 }}
-                className={`flex flex-1 flex-col items-center justify-center gap-2 rounded-[1.5rem] py-5 text-sm font-bold transition-all ${
+                className={`flex min-w-[154px] flex-none flex-col items-center justify-center gap-2 rounded-[1.5rem] px-4 py-4 text-sm font-bold transition-all md:min-w-0 md:flex-1 md:py-5 ${
                   activeStage === key
                     ? 'scale-[1.02] bg-rose-600 text-white shadow-xl'
                     : darkMode
@@ -4441,8 +4443,8 @@ ${cleanedResult}`,
             ))}
           </div>
 
-          <div className="px-4">
-            <h2 className={`text-3xl font-black tracking-tight transition-colors ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+          <div className="px-1 sm:px-4">
+            <h2 className={`text-2xl font-black tracking-tight transition-colors sm:text-3xl ${darkMode ? 'text-white' : 'text-slate-900'}`}>
               {translateText(guideData[activeStage].title)}
             </h2>
             <p className="mt-2 font-medium text-slate-500">{translateText(guideData[activeStage].description)}</p>
