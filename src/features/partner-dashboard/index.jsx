@@ -5,6 +5,7 @@ import DashboardShell from "./components/DashboardShell";
 import OverviewPage from "./pages/OverviewPage";
 import ModulePage from "./pages/ModulePage";
 import LessonPage from "./pages/LessonPage";
+import InteractiveGuidesPage from "./pages/InteractiveGuidesPage";
 import { PartnerDashboardProvider, usePartnerDashboard } from "./state/PartnerDashboardContext";
 import { getModuleState, isLessonUnlocked, isModuleUnlocked } from "./utils/progress";
 
@@ -63,9 +64,12 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   const openModule = (moduleId) => navigate(`${BASE_PATH}/module/${moduleId}`);
   const openLesson = (moduleId, lessonId) =>
     navigate(`${BASE_PATH}/module/${moduleId}/lesson/${lessonId}`);
+  const openGuides = () => navigate(`${BASE_PATH}/guides`);
+  const openGuide = (guideId) => navigate(`${BASE_PATH}/guides/${guideId}`);
 
   const moduleMatch = subPath.match(/^\/module\/([a-z0-9-]+)$/i);
   const lessonMatch = subPath.match(/^\/module\/([a-z0-9-]+)\/lesson\/([a-z0-9-]+)$/i);
+  const guidesMatch = subPath.match(/^\/guides(?:\/([a-z0-9-]+))?$/i);
 
   let page = null;
 
@@ -76,9 +80,20 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           curriculum={curriculum}
           onOpenModule={openModule}
           onOpenLesson={openLesson}
+          onOpenGuides={openGuides}
           darkMode={darkMode}
           translateText={translateText}
         />
+    );
+  } else if (guidesMatch) {
+    page = (
+      <InteractiveGuidesPage
+        guideId={guidesMatch[1] || null}
+        onBack={openGuides}
+        onOpenGuide={openGuide}
+        darkMode={darkMode}
+        translateText={translateText}
+      />
     );
   } else if (moduleMatch) {
     const moduleId = moduleMatch[1];
