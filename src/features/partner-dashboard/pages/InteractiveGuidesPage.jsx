@@ -90,6 +90,7 @@ function GuideCard({ guide, onOpen, translateText }) {
 export default function InteractiveGuidesPage({
   guideId,
   onBack,
+  onBackToDashboard,
   onOpenGuide,
   darkMode = false,
   translateText = (value) => value,
@@ -167,18 +168,27 @@ export default function InteractiveGuidesPage({
       <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/40 p-5 shadow-2xl shadow-black/20 sm:p-7">
         <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 left-12 h-48 w-48 rounded-full bg-fuchsia-400/10 blur-3xl" />
-        <div className="relative z-10 max-w-3xl">
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-300">
-            <Library className="h-4 w-4" /> {tx("Interactive Guide Library")}
-          </p>
-          <h2 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
-            {tx("Practice core support skills with focused visual guides.")}
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
-            {tx(
-              "Use these companion guides alongside the course lessons for deeper practice in pregnancy, labor, postpartum recovery, communication, and mental health support."
-            )}
-          </p>
+        <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-300">
+              <Library className="h-4 w-4" /> {tx("Interactive Guide Library")}
+            </p>
+            <h2 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
+              {tx("Practice core support skills with focused visual guides.")}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
+              {tx(
+                "Use these companion guides alongside the course lessons for deeper practice in pregnancy, labor, postpartum recovery, communication, and mental health support."
+              )}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onBackToDashboard}
+            className="flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-2 text-sm font-black text-slate-100 transition hover:border-cyan-400/60 hover:bg-slate-800"
+          >
+            <ArrowLeft className="h-4 w-4" /> {tx("Back to Dashboard")}
+          </button>
         </div>
       </section>
 

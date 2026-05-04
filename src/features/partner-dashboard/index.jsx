@@ -90,6 +90,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
       <InteractiveGuidesPage
         guideId={guidesMatch[1] || null}
         onBack={openGuides}
+        onBackToDashboard={openOverview}
         onOpenGuide={openGuide}
         darkMode={darkMode}
         translateText={translateText}
