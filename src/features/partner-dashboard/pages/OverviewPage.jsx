@@ -5,10 +5,18 @@ import ProgressBar from "../components/ProgressBar";
 
 export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpenLesson, darkMode = false, translateText = (value) => value }) {
   const tx = (value) => translateText(value);
+  const hasNextLesson = Boolean(metrics.nextLesson.lessonId);
+  const latestCompleted = metrics.recentlyCompleted[0] || null;
+  const latestCompletedTime = latestCompleted?.completedAt
+    ? new Date(latestCompleted.completedAt).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+      })
+    : null;
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 pb-24 sm:space-y-6 sm:pb-0">
       <section
-        className={`relative overflow-hidden rounded-[2rem] border p-5 md:p-6 ${
+        className={`relative overflow-hidden rounded-[1.75rem] border p-4 sm:p-5 md:rounded-[2rem] md:p-6 ${
           darkMode
             ? "border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/30 shadow-xl"
             : "border-slate-200 bg-gradient-to-br from-white via-white to-cyan-50/50 shadow-sm"
@@ -17,7 +25,7 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
         <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-cyan-500/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-12 left-16 h-40 w-40 rounded-full bg-rose-500/10 blur-3xl" />
         <div className="relative z-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <div>
+          <div className="min-w-0">
             <p
               className={`text-xs font-black uppercase tracking-[0.2em] ${
                 darkMode ? "text-slate-500" : "text-slate-500"
@@ -26,20 +34,20 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
               {tx("Current Module")}
             </p>
             <h2
-              className={`mt-1 text-2xl font-black tracking-tight md:text-3xl ${
+              className={`mt-1 text-xl font-black tracking-tight sm:text-2xl md:text-3xl ${
                 darkMode ? "text-slate-100" : "text-slate-900"
               }`}
             >
               {tx(metrics.currentModule.title)}
             </h2>
-            <p className={`mt-2 text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
               {tx("Completion")}: {metrics.currentModule.completion}%
             </p>
             <ProgressBar className="mt-3 max-w-md" value={metrics.currentModule.completion} trackClassName={darkMode ? "bg-slate-800" : ""} />
             {metrics.nextLesson.lessonId && (
               <button
                 type="button"
-                className={`mt-4 rounded-xl px-4 py-2 text-sm font-bold text-white transition ${
+                className={`mt-4 min-h-12 w-full rounded-xl px-4 py-3 text-sm font-bold text-white transition sm:min-h-0 sm:w-auto sm:py-2 ${
                   darkMode
                     ? "bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400"
                     : "bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-700"
@@ -126,7 +134,7 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
           {metrics.nextLesson.lessonId && (
             <button
               type="button"
-              className={`mt-2 rounded-lg px-3 py-1.5 text-xs font-bold text-white transition ${darkMode ? "bg-indigo-600 hover:bg-indigo-500" : "bg-indigo-700 hover:bg-indigo-600"}`}
+              className={`mt-3 min-h-11 w-full rounded-lg px-3 py-2 text-sm font-bold text-white transition sm:min-h-0 sm:w-auto sm:py-1.5 sm:text-xs ${darkMode ? "bg-indigo-600 hover:bg-indigo-500" : "bg-indigo-700 hover:bg-indigo-600"}`}
               onClick={() =>
                 onOpenLesson(metrics.nextLesson.moduleId, metrics.nextLesson.lessonId)
               }
@@ -145,7 +153,68 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
         </article>
       </section>
 
-      <section className={`rounded-[1.8rem] border p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <article className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-cyan-950/20 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-cyan-50/40 shadow-sm"}`}>
+          <p className={`text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+            {tx("Pick Up Where You Left Off")}
+          </p>
+          <div className="mt-3 space-y-3">
+            <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+                {tx("Up Next")}
+              </p>
+              <p className={`mt-1 text-base font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+                {tx(metrics.nextLesson.lessonTitle)}
+              </p>
+              <p className={`mt-1 text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+                {tx(metrics.nextLesson.moduleTitle)}
+              </p>
+            </div>
+            {latestCompleted && (
+              <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
+                <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+                  {tx("Last Completed")}
+                </p>
+                <p className={`mt-1 text-sm font-bold leading-relaxed ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+                  {tx(latestCompleted.lessonTitle)}
+                </p>
+                <p className={`mt-1 text-xs ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+                  {tx(latestCompleted.moduleTitle)}
+                  {latestCompletedTime ? ` • ${latestCompletedTime}` : ""}
+                </p>
+              </div>
+            )}
+          </div>
+        </article>
+
+        <article className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-emerald-950/20 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-emerald-50/40 shadow-sm"}`}>
+          <p className={`text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-emerald-300" : "text-emerald-700"}`}>
+            {tx("Return Session Snapshot")}
+          </p>
+          <div className="mt-3 space-y-3">
+            <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+                {tx("Modules Started")}
+              </p>
+              <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+                {metrics.modules.filter((module) => module.completedLessons > 0 || module.completion > 0).length}
+              </p>
+            </div>
+            <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+                {tx("Recent Activity")}
+              </p>
+              <p className={`mt-1 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-700"}`}>
+                {latestCompleted
+                  ? tx("You already closed one lesson loop. Jump back in while the details are still fresh.")
+                  : tx("Start the next lesson to build momentum and unlock the rest of the training path.")}
+              </p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
         <h2 className={`mb-4 text-xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Module Progress")}</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {metrics.modules.map((module) => (
@@ -160,7 +229,7 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
         </div>
       </section>
 
-      <section className={`rounded-[1.8rem] border p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
+      <section className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
         <h2 className={`mb-4 text-xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Recently Completed Lessons")}</h2>
         {!metrics.recentlyCompleted.length ? (
           <p className={`text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{tx("No lessons completed yet. Start with Prenatal Module 1.")}</p>
@@ -171,13 +240,13 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
                 key={`${item.moduleId}-${item.lessonId}-${item.completedAt}`}
                 className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border px-3 py-2 ${darkMode ? "border-slate-800 bg-slate-800/70" : "border-slate-100 bg-slate-50"}`}
               >
-                <div>
+                <div className="min-w-0">
                   <p className={`text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx(item.lessonTitle)}</p>
                   <p className={`text-xs ${darkMode ? "text-slate-400" : "text-slate-500"}`}>{tx(item.moduleTitle)}</p>
                 </div>
                 <button
                   type="button"
-                  className={`rounded-lg border px-3 py-1.5 text-xs font-bold ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`}
+                  className={`min-h-11 w-full rounded-lg border px-3 py-2 text-sm font-bold sm:min-h-0 sm:w-auto sm:py-1.5 sm:text-xs ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`}
                   onClick={() => onOpenLesson(item.moduleId, item.lessonId)}
                 >
                   {tx("Review")}
@@ -188,12 +257,49 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
         )}
       </section>
 
-      <section className={`rounded-[1.8rem] border p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
+      <section className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
         <h2 className={`mb-2 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Training Approach")}</h2>
         <p className={`text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
           {tx("This dashboard is built as structured training: lesson content, scenario practice, immediate quiz feedback, and measurable progression through Prenatal, Labor and Delivery, and Postpartum Recovery modules.")}
         </p>
       </section>
+
+      {hasNextLesson && (
+        <div
+          className={`fixed inset-x-0 bottom-0 z-40 border-t px-3 py-3 shadow-[0_-12px_30px_rgba(15,23,42,0.08)] backdrop-blur sm:hidden ${
+            darkMode
+              ? "border-slate-800 bg-slate-950/95"
+              : "border-slate-200/80 bg-white/95"
+          }`}
+        >
+          <div className="mx-auto flex max-w-md items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+                {tx("Resume Training")}
+              </p>
+              <p className={`truncate text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+                {tx(metrics.nextLesson.lessonTitle)}
+              </p>
+              <p className={`truncate text-xs ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+                {tx(metrics.nextLesson.moduleTitle)}
+              </p>
+            </div>
+            <button
+              type="button"
+              className={`min-h-11 shrink-0 rounded-xl px-4 py-3 text-sm font-bold text-white ${
+                darkMode
+                  ? "bg-gradient-to-r from-cyan-600 to-teal-500"
+                  : "bg-gradient-to-r from-slate-900 to-slate-700"
+              }`}
+              onClick={() =>
+                onOpenLesson(metrics.nextLesson.moduleId, metrics.nextLesson.lessonId)
+              }
+            >
+              {tx("Resume")}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

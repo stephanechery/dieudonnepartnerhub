@@ -30,7 +30,13 @@ import {
   CheckSquare,
   Globe,
   ChevronDown,
-  Check
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  ArrowRight,
+  Users,
+  Lock,
+  Rocket
 } from 'lucide-react';
 import dieudonneDarkLogo from './assets/Dieudonne_Dark_Logo.png';
 import heroPartnerJourney from './assets/hero-partner-tablet.svg';
@@ -243,11 +249,88 @@ const getSupportCardStructuredContent = (item) => ({
   motherImpact: item?.motherImpact || deriveMotherImpactFromScenario(item)
 });
 
+const ttsAudioCache = new Map();
+const ttsAudioPromiseCache = new Map();
+const stopCardFlip = (event) => {
+  event.stopPropagation();
+};
+
+const useIsSmallScreen = () => {
+  const getMatches = () =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches;
+
+  const [isSmallScreen, setIsSmallScreen] = useState(getMatches);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const mediaQuery = window.matchMedia('(max-width: 640px)');
+    const handleChange = (event) => setIsSmallScreen(event.matches);
+    setIsSmallScreen(mediaQuery.matches);
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, []);
+
+  return isSmallScreen;
+};
+
+const playAudioUrl = async (url, onDone) => {
+  const audio = new Audio(url);
+  audio.onended = onDone;
+  audio.onerror = onDone;
+  try {
+    await audio.play();
+  } catch (error) {
+    onDone();
+  }
+};
+
+const getCardSpeechText = (translate, item) =>
+  `${translate('Partner Actions')}: ${item.checklist.map((task) => translate(task)).join('. ')}`;
+
+const primeTtsAudio = async (speechText) => {
+  if (!speechText || !apiKey) return null;
+
+  const cachedUrl = ttsAudioCache.get(speechText);
+  if (cachedUrl) {
+    return cachedUrl;
+  }
+
+  const pendingPromise = ttsAudioPromiseCache.get(speechText);
+  if (pendingPromise) {
+    return pendingPromise;
+  }
+
+  const nextPromise = fetchTTS(speechText)
+    .then((url) => {
+      if (url) {
+        ttsAudioCache.set(speechText, url);
+      }
+      ttsAudioPromiseCache.delete(speechText);
+      return url;
+    })
+    .catch((error) => {
+      ttsAudioPromiseCache.delete(speechText);
+      return null;
+    });
+
+  ttsAudioPromiseCache.set(speechText, nextPromise);
+  return nextPromise;
+};
+
 const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (value) => value }) => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioState, setAudioState] = useState('idle');
+  const isSmallScreen = useIsSmallScreen();
   const structured = getSupportCardStructuredContent(item);
   const tx = (value) => translateText(value);
+  const speechText = useMemo(() => getCardSpeechText(tx, item), [item, tx]);
   const clinicalTone = item.isEmergency
     ? darkMode
       ? 'border-rose-900/45 bg-rose-950/20'
@@ -256,34 +339,121 @@ const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (valu
       ? 'border-blue-900/45 bg-blue-950/20'
       : 'border-blue-200 bg-blue-50/80';
 
+  useEffect(() => {
+    if (!isFlipped) return;
+    primeTtsAudio(speechText);
+  }, [isFlipped, speechText]);
+
   const handleSpeak = async (e) => {
     e.stopPropagation();
-    if (isPlaying || !apiKey) return;
-    setIsPlaying(true);
+    if (audioState !== 'idle') return;
 
-    const speechText = `${tx('Partner Actions')}: ${item.checklist.map((task) => tx(task)).join('. ')}`;
-    const url = await fetchTTS(speechText);
-
-    if (url) {
-      const audio = new Audio(url);
-      audio.onended = () => {
-        URL.revokeObjectURL(url);
-        setIsPlaying(false);
-      };
-      audio.onerror = () => {
-        URL.revokeObjectURL(url);
-        setIsPlaying(false);
-      };
-      audio.play();
-    } else {
-      setIsPlaying(false);
+    if (!apiKey) {
+      return;
     }
+
+    setAudioState('loading');
+    const url = await primeTtsAudio(speechText);
+
+    if (!url) {
+      setAudioState('idle');
+      return;
+    }
+
+    setAudioState('playing');
+    await playAudioUrl(url, () => setAudioState('idle'));
   };
+
+  if (isSmallScreen) {
+    return (
+      <div className={`overflow-hidden rounded-3xl border ${darkMode ? 'border-slate-700 bg-slate-900 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
+        <button
+          type="button"
+          className="w-full p-5 text-left"
+          onClick={() => setIsFlipped((prev) => !prev)}
+          onTouchStart={() => primeTtsAudio(speechText)}
+        >
+          <div className="mb-4 flex items-start gap-4">
+            <div className={`rounded-xl p-3 ${colorClass}`}>{icon}</div>
+            <div className="min-w-0">
+              <h3 className={`text-xl font-bold leading-tight ${darkMode ? 'text-slate-100' : 'text-slate-800'}`}>
+                {tx(item.title)}
+              </h3>
+              <p className={`mt-2 text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                {tx(structured.definition)}
+              </p>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className={`rounded-xl border p-3 ${darkMode ? 'border-slate-800 bg-slate-800/70' : 'border-slate-100 bg-slate-50'}`}>
+              <p className="text-[10px] font-black uppercase tracking-widest text-rose-500">{tx('What Is Happening In The Body')}</p>
+              <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{tx(structured.bodyChanges)}</p>
+            </div>
+            <span className={`inline-flex items-center gap-2 text-xs font-bold uppercase ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+              <RotateCcw className="h-4 w-4" /> {tx(isFlipped ? 'Tap to close training' : 'Tap to open training')}
+            </span>
+          </div>
+        </button>
+
+        {isFlipped && (
+          <div className={`border-t p-5 ${darkMode ? 'border-slate-800 bg-slate-900' : 'border-slate-100 bg-white'}`}>
+            <div className="mb-4 flex items-start justify-between gap-3">
+              <h4 className={`flex items-center gap-2 text-lg font-bold ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>
+                <Zap className="h-5 w-5 text-amber-500" /> {tx('Partner Action Guide')}
+              </h4>
+              <button
+                type="button"
+                onClick={handleSpeak}
+                onTouchStart={() => primeTtsAudio(speechText)}
+                className={`rounded-full border p-2.5 shadow-md transition-colors ${
+                  darkMode ? 'border-slate-700 bg-slate-800 hover:bg-slate-700' : 'border-slate-100 bg-white hover:bg-slate-50'
+                }`}
+                disabled={audioState !== 'idle' || !apiKey}
+                title={tx('Play checklist audio')}
+              >
+                <Volume2 className={`h-5 w-5 ${audioState === 'playing' ? 'text-rose-500' : audioState === 'loading' ? 'animate-pulse text-cyan-500' : darkMode ? 'text-slate-300' : 'text-slate-500'}`} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-3">
+                {item.checklist.map((task, idx) => (
+                  <div key={idx} className="flex items-center gap-3">
+                    <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md ${darkMode ? 'bg-emerald-900/30 text-emerald-400' : 'bg-emerald-50 text-emerald-600'}`}>
+                      <CheckSquare className="h-3.5 w-3.5" />
+                    </div>
+                    <span className={`text-sm font-semibold leading-snug ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(task)}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className={`rounded-2xl p-4 ${darkMode ? 'border border-blue-800/30 bg-blue-900/10' : 'border border-blue-100 bg-blue-50'}`}>
+                <span className="mb-2 block text-[10px] font-black uppercase tracking-widest text-blue-500">{tx('Real-World Scenario')}</span>
+                <p className={`text-xs italic leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>"{tx(item.scenario)}"</p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold uppercase text-rose-400">{tx('Myth')}</span>
+                  <p className={`text-[11px] leading-tight ${darkMode ? 'text-slate-500' : 'text-slate-500'}`}>{tx(item.myth)}</p>
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold uppercase text-emerald-500">{tx('Fact')}</span>
+                  <p className={`text-[11px] leading-tight ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{tx(item.fact)}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div
-      className="group h-[500px] cursor-pointer [perspective:1000px]"
+      className="group h-[470px] cursor-pointer [perspective:1000px]"
       onClick={() => setIsFlipped(!isFlipped)}
+      onMouseEnter={() => primeTtsAudio(speechText)}
     >
       <div
         className={`relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] ${
@@ -302,7 +472,12 @@ const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (valu
                 {tx(item.title)}
               </h3>
             </div>
-            <div className="custom-scrollbar min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+            <div
+              className="custom-scrollbar min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1 touch-pan-y [-webkit-overflow-scrolling:touch]"
+              onClick={stopCardFlip}
+              onPointerDown={stopCardFlip}
+              onTouchStart={stopCardFlip}
+            >
               <div className={`rounded-xl border p-2.5 ${darkMode ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white/70'}`}>
                 <p className="text-[10px] font-black uppercase tracking-widest text-cyan-500">{tx('Definition')}</p>
                 <p className={`mt-1 text-[13px] leading-snug ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(structured.definition)}</p>
@@ -335,7 +510,7 @@ const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (valu
         </div>
 
         <div
-          className={`absolute inset-0 flex h-full w-full flex-col rounded-3xl border-2 p-8 transition-colors duration-300 [backface-visibility:hidden] [transform:rotateY(180deg)] ${
+          className={`absolute inset-0 flex h-full w-full flex-col overflow-hidden rounded-3xl border-2 p-8 transition-colors duration-300 [backface-visibility:hidden] [transform:rotateY(180deg)] ${
             darkMode ? 'border-slate-800 bg-slate-900 shadow-2xl' : 'bg-white'
           } ${colorClass.replace('bg-', 'bg-opacity-5 border-')}`}
         >
@@ -345,21 +520,24 @@ const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (valu
             </h4>
             <button
               onClick={handleSpeak}
+              onPointerDown={stopCardFlip}
+              onMouseEnter={() => primeTtsAudio(speechText)}
               className={`rounded-full border p-2.5 shadow-md transition-colors ${
                 darkMode ? 'border-slate-700 bg-slate-800 hover:bg-slate-700' : 'border-slate-100 bg-white hover:bg-slate-50'
               }`}
-              disabled={isPlaying || !apiKey}
+              disabled={audioState !== 'idle' || !apiKey}
               title={apiKey ? tx('Play checklist audio') : tx('Set VITE_GEMINI_API_KEY to enable audio')}
             >
-              {isPlaying ? (
-                <span className="text-xs font-black tracking-wide text-rose-500">...</span>
-              ) : (
-                <Volume2 className={`h-5 w-5 ${darkMode ? 'text-slate-300' : 'text-slate-500'}`} />
-              )}
+              <Volume2 className={`h-5 w-5 ${audioState === 'playing' ? 'text-rose-500' : audioState === 'loading' ? 'animate-pulse text-cyan-500' : darkMode ? 'text-slate-300' : 'text-slate-500'}`} />
             </button>
           </div>
 
-          <div className="custom-scrollbar flex-1 space-y-6 overflow-y-auto pr-2">
+          <div
+            className="custom-scrollbar min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain pr-2 touch-pan-y [-webkit-overflow-scrolling:touch]"
+            onClick={stopCardFlip}
+            onPointerDown={stopCardFlip}
+            onTouchStart={stopCardFlip}
+          >
             <div className="space-y-3">
               {item.checklist.map((task, idx) => (
                 <div key={idx} className="flex items-center gap-3">
@@ -1306,8 +1484,75 @@ const getKeyTermStructuredContent = (item) => {
 
 const KeyTermFlippableCard = ({ item, sectionTone, darkMode, translateText = (value) => value }) => {
   const [isFlipped, setIsFlipped] = useState(false);
+  const isSmallScreen = useIsSmallScreen();
   const structured = getKeyTermStructuredContent(item);
   const tx = (value) => translateText(value);
+
+  if (isSmallScreen) {
+    return (
+      <div className={`overflow-hidden rounded-3xl border ${darkMode ? `${sectionTone.cardDark} shadow-xl` : `${sectionTone.cardLight} shadow-sm`}`}>
+        <button
+          type="button"
+          className="w-full p-5 text-left"
+          onClick={() => setIsFlipped((prev) => !prev)}
+        >
+          <div className={`mb-2 h-1.5 w-16 rounded-full bg-gradient-to-r ${sectionTone.accent}`} />
+          <div className="mb-3 flex items-start justify-between gap-3">
+            <h4 className={`text-xl font-bold leading-tight ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>{tx(item.term)}</h4>
+            <span className={`rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-wide ${darkMode ? sectionTone.chipDark : sectionTone.chip}`}>
+              {tx(item.stage)}
+            </span>
+          </div>
+          <div className="space-y-2">
+            <div className={`rounded-xl border p-3 ${darkMode ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white/70'}`}>
+              <p className={`text-[10px] font-black uppercase tracking-widest ${sectionTone.heading}`}>{tx('Definition')}</p>
+              <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(structured.definition)}</p>
+            </div>
+            <span className={`inline-flex items-center gap-2 text-xs font-bold uppercase ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+              <RotateCcw className="h-4 w-4" /> {tx(isFlipped ? 'Tap to close training' : 'Tap to open training')}
+            </span>
+          </div>
+        </button>
+
+        {isFlipped && (
+          <div className={`border-t p-5 ${darkMode ? sectionTone.backDark : sectionTone.backLight}`}>
+            <div className="mb-3 flex items-center gap-2">
+              <Zap className="h-5 w-5 text-amber-500" />
+              <h5 className={`text-lg font-bold ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>{tx('Training Deep Dive')}</h5>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-widest text-blue-500">{tx('Clinical Meaning')}</p>
+                <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{tx(item.deepDive)}</p>
+              </div>
+
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500">{tx('Partner Actions')}</p>
+                <div className="mt-1.5 space-y-1.5">
+                  {item.partnerTips.map((tip) => (
+                    <div key={tip} className="flex items-start gap-2">
+                      <CheckSquare className={`mt-0.5 h-3.5 w-3.5 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                      <p className={`text-sm font-semibold leading-relaxed ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(tip)}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {item.redFlag && (
+                <div className={`rounded-xl border p-2.5 ${darkMode ? 'border-rose-900/40 bg-rose-900/20' : 'border-rose-200 bg-rose-50'}`}>
+                  <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-rose-500">
+                    <ShieldAlert className="h-3.5 w-3.5" /> {tx('Escalation Trigger')}
+                  </p>
+                  <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-rose-100' : 'text-rose-700'}`}>{tx(item.redFlag)}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="group h-[390px] cursor-pointer [perspective:1000px]" onClick={() => setIsFlipped(!isFlipped)}>
@@ -1320,7 +1565,12 @@ const KeyTermFlippableCard = ({ item, sectionTone, darkMode, translateText = (va
               {tx(item.stage)}
             </span>
           </div>
-          <div className="custom-scrollbar flex-1 space-y-2 overflow-y-auto pr-1">
+          <div
+            className="custom-scrollbar min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1 touch-pan-y [-webkit-overflow-scrolling:touch]"
+            onClick={stopCardFlip}
+            onPointerDown={stopCardFlip}
+            onTouchStart={stopCardFlip}
+          >
             <div className={`rounded-xl border p-2.5 ${darkMode ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white/70'}`}>
               <p className={`text-[10px] font-black uppercase tracking-widest ${sectionTone.heading}`}>{tx('Definition')}</p>
               <p className={`mt-1 text-[13px] leading-snug ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(structured.definition)}</p>
@@ -1346,13 +1596,18 @@ const KeyTermFlippableCard = ({ item, sectionTone, darkMode, translateText = (va
           </div>
         </div>
 
-        <div className={`absolute inset-0 flex h-full w-full flex-col rounded-3xl border-2 p-4 [backface-visibility:hidden] [transform:rotateY(180deg)] ${darkMode ? sectionTone.backDark : sectionTone.backLight}`}>
+        <div className={`absolute inset-0 flex h-full w-full flex-col overflow-hidden rounded-3xl border-2 p-4 [backface-visibility:hidden] [transform:rotateY(180deg)] ${darkMode ? sectionTone.backDark : sectionTone.backLight}`}>
           <div className="mb-2 flex items-center gap-2">
             <Zap className="h-5 w-5 text-amber-500" />
             <h5 className={`text-lg font-bold ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>{tx('Training Deep Dive')}</h5>
           </div>
 
-          <div className="custom-scrollbar flex-1 space-y-3 overflow-y-auto pr-1">
+          <div
+            className="custom-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain pr-1 touch-pan-y [-webkit-overflow-scrolling:touch]"
+            onClick={stopCardFlip}
+            onPointerDown={stopCardFlip}
+            onTouchStart={stopCardFlip}
+          >
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-blue-500">{tx('Clinical Meaning')}</p>
               <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{tx(item.deepDive)}</p>
@@ -1396,30 +1651,97 @@ const KeyTermFlippableCard = ({ item, sectionTone, darkMode, translateText = (va
 
 const KeyTermsPanel = ({ darkMode, translateText = (value) => value }) => {
   const tx = (value) => translateText(value);
+  const [termStep, setTermStep] = useState(0);
+  const mobileTerms = keyTermSections.flatMap((section) => {
+    const sectionTone = keyTermTone[section.tone];
+    return section.terms.map((item) => ({
+      item,
+      sectionTitle: section.title,
+      sectionTone,
+    }));
+  });
+  const currentTerm = mobileTerms[termStep] || mobileTerms[0];
+  const termStepPercent = mobileTerms.length
+    ? Math.round(((termStep + 1) / mobileTerms.length) * 100)
+    : 0;
+
   return (
     <div className="space-y-8">
-      {keyTermSections.map((section) => {
-        const Icon = section.icon;
-        const sectionTone = keyTermTone[section.tone];
-
-        return (
-          <section key={section.id} className={`space-y-4 rounded-2xl border p-4 ${darkMode ? sectionTone.sectionDark : sectionTone.sectionLight}`}>
-            <div className="flex items-center gap-3">
-              <Icon className={`h-5 w-5 ${sectionTone.heading}`} />
-              <h3 className={`text-lg font-black tracking-tight ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>
-                {tx(section.title)}
-              </h3>
-              <div className={`ml-3 h-px flex-1 ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`} />
+      {currentTerm && (
+        <section className={`space-y-4 rounded-[1.75rem] border p-4 shadow-xl md:p-6 ${darkMode ? 'border-slate-800 bg-slate-900/92' : 'border-slate-200 bg-white'}`}>
+          <div>
+            <div className={`flex items-center justify-between text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-slate-500' : 'text-slate-500'}`}>
+              <span>{tx('Term')} {termStep + 1}/{mobileTerms.length}</span>
+              <span>{termStepPercent}%</span>
             </div>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {section.terms.map((item) => (
-                <KeyTermFlippableCard key={item.term} item={item} sectionTone={sectionTone} darkMode={darkMode} translateText={translateText} />
-              ))}
+            <div className={`mt-2 h-2 overflow-hidden rounded-full ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}>
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500"
+                style={{ width: `${termStepPercent}%` }}
+              />
             </div>
-          </section>
-        );
-      })}
+            <p className={`mt-3 text-xs font-black uppercase tracking-[0.16em] ${darkMode ? 'text-slate-500' : 'text-slate-500'}`}>
+              {tx(currentTerm.sectionTitle)}
+            </p>
+          </div>
+
+          <KeyTermFlippableCard
+            key={`${currentTerm.sectionTitle}-${currentTerm.item.term}`}
+            item={currentTerm.item}
+            sectionTone={currentTerm.sectionTone}
+            darkMode={darkMode}
+            translateText={translateText}
+          />
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setTermStep((current) => Math.max(0, current - 1))}
+              disabled={termStep === 0}
+              className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-sm font-bold disabled:opacity-40 ${
+                darkMode ? 'border-slate-700 bg-slate-950 text-slate-200' : 'border-slate-300 bg-white text-slate-700'
+              }`}
+            >
+              <ChevronLeft className="h-4 w-4" /> {tx('Back')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setTermStep((current) => Math.min(mobileTerms.length - 1, current + 1))}
+              disabled={termStep === mobileTerms.length - 1}
+              className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-white disabled:opacity-40 ${
+                darkMode ? 'bg-gradient-to-r from-cyan-600 to-teal-500' : 'bg-gradient-to-r from-slate-900 to-slate-700'
+              }`}
+            >
+              {tx('Next')} <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </section>
+      )}
+
+      <div className="hidden space-y-8">
+        {keyTermSections.map((section) => {
+          const Icon = section.icon;
+          const sectionTone = keyTermTone[section.tone];
+
+          return (
+            <section key={section.id} className={`space-y-4 rounded-2xl border p-4 ${darkMode ? sectionTone.sectionDark : sectionTone.sectionLight}`}>
+              <div className="flex items-center gap-3">
+                <Icon className={`h-5 w-5 ${sectionTone.heading}`} />
+                <h3 className={`text-lg font-black tracking-tight ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>
+                  {tx(section.title)}
+                </h3>
+                <div className={`ml-3 h-px flex-1 ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`} />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {section.terms.map((item) => (
+                  <KeyTermFlippableCard key={item.term} item={item} sectionTone={sectionTone} darkMode={darkMode} translateText={translateText} />
+                ))}
+              </div>
+            </section>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -2624,7 +2946,8 @@ const App = () => {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState(null);
   const [userInput, setUserInput] = useState('');
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+  const [guideStep, setGuideStep] = useState(0);
   const [winCelebration, setWinCelebration] = useState(null);
   const [coachHistory, setCoachHistory] = useState([]);
   const [mealHistory, setMealHistory] = useState([]);
@@ -3212,7 +3535,7 @@ ${JSON.stringify(keyedSource)}`,
   }, [scrollToMainExperience]);
 
   const renderHeroHeadline = () => {
-    const headline = translateText('Built for partners. Designed for safer maternal outcomes.');
+    const headline = translateText('Built for partners. Designed for safer outcomes.');
     const emphasisByLanguage = {
       en: 'partners',
       es: 'parejas',
@@ -3826,7 +4149,29 @@ ${cleanedResult}`,
     const uiLabels = [
       'Mission-Driven Partner Training Platform',
       'Built for partners. Designed for safer maternal outcomes.',
+      'Built for partners. Designed for safer outcomes.',
       'Dieudonne Partner Hub equips fathers and support people with clinically grounded guidance, interactive training, and intelligent coaching across prenatal, labor, and postpartum recovery.',
+      'Built for partners',
+      'Prenatal Care',
+      'Labor Support',
+      'Fetal Support',
+      'Postpartum Recovery',
+      'Evidence-Informed',
+      'Clinically reviewed content you can trust.',
+      'Interactive Training',
+      'Lessons that build confidence.',
+      'Smart Coaching',
+      'Guidance when it matters most.',
+      'Real-Time Support',
+      'Tools for every moment.',
+      'Clinically Grounded',
+      'Guidance backed by evidence and best practices.',
+      'Private & Secure',
+      'Progress and profile data stay protected.',
+      'Built for Real Families',
+      'Practical tools for partners in daily care.',
+      'Continuously Evolving',
+      'New content shaped by partner feedback.',
       'Why this platform works',
       'Clinically grounded playbooks',
       'Evidence-informed training content, warning-sign thresholds, and partner action checklists that convert uncertainty into confident support.',
@@ -3927,6 +4272,13 @@ ${cleanedResult}`,
       'SITE BUILT BY CHERY TALENT MANAGEMENT AGENCY',
       'Dark Mode',
       'Light Mode',
+      'Card',
+      'Step',
+      'Back',
+      'Next',
+      'Cultural Notes',
+      'Scenario Practice',
+      'Finish Lesson',
       'Excellent support move. Momentum is building.',
       'Strong partner leadership. Keep this rhythm.',
       'That consistency protects recovery and trust.',
@@ -3983,6 +4335,14 @@ ${cleanedResult}`,
         'Open Module',
         'Back to Dashboard',
         'Back to Module',
+        'Step',
+        'Continue Learning',
+        'Take Quiz',
+        'Cultural Notes',
+        'Scenario Practice',
+        'Finish Lesson',
+        'Back',
+        'Next',
         'Clinical Learning',
         'Medical Terms',
         'Cultural Sensitivity Notes',
@@ -3990,8 +4350,13 @@ ${cleanedResult}`,
         'Write your response plan...',
         'Save Scenario Response',
         'Knowledge Quiz',
+        'Quiz Progress',
         'Select all that apply.',
         'Submit Quiz',
+        'Next Question',
+        'answered',
+        'Ready to submit your quiz.',
+        'Jump to the next unanswered question.',
         'Score:',
         'Lesson Completion',
         'Mark Lesson Complete',
@@ -4069,9 +4434,26 @@ ${cleanedResult}`,
     return () => window.clearTimeout(timer);
   }, [language, activeStage, queueTranslations]);
 
+  useEffect(() => {
+    setGuideStep(0);
+  }, [activeStage]);
+
   const isKeyTermsStage = activeStage === 'keyterms';
   const isDashboardStage = activeStage === 'dashboard';
   const currentLanguageMeta = LANGUAGE_OPTIONS.find((item) => item.code === language) || LANGUAGE_OPTIONS[0];
+  const mobileGuideCards = (guideData[activeStage]?.subsections || []).flatMap((sub, subsectionIndex) =>
+    (sub.cards || []).map((card, cardIndex) => ({
+      card,
+      icon: sub.icon,
+      color: sub.color,
+      heading: sub.heading,
+      id: `${activeStage}-${subsectionIndex}-${cardIndex}`
+    }))
+  );
+  const currentGuideCard = mobileGuideCards[guideStep] || mobileGuideCards[0];
+  const guideStepPercent = mobileGuideCards.length
+    ? Math.round(((guideStep + 1) / mobileGuideCards.length) * 100)
+    : 0;
 
   return (
     <div ref={appRootRef} className={`min-h-screen p-4 font-sans transition-colors duration-500 md:p-8 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
@@ -4107,20 +4489,30 @@ ${cleanedResult}`,
         </div>
       )}
 
-      <header className="mx-auto mb-8 flex max-w-7xl flex-col justify-between gap-4 md:flex-row md:items-center">
+      <header className={`hero-topbar mx-auto mb-6 flex max-w-7xl flex-col justify-between gap-3 rounded-[1.75rem] border px-4 py-3 shadow-2xl sm:mb-8 sm:flex-row sm:items-center sm:gap-4 sm:rounded-[2.25rem] sm:px-6 ${
+        darkMode
+          ? 'border-slate-700/70 bg-slate-950/86 text-slate-100 shadow-cyan-950/20'
+          : 'border-white/80 bg-white/86 text-slate-900 shadow-slate-200/70 backdrop-blur-xl'
+      }`}>
         <div className="flex items-center gap-4">
           <img
             src={dieudonneDarkLogo}
             alt="Dieudonne logo"
-            className={`h-16 w-auto rounded-xl border p-1 shadow-xl ${
+            className={`h-11 w-auto rounded-xl border p-1 shadow-xl sm:h-14 ${
               darkMode ? 'border-slate-700 bg-black' : 'border-slate-200 bg-black'
             }`}
           />
+          <div className={`hidden items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.18em] lg:flex ${
+            darkMode ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-600'
+          }`}>
+            <ShieldCheck className="h-4 w-4 text-cyan-400" />
+            {translateText('Mission-Driven Partner Training Platform')}
+          </div>
         </div>
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className={`group flex h-11 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-all sm:px-4 sm:text-sm ${
+            className={`group flex min-h-11 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-all sm:px-4 sm:text-sm ${
               darkMode
                 ? 'border-slate-700 bg-slate-900 text-amber-300 hover:border-slate-600'
                 : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-800'
@@ -4133,7 +4525,7 @@ ${cleanedResult}`,
           <div ref={languageMenuRef} className="relative" data-no-translate="true">
             <button
               onClick={() => setLanguageMenuOpen((prev) => !prev)}
-              className={`flex h-11 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-all sm:min-w-[112px] sm:px-4 sm:text-sm ${
+              className={`flex min-h-11 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-all sm:min-w-[112px] sm:px-4 sm:text-sm ${
                 darkMode
                   ? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-slate-600'
                   : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
@@ -4185,45 +4577,46 @@ ${cleanedResult}`,
             )}
           </div>
 
-          <div className={`hidden items-center gap-2 rounded-full border px-5 py-2 shadow-sm transition-colors sm:flex ${darkMode ? 'border-slate-700 bg-slate-900 text-slate-300' : 'border-slate-200 bg-white/80 text-slate-700 backdrop-blur'}`}>
-            <ShieldCheck className="h-4 w-4 text-emerald-500" />
-            <span className="text-xs font-bold sm:text-sm">{translateText('Full Journey Support Guide')}</span>
-          </div>
+          <button
+            type="button"
+            onClick={handleHeroExploreGuide}
+            className={`hidden min-h-11 items-center gap-2 rounded-full px-5 text-sm font-extrabold text-white shadow-lg transition-all hover:-translate-y-0.5 sm:inline-flex ${
+              darkMode
+                ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-fuchsia-600 shadow-indigo-950/35'
+                : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-rose-500 shadow-indigo-200'
+            }`}
+          >
+            {translateText('Full Journey Support Guide')}
+            <ArrowRight className="h-4 w-4" />
+          </button>
         </div>
       </header>
 
       <section
-        className={`hero-premium-section mx-auto mb-8 max-w-7xl overflow-hidden rounded-[1.75rem] border p-4 sm:p-7 md:min-h-[78vh] md:rounded-[2.25rem] md:p-10 lg:p-12 ${
-          darkMode ? 'border-slate-800 bg-slate-900' : 'border-slate-200 bg-white'
+        className={`hero-premium-section mx-auto mb-8 max-w-7xl overflow-hidden rounded-[1.5rem] border px-4 py-6 sm:px-8 sm:py-10 md:min-h-[72vh] md:rounded-[2.25rem] lg:px-12 lg:py-12 ${
+          darkMode ? 'hero-premium-section-dark border-slate-800 bg-slate-950' : 'hero-premium-section-light border-slate-200 bg-white'
         }`}
       >
         <div className="relative">
-          <div
-            className={`pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full blur-3xl ${
-              darkMode ? 'bg-cyan-500/18' : 'bg-cyan-300/30'
-            }`}
-          />
-          <div
-            className={`pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full blur-3xl ${
-              darkMode ? 'bg-rose-500/14' : 'bg-rose-300/30'
-            }`}
-          />
+          <div className={`hero-grid-field pointer-events-none absolute inset-0 ${darkMode ? 'opacity-100' : 'opacity-45'}`} />
+          <div className="hero-radial hero-radial-cyan" />
+          <div className="hero-radial hero-radial-rose" />
 
-          <div className="relative z-10 grid grid-cols-1 items-start gap-6 md:gap-8 lg:grid-cols-2 lg:gap-12">
-            <div className="space-y-5 sm:space-y-6 md:space-y-8">
+          <div className="relative z-10 grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-10 xl:gap-14">
+            <div className="space-y-5 sm:space-y-6">
               <div
-                className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] sm:px-4 sm:text-xs sm:tracking-[0.24em] ${
+                className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] sm:px-4 sm:text-xs ${
                   darkMode
-                    ? 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
-                    : 'border-cyan-300/70 bg-cyan-50 text-cyan-700'
+                    ? 'border-indigo-400/30 bg-indigo-500/12 text-indigo-200'
+                    : 'border-indigo-200 bg-indigo-50 text-indigo-700'
                 }`}
               >
-                <ShieldCheck className="h-3.5 w-3.5" />
-                {translateText('Mission-Driven Partner Training Platform')}
+                <Users className="h-3.5 w-3.5" />
+                {translateText('Built for partners')}
               </div>
 
               <div className="space-y-4">
-                <h1 className={`text-[2.45rem] font-black leading-[0.98] sm:text-[4rem] md:text-[5rem] ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                <h1 className={`hero-headline max-w-3xl text-[2.65rem] font-black leading-[1.02] sm:text-[4rem] md:text-[4.65rem] lg:text-[3.75rem] xl:text-[4.2rem] ${darkMode ? 'text-white' : 'text-slate-950'}`}>
                   {renderHeroHeadline()}
                 </h1>
                 <p className={`max-w-2xl text-[15px] leading-relaxed sm:text-base md:text-xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
@@ -4233,49 +4626,58 @@ ${cleanedResult}`,
                 </p>
               </div>
 
-              <div className="space-y-2.5 sm:space-y-3">
-                {[
-                  {
-                    label: 'Clinically grounded playbooks',
-                    detail: 'Evidence-informed training content, warning-sign thresholds, and partner action checklists that convert uncertainty into confident support.'
-                  },
-                  {
-                    label: 'Interactive learning system',
-                    detail: 'Flip-card training, stage-based physiology guides, and dashboard progression reinforce what to do, when to do it, and why it matters.'
-                  },
-                  {
-                    label: 'Real-time partner support',
-                    detail: 'Use intelligent clarifier, labor coach, and recovery nutrition tools to get practical language and action plans in the moment.'
-                  }
-                ].map((item, index) => (
-                  <div
-                    key={item.label}
-                    className={`hero-feature-glow hero-feature-glow--${(index % 3) + 1} ${
-                      darkMode ? 'hero-feature-glow-dark' : 'hero-feature-glow-light'
-                    }`}
-                  >
-                    <div
-                      className={`hero-feature-glow-inner rounded-2xl border px-4 py-3 sm:px-5 sm:py-4 ${
-                        darkMode ? 'hero-feature-glow-inner-dark border-slate-700/75' : 'hero-feature-glow-inner-light border-slate-200'
-                      }`}
-                    >
-                      <p className={`text-[12px] font-black uppercase tracking-[0.14em] sm:text-sm ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>
-                        {translateText(item.label)}
-                      </p>
-                      <p className={`mt-1 text-[14px] leading-relaxed sm:text-sm ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                        {translateText(item.detail)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="grid gap-3 sm:hidden">
+                <button
+                  onClick={handleHeroEnterPlatform}
+                  className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 text-base font-bold text-white shadow-lg transition-all active:scale-95 ${
+                    darkMode ? 'bg-gradient-to-r from-blue-600 to-fuchsia-600 shadow-indigo-950/30' : 'bg-gradient-to-r from-blue-600 to-rose-500 shadow-indigo-200'
+                  }`}
+                >
+                  {translateText('Enter Partner Platform')}
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={handleHeroExploreGuide}
+                  className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3 text-base font-bold transition-colors ${
+                    darkMode
+                      ? 'border-slate-700 bg-slate-800/80 text-slate-100 hover:border-slate-500'
+                      : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
+                  }`}
+                >
+                  <BookOpen className="h-4 w-4" />
+                  {translateText('Explore Main Guide')}
+                </button>
               </div>
 
-              <p className={`text-[13px] font-medium sm:text-sm ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              <div className="hidden gap-3 sm:flex">
+                <button
+                  onClick={handleHeroEnterPlatform}
+                  className={`hero-cta-button hero-cta-primary inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl px-6 py-3 text-base font-extrabold text-white shadow-lg transition-all active:scale-95 ${
+                    darkMode ? 'bg-gradient-to-r from-blue-600 to-fuchsia-600 shadow-indigo-950/30' : 'bg-gradient-to-r from-blue-600 to-rose-500 shadow-indigo-200'
+                  }`}
+                >
+                  {translateText('Enter Partner Platform')}
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={handleHeroExploreGuide}
+                  className={`hero-cta-button inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-base font-extrabold transition-colors ${
+                    darkMode
+                      ? 'border-slate-700 bg-slate-950/50 text-slate-100 hover:border-slate-500'
+                      : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
+                  }`}
+                >
+                  <BookOpen className="h-5 w-5" />
+                  {translateText('Explore Main Guide')}
+                </button>
+              </div>
+
+              <p className={`max-w-lg text-[13px] font-medium sm:text-sm ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                 {translateText('No fluff. Practical, clinically aligned support for real families.')}
               </p>
             </div>
 
-            <div className="relative lg:self-stretch">
+            <div className="relative lg:self-center">
               <div className={`hero-media-card overflow-hidden rounded-[1.6rem] border sm:rounded-[2rem] ${darkMode ? 'border-slate-700 bg-slate-950/70' : 'border-slate-200 bg-slate-100'}`}>
                 <img
                   src={heroImageSrc}
@@ -4291,52 +4693,56 @@ ${cleanedResult}`,
                 <div className={`pointer-events-none absolute inset-0 ${darkMode ? 'bg-gradient-to-t from-slate-950/60 via-transparent to-transparent' : 'bg-gradient-to-t from-slate-100/60 via-transparent to-transparent'}`} />
               </div>
 
-              <div className={`hero-access-panel mt-4 rounded-[1.6rem] border p-3.5 sm:mt-5 sm:rounded-3xl sm:p-4 md:p-5 ${darkMode ? 'border-slate-600/80 bg-slate-900/70 text-slate-100' : 'border-white/70 bg-white/75 text-slate-900'}`}>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="hero-glow-box">
-                    <div className={`hero-glow-box-inner rounded-2xl border p-3 ${darkMode ? 'border-slate-600/80 bg-slate-900/70' : 'border-slate-200 bg-white/90'}`}>
-                      <p className={`mb-3 text-[10px] font-black uppercase tracking-[0.24em] ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`}>
-                        {translateText('Enter Partner Platform')}
-                      </p>
-                      <button
-                        onClick={handleHeroEnterPlatform}
-                        className={`hero-cta-button hero-cta-primary inline-flex min-h-[60px] w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-base font-bold text-white shadow-lg transition-all active:scale-95 ${
-                          darkMode ? 'bg-rose-600 shadow-rose-900/30 hover:bg-rose-500' : 'bg-rose-600 shadow-rose-200 hover:bg-rose-700'
-                        }`}
-                      >
-                        <ClipboardList className="h-4 w-4" />
-                        {translateText('Enter Partner Platform')}
-                      </button>
+              <div className={`hero-feature-rail mt-4 grid gap-2 rounded-[1.4rem] border p-3 sm:grid-cols-4 ${
+                darkMode ? 'border-indigo-500/35 bg-slate-950/78 text-slate-100' : 'border-indigo-200 bg-white/86 text-slate-900'
+              }`}>
+                {[
+                  { icon: <ShieldCheck className="h-5 w-5" />, label: 'Evidence-Informed', detail: 'Clinically reviewed content you can trust.' },
+                  { icon: <Layers className="h-5 w-5" />, label: 'Interactive Training', detail: 'Lessons that build confidence.' },
+                  { icon: <MessageSquare className="h-5 w-5" />, label: 'Smart Coaching', detail: 'Guidance when it matters most.' },
+                  { icon: <CheckSquare className="h-5 w-5" />, label: 'Real-Time Support', detail: 'Tools for every moment.' }
+                ].map((item) => (
+                  <div key={item.label} className={`rounded-2xl px-3 py-3 text-center ${darkMode ? 'bg-slate-900/70' : 'bg-slate-50'}`}>
+                    <div className={`mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-2xl ${
+                      darkMode ? 'bg-indigo-500/12 text-cyan-300' : 'bg-indigo-100 text-indigo-700'
+                    }`}>
+                      {item.icon}
                     </div>
+                    <p className="text-sm font-extrabold">{translateText(item.label)}</p>
+                    <p className={`mt-1 text-xs leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{translateText(item.detail)}</p>
                   </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
-                  <div className="hero-glow-box hero-glow-box--guide">
-                    <div className={`hero-glow-box-inner rounded-2xl border p-3 ${darkMode ? 'border-slate-600/80 bg-slate-900/70' : 'border-slate-200 bg-white/90'}`}>
-                      <p className={`mb-3 text-[10px] font-black uppercase tracking-[0.24em] ${darkMode ? 'text-indigo-300' : 'text-indigo-700'}`}>
-                        {translateText('Explore Main Guide')}
-                      </p>
-                      <button
-                        onClick={handleHeroExploreGuide}
-                        className={`hero-cta-button inline-flex min-h-[60px] w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3.5 text-base font-bold transition-colors ${
-                          darkMode
-                            ? 'border-slate-700 bg-slate-800/80 text-slate-100 hover:border-slate-500'
-                            : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
-                        }`}
-                      >
-                        <BookOpen className="h-4 w-4" />
-                        {translateText('Explore Main Guide')}
-                      </button>
-                    </div>
-                  </div>
+          <div className={`relative z-10 mt-8 grid gap-3 rounded-[1.45rem] border p-4 sm:grid-cols-2 lg:grid-cols-4 ${
+            darkMode ? 'border-slate-700/80 bg-slate-900/60 text-slate-100' : 'border-slate-200 bg-white/76 text-slate-900'
+          }`}>
+            {[
+              { icon: <ShieldCheck className="h-6 w-6" />, label: 'Clinically Grounded', detail: 'Guidance backed by evidence and best practices.' },
+              { icon: <Lock className="h-6 w-6" />, label: 'Private & Secure', detail: 'Progress and profile data stay protected.' },
+              { icon: <Users className="h-6 w-6" />, label: 'Built for Real Families', detail: 'Practical tools for partners in daily care.' },
+              { icon: <Rocket className="h-6 w-6" />, label: 'Continuously Evolving', detail: 'New content shaped by partner feedback.' }
+            ].map((item) => (
+              <div key={item.label} className={`hero-trust-item flex items-start gap-3 rounded-2xl px-3 py-3 ${darkMode ? 'hover:bg-slate-900' : 'hover:bg-slate-50'}`}>
+                <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border ${
+                  darkMode ? 'border-cyan-400/35 bg-cyan-400/10 text-cyan-300' : 'border-cyan-200 bg-cyan-50 text-cyan-700'
+                }`}>
+                  {item.icon}
                 </div>
+                <div>
+                  <p className="text-sm font-extrabold">{translateText(item.label)}</p>
+                  <p className={`mt-1 text-xs leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{translateText(item.detail)}</p>
                 </div>
               </div>
-          </div>
+            ))}
+              </div>
         </div>
       </section>
 
       {experienceEntry && (
-      <main ref={mainContentRef} className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:gap-8 lg:grid-cols-4">
+      <main ref={mainContentRef} className="premium-guide-layout mx-auto grid max-w-7xl grid-cols-1 gap-5 md:gap-7 lg:grid-cols-4">
         <div className="order-2 space-y-6 lg:order-1 lg:col-span-1">
           <div className="relative">
             {winCelebration && (
@@ -4364,18 +4770,18 @@ ${cleanedResult}`,
               </div>
             )}
 
-            <section className={`overflow-hidden rounded-3xl border p-6 transition-colors ${darkMode ? 'border-slate-800 bg-slate-900 shadow-xl' : 'border-slate-100 bg-white shadow-sm'}`}>
-              <h2 className={`mb-6 flex items-center gap-2 text-lg font-bold ${darkMode ? 'text-slate-100' : 'text-slate-800'}`}>
+            <section className={`premium-surface overflow-hidden rounded-3xl border p-5 transition-colors ${darkMode ? 'border-slate-800 bg-slate-900/90 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
+              <h2 className={`mb-5 flex items-center gap-2 text-base font-extrabold ${darkMode ? 'text-slate-100' : 'text-slate-800'}`}>
                 <Clock className="h-5 w-5 text-rose-500" />
                 {translateText('Core Partner Wins')}
               </h2>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {supportTasks.map((task) => (
                   <button
                     key={task.id}
                     onClick={() => toggleTask(task.id)}
-                    className={`group flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all ${
+                    className={`group flex w-full items-center gap-3 rounded-2xl border px-3.5 py-3 text-left transition-all ${
                       checklist[task.id]
                         ? 'border-emerald-500/50 bg-emerald-50/10 text-emerald-400'
                         : darkMode
@@ -4403,9 +4809,9 @@ ${cleanedResult}`,
             {guideData[activeStage].aiTool}
           </div>
 
-          <div className="group relative overflow-hidden rounded-3xl bg-slate-900 p-8 text-white shadow-2xl">
+          <div className="group relative overflow-hidden rounded-3xl bg-slate-900 p-6 text-white shadow-2xl">
             <div className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-amber-400/10 blur-3xl transition-all group-hover:bg-amber-400/20" />
-            <div className="mb-4 flex items-center gap-2 font-bold text-amber-400">
+            <div className="mb-3 flex items-center gap-2 text-sm font-extrabold text-amber-400">
               <Zap className="h-5 w-5" />
               {translateText('The "Partner" Role')}
             </div>
@@ -4416,7 +4822,7 @@ ${cleanedResult}`,
         </div>
 
         <div className="order-1 space-y-6 md:space-y-8 lg:order-2 lg:col-span-3">
-          <div className={`flex gap-2 overflow-x-auto rounded-[2rem] border p-1.5 transition-colors [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-5 md:overflow-visible ${darkMode ? 'border-slate-800 bg-slate-900 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
+          <div className={`premium-tab-rail flex gap-2 overflow-x-auto rounded-[1.55rem] border p-1.5 transition-colors [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-5 md:overflow-visible ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
             {Object.entries(guideData).map(([key, data]) => (
               <button
                 key={key}
@@ -4427,9 +4833,9 @@ ${cleanedResult}`,
                   }
                   setActiveStage(key);
                 }}
-                className={`flex min-w-[154px] flex-none flex-col items-center justify-center gap-2 rounded-[1.5rem] px-4 py-4 text-sm font-bold transition-all md:min-w-0 md:flex-1 md:py-5 ${
+                className={`flex min-w-[154px] flex-none flex-col items-center justify-center gap-2 rounded-[1.15rem] px-4 py-3 text-sm font-extrabold transition-all md:min-w-0 md:flex-1 md:py-4 ${
                   activeStage === key
-                    ? 'scale-[1.02] bg-rose-600 text-white shadow-xl'
+                    ? 'scale-[1.01] bg-gradient-to-r from-blue-600 to-fuchsia-600 text-white shadow-xl shadow-indigo-950/15'
                     : darkMode
                       ? 'text-slate-500 hover:bg-slate-800 hover:text-slate-300'
                       : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
@@ -4443,11 +4849,11 @@ ${cleanedResult}`,
             ))}
           </div>
 
-          <div className="px-1 sm:px-4">
+          <div className="px-1 sm:px-2">
             <h2 className={`text-2xl font-black tracking-tight transition-colors sm:text-3xl ${darkMode ? 'text-white' : 'text-slate-900'}`}>
               {translateText(guideData[activeStage].title)}
             </h2>
-            <p className="mt-2 font-medium text-slate-500">{translateText(guideData[activeStage].description)}</p>
+            <p className={`mt-2 max-w-2xl text-sm font-semibold leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{translateText(guideData[activeStage].description)}</p>
           </div>
 
           {isDashboardStage ? (
@@ -4469,11 +4875,68 @@ ${cleanedResult}`,
             <KeyTermsPanel darkMode={darkMode} translateText={translateText} />
           ) : (
             <>
-              {activeStage === 'prenatal' && <PregnancyAnatomy darkMode={darkMode} translateText={translateText} />}
-              {activeStage === 'labor' && <LaborDeliveryGuide darkMode={darkMode} translateText={translateText} />}
-              {activeStage === 'postpartum' && <PostpartumRecoveryGuide darkMode={darkMode} translateText={translateText} />}
+              <div className="hidden">
+                {activeStage === 'prenatal' && <PregnancyAnatomy darkMode={darkMode} translateText={translateText} />}
+                {activeStage === 'labor' && <LaborDeliveryGuide darkMode={darkMode} translateText={translateText} />}
+                {activeStage === 'postpartum' && <PostpartumRecoveryGuide darkMode={darkMode} translateText={translateText} />}
+              </div>
 
-              <div className="space-y-12">
+              {currentGuideCard && (
+                <div className={`space-y-4 rounded-[1.75rem] border p-4 shadow-xl md:p-6 ${darkMode ? 'border-slate-800 bg-slate-900/92' : 'border-slate-200 bg-white'}`}>
+                  <div>
+                    <div className={`flex items-center justify-between text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-slate-500' : 'text-slate-500'}`}>
+                      <span>{translateText('Card')} {guideStep + 1}/{mobileGuideCards.length}</span>
+                      <span>{guideStepPercent}%</span>
+                    </div>
+                    <div className={`mt-2 h-2 overflow-hidden rounded-full ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}>
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500"
+                        style={{ width: `${guideStepPercent}%` }}
+                      />
+                    </div>
+                    <div className="mt-3 flex items-center gap-3">
+                      <div className={`rounded-xl p-2 shadow-sm ${currentGuideCard.color}`}>{currentGuideCard.icon}</div>
+                      <h3 className={`text-lg font-black tracking-tight ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>
+                        {translateText(currentGuideCard.heading)}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <FlippableCard
+                    key={currentGuideCard.id}
+                    item={currentGuideCard.card}
+                    icon={currentGuideCard.icon}
+                    colorClass={currentGuideCard.color}
+                    darkMode={darkMode}
+                    translateText={translateText}
+                  />
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setGuideStep((current) => Math.max(0, current - 1))}
+                      disabled={guideStep === 0}
+                      className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-sm font-bold disabled:opacity-40 ${
+                        darkMode ? 'border-slate-700 bg-slate-950 text-slate-200' : 'border-slate-300 bg-white text-slate-700'
+                      }`}
+                    >
+                      <ChevronLeft className="h-4 w-4" /> {translateText('Back')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setGuideStep((current) => Math.min(mobileGuideCards.length - 1, current + 1))}
+                      disabled={guideStep === mobileGuideCards.length - 1}
+                      className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-white disabled:opacity-40 ${
+                        darkMode ? 'bg-gradient-to-r from-cyan-600 to-teal-500' : 'bg-gradient-to-r from-slate-900 to-slate-700'
+                      }`}
+                    >
+                      {translateText('Next')} <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="hidden space-y-12">
                 {guideData[activeStage].subsections.map((sub, sIndex) => (
                   <div key={sIndex} className="space-y-8">
                     <div className="flex items-center gap-4 px-2">
@@ -4492,16 +4955,16 @@ ${cleanedResult}`,
                 ))}
               </div>
 
-              <div className={`group relative overflow-hidden rounded-[2rem] border p-10 transition-colors ${darkMode ? 'border-slate-800 bg-slate-900 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
+              <div className={`premium-surface group relative overflow-hidden rounded-[1.75rem] border p-6 transition-colors sm:p-7 ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
                 <div className="absolute -right-32 -top-32 h-64 w-64 rounded-full bg-rose-500/5 blur-[100px]" />
                 <div className="relative z-10">
-                  <h3 className={`mb-4 text-2xl font-black transition-colors ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                  <h3 className={`mb-3 text-xl font-black transition-colors sm:text-2xl ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                     {translateText('Mastering')} {translateText(guideData[activeStage].title)}
                   </h3>
-                  <p className={`mb-8 max-w-2xl font-medium leading-relaxed transition-colors ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                  <p className={`mb-5 max-w-2xl text-sm font-medium leading-relaxed transition-colors sm:text-base ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                     {translateText('Flip the cards above to see actionable tips for this stage. As a partner, your education is just as vital as hers to ensure a safe transition for the entire family.')}
                   </p>
-                  <div className={`flex items-start gap-5 rounded-2xl border p-6 transition-colors ${darkMode ? 'border-slate-700 bg-slate-800/50' : 'border-slate-100 bg-slate-50'}`}>
+                  <div className={`flex items-start gap-4 rounded-2xl border p-4 transition-colors ${darkMode ? 'border-slate-700 bg-slate-800/50' : 'border-slate-100 bg-slate-50'}`}>
                     <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border shadow-sm transition-colors ${darkMode ? 'border-slate-700 bg-slate-900' : 'border-slate-200 bg-white'}`}>
                       <ShieldAlert className="h-6 w-6 text-rose-500" />
                     </div>

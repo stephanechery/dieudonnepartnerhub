@@ -13,7 +13,9 @@
    - Enable Email/Password.
    - Enable Google provider (optional).
    - Configure site URL and redirect URL(s):
-     - `https://<your-domain>/partner-dashboard`
+     - `https://www.dieudonnepartnerhub.org/partner-dashboard`
+     - `https://dieudonnepartnerhub.org/partner-dashboard` if the apex domain is enabled
+     - any Vercel preview domains you want to test with Google OAuth
 
 ## 3) Configure app env vars
 Use `.env.example` as reference.
@@ -22,6 +24,7 @@ Required in Vercel project env:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
 - `VITE_SUPABASE_PROFILES_TABLE=partner_profiles`
+- `VITE_AUTH_REDIRECT_ORIGIN=https://www.dieudonnepartnerhub.org`
 - `VITE_GEMINI_API_KEY` (if using Gemini features client-side)
 
 Optional:

@@ -91,6 +91,76 @@ body {
 .hero-premium-section {
   position: relative;
   isolation: isolate;
+  box-shadow:
+    0 24px 90px rgba(2, 6, 23, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.hero-premium-section-dark {
+  background-image:
+    radial-gradient(circle at 74% 18%, rgba(14, 165, 233, 0.12), transparent 34%),
+    radial-gradient(circle at 88% 66%, rgba(217, 70, 239, 0.13), transparent 32%),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.98), rgba(6, 12, 34, 0.98));
+}
+
+.hero-premium-section-light {
+  background-image:
+    radial-gradient(circle at 78% 18%, rgba(59, 130, 246, 0.12), transparent 34%),
+    radial-gradient(circle at 88% 66%, rgba(236, 72, 153, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.98));
+}
+
+.hero-topbar {
+  position: relative;
+  isolation: isolate;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.hero-topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(14, 165, 233, 0.1), transparent 34%, rgba(217, 70, 239, 0.1)),
+    radial-gradient(circle at 10% 50%, rgba(56, 189, 248, 0.12), transparent 28%);
+}
+
+.hero-grid-field {
+  background-image:
+    linear-gradient(rgba(96, 165, 250, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 165, 250, 0.08) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at 58% 38%, black 0%, transparent 68%);
+}
+
+.hero-radial {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(64px);
+}
+
+.hero-radial-cyan {
+  right: 8%;
+  top: 12%;
+  width: 22rem;
+  height: 22rem;
+  background: rgba(14, 165, 233, 0.15);
+}
+
+.hero-radial-rose {
+  right: -8%;
+  bottom: 10%;
+  width: 20rem;
+  height: 20rem;
+  background: rgba(217, 70, 239, 0.14);
+}
+
+.hero-headline {
+  letter-spacing: 0;
 }
 
 .hero-media-card {
@@ -101,6 +171,32 @@ body {
     radial-gradient(circle at 50% 75%, rgba(99, 102, 241, 0.14) 0%, transparent 46%),
     #020617;
   box-shadow: 0 30px 80px rgba(2, 6, 23, 0.3);
+}
+
+.hero-feature-rail {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 22px 60px rgba(15, 23, 42, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.hero-trust-item {
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.hero-trust-item:hover {
+  transform: translateY(-1px);
+}
+
+.premium-guide-layout {
+  scroll-margin-top: 2rem;
+}
+
+.premium-surface,
+.premium-tab-rail {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .hero-access-panel {

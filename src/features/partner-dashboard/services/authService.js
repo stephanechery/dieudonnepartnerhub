@@ -5,6 +5,8 @@ const GOOGLE_SCRIPT_ID = "google-identity-services";
 
 const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || "").trim();
 const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || "").trim();
+const AUTH_REDIRECT_ORIGIN = (import.meta.env.VITE_AUTH_REDIRECT_ORIGIN || "").trim();
+const AUTH_REDIRECT_PATH = "/partner-dashboard";
 
 const textEncoder = new TextEncoder();
 
@@ -13,6 +15,13 @@ const normalizeEmail = (email) => email.trim().toLowerCase();
 const isBrowser = () => typeof window !== "undefined";
 
 const isSupabaseAuthEnabled = () => Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+
+const getAuthRedirectUrl = () => {
+  const fallbackOrigin = isBrowser() ? window.location.origin : "";
+  const configuredOrigin = AUTH_REDIRECT_ORIGIN || fallbackOrigin;
+  const normalizedOrigin = configuredOrigin.replace(/\/+$/, "");
+  return `${normalizedOrigin}${AUTH_REDIRECT_PATH}`;
+};
 
 const toHex = (buffer) =>
   Array.from(new Uint8Array(buffer))
@@ -418,7 +427,7 @@ export const requestPasswordReset = async (email) => {
   }
 
   const normalizedEmail = normalizeEmail(email);
-  const redirectTo = `${window.location.origin}/partner-dashboard`;
+  const redirectTo = getAuthRedirectUrl();
   await supabaseAuthRequest("recover", {
     method: "POST",
     body: { email: normalizedEmail, redirect_to: redirectTo },
@@ -517,7 +526,7 @@ const upsertGoogleUserLocal = (profile) => {
 
 export const loginWithGoogle = async () => {
   if (isSupabaseAuthEnabled()) {
-    const redirectTo = `${window.location.origin}/partner-dashboard`;
+    const redirectTo = getAuthRedirectUrl();
     const authorizeUrl = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(
       redirectTo
     )}`;

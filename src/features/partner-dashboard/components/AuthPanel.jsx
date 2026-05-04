@@ -23,13 +23,13 @@ export default function AuthPanel({ darkMode = false, translateText = (value) =>
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const labelClass = `block text-sm font-semibold ${darkMode ? "text-slate-300" : "text-slate-700"}`;
-  const inputClass = `mt-1 w-full rounded-xl border px-3 py-2 ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500" : "border-slate-300"}`;
-  const primaryBtnClass = `rounded-xl px-4 py-2 text-sm font-bold text-white transition ${
+  const inputClass = `mt-1 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900"}`;
+  const primaryBtnClass = `inline-flex min-h-12 items-center justify-center rounded-xl px-4 py-3 text-sm font-bold text-white transition ${
     darkMode
       ? "bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400"
       : "bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-700"
   }`;
-  const secondaryBtnClass = `rounded-xl border px-4 py-2 text-sm font-bold ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 text-slate-700 hover:bg-slate-100"}`;
+  const secondaryBtnClass = `inline-flex min-h-12 items-center justify-center rounded-xl border px-4 py-3 text-sm font-bold ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`;
 
   const run = async (action) => {
     setError("");
@@ -86,15 +86,15 @@ export default function AuthPanel({ darkMode = false, translateText = (value) =>
   };
 
   return (
-    <div className={`mx-auto w-full max-w-3xl rounded-[2rem] border p-6 md:p-8 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <div className={`mx-auto w-full max-w-3xl rounded-[1.75rem] border p-4 sm:p-6 md:rounded-[2rem] md:p-8 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
+      <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className={`text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Partner Education Dashboard")}</h1>
-          <p className={`text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+          <h1 className={`text-2xl font-black leading-tight sm:text-3xl ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Partner Education Dashboard")}</h1>
+          <p className={`mt-1 text-base leading-relaxed sm:text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
             {tx("Secure sign-in to track module progress, quiz scores, and lesson completion.")}
           </p>
         </div>
-        <div className={`flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold ${darkMode ? "border-emerald-900/50 bg-emerald-900/30 text-emerald-300" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
+        <div className={`flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold ${darkMode ? "border-emerald-900/50 bg-emerald-900/30 text-emerald-300" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
           <ShieldCheck className="h-4 w-4" /> {tx("User Scoped")}
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function AuthPanel({ darkMode = false, translateText = (value) =>
             key={value}
             type="button"
             onClick={() => setMode(value)}
-            className={`rounded-xl px-3 py-2 text-sm font-bold transition ${
+            className={`min-h-12 rounded-xl px-2 py-3 text-sm font-bold transition sm:px-3 sm:py-2 ${
               mode === value
                 ? darkMode
                   ? "bg-slate-700 text-slate-100 shadow-sm"
@@ -149,17 +149,17 @@ export default function AuthPanel({ darkMode = false, translateText = (value) =>
               required
             />
           </label>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:flex sm:flex-wrap">
             <button
               type="submit"
-              className={primaryBtnClass}
+              className={`${primaryBtnClass} w-full sm:w-auto`}
               disabled={loading}
             >
               {loading ? tx("Signing in...") : tx("Log In")}
             </button>
             <button
               type="button"
-              className={secondaryBtnClass}
+              className={`${secondaryBtnClass} w-full sm:w-auto`}
               disabled={loading || !googleLoginConfigured}
               onClick={() => run(() => loginGoogle())}
               title={
@@ -230,7 +230,7 @@ export default function AuthPanel({ darkMode = false, translateText = (value) =>
           </div>
           <button
             type="submit"
-            className={primaryBtnClass}
+            className={`${primaryBtnClass} w-full sm:w-auto`}
             disabled={loading}
           >
             {loading ? tx("Creating account...") : tx("Create Account")}
@@ -259,7 +259,7 @@ export default function AuthPanel({ darkMode = false, translateText = (value) =>
             </p>
             <button
               type="submit"
-              className={primaryBtnClass}
+              className={`${primaryBtnClass} w-full sm:w-auto`}
               disabled={loading}
             >
               {tx("Send Reset Email")}
