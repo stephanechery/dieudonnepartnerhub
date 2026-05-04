@@ -503,14 +503,12 @@ const buildVideoShareHref = (video) => {
       ? `${window.location.origin}/partner-dashboard/video-hub`
       : "https://www.dieudonnepartnerhub.org/partner-dashboard/video-hub";
   const body = [
-    `I thought this Dieudonne Partner Hub video could be helpful: ${video.title}`,
+    `I thought this video from Dieudonne Partner Hub could be helpful:`,
     "",
-    video.description,
+    video.title,
     "",
-    `Watch it in the hub: ${hubUrl}`,
-    video.sourceUrl ? `Source: ${video.sourceUrl}` : "",
+    `Open the video hub: ${hubUrl}`,
   ]
-    .filter(Boolean)
     .join("\n");
 
   return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -518,11 +516,9 @@ const buildVideoShareHref = (video) => {
 
 function VideoEmbed({ video }) {
   const [playerRequested, setPlayerRequested] = useState(false);
-  const [playerLoaded, setPlayerLoaded] = useState(false);
 
   useEffect(() => {
     setPlayerRequested(false);
-    setPlayerLoaded(false);
   }, [video.id]);
 
   return (
@@ -542,13 +538,10 @@ function VideoEmbed({ video }) {
           allowFullScreen
           loading="eager"
           referrerPolicy="strict-origin-when-cross-origin"
-          onLoad={() => setPlayerLoaded(true)}
-          className={`absolute inset-0 h-full w-full transition duration-300 ${
-            playerLoaded ? "opacity-100" : "opacity-0"
-          }`}
+          className="absolute inset-0 h-full w-full"
         />
       )}
-      {(!playerRequested || !playerLoaded) && (
+      {!playerRequested && (
         <button
           type="button"
           onClick={() => setPlayerRequested(true)}
@@ -559,7 +552,7 @@ function VideoEmbed({ video }) {
             <Play className="h-8 w-8 fill-current" />
           </span>
           <span className="rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-sm font-black backdrop-blur-md">
-            {playerRequested ? "Loading video..." : "Play video in hub"}
+            Play video in hub
           </span>
         </button>
       )}
@@ -575,7 +568,38 @@ function VideoPlayerModal({
   onSave,
   onWatchLater,
 }) {
+  const [shareStatus, setShareStatus] = useState("");
+
+  useEffect(() => {
+    setShareStatus("");
+  }, [video?.id]);
+
   if (!video) return null;
+
+  const handleShareVideo = async () => {
+    const mailtoHref = buildVideoShareHref(video);
+    setShareStatus("Opening email draft...");
+
+    try {
+      await navigator.clipboard?.writeText(
+        `${video.title}\n${window.location.origin}/partner-dashboard/video-hub`
+      );
+    } catch {
+      // Clipboard is best-effort. The email handoff is the primary action.
+    }
+
+    const mailLink = document.createElement("a");
+    mailLink.href = mailtoHref;
+    mailLink.target = "_blank";
+    mailLink.rel = "noopener noreferrer";
+    document.body.appendChild(mailLink);
+    mailLink.click();
+    mailLink.remove();
+
+    window.setTimeout(() => {
+      setShareStatus("Email draft requested. Video link copied as backup.");
+    }, 900);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/78 p-3 backdrop-blur-md sm:p-5">
@@ -627,12 +651,18 @@ function VideoPlayerModal({
             </div>
 
             <div className="mt-5 grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
-              <a
-                href={buildVideoShareHref(video)}
+              <button
+                type="button"
+                onClick={handleShareVideo}
                 className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-black text-slate-100 transition hover:bg-white/[0.08] active:scale-[0.98]"
               >
                 Send to Friend or Family Member
-              </a>
+              </button>
+              {shareStatus && (
+                <p className="-mt-1 rounded-xl border border-cyan-300/15 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-100">
+                  {shareStatus}
+                </p>
+              )}
               <button
                 type="button"
                 onClick={() => onSave(video.id)}
