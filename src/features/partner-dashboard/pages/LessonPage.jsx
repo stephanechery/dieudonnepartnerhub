@@ -11,6 +11,92 @@ import { getModuleState, isLessonComplete } from "../utils/progress";
 const isMultiQuestion = (question) =>
   question.type === "multi" || Array.isArray(question.answerIndexes);
 
+const buildFallbackCourseSections = (lesson) => [
+  {
+    id: "concept",
+    phase: "Start",
+    title: "Concept Explanation",
+    summary: lesson.summary,
+    teachingPoints: lesson.clinicalContent || [],
+    appliedExamples: (lesson.definitions || []).map(
+      (entry) => `${entry.term}: ${entry.definition}`
+    ),
+    quickCheck: lesson.quiz?.[0]
+      ? {
+          question: lesson.quiz[0].question,
+          options: lesson.quiz[0].options,
+          answerIndex: lesson.quiz[0].answerIndex,
+          answerIndexes: lesson.quiz[0].answerIndexes,
+          rationale: lesson.quiz[0].rationale,
+        }
+      : null,
+  },
+  {
+    id: "application",
+    phase: "Middle",
+    title: "Applied Examples",
+    summary:
+      "Connect the clinical idea to what a partner should say, notice, and do in real time.",
+    teachingPoints: lesson.culturalNotes || [],
+    appliedExamples: lesson.scenario
+      ? [lesson.scenario.prompt, lesson.scenario.guidance]
+      : [],
+    quickCheck: lesson.quiz?.[1]
+      ? {
+          question: lesson.quiz[1].question,
+          options: lesson.quiz[1].options,
+          answerIndex: lesson.quiz[1].answerIndex,
+          answerIndexes: lesson.quiz[1].answerIndexes,
+          rationale: lesson.quiz[1].rationale,
+        }
+      : null,
+  },
+  {
+    id: "practice",
+    phase: "End",
+    title: "Reflection and Readiness",
+    summary:
+      "Write a short response plan before opening the quiz. This makes the learning usable outside the app.",
+    teachingPoints: [
+      "Name the concern clearly.",
+      "Choose one immediate support action.",
+      "Identify what would trigger provider contact or emergency care.",
+    ],
+    appliedExamples: lesson.scenario
+      ? [lesson.scenario.guidance]
+      : [],
+    reflectionPrompt: lesson.scenario?.prompt,
+    quickCheck: lesson.quiz?.[2]
+      ? {
+          question: lesson.quiz[2].question,
+          options: lesson.quiz[2].options,
+          answerIndex: lesson.quiz[2].answerIndex,
+          answerIndexes: lesson.quiz[2].answerIndexes,
+          rationale: lesson.quiz[2].rationale,
+        }
+      : null,
+  },
+];
+
+const getCourseSections = (lesson) =>
+  lesson.course?.sections?.length ? lesson.course.sections : buildFallbackCourseSections(lesson);
+
+const buildCourseCheckState = (sections) =>
+  sections.reduce((acc, section) => {
+    if (section.quickCheck) {
+      acc[section.id] = null;
+    }
+    return acc;
+  }, {});
+
+const isQuickCheckCorrect = (quickCheck, selectedIndex) => {
+  if (selectedIndex == null) return false;
+  if (Array.isArray(quickCheck?.answerIndexes)) {
+    return quickCheck.answerIndexes.includes(selectedIndex);
+  }
+  return selectedIndex === quickCheck?.answerIndex;
+};
+
 export default function LessonPage({
   module,
   lesson,
@@ -63,17 +149,37 @@ export default function LessonPage({
   );
   const [lessonStep, setLessonStep] = useState(0);
   const [quizStep, setQuizStep] = useState(0);
+  const [courseStep, setCourseStep] = useState(0);
   const quizSectionRef = useRef(null);
 
   const lessonIndex = module.lessons.findIndex((item) => item.id === lesson.id);
   const lessonNumber = lessonIndex + 1;
   const moduleProgressPercent = Math.round((lessonNumber / module.lessons.length) * 100);
   const mobileQuestion = lesson.quiz[quizStep];
+  const courseSections = useMemo(() => getCourseSections(lesson), [lesson]);
+  const [courseChecks, setCourseChecks] = useState(() =>
+    buildCourseCheckState(courseSections)
+  );
+  const courseCheckTotal = courseSections.filter((section) => section.quickCheck).length;
+  const courseCheckCorrectCount = courseSections.reduce((count, section) => {
+    if (!section.quickCheck) return count;
+    return (
+      count +
+      (isQuickCheckCorrect(section.quickCheck, courseChecks[section.id]) ? 1 : 0)
+    );
+  }, 0);
+  const reflectionComplete = scenarioResponse.trim().length >= 20;
+  const courseComplete =
+    (courseCheckTotal === 0 || courseCheckCorrectCount === courseCheckTotal) &&
+    reflectionComplete;
+  const quizUnlocked = Boolean(savedQuizResponses || submitted || score !== null || courseComplete);
+  const courseProgressPercent = Math.round(
+    ((courseCheckCorrectCount + (reflectionComplete ? 1 : 0)) /
+      Math.max(1, courseCheckTotal + 1)) *
+      100
+  );
   const lessonDeckSteps = [
-    "Clinical Learning",
-    "Medical Terms",
-    "Cultural Notes",
-    "Scenario Practice",
+    ...courseSections.map((section) => section.title),
     "Knowledge Quiz",
     "Finish Lesson",
   ];
@@ -88,6 +194,8 @@ export default function LessonPage({
     setScenarioResponse(moduleState.scenarioResponses[lesson.id] || "");
     setLessonStep(0);
     setQuizStep(0);
+    setCourseStep(0);
+    setCourseChecks(buildCourseCheckState(getCourseSections(lesson)));
   }, [lesson.id, moduleState, savedQuizResponses]);
 
   const answeredAll = lesson.quiz.every((question) => {
@@ -146,6 +254,7 @@ export default function LessonPage({
   };
 
   const submitQuiz = () => {
+    if (!quizUnlocked) return;
     if (!answeredAll) return;
     const nextScore = onSubmitQuiz(answers);
     setScore(nextScore);
@@ -244,6 +353,169 @@ export default function LessonPage({
     </div>
   );
 
+  const renderCourseSection = (section, index, compact = false) => {
+    const selectedAnswer = courseChecks[section.id];
+    const quickCheckCorrect = section.quickCheck
+      ? isQuickCheckCorrect(section.quickCheck, selectedAnswer)
+      : true;
+
+    return (
+      <article
+        key={section.id}
+        className={`rounded-[1.6rem] border p-4 ${
+          darkMode ? "border-slate-800 bg-slate-900/90" : "border-slate-200 bg-white"
+        }`}
+      >
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p className={`text-[11px] font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+              {tx(section.phase || `Step ${index + 1}`)}
+            </p>
+            <h3 className={`mt-1 text-xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+              {tx(section.title)}
+            </h3>
+            <p className={`mt-2 max-w-3xl text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+              {tx(section.summary)}
+            </p>
+          </div>
+          <span
+            className={`w-fit rounded-full border px-3 py-1.5 text-xs font-bold ${
+              quickCheckCorrect && (section.quickCheck || section.reflectionPrompt)
+                ? darkMode
+                  ? "border-emerald-900/60 bg-emerald-950/30 text-emerald-200"
+                  : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                : darkMode
+                  ? "border-slate-700 bg-slate-800 text-slate-300"
+                  : "border-slate-200 bg-slate-50 text-slate-600"
+            }`}
+          >
+            {quickCheckCorrect && (section.quickCheck || section.reflectionPrompt)
+              ? tx("Completed")
+              : tx("In Progress")}
+          </span>
+        </div>
+
+        <div className={`mt-4 grid grid-cols-1 gap-4 ${compact ? "" : "lg:grid-cols-2"}`}>
+          <div className={`rounded-2xl border p-4 ${darkMode ? "border-slate-800 bg-slate-800/60" : "border-slate-100 bg-slate-50"}`}>
+            <p className={`mb-3 text-xs font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              {tx("Build Understanding")}
+            </p>
+            <div className="space-y-3">
+              {(section.teachingPoints || []).map((point, pointIndex) => (
+                <p
+                  key={point}
+                  className={`text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-700"}`}
+                >
+                  <span className={`mr-2 font-black ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+                    {pointIndex + 1}.
+                  </span>
+                  {tx(point)}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <div className={`rounded-2xl border p-4 ${darkMode ? "border-blue-900/40 bg-blue-950/20" : "border-blue-100 bg-blue-50"}`}>
+            <p className={`mb-3 text-xs font-black uppercase tracking-[0.16em] ${darkMode ? "text-blue-300" : "text-blue-700"}`}>
+              {tx("Applied Examples")}
+            </p>
+            <div className="space-y-3">
+              {(section.appliedExamples || []).map((example, exampleIndex) => (
+                <p
+                  key={example}
+                  className={`text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-700"}`}
+                >
+                  <span className={`mr-2 font-black ${darkMode ? "text-blue-300" : "text-blue-700"}`}>
+                    {exampleIndex + 1}.
+                  </span>
+                  {tx(example)}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {section.reflectionPrompt && (
+          <div className={`mt-4 rounded-2xl border p-4 ${darkMode ? "border-amber-900/50 bg-amber-950/20" : "border-amber-100 bg-amber-50"}`}>
+            <p className={`text-xs font-black uppercase tracking-[0.16em] ${darkMode ? "text-amber-300" : "text-amber-700"}`}>
+              {tx("Reflection")}
+            </p>
+            <p className={`mt-2 text-sm font-semibold leading-relaxed ${darkMode ? "text-amber-100" : "text-amber-900"}`}>
+              {tx(section.reflectionPrompt)}
+            </p>
+            <textarea
+              className={`mt-3 min-h-28 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-900 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900"}`}
+              placeholder={tx("Write your response plan...")}
+              value={scenarioResponse}
+              onChange={(event) => setScenarioResponse(event.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => onSaveScenario(scenarioResponse)}
+              className={`mt-3 min-h-11 rounded-lg border px-4 py-3 text-sm font-bold ${darkMode ? "border-slate-700 bg-slate-950 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`}
+            >
+              {tx("Save Reflection")}
+            </button>
+            {!reflectionComplete && (
+              <p className={`mt-2 text-xs ${darkMode ? "text-amber-200" : "text-amber-800"}`}>
+                {tx("Write at least 20 characters to unlock the quiz.")}
+              </p>
+            )}
+          </div>
+        )}
+
+        {section.quickCheck && (
+          <div className={`mt-4 rounded-2xl border p-4 ${darkMode ? "border-slate-800 bg-slate-800/60" : "border-slate-100 bg-slate-50"}`}>
+            <p className={`text-xs font-black uppercase tracking-[0.16em] ${darkMode ? "text-emerald-300" : "text-emerald-700"}`}>
+              {tx("Quick Knowledge Check")}
+            </p>
+            <p className={`mt-2 text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+              {tx(section.quickCheck.question)}
+            </p>
+            <div className="mt-3 grid grid-cols-1 gap-2 lg:grid-cols-3">
+              {section.quickCheck.options.map((option, optionIndex) => {
+                const selected = selectedAnswer === optionIndex;
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() =>
+                      setCourseChecks((prev) => ({
+                        ...prev,
+                        [section.id]: optionIndex,
+                      }))
+                    }
+                    className={`min-h-11 rounded-xl border px-3 py-3 text-left text-sm font-semibold transition ${
+                      selected
+                        ? quickCheckCorrect
+                          ? darkMode
+                            ? "border-emerald-700 bg-emerald-950/40 text-emerald-100"
+                            : "border-emerald-300 bg-emerald-50 text-emerald-800"
+                          : darkMode
+                            ? "border-amber-700 bg-amber-950/40 text-amber-100"
+                            : "border-amber-300 bg-amber-50 text-amber-800"
+                        : darkMode
+                          ? "border-slate-700 bg-slate-900 text-slate-300 hover:border-cyan-700"
+                          : "border-slate-200 bg-white text-slate-700 hover:border-cyan-300"
+                    }`}
+                  >
+                    {tx(option)}
+                  </button>
+                );
+              })}
+            </div>
+            {selectedAnswer !== null && (
+              <p className={`mt-3 text-sm leading-relaxed ${quickCheckCorrect ? (darkMode ? "text-emerald-200" : "text-emerald-700") : (darkMode ? "text-amber-200" : "text-amber-800")}`}>
+                {quickCheckCorrect ? tx("Correct.") : tx("Review this section and try again.")}{" "}
+                {tx(section.quickCheck.rationale)}
+              </p>
+            )}
+          </div>
+        )}
+      </article>
+    );
+  };
+
   const renderMobileQuizPanel = () => (
     <form className="space-y-3" onSubmit={handleQuizSubmit}>
       {savedQuizResponses && (
@@ -325,6 +597,54 @@ export default function LessonPage({
   );
 
   const renderMobileLessonStep = () => {
+    if (lessonStep < courseSections.length) {
+      return renderCourseSection(courseSections[lessonStep], lessonStep, true);
+    }
+
+    if (lessonStep === courseSections.length) {
+      if (!quizUnlocked) {
+        return (
+          <div className={`rounded-2xl border p-4 ${darkMode ? "border-amber-900/50 bg-amber-950/20 text-amber-100" : "border-amber-100 bg-amber-50 text-amber-900"}`}>
+            <p className="text-sm font-bold">{tx("Quiz locked until course work is complete.")}</p>
+            <p className="mt-2 text-sm leading-relaxed">
+              {tx("Complete the quick checks and reflection first.")}
+            </p>
+          </div>
+        );
+      }
+      return renderMobileQuizPanel();
+    }
+
+    if (lessonStep > courseSections.length) {
+      return (
+        <div className="space-y-3">
+          <p className={`text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+            {tx("Requires quiz score of at least 70% to unlock structured progression.")}
+          </p>
+          <button
+            type="button"
+            onClick={handleComplete}
+            disabled={!canMarkComplete}
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <CheckCircle2 className="h-4 w-4" /> {tx("Mark Lesson Complete")}
+          </button>
+          {completeStatus && (
+            <p className={`rounded-xl border px-3 py-2 text-sm ${darkMode ? "border-emerald-900/60 bg-emerald-950/30 text-emerald-200" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
+              {tx("Lesson completed and progress saved.")}
+            </p>
+          )}
+          {!completeStatus && score !== null && score < 70 && (
+            <p className={`rounded-xl border px-3 py-2 text-sm ${darkMode ? "border-amber-900/60 bg-amber-950/30 text-amber-200" : "border-amber-200 bg-amber-50 text-amber-700"}`}>
+              <span className="inline-flex items-center gap-2 font-bold">
+                <AlertTriangle className="h-4 w-4" /> {tx("Retake quiz to reach 70% and unlock progression.")}
+              </span>
+            </p>
+          )}
+        </div>
+      );
+    }
+
     if (lessonStep === 0) {
       return (
         <div className="space-y-3">
@@ -403,6 +723,16 @@ export default function LessonPage({
     }
 
     if (lessonStep === 4) {
+      if (!quizUnlocked) {
+        return (
+          <div className={`rounded-2xl border p-4 ${darkMode ? "border-amber-900/50 bg-amber-950/20 text-amber-100" : "border-amber-100 bg-amber-50 text-amber-900"}`}>
+            <p className="text-sm font-bold">{tx("Quiz locked until course work is complete.")}</p>
+            <p className="mt-2 text-sm leading-relaxed">
+              {tx("Complete the quick checks and reflection first.")}
+            </p>
+          </div>
+        );
+      }
       return renderMobileQuizPanel();
     }
 
@@ -435,8 +765,8 @@ export default function LessonPage({
     );
   };
 
-  const isMobileLearningStep = lessonStep < 4;
-  const isMobileFinishStep = lessonStep >= 5;
+  const isMobileLearningStep = lessonStep < courseSections.length;
+  const isMobileFinishStep = lessonStep >= courseSections.length + 1;
   const nextLessonStepLabel = lessonDeckSteps[Math.min(lessonStep + 1, lessonDeckSteps.length - 1)];
   const handleMobilePrimaryAction = () => {
     if (isMobileLearningStep) {
@@ -561,6 +891,95 @@ export default function LessonPage({
         </div>
       </section>
 
+      <section className={`hidden rounded-[1.8rem] border p-5 sm:block ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p className={`text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+              {tx("Structured Course")}
+            </p>
+            <h3 className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+              {tx("Complete the learning path before the quiz")}
+            </h3>
+            <p className={`mt-2 max-w-3xl text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+              {tx("Move through concept explanation, applied examples, reflection, and quick checks. The knowledge quiz opens when the course work is complete.")}
+            </p>
+          </div>
+          <div className={`min-w-[240px] rounded-2xl border p-4 ${darkMode ? "border-slate-800 bg-slate-900" : "border-slate-200 bg-white"}`}>
+            <div className={`flex items-center justify-between text-xs font-bold uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
+              <span>{tx("Course Progress")}</span>
+              <span>{courseProgressPercent}%</span>
+            </div>
+            <div className={`mt-2 h-2 overflow-hidden rounded-full ${darkMode ? "bg-slate-800" : "bg-slate-200"}`}>
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500"
+                style={{ width: `${courseProgressPercent}%` }}
+              />
+            </div>
+            <p className={`mt-3 text-xs leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+              {courseCheckCorrectCount}/{courseCheckTotal} {tx("checks complete")} · {reflectionComplete ? tx("reflection saved") : tx("reflection needed")}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          {courseSections.map((section, index) => {
+            const selected = courseStep === index;
+            const complete = section.quickCheck
+              ? isQuickCheckCorrect(section.quickCheck, courseChecks[section.id])
+              : false;
+            return (
+              <button
+                key={section.id}
+                type="button"
+                onClick={() => setCourseStep(index)}
+                className={`min-h-11 rounded-xl border px-4 py-2 text-sm font-bold transition ${
+                  selected
+                    ? "border-transparent bg-gradient-to-r from-cyan-600 to-teal-500 text-white"
+                    : complete
+                      ? darkMode
+                        ? "border-emerald-900/60 bg-emerald-950/30 text-emerald-200"
+                        : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                      : darkMode
+                        ? "border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800"
+                        : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                {tx(section.phase || `Step ${index + 1}`)} · {tx(section.title)}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-5">
+          {renderCourseSection(courseSections[courseStep], courseStep)}
+        </div>
+
+        <div className="mt-4 flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setCourseStep((current) => Math.max(0, current - 1))}
+            disabled={courseStep === 0}
+            className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-sm font-bold disabled:opacity-40 ${
+              darkMode ? "border-slate-700 bg-slate-950 text-slate-200" : "border-slate-300 bg-white text-slate-700"
+            }`}
+          >
+            <ChevronLeft className="h-4 w-4" /> {tx("Back")}
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              setCourseStep((current) => Math.min(courseSections.length - 1, current + 1))
+            }
+            disabled={courseStep === courseSections.length - 1}
+            className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-white disabled:opacity-40 ${
+              darkMode ? "bg-gradient-to-r from-cyan-600 to-teal-500" : "bg-gradient-to-r from-slate-900 to-slate-700"
+            }`}
+          >
+            {tx("Next")} <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </section>
+
       <section className={`hidden rounded-[1.8rem] border p-4 sm:block sm:p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
         <h3 className={`mb-2 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
           {tx("Clinical Learning")}
@@ -649,6 +1068,15 @@ export default function LessonPage({
         <h3 className={`mb-3 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
           {tx("Knowledge Quiz")}
         </h3>
+        {!quizUnlocked ? (
+          <div className={`rounded-2xl border p-4 ${darkMode ? "border-amber-900/50 bg-amber-950/20 text-amber-100" : "border-amber-100 bg-amber-50 text-amber-900"}`}>
+            <p className="text-sm font-bold">{tx("Quiz locked until course work is complete.")}</p>
+            <p className="mt-2 text-sm leading-relaxed">
+              {tx("Complete each quick knowledge check and write a reflection response before opening the quiz.")}
+            </p>
+          </div>
+        ) : (
+          <>
         {savedQuizResponses && (
           <p className={`mb-3 rounded-xl border px-3 py-2 text-xs font-semibold ${darkMode ? "border-cyan-900/60 bg-cyan-950/30 text-cyan-200" : "border-cyan-200 bg-cyan-50 text-cyan-800"}`}>
             {tx("Saved responses loaded. You can review or edit before resubmitting.")}
@@ -735,6 +1163,8 @@ export default function LessonPage({
             )}
           </div>
         </form>
+          </>
+        )}
       </section>
 
       <section className={`hidden rounded-[1.8rem] border p-4 sm:block sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>

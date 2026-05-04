@@ -12,6 +12,93 @@ export const partnerCurriculum = {
           title: "Prenatal Foundations",
           summary:
             "Build a strong baseline for prenatal support by learning what is changing anatomically and emotionally.",
+          course: {
+            sections: [
+              {
+                id: "concept",
+                phase: "Start",
+                title: "Concept Explanation",
+                summary:
+                  "Pregnancy symptoms often connect to predictable body systems. The partner role starts with seeing patterns instead of isolated complaints.",
+                teachingPoints: [
+                  "Cardiovascular, hormonal, and musculoskeletal changes often appear together.",
+                  "Normal discomfort still deserves care, tracking, and language that lowers stress."
+                ],
+                appliedExamples: [
+                  "Back pain after standing may connect to lordosis, pelvic ligament stretch, and fatigue.",
+                  "Emotional overwhelm after a long day can reflect hormonal sensitivity plus depleted energy."
+                ],
+                quickCheck: {
+                  question:
+                    "If she reports back pain and overwhelm, what should you do first?",
+                  options: [
+                    "Dismiss it as normal pregnancy",
+                    "Validate, support comfort, and track the symptom pattern",
+                    "Wait until the next appointment without action"
+                  ],
+                  answerIndex: 1,
+                  rationale:
+                    "Validation and pattern tracking protect trust while helping you notice escalation."
+                }
+              },
+              {
+                id: "application",
+                phase: "Middle",
+                title: "Applied Example",
+                summary:
+                  "Use physiology to choose useful support actions without making her teach you what she needs.",
+                teachingPoints: [
+                  "Translate a symptom into one comfort action and one monitoring question.",
+                  "Avoid over-talking. Name what may be happening and move into practical support."
+                ],
+                appliedExamples: [
+                  "For lower back pain: offer water, side-lying rest, warm compress, and ask whether pain is worsening or paired with other symptoms.",
+                  "For sudden severe headache or vision changes: do not monitor casually, escalate promptly."
+                ],
+                reflectionPrompt:
+                  "Write a two-sentence response that combines empathy with one practical action.",
+                quickCheck: {
+                  question:
+                    "Which symptom pairing requires urgent escalation in late pregnancy?",
+                  options: [
+                    "Mild evening fatigue and hunger",
+                    "Severe headache with visual changes",
+                    "Occasional hip soreness after walking"
+                  ],
+                  answerIndex: 1,
+                  rationale:
+                    "Severe headache with visual changes can signal hypertensive complications."
+                }
+              },
+              {
+                id: "practice",
+                phase: "End",
+                title: "Practice and Readiness",
+                summary:
+                  "Before the quiz, prove you can turn the lesson into a calm support plan.",
+                teachingPoints: [
+                  "A good response includes empathy, comfort, and a clear threshold for calling the care team.",
+                  "The goal is not diagnosis. The goal is steady support and timely escalation."
+                ],
+                appliedExamples: [
+                  "You might say: 'I believe you. Your body is carrying a lot today. Let me help you get settled, then we will track whether this improves.'"
+                ],
+                reflectionPrompt:
+                  "Create a short overnight plan for comfort, hydration, rest, and symptom watch points.",
+                quickCheck: {
+                  question: "What makes the partner response clinically useful?",
+                  options: [
+                    "It is short, supportive, and includes what to watch next",
+                    "It replaces the provider's guidance",
+                    "It avoids discussing symptoms"
+                  ],
+                  answerIndex: 0,
+                  rationale:
+                    "A useful response supports her now and keeps escalation criteria visible."
+                }
+              }
+            ]
+          },
           clinicalContent: [
             "Pregnancy changes cardiovascular, endocrine, and musculoskeletal systems in parallel. Multiple symptoms often come from one hormonal shift.",
             "Partners who can identify normal adaptation versus escalation triggers reduce both maternal stress and avoidable delays in care."
@@ -82,6 +169,87 @@ export const partnerCurriculum = {
           title: "Hormones and Maternal Experience",
           summary:
             "Translate endocrine language into practical support decisions at home and during appointments.",
+          course: {
+            sections: [
+              {
+                id: "concept",
+                phase: "Start",
+                title: "Concept Explanation",
+                summary:
+                  "Hormones shape symptoms, mood, digestion, pain sensitivity, and energy. Support improves when partners can translate those shifts into daily care.",
+                teachingPoints: [
+                  "hCG often tracks with early nausea patterns.",
+                  "Relaxin can increase pelvic and back discomfort by changing joint stability."
+                ],
+                appliedExamples: [
+                  "First-trimester nausea may call for smaller food timing, hydration reminders, and reduced stimulation.",
+                  "Pelvic discomfort may call for movement support, rest positions, and fewer standing tasks."
+                ],
+                quickCheck: {
+                  question: "Which hormone is strongly linked with early nausea patterns?",
+                  options: ["hCG", "Melatonin", "Adrenaline"],
+                  answerIndex: 0,
+                  rationale:
+                    "hCG rises rapidly in early pregnancy and often tracks with nausea intensity."
+                }
+              },
+              {
+                id: "application",
+                phase: "Middle",
+                title: "Applied Example",
+                summary:
+                  "Hormone literacy is only useful when it leads to more patient support at home.",
+                teachingPoints: [
+                  "Name the biological reason without blaming her mood or fatigue.",
+                  "Pair each symptom with a small support action that removes load."
+                ],
+                appliedExamples: [
+                  "For midday exhaustion: prep food, lower noise, bring water, and protect a rest window.",
+                  "For emotional sensitivity: validate first, then ask whether she wants quiet, touch, prayer, music, or space."
+                ],
+                reflectionPrompt:
+                  "Draft a 24-hour support plan for nausea, fatigue, and emotional sensitivity.",
+                quickCheck: {
+                  question: "What is the best framing for emotional sensitivity during hormone shifts?",
+                  options: [
+                    "A biological signal requiring support",
+                    "An overreaction",
+                    "A reason to stop discussing symptoms"
+                  ],
+                  answerIndex: 0,
+                  rationale:
+                    "Hormonal transitions can heighten emotional intensity and need support, not blame."
+                }
+              },
+              {
+                id: "practice",
+                phase: "End",
+                title: "Practice and Readiness",
+                summary:
+                  "Finish by turning endocrine language into a clear, low-friction care plan.",
+                teachingPoints: [
+                  "Support plans should include food timing, hydration, rest, and symptom thresholds.",
+                  "Use her preferred coping rituals as part of the plan."
+                ],
+                appliedExamples: [
+                  "A useful plan might include crackers by the bed, water refills, a quiet midday reset, and a note of symptoms to ask about at the next visit."
+                ],
+                reflectionPrompt:
+                  "Write the exact support plan you would use for the next 24 hours.",
+                quickCheck: {
+                  question: "What should a hormone-informed support plan include?",
+                  options: [
+                    "Food timing, rest, hydration, and symptom watch points",
+                    "Only reassurance",
+                    "More questions without practical help"
+                  ],
+                  answerIndex: 0,
+                  rationale:
+                    "The plan should reduce load and keep symptom changes visible."
+                }
+              }
+            ]
+          },
           clinicalContent: [
             "Estrogen rises through pregnancy and influences vascular tone and neurotransmitter pathways; this can affect mood sensitivity, headaches, and nausea intensity.",
             "hCG rises rapidly in first trimester to sustain progesterone production and is strongly associated with nausea patterns."
@@ -154,6 +322,91 @@ export const partnerCurriculum = {
           title: "Appointment Advocacy and Risk Recognition",
           summary:
             "Prepare for prenatal visits with concise questions and escalation criteria.",
+          course: {
+            sections: [
+              {
+                id: "concept",
+                phase: "Start",
+                title: "Concept Explanation",
+                summary:
+                  "Prenatal advocacy means helping the mother leave appointments with clear decisions, next steps, and warning thresholds.",
+                teachingPoints: [
+                  "Partners can track blood pressure trends, glucose screening outcomes, symptoms, and questions.",
+                  "Informed consent requires benefits, risks, alternatives, intuition, and the option of doing nothing when safe."
+                ],
+                appliedExamples: [
+                  "Before a visit, prepare the top three symptoms and the one decision that needs clarity.",
+                  "During a visit, write down the plan, timing, and who to call if symptoms change."
+                ],
+                quickCheck: {
+                  question: "What is the partner's best role in a prenatal appointment?",
+                  options: [
+                    "Answer every question for her",
+                    "Capture decisions and clarify next steps",
+                    "Avoid asking questions"
+                  ],
+                  answerIndex: 1,
+                  rationale:
+                    "Documentation and clarification help the family follow the plan after the visit."
+                }
+              },
+              {
+                id: "application",
+                phase: "Middle",
+                title: "Applied Example",
+                summary:
+                  "When a recommendation is made, use short respectful questions to clarify the decision.",
+                teachingPoints: [
+                  "B.R.A.I.N. keeps questions calm under time pressure.",
+                  "The partner can protect her voice without turning the room into a conflict."
+                ],
+                appliedExamples: [
+                  "Ask: 'Can we quickly review the benefit, risk, and alternatives so we understand the recommendation?'",
+                  "Ask: 'What would make this urgent today versus safe to monitor?'"
+                ],
+                reflectionPrompt:
+                  "Write a two-minute B.R.A.I.N. script for an induction recommendation.",
+                quickCheck: {
+                  question: "Which question best supports informed consent?",
+                  options: [
+                    "Can we review benefits, risks, and alternatives?",
+                    "Can we ignore this plan?",
+                    "Can you decide without explaining?"
+                  ],
+                  answerIndex: 0,
+                  rationale:
+                    "The question keeps the tone collaborative while making the decision clearer."
+                }
+              },
+              {
+                id: "practice",
+                phase: "End",
+                title: "Practice and Readiness",
+                summary:
+                  "Close the lesson by preparing an appointment note that can be used in real care.",
+                teachingPoints: [
+                  "Good notes are brief: symptom, timing, severity, provider plan, and call-back threshold.",
+                  "Urgent warning signs should never be buried in a general list."
+                ],
+                appliedExamples: [
+                  "For headache with vision changes: document timing, severity, blood pressure if known, and call promptly."
+                ],
+                reflectionPrompt:
+                  "Create a visit prep note with three questions and one symptom threshold.",
+                quickCheck: {
+                  question: "Which symptom should be treated as urgent?",
+                  options: [
+                    "Severe headache with visual disturbance",
+                    "Mild heartburn after dinner",
+                    "Occasional tiredness"
+                  ],
+                  answerIndex: 0,
+                  rationale:
+                    "This can reflect hypertensive complications and needs urgent guidance."
+                }
+              }
+            ]
+          },
           clinicalContent: [
             "A partner can reduce cognitive load by tracking blood pressure trends, glucose screening outcomes, and symptom changes between appointments.",
             "Informed consent requires benefit-risk-alternative discussion before interventions, especially around induction and surveillance decisions."
@@ -223,6 +476,332 @@ export const partnerCurriculum = {
               ],
               answerIndex: 1,
               rationale: "Neurologic symptoms with severe headache require urgent hypertensive evaluation."
+            }
+          ]
+        },
+        {
+          id: "prenatal-nutrition-rest",
+          title: "Nutrition, Rest, and Daily Load",
+          summary:
+            "Build practical support around food, hydration, sleep, and daily physical strain.",
+          course: {
+            sections: [
+              {
+                id: "concept",
+                phase: "Start",
+                title: "Concept Explanation",
+                summary:
+                  "Daily support is clinical support when it protects hydration, food access, movement, and rest.",
+                teachingPoints: [
+                  "Pregnancy increases metabolic demand and can make nausea, reflux, constipation, and fatigue harder to manage.",
+                  "Partners can reduce symptom spikes by planning meals, water, rest blocks, and physical load before the day gets hard."
+                ],
+                appliedExamples: [
+                  "Pack a water bottle, protein snack, and nausea-safe option before leaving home.",
+                  "Move heavier chores to the partner and protect a predictable rest window."
+                ],
+                quickCheck: {
+                  question: "Which action best reduces daily prenatal strain?",
+                  options: [
+                    "Waiting until symptoms become severe",
+                    "Planning hydration, food, rest, and task support",
+                    "Encouraging her to push through fatigue"
+                  ],
+                  answerIndex: 1,
+                  rationale:
+                    "Simple routines lower preventable stress and help symptoms get noticed earlier."
+                }
+              },
+              {
+                id: "application",
+                phase: "Middle",
+                title: "Applied Example",
+                summary:
+                  "Support plans work best when they are specific enough to use during a real workday.",
+                teachingPoints: [
+                  "A partner should ask what foods are tolerable instead of assuming one meal plan fits every day.",
+                  "Rest support includes limiting late-night logistics, visitor demands, and avoidable physical tasks."
+                ],
+                appliedExamples: [
+                  "If nausea peaks in the morning, place crackers, water, and medication reminders within reach.",
+                  "If pelvic pain increases after errands, shorten trips and add seated breaks."
+                ],
+                reflectionPrompt:
+                  "Write a one-day support plan that protects meals, water, movement, and rest.",
+                quickCheck: {
+                  question: "What should a partner do when food tolerance changes?",
+                  options: [
+                    "Keep serving the same meals",
+                    "Ask what is tolerable and adjust the plan",
+                    "Skip meals to avoid nausea"
+                  ],
+                  answerIndex: 1,
+                  rationale:
+                    "Food tolerance can shift quickly, so support needs to follow her real symptoms."
+                }
+              },
+              {
+                id: "practice",
+                phase: "End",
+                title: "Practice and Readiness",
+                summary:
+                  "End by turning support into a repeatable home rhythm.",
+                teachingPoints: [
+                  "The goal is not perfection. The goal is fewer avoidable stress peaks.",
+                  "Partners should track patterns that affect care, such as poor intake, dizziness, or worsening swelling."
+                ],
+                appliedExamples: [
+                  "Create a shared note for meals, water, symptoms, movement, and call-worthy changes."
+                ],
+                reflectionPrompt:
+                  "Name two daily tasks you will fully own during pregnancy and how you will track whether they help.",
+                quickCheck: {
+                  question: "Which symptom pattern should be tracked and discussed with the care team?",
+                  options: [
+                    "Dizziness with poor intake",
+                    "A single preferred snack",
+                    "Normal mild tiredness after activity"
+                  ],
+                  answerIndex: 0,
+                  rationale:
+                    "Dizziness with poor intake can affect safety and should be communicated if persistent or severe."
+                }
+              }
+            ]
+          },
+          clinicalContent: [
+            "Pregnancy changes fluid needs, digestion, sleep quality, and physical tolerance. Support should be practical and repeated, not occasional.",
+            "Partners can reduce daily burden by taking ownership of food access, hydration prompts, transportation planning, and heavier household tasks."
+          ],
+          definitions: [
+            {
+              term: "Hyperemesis",
+              definition:
+                "Severe pregnancy nausea and vomiting that can cause dehydration, weight loss, and need for medical treatment."
+            },
+            {
+              term: "Pelvic Girdle Pain",
+              definition:
+                "Pregnancy-related pain around the pelvis or hips that can worsen with stairs, lifting, or long walking."
+            },
+            {
+              term: "Reflux",
+              definition:
+                "Burning or regurgitation caused by stomach contents moving upward, often worsened later in pregnancy."
+            }
+          ],
+          culturalNotes: [
+            "Honor preferred foods and family traditions while watching for hydration and symptom safety.",
+            "Do not frame rest as laziness. Rest is part of prenatal risk reduction."
+          ],
+          scenario: {
+            prompt:
+              "She is nauseated, exhausted, and still trying to handle dinner, laundry, and errands. Build a realistic evening plan.",
+            guidance:
+              "Include what you take over, what gets delayed, and what symptoms you would track."
+          },
+          quiz: [
+            {
+              id: "q1",
+              question: "The strongest partner move for daily prenatal support is to:",
+              options: [
+                "Wait for instructions",
+                "Own predictable routines before symptoms spike",
+                "Reduce all movement",
+                "Focus only on appointments"
+              ],
+              answerIndex: 1,
+              rationale:
+                "Predictable routines protect energy and reduce the need for the mother to manage every detail."
+            },
+            {
+              id: "q2",
+              question: "Persistent vomiting with dizziness may indicate:",
+              options: [
+                "Need for medical guidance",
+                "Normal hunger only",
+                "A reason to skip fluids",
+                "A non-issue"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Dehydration risk needs clinical guidance when vomiting and dizziness persist."
+            },
+            {
+              id: "q3",
+              question: "A useful support plan should include:",
+              options: [
+                "Food, hydration, rest, and task ownership",
+                "Only motivational language",
+                "Extra chores for mother",
+                "No symptom tracking"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Concrete support reduces daily load and improves pattern recognition."
+            }
+          ]
+        },
+        {
+          id: "prenatal-birth-prep",
+          title: "Birth Prep and Home Readiness",
+          summary:
+            "Prepare for birth with practical plans, hospital logistics, and shared expectations.",
+          course: {
+            sections: [
+              {
+                id: "concept",
+                phase: "Start",
+                title: "Concept Explanation",
+                summary:
+                  "Birth preparation is the process of making choices, roles, and logistics clear before labor begins.",
+                teachingPoints: [
+                  "A birth plan should be short, flexible, and focused on values, preferences, and safety needs.",
+                  "Prepared partners know where to go, what to bring, who to call, and how to communicate when plans change."
+                ],
+                appliedExamples: [
+                  "Store hospital address, triage phone number, insurance card, and medication list in one shared place.",
+                  "Practice a short script for pain support, consent questions, and family updates."
+                ],
+                quickCheck: {
+                  question: "What makes a birth plan useful?",
+                  options: [
+                    "It is long and rigid",
+                    "It is short, flexible, and values-based",
+                    "It replaces clinical advice"
+                  ],
+                  answerIndex: 1,
+                  rationale:
+                    "A focused plan helps the team understand priorities while leaving room for safety changes."
+                }
+              },
+              {
+                id: "application",
+                phase: "Middle",
+                title: "Applied Example",
+                summary:
+                  "Logistics should be clear enough that neither person has to solve everything during contractions.",
+                teachingPoints: [
+                  "The partner can handle bags, transport, visitor boundaries, and update messages.",
+                  "Clear roles reduce conflict when labor starts at an inconvenient time."
+                ],
+                appliedExamples: [
+                  "Create a go-time checklist: contractions, fluid, bleeding, fetal movement, call provider, leave time.",
+                  "Assign one person for family updates so the mother does not manage messages."
+                ],
+                reflectionPrompt:
+                  "Draft your go-time checklist and identify who handles each item.",
+                quickCheck: {
+                  question: "Who should manage family updates during labor when possible?",
+                  options: [
+                    "The mother between contractions",
+                    "A designated support person",
+                    "No one under any circumstance"
+                  ],
+                  answerIndex: 1,
+                  rationale:
+                    "A designated person protects the mother's focus and reduces stress."
+                }
+              },
+              {
+                id: "practice",
+                phase: "End",
+                title: "Practice and Readiness",
+                summary:
+                  "Finish by rehearsing how you will respond when labor begins.",
+                teachingPoints: [
+                  "Rehearsal builds calm because the first steps are already decided.",
+                  "Partners should know emergency symptoms that bypass routine planning."
+                ],
+                appliedExamples: [
+                  "If she has heavy bleeding, severe headache, or decreased fetal movement, call the care team or seek urgent care based on guidance."
+                ],
+                reflectionPrompt:
+                  "Write the first five actions you will take when she says labor may be starting.",
+                quickCheck: {
+                  question: "Which situation should override routine plans?",
+                  options: [
+                    "A packed bag is missing socks",
+                    "Heavy bleeding or decreased fetal movement",
+                    "A family member wants an update"
+                  ],
+                  answerIndex: 1,
+                  rationale:
+                    "Potential emergency symptoms require prompt clinical guidance."
+                }
+              }
+            ]
+          },
+          clinicalContent: [
+            "Birth preparation improves response time by clarifying logistics, support roles, preferences, and escalation criteria before labor starts.",
+            "A partner can reduce stress by owning transport, communication, packed items, visitor boundaries, and decision notes."
+          ],
+          definitions: [
+            {
+              term: "Birth Preferences",
+              definition:
+                "A short list of values and care preferences that helps the team understand what matters to the mother."
+            },
+            {
+              term: "Triage",
+              definition:
+                "The clinical process of assessing symptoms and deciding the next level of care."
+            },
+            {
+              term: "Rupture of Membranes",
+              definition:
+                "When the amniotic sac breaks and fluid leaks or gushes before or during labor."
+            }
+          ],
+          culturalNotes: [
+            "Include faith, family, modesty, and language needs in birth preferences when they matter.",
+            "Set visitor boundaries early so support does not become another demand on the mother."
+          ],
+          scenario: {
+            prompt:
+              "Contractions begin at night, the bag is not fully packed, and family members are texting. What do you do first?",
+            guidance:
+              "Prioritize clinical guidance, transport readiness, and reducing the mother's communication load."
+          },
+          quiz: [
+            {
+              id: "q1",
+              question: "A partner should know before labor starts:",
+              options: [
+                "Only the due date",
+                "Where to go, who to call, and what symptoms change the plan",
+                "Everyone's visitor preferences except mother's",
+                "Nothing until contractions begin"
+              ],
+              answerIndex: 1,
+              rationale:
+                "Prepared logistics reduce stress and support faster decisions."
+            },
+            {
+              id: "q2",
+              question: "A birth preference plan should be:",
+              options: [
+                "Flexible and clear",
+                "Secret from the care team",
+                "Focused only on visitors",
+                "Used to refuse all changes"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Clear preferences help the care team support values while adapting to safety needs."
+            },
+            {
+              id: "q3",
+              question: "The partner's communication role is to:",
+              options: [
+                "Protect focus and share concise updates",
+                "Send every detail to everyone",
+                "Hand the phone to mother",
+                "Avoid all provider questions"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Good communication protects the mother's energy and keeps support aligned."
             }
           ]
         }
@@ -410,6 +989,162 @@ export const partnerCurriculum = {
               options: ["We refuse everything", "Can we review benefits, risks, and alternatives quickly?", "Do whatever", "No questions"],
               answerIndex: 1,
               rationale: "Clear collaborative language improves decision quality in time pressure."
+            }
+          ]
+        },
+        {
+          id: "labor-advocacy-monitoring",
+          title: "Monitoring, Advocacy, and Team Communication",
+          summary:
+            "Understand bedside monitoring and practice clear communication with the care team.",
+          clinicalContent: [
+            "Labor monitoring gives the team information about contraction pattern, fetal response, and maternal status. Partners do not need to interpret every tracing, but they should understand why monitoring changes.",
+            "Strong partner advocacy is calm, concise, and specific. It helps the mother understand what is happening without disrupting urgent care."
+          ],
+          definitions: [
+            {
+              term: "Fetal Monitoring",
+              definition:
+                "Assessment of fetal heart rate patterns during labor using external or internal tools."
+            },
+            {
+              term: "Variability",
+              definition:
+                "Normal beat-to-beat fetal heart rate changes that can help clinicians assess fetal well-being."
+            },
+            {
+              term: "Tachysystole",
+              definition:
+                "Excessively frequent contractions that can reduce fetal recovery time between contractions."
+            }
+          ],
+          culturalNotes: [
+            "Ask for plain-language explanations when clinical terms move too quickly.",
+            "Support the mother's preference for who hears updates, especially when family is present."
+          ],
+          scenario: {
+            prompt:
+              "The monitor alarm sounds, staff enter quickly, and she becomes frightened. What do you say to her and what do you ask the nurse?",
+            guidance:
+              "Ground her first, then ask for a short explanation of what is being watched and what happens next."
+          },
+          quiz: [
+            {
+              id: "q1",
+              question: "A partner's best response to urgent monitor activity is to:",
+              options: [
+                "Panic and interpret the tracing alone",
+                "Stay calm, orient the mother, and ask for a concise update",
+                "Disconnect the monitor",
+                "Leave the room"
+              ],
+              answerIndex: 1,
+              rationale:
+                "Calm orientation and clear questions support safety and reduce fear."
+            },
+            {
+              id: "q2",
+              question: "Fetal monitoring is used to assess:",
+              options: [
+                "Fetal heart rate patterns and response to labor",
+                "Visitor timing",
+                "Only maternal hunger",
+                "The exact birth time"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Monitoring helps clinicians assess fetal response and labor status."
+            },
+            {
+              id: "q3",
+              question: "Effective advocacy language during labor is:",
+              options: [
+                "Clear, respectful, and specific",
+                "Loud and accusatory",
+                "Silent at all times",
+                "Focused on winning arguments"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Specific, respectful questions protect understanding while keeping care moving."
+            }
+          ]
+        },
+        {
+          id: "labor-immediate-postbirth",
+          title: "Immediate Postbirth Support",
+          summary:
+            "Support the first hour after birth, including bonding, recovery checks, and role transitions.",
+          clinicalContent: [
+            "The immediate postbirth period includes placental delivery, bleeding assessment, newborn transition, feeding initiation, and emotional decompression.",
+            "Partners can help by staying present, watching communication, taking notes, and protecting skin-to-skin or feeding goals when clinically safe."
+          ],
+          definitions: [
+            {
+              term: "Golden Hour",
+              definition:
+                "The early postbirth period often used for skin-to-skin, bonding, feeding initiation, and recovery observation."
+            },
+            {
+              term: "Uterine Tone",
+              definition:
+                "The firmness of the uterus after birth, assessed to reduce hemorrhage risk."
+            },
+            {
+              term: "Apgar Score",
+              definition:
+                "A quick newborn assessment of appearance, pulse, grimace, activity, and respiration after birth."
+            }
+          ],
+          culturalNotes: [
+            "Protect cultural or spiritual first moments when they are safe and requested.",
+            "Clarify photo, visitor, and announcement preferences before birth when possible."
+          ],
+          scenario: {
+            prompt:
+              "Baby is being assessed, staff are checking bleeding, and family is asking for updates. What do you prioritize?",
+            guidance:
+              "Focus on mother-baby status, provider updates, and protecting the mother's stated preferences."
+          },
+          quiz: [
+            {
+              id: "q1",
+              question: "The immediate postbirth partner role includes:",
+              options: [
+                "Managing updates, staying present, and tracking care instructions",
+                "Leaving all decisions to visitors",
+                "Ignoring maternal bleeding updates",
+                "Only taking photos"
+              ],
+              answerIndex: 0,
+              rationale:
+                "The partner can reduce stress by managing communication and listening for care details."
+            },
+            {
+              id: "q2",
+              question: "Uterine tone matters because it helps assess:",
+              options: [
+                "Hemorrhage risk",
+                "Hair color",
+                "Visitor flow",
+                "Contraction music"
+              ],
+              answerIndex: 0,
+              rationale:
+                "A firm uterus reduces bleeding risk after birth."
+            },
+            {
+              id: "q3",
+              question: "Skin-to-skin should be supported:",
+              options: [
+                "When clinically safe and desired",
+                "Only if visitors request it",
+                "Never after vaginal birth",
+                "Only after discharge"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Skin-to-skin can support bonding and feeding when mother and baby are stable."
             }
           ]
         }
@@ -612,6 +1347,162 @@ export const partnerCurriculum = {
               options: ["Rely on intuition only", "Use defined thresholds and escalate early", "Wait for multiple severe signs", "Avoid calling due to overreaction concerns"],
               answerIndex: 1,
               rationale: "Threshold-based escalation prevents delay in time-sensitive conditions."
+            }
+          ]
+        },
+        {
+          id: "postpartum-feeding-support",
+          title: "Feeding Support and Partner Logistics",
+          summary:
+            "Support feeding goals with practical help, symptom awareness, and low-pressure coordination.",
+          clinicalContent: [
+            "Feeding can involve breastfeeding, pumping, formula, or combined plans. Partners support success by protecting rest, supplies, hydration, and timely help.",
+            "Pain, poor latch, dehydration signs, low diaper counts, breast redness, and flu-like symptoms should prompt skilled support or provider guidance."
+          ],
+          definitions: [
+            {
+              term: "Latch",
+              definition:
+                "How the baby attaches to the breast during feeding, affecting milk transfer and nipple comfort."
+            },
+            {
+              term: "Mastitis",
+              definition:
+                "Breast inflammation or infection that can cause redness, pain, fever, and flu-like symptoms."
+            },
+            {
+              term: "Cluster Feeding",
+              definition:
+                "Periods when a newborn feeds very frequently, often during growth or regulation phases."
+            }
+          ],
+          culturalNotes: [
+            "Respect the mother's feeding goals without using shame or pressure.",
+            "Family feeding advice may conflict. Help center the plan she chose with her care team."
+          ],
+          scenario: {
+            prompt:
+              "She is crying during feeds, family is giving conflicting advice, and the baby wants to feed again. What is your next support plan?",
+            guidance:
+              "Include emotional support, practical setup, and when to contact feeding or medical support."
+          },
+          quiz: [
+            {
+              id: "q1",
+              question: "A partner supports feeding best by:",
+              options: [
+                "Reducing pressure and managing practical needs",
+                "Criticizing the feeding method",
+                "Ignoring pain",
+                "Inviting more conflicting advice"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Support should protect the mother's goals and reduce avoidable stress."
+            },
+            {
+              id: "q2",
+              question: "Breast redness with fever or flu-like symptoms may indicate:",
+              options: [
+                "Mastitis",
+                "Normal hunger",
+                "A visitor issue",
+                "No need for follow-up"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Mastitis symptoms require prompt provider guidance."
+            },
+            {
+              id: "q3",
+              question: "Cluster feeding means:",
+              options: [
+                "Frequent feeding over a period of time",
+                "Baby should never feed again",
+                "A guaranteed milk supply problem",
+                "A reason to stop all support"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Cluster feeding can be common, but pain, dehydration, or low output still need attention."
+            }
+          ]
+        },
+        {
+          id: "postpartum-return-rhythm",
+          title: "Return Home Rhythm and Long-Term Recovery",
+          summary:
+            "Build a home routine that supports recovery beyond the first week.",
+          clinicalContent: [
+            "Postpartum recovery continues for weeks and months. Pain, bleeding, mood, sleep, feeding, and appointment follow-through all need ongoing support.",
+            "Partners can create a simple home operating rhythm: rest protection, meals, meds, hydration, symptom checks, appointments, and visitor boundaries."
+          ],
+          definitions: [
+            {
+              term: "Postpartum Visit",
+              definition:
+                "A clinical follow-up after birth to assess recovery, mood, feeding, contraception, and medical concerns."
+            },
+            {
+              term: "Pelvic Floor",
+              definition:
+                "Muscles and connective tissue that support bladder, bowel, sexual function, and core stability."
+            },
+            {
+              term: "Care Load",
+              definition:
+                "The combined physical, emotional, and planning work required to keep recovery and newborn care moving."
+            }
+          ],
+          culturalNotes: [
+            "Use community and family help in ways that reduce work for the mother instead of creating hosting duties.",
+            "Some families expect the mother to resume duties quickly. Partners can protect recovery with clear boundaries."
+          ],
+          scenario: {
+            prompt:
+              "Two weeks after birth, visitors keep coming, sleep is fragmented, and appointments are being missed. Reset the home plan.",
+            guidance:
+              "Prioritize rest, appointment follow-through, visitor limits, and shared task ownership."
+          },
+          quiz: [
+            {
+              id: "q1",
+              question: "A strong return-home rhythm includes:",
+              options: [
+                "Rest, meals, meds, symptom checks, appointments, and visitor limits",
+                "Only baby photos",
+                "Unlimited visitors",
+                "No follow-up care"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Recovery needs practical systems that protect the mother over time."
+            },
+            {
+              id: "q2",
+              question: "Missed postpartum appointments matter because:",
+              options: [
+                "Recovery, mood, feeding, and medical concerns may be missed",
+                "Appointments are only paperwork",
+                "They only matter after six months",
+                "Partners cannot help with them"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Follow-up care can catch physical and mental health concerns early."
+            },
+            {
+              id: "q3",
+              question: "Visitor boundaries should be based on:",
+              options: [
+                "Mother's recovery needs and household capacity",
+                "Who texts the most",
+                "Avoiding all help",
+                "Keeping everyone entertained"
+              ],
+              answerIndex: 0,
+              rationale:
+                "Help should reduce care load, not create more work."
             }
           ]
         }
