@@ -6,6 +6,7 @@ import OverviewPage from "./pages/OverviewPage";
 import ModulePage from "./pages/ModulePage";
 import LessonPage from "./pages/LessonPage";
 import InteractiveGuidesPage from "./pages/InteractiveGuidesPage";
+import VideoHubPage from "./pages/VideoHubPage";
 import { PartnerDashboardProvider, usePartnerDashboard } from "./state/PartnerDashboardContext";
 import { getModuleState, isLessonUnlocked, isModuleUnlocked } from "./utils/progress";
 
@@ -66,6 +67,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     navigate(`${BASE_PATH}/module/${moduleId}/lesson/${lessonId}`);
   const openGuides = () => navigate(`${BASE_PATH}/guides`);
   const openGuide = (guideId) => navigate(`${BASE_PATH}/guides/${guideId}`);
+  const openVideoHub = () => navigate(`${BASE_PATH}/video-hub`);
 
   const moduleMatch = subPath.match(/^\/module\/([a-z0-9-]+)$/i);
   const lessonMatch = subPath.match(/^\/module\/([a-z0-9-]+)\/lesson\/([a-z0-9-]+)$/i);
@@ -81,10 +83,13 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           onOpenModule={openModule}
           onOpenLesson={openLesson}
           onOpenGuides={openGuides}
+          onOpenVideoHub={openVideoHub}
           darkMode={darkMode}
           translateText={translateText}
         />
     );
+  } else if (subPath === "/video-hub") {
+    page = <VideoHubPage />;
   } else if (guidesMatch) {
     page = (
       <InteractiveGuidesPage
@@ -183,6 +188,10 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         </button>
       </div>
     );
+  }
+
+  if (subPath === "/video-hub") {
+    return page;
   }
 
   return (

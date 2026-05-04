@@ -1,10 +1,10 @@
 import React from "react";
-import { ArrowRight, BarChart3, BookMarked, Clock3, GraduationCap, Library } from "lucide-react";
+import { ArrowRight, BarChart3, BookMarked, Clock3, GraduationCap, Library, Video } from "lucide-react";
 import ModuleCard from "../components/ModuleCard";
 import ProgressBar from "../components/ProgressBar";
 import { partnerInteractiveGuides } from "../data/interactiveGuides";
 
-export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpenLesson, onOpenGuides, darkMode = false, translateText = (value) => value }) {
+export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpenLesson, onOpenGuides, onOpenVideoHub, darkMode = false, translateText = (value) => value }) {
   const tx = (value) => translateText(value);
   const hasNextLesson = Boolean(metrics.nextLesson.lessonId);
   const latestCompleted = metrics.recentlyCompleted[0] || null;
@@ -311,6 +311,29 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
               </button>
             );
           })}
+        </div>
+      </section>
+
+      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950/20 shadow-xl" : "border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950 shadow-sm"}`}>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+              <Video className="h-4 w-4" /> {tx("Partner Video Hub")}
+            </p>
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-white sm:text-3xl">
+              {tx("Watch partner-focused support videos inside the hub")}
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-slate-300">
+              {tx("Open embedded videos for prenatal education, labor support, postpartum recovery, newborn care, and mental health without leaving the platform.")}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onOpenVideoHub}
+            className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-400 hover:to-fuchsia-400"
+          >
+            {tx("Open Video Hub")} <ArrowRight className="h-4 w-4" />
+          </button>
         </div>
       </section>
 
