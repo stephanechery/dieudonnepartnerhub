@@ -24,6 +24,7 @@ import {
   Volume2,
   X,
   MessageSquare,
+  Mail,
   Search,
   Moon,
   Shield,
@@ -1777,6 +1778,141 @@ const mealFocusModes = [
   'Fast, one-pan recovery meals for low-energy days'
 ];
 
+const postpartumMealIdeas = [
+  {
+    focus: 'Iron repletion and blood-loss recovery',
+    title: 'Turkey Lentil Recovery Bowl',
+    options: [
+      'Ground turkey, lentils, spinach, brown rice, and lemon yogurt sauce. Simmer lentils ahead, then warm everything in one skillet for a 15-minute bowl.',
+      'Beef and black bean taco rice with avocado and salsa. Use microwave rice and canned beans so the meal lands fast without extra cleanup.',
+      'Egg, spinach, and sweet potato hash with pumpkin seeds. Roast extra sweet potato once, then reheat portions with eggs through the week.'
+    ],
+    helps: [
+      'Iron supports blood-loss recovery.',
+      'Protein supports tissue repair and energy stability.',
+      'Vitamin C from citrus or salsa helps iron absorption.',
+      'Complex carbs help steady appetite during broken sleep.'
+    ],
+    execution: [
+      'Buy pre-washed greens and microwave grains.',
+      'Serve with a full water bottle before she asks.',
+      'Pack leftovers in single-serving containers.'
+    ]
+  },
+  {
+    focus: 'Fiber and gentle digestion support',
+    title: 'White Bean Chicken Soup',
+    options: [
+      'Rotisserie chicken, white beans, carrots, celery, broth, and parsley. Simmer for 20 minutes and keep it mild for an easier postpartum stomach.',
+      'Oatmeal bowl with chia, berries, peanut butter, and Greek yogurt. Prep dry jars so breakfast only needs hot water or milk.',
+      'Salmon, quinoa, cucumber, olive oil, and lemon. Use canned salmon when the household needs a no-cook option.'
+    ],
+    helps: [
+      'Fiber supports constipation recovery.',
+      'Warm fluids support hydration and comfort.',
+      'Protein reduces blood sugar dips.',
+      'Omega-3 fats support inflammation balance.'
+    ],
+    execution: [
+      'Keep stool-softener-friendly meals soft and hydrated.',
+      'Offer small portions more often.',
+      'Avoid spicy experiments unless she asks for them.'
+    ]
+  },
+  {
+    focus: 'High-protein tissue repair and energy stability',
+    title: 'Sheet-Pan Chicken and Sweet Potato',
+    options: [
+      'Chicken thighs, sweet potatoes, broccoli, olive oil, and garlic. Roast one tray and serve with yogurt sauce for extra protein.',
+      'Cottage cheese toast with avocado, tomato, and boiled eggs. It works as a fast meal when no one has energy to cook.',
+      'Bean and cheese quesadilla with spinach and guacamole. Use whole-grain tortillas and serve with fruit on the side.'
+    ],
+    helps: [
+      'Protein supports incision, perineal, and muscle repair.',
+      'Potassium-rich foods support fluid shifts.',
+      'Healthy fats help satiety during feeding windows.',
+      'A predictable meal prevents skipped eating.'
+    ],
+    execution: [
+      'Cook once and portion twice.',
+      'Bring food to her recovery spot.',
+      'Set a 3-hour food check during the day.'
+    ]
+  },
+  {
+    focus: 'Hydration-forward breastfeeding support',
+    title: 'Brothy Noodle and Egg Bowl',
+    options: [
+      'Low-sodium broth, noodles, soft-boiled egg, shredded chicken, greens, and sesame oil. Keep broth ready so the bowl comes together quickly.',
+      'Greek yogurt smoothie with berries, oats, peanut butter, and milk. Blend and serve with a straw during feeding or pumping.',
+      'Tuna avocado rice bowl with cucumber and seaweed snacks. Use pouches and microwave rice for a low-effort meal.'
+    ],
+    helps: [
+      'Fluids support hydration during feeding.',
+      'Protein supports milk production demands.',
+      'Sodium and potassium support fluid balance.',
+      'Easy-to-eat meals reduce skipped calories.'
+    ],
+    execution: [
+      'Refill water every time baby feeds.',
+      'Set snacks within arm reach.',
+      'Keep one one-handed meal ready daily.'
+    ]
+  },
+  {
+    focus: 'Fast, one-pan recovery meals for low-energy days',
+    title: 'One-Pan Sausage, Beans, and Greens',
+    options: [
+      'Chicken sausage, cannellini beans, kale, tomatoes, and olive oil. Warm everything in one pan and finish with lemon.',
+      'Frozen veggie fried rice with scrambled eggs and edamame. Add extra eggs for protein and keep seasoning gentle.',
+      'Pesto chickpea pasta with peas and parmesan. Use one pot and save half for tomorrow.'
+    ],
+    helps: [
+      'One-pan meals reduce partner execution friction.',
+      'Beans and greens support iron, fiber, and minerals.',
+      'Protein and carbs help stabilize energy.',
+      'Leftovers protect the next recovery window.'
+    ],
+    execution: [
+      'Keep two emergency meals in the pantry.',
+      'Clean as the meal cooks.',
+      'Serve before visitors or chores get attention.'
+    ]
+  }
+];
+
+const buildPostpartumMealIdea = (historyLength = 0) => {
+  const idea = postpartumMealIdeas[historyLength % postpartumMealIdeas.length];
+  const optionOffset = historyLength % idea.options.length;
+  const orderedOptions = [
+    ...idea.options.slice(optionOffset),
+    ...idea.options.slice(0, optionOffset)
+  ];
+
+  return `Recovery focus: ${idea.focus}
+
+Meal Option A: ${orderedOptions[0]}
+
+Meal Option B: ${orderedOptions[1]}
+
+Meal Option C: ${orderedOptions[2]}
+
+Why It Helps:
+${idea.helps.map((item) => `- ${item}`).join('\n')}
+
+Partner Execution Tip:
+${idea.execution.map((item) => `- ${item}`).join('\n')}`;
+};
+
+const buildShareHref = ({ type, subject, body }) => {
+  const encodedSubject = encodeURIComponent(subject || 'Dieudonne Partner Hub meal idea');
+  const encodedBody = encodeURIComponent(body || '');
+  if (type === 'sms') {
+    return `sms:?&body=${encodedBody}`;
+  }
+  return `mailto:?subject=${encodedSubject}&body=${encodedBody}`;
+};
+
 
 const LANGUAGE_OPTIONS = [
   { code: 'en', short: 'EN', flag: '🇺🇸', label: 'English', modelLabel: 'English' },
@@ -2945,6 +3081,7 @@ const App = () => {
   });
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState(null);
+  const [aiResultMeta, setAiResultMeta] = useState(null);
   const [userInput, setUserInput] = useState('');
   const [darkMode, setDarkMode] = useState(true);
   const [guideStep, setGuideStep] = useState(0);
@@ -3566,11 +3703,26 @@ ${JSON.stringify(keyedSource)}`,
   };
 
   const handleAiAction = async (type) => {
+    const languageMeta = LANGUAGE_OPTIONS.find((item) => item.code === language) || LANGUAGE_OPTIONS[0];
+
+    if (type === 'meal') {
+      const generatedMeal = buildPostpartumMealIdea(mealHistory.length);
+      setAiResultMeta({
+        type: 'meal',
+        title: 'Postpartum Recovery Meal Idea',
+        eyebrow: 'Instant Recovery Nutrition',
+        shareSubject: 'Postpartum recovery meal idea from Dieudonne Partner Hub'
+      });
+      setAiResult(generatedMeal);
+      setMealHistory((prev) => [...prev.slice(-9), generatedMeal]);
+      return;
+    }
+
     setAiLoading(true);
     setAiResult(null);
+    setAiResultMeta(null);
     let prompt = '';
     let generationConfig = {};
-    const languageMeta = LANGUAGE_OPTIONS.find((item) => item.code === language) || LANGUAGE_OPTIONS[0];
     const responseLanguageInstruction =
       languageMeta.code === 'en'
         ? 'Respond in English.'
@@ -3692,8 +3844,23 @@ ${cleanedResult}`,
         setMealHistory((prev) => [...prev.slice(-9), cleanedResult]);
       }
 
+      setAiResultMeta({
+        type,
+        title: type === 'coach' ? 'Labor Coaching Pack' : 'Gemini Intelligent Insight',
+        eyebrow: type === 'coach' ? 'Real-Time Partner Coach' : 'Clinical Language Support',
+        shareSubject:
+          type === 'coach'
+            ? 'Labor coaching pack from Dieudonne Partner Hub'
+            : 'Partner support note from Dieudonne Partner Hub'
+      });
       setAiResult(cleanedResult);
     } catch (error) {
+      setAiResultMeta({
+        type: 'error',
+        title: 'Request Needs Attention',
+        eyebrow: 'Support Tool',
+        shareSubject: 'Dieudonne Partner Hub support note'
+      });
       if (!apiKey) {
         setAiResult('Gemini API key missing. Set VITE_GEMINI_API_KEY so text and audio requests can authenticate.');
       } else {
@@ -4086,24 +4253,60 @@ ${cleanedResult}`,
         }
       ],
       aiTool: (
-        <div className={`mt-8 rounded-3xl border p-6 shadow-sm transition-colors duration-300 ${darkMode ? 'border-slate-700 bg-slate-900' : 'border-rose-100 bg-rose-50'}`}>
-          <h4 className={`mb-2 flex items-center gap-2 font-bold ${darkMode ? 'text-rose-400' : 'text-rose-900'}`}>
-            <Sparkles className="h-5 w-5" />
-            {translateText('Intelligent Postpartum Recovery Nutrition')}
-          </h4>
-          <p className={`mb-6 text-sm font-medium ${darkMode ? 'text-slate-400' : 'text-rose-700'}`}>
-            {translateText('Generate a meal idea optimized for her recovery stage.')}
-          </p>
-          <button
-            onClick={() => handleAiAction('meal')}
-            disabled={aiLoading}
-            className={`flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold text-white shadow-md transition-all active:scale-95 ${
-              darkMode ? 'bg-rose-600 hover:bg-rose-500' : 'bg-rose-600 hover:bg-rose-700'
-            }`}
-          >
-            {aiLoading ? <Utensils className="h-4 w-4" /> : <Utensils className="h-4 w-4" />}
-            {aiLoading ? translateText('Generating Meal Tips...') : translateText('Get Meal Idea ✨')}
-          </button>
+        <div className={`mt-8 overflow-hidden rounded-2xl border shadow-sm transition-colors duration-300 ${
+          darkMode ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-white'
+        }`}>
+          <div className={`border-b px-4 py-4 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className={`mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-rose-300' : 'text-rose-700'}`}>
+                  <Sparkles className="h-4 w-4" />
+                  {translateText('Instant Recovery Nutrition')}
+                </p>
+                <h4 className={`text-xl font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
+                  {translateText('Postpartum Meal Builder')}
+                </h4>
+                <p className={`mt-2 max-w-xl text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                  {translateText('Generate a recovery meal pack instantly, then send it by email or text.')}
+                </p>
+              </div>
+              <div className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${
+                darkMode ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+              }`}>
+                <Zap className="h-3.5 w-3.5" />
+                {translateText('Instant')}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3">
+            {[
+              'Iron + protein',
+              'Hydration support',
+              'Low-effort prep'
+            ].map((label) => (
+              <div
+                key={label}
+                className={`rounded-xl border px-3 py-3 text-sm font-bold ${
+                  darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
+                }`}
+              >
+                {translateText(label)}
+              </div>
+            ))}
+          </div>
+
+          <div className="px-4 pb-4">
+            <button
+              onClick={() => handleAiAction('meal')}
+              className={`flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-black text-white shadow-md transition-all active:scale-95 ${
+                darkMode ? 'bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500' : 'bg-gradient-to-r from-slate-950 to-rose-700 hover:from-slate-800 hover:to-rose-600'
+              }`}
+            >
+              <Utensils className="h-4 w-4" />
+              {translateText('Get Instant Meal Pack')}
+            </button>
+          </div>
         </div>
       )
     },
@@ -4194,6 +4397,22 @@ ${cleanedResult}`,
       'Flip the cards above to see actionable tips for this stage. As a partner, your education is just as vital as hers to ensure a safe transition for the entire family.',
       'Every pregnancy and labor is unique. Use these guidelines as a baseline, but always defer to the specific instructions given by your medical team.',
       'Gemini Intelligent Insight',
+      'Instant Recovery Nutrition',
+      'Postpartum Recovery Meal Idea',
+      'Postpartum Meal Builder',
+      'Generate a recovery meal pack instantly, then send it by email or text.',
+      'Iron + protein',
+      'Hydration support',
+      'Low-effort prep',
+      'Instant',
+      'Get Instant Meal Pack',
+      'Send by Email',
+      'Send by Text',
+      'Labor Coaching Pack',
+      'Real-Time Partner Coach',
+      'Clinical Language Support',
+      'Request Needs Attention',
+      'Support Tool',
       'Got it',
       'Interactive Anatomy Guide',
       'Interactive Labor Physiology Guide',
@@ -4477,26 +4696,66 @@ ${cleanedResult}`,
     <div ref={appRootRef} className={`min-h-screen p-4 font-sans transition-colors duration-500 md:p-8 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
       {aiResult && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-md">
-          <div className={`flex min-h-0 max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl shadow-2xl ${darkMode ? 'border border-slate-800 bg-slate-900' : 'bg-white'}`}>
-            <div className="flex items-center justify-between bg-slate-900 p-6 text-white">
-              <div className="flex items-center gap-2 font-bold">
-                <Sparkles className="h-5 w-5 text-rose-400" />
-                {translateText('Gemini Intelligent Insight')}
+          <div className={`flex min-h-0 max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl shadow-2xl ${darkMode ? 'border border-slate-800 bg-slate-900' : 'border border-slate-200 bg-white'}`}>
+            <div className={`flex items-center justify-between border-b p-5 ${darkMode ? 'border-slate-800 bg-slate-950 text-white' : 'border-slate-200 bg-slate-50 text-slate-950'}`}>
+              <div className="min-w-0">
+                <p className={`mb-1 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.18em] ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`}>
+                  <Sparkles className="h-4 w-4" />
+                  {translateText(aiResultMeta?.eyebrow || 'Gemini Intelligent Insight')}
+                </p>
+                <h3 className="truncate text-lg font-black">
+                  {translateText(aiResultMeta?.title || 'Gemini Intelligent Insight')}
+                </h3>
               </div>
-              <button onClick={() => setAiResult(null)} className="rounded-full p-2 transition-colors hover:bg-slate-800">
+              <button
+                onClick={() => {
+                  setAiResult(null);
+                  setAiResultMeta(null);
+                }}
+                className={`rounded-full p-2 transition-colors ${darkMode ? 'hover:bg-slate-800' : 'hover:bg-slate-200'}`}
+              >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <div
               ref={insightScrollRef}
-              className="custom-scrollbar h-[56vh] min-h-[240px] overflow-y-auto overscroll-contain p-8"
+              className="custom-scrollbar h-[56vh] min-h-[240px] overflow-y-auto overscroll-contain p-6 sm:p-8"
             >
               <p className={`whitespace-pre-wrap leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{aiResult}</p>
             </div>
-            <div className={`border-t p-6 ${darkMode ? 'border-slate-800' : 'border-slate-200'}`}>
+            <div className={`space-y-3 border-t p-4 sm:p-5 ${darkMode ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-slate-50'}`}>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <a
+                  href={buildShareHref({
+                    type: 'email',
+                    subject: aiResultMeta?.shareSubject,
+                    body: aiResult
+                  })}
+                  className={`flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-black transition ${
+                    darkMode ? 'border-slate-700 bg-slate-900 text-slate-100 hover:bg-slate-800' : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-100'
+                  }`}
+                >
+                  <Mail className="h-4 w-4" /> {translateText('Send by Email')}
+                </a>
+                <a
+                  href={buildShareHref({
+                    type: 'sms',
+                    subject: aiResultMeta?.shareSubject,
+                    body: aiResult
+                  })}
+                  className={`flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-black transition ${
+                    darkMode ? 'border-slate-700 bg-slate-900 text-slate-100 hover:bg-slate-800' : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-100'
+                  }`}
+                >
+                  <MessageSquare className="h-4 w-4" /> {translateText('Send by Text')}
+                </a>
+              </div>
               <button
-                onClick={() => setAiResult(null)}
-                className={`w-full rounded-2xl py-4 font-bold text-white shadow-lg transition-all active:scale-95 ${
+                onClick={() => {
+                  setAiResult(null);
+                  setAiResultMeta(null);
+                }}
+                className={`w-full rounded-xl py-3 font-bold text-white shadow-lg transition-all active:scale-95 ${
                   darkMode ? 'bg-rose-600 shadow-rose-900/20 hover:bg-rose-500' : 'bg-rose-600 shadow-rose-200 hover:bg-rose-700'
                 }`}
               >
