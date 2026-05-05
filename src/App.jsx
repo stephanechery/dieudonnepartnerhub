@@ -3064,7 +3064,7 @@ const localizeUiString = (value, locale, translationMap) => {
 const App = () => {
   const [activeStage, setActiveStage] = useState('prenatal');
   const [experienceEntry, setExperienceEntry] = useState(null);
-  const [heroImageSrc, setHeroImageSrc] = useState('/hero-reference.png');
+  const [heroImageSrc, setHeroImageSrc] = useState('/home-hero-pregnant.png');
   const [language, setLanguage] = useState(() => {
     if (typeof window === 'undefined') return 'en';
     return window.sessionStorage.getItem(LANGUAGE_SESSION_KEY) || 'en';
