@@ -4,6 +4,7 @@ import {
   Bookmark,
   BookOpen,
   ChevronDown,
+  Clock3,
   Download,
   FileText,
   Globe2,
@@ -40,6 +41,7 @@ const navGroups = [
       { label: "My Journey", icon: GraduationCap, action: "home" },
       { label: "Continue Watching", icon: Play, action: "continue" },
       { label: "Saved Videos", icon: Bookmark, action: "saved" },
+      { label: "Watch Later", icon: Clock3, action: "watchLater" },
     ],
   },
   {
@@ -88,7 +90,15 @@ const glossaryResource = {
 
 const findVideo = (videoId) => videoHubVideos.find((video) => video.id === videoId);
 
-function SidebarNav({ open, onClose, activeCategory, savedCount, showSavedOnly, onItemSelect }) {
+function SidebarNav({
+  open,
+  onClose,
+  activeCategory,
+  savedCount,
+  watchLaterCount,
+  libraryView,
+  onItemSelect,
+}) {
   return (
     <>
       {open && (
@@ -139,8 +149,14 @@ function SidebarNav({ open, onClose, activeCategory, savedCount, showSavedOnly, 
                   const Icon = item.icon;
                   const active =
                     item.category === activeCategory ||
-                    (item.action === "saved" && showSavedOnly) ||
-                    (item.action === "home" && index === 0 && activeCategory === "All" && !showSavedOnly);
+                    (item.action === libraryView && ["saved", "watchLater"].includes(item.action)) ||
+                    (item.action === "home" && index === 0 && activeCategory === "All" && libraryView === "all");
+                  const count =
+                    item.action === "saved"
+                      ? savedCount
+                      : item.action === "watchLater"
+                        ? watchLaterCount
+                        : 0;
                   return (
                     <button
                       key={item.label}
@@ -154,9 +170,9 @@ function SidebarNav({ open, onClose, activeCategory, savedCount, showSavedOnly, 
                     >
                       <Icon className="h-4 w-4" />
                       <span className="min-w-0 flex-1">{item.label}</span>
-                      {item.action === "saved" && savedCount > 0 && (
+                      {count > 0 && (
                         <span className="rounded-full bg-cyan-300/15 px-2 py-0.5 text-[10px] font-black text-cyan-100">
-                          {savedCount}
+                          {count}
                         </span>
                       )}
                     </button>
@@ -174,7 +190,7 @@ function SidebarNav({ open, onClose, activeCategory, savedCount, showSavedOnly, 
           </p>
           <button
             type="button"
-            onClick={() => onItemSelect({ action: "saved" })}
+            onClick={() => onItemSelect({ action: "watchLater" })}
             className="mt-4 w-full rounded-xl border border-violet-300/30 bg-violet-300/10 px-3 py-2 text-sm font-black text-violet-100 transition hover:bg-violet-300/15 active:scale-[0.98]"
           >
             Build Watchlist
@@ -376,10 +392,17 @@ function VideoCard({ video, onSelect, selected }) {
 
 function VideoCarousel({ title, videos, onSelect, selectedVideo, onViewAll }) {
   if (!videos.length) {
+    const emptyCopy =
+      title === "Saved Videos"
+        ? "No saved videos yet. Open a video and tap Save to build this list."
+        : title === "Watch Later"
+          ? "No videos added to Watch Later yet. Open a video and tap Watch Later to build your watchlist."
+          : "No videos match this search yet.";
+
     return (
       <section className="px-4 py-8 lg:px-7">
         <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-6 text-slate-400">
-          No videos match this search yet.
+          {emptyCopy}
         </div>
       </section>
     );
@@ -699,10 +722,11 @@ function VideoPlayerModal({
 
 function ResourceModal({ resource, onClose }) {
   if (!resource) return null;
+  const hasSections = Array.isArray(resource.sections) && resource.sections.length > 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-md">
-      <div className="w-full max-w-xl rounded-[1.75rem] border border-white/10 bg-slate-950 p-5 shadow-2xl shadow-slate-950/70">
+      <div className="max-h-[92dvh] w-full max-w-4xl overflow-y-auto rounded-[1.75rem] border border-white/10 bg-slate-950 p-5 shadow-2xl shadow-slate-950/70">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">
@@ -722,10 +746,34 @@ function ResourceModal({ resource, onClose }) {
           </button>
         </div>
         <p className="mt-4 text-sm leading-relaxed text-slate-300">
-          {resource.details || resource.description}
+          {resource.description}
         </p>
+        {hasSections ? (
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {resource.sections.map((section) => (
+              <div
+                key={section.title}
+                className="rounded-2xl border border-white/10 bg-white/[0.04] p-4"
+              >
+                <h4 className="text-sm font-black text-white">{section.title}</h4>
+                <ul className="mt-3 space-y-2">
+                  {section.items.map((item) => (
+                    <li key={item} className="flex gap-2 text-sm leading-relaxed text-slate-300">
+                      <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-cyan-300" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-4 text-sm leading-relaxed text-slate-300">
+            {resource.details}
+          </p>
+        )}
         <div className="mt-6 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4 text-sm leading-relaxed text-cyan-100">
-          Partner use: save the key point, discuss it with mom, and bring it to the care team when it affects safety or preferences.
+          Partner use: {resource.partnerAction || "save the key point, discuss it with mom, and bring it to the care team when it affects safety or preferences."}
         </div>
         <button
           type="button"
@@ -742,7 +790,7 @@ function ResourceModal({ resource, onClose }) {
 export default function VideoHubPage() {
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [showSavedOnly, setShowSavedOnly] = useState(false);
+  const [libraryView, setLibraryView] = useState("all");
   const [selectedVideo, setSelectedVideo] = useState(videoHubVideos[0]);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -755,7 +803,12 @@ export default function VideoHubPage() {
     return videoHubVideos.filter((video) => {
       const matchesCategory =
         selectedCategory === "All" || video.category === selectedCategory;
-      const matchesSaved = !showSavedOnly || savedVideoIds.includes(video.id);
+      const matchesLibrary =
+        libraryView === "saved"
+          ? savedVideoIds.includes(video.id)
+          : libraryView === "watchLater"
+            ? watchLaterIds.includes(video.id)
+            : true;
       const searchText = [
         video.title,
         video.category,
@@ -765,9 +818,9 @@ export default function VideoHubPage() {
       ]
         .join(" ")
         .toLowerCase();
-      return matchesCategory && matchesSaved && (!normalized || searchText.includes(normalized));
+      return matchesCategory && matchesLibrary && (!normalized || searchText.includes(normalized));
     });
-  }, [query, selectedCategory, showSavedOnly, savedVideoIds]);
+  }, [query, selectedCategory, libraryView, savedVideoIds, watchLaterIds]);
 
   const handleSelectVideo = (video) => {
     setSelectedVideo(video);
@@ -784,7 +837,7 @@ export default function VideoHubPage() {
 
   const selectCategory = (category) => {
     setSelectedCategory(category);
-    setShowSavedOnly(false);
+    setLibraryView("all");
     scrollToSection("video-section-continue");
   };
 
@@ -817,14 +870,21 @@ export default function VideoHubPage() {
     }
 
     if (item.action === "continue") {
-      setShowSavedOnly(false);
+      setLibraryView("all");
       scrollToSection("video-section-continue");
       return;
     }
 
     if (item.action === "saved") {
       setSelectedCategory("All");
-      setShowSavedOnly(true);
+      setLibraryView("saved");
+      scrollToSection("video-section-continue");
+      return;
+    }
+
+    if (item.action === "watchLater") {
+      setSelectedCategory("All");
+      setLibraryView("watchLater");
       scrollToSection("video-section-continue");
       return;
     }
@@ -864,7 +924,8 @@ export default function VideoHubPage() {
           onClose={() => setSidebarOpen(false)}
           activeCategory={selectedCategory}
           savedCount={savedVideoIds.length}
-          showSavedOnly={showSavedOnly}
+          watchLaterCount={watchLaterIds.length}
+          libraryView={libraryView}
           onItemSelect={handleSidebarItem}
         />
         <main className="min-w-0 overflow-hidden border-white/10 bg-slate-950/38 backdrop-blur-xl lg:rounded-[1.75rem] lg:border">
@@ -877,7 +938,7 @@ export default function VideoHubPage() {
             onPrimary={() => handleSelectVideo(selectedVideo || videoHubVideos[0])}
             onExplore={() => {
               setSelectedCategory("All");
-              setShowSavedOnly(false);
+              setLibraryView("all");
               scrollToSection("video-section-browse");
             }}
           />
@@ -886,13 +947,19 @@ export default function VideoHubPage() {
             onSelect={selectCategory}
           />
           <VideoCarousel
-            title={showSavedOnly ? "Saved Videos" : "Continue Watching"}
+            title={
+              libraryView === "saved"
+                ? "Saved Videos"
+                : libraryView === "watchLater"
+                  ? "Watch Later"
+                  : "Continue Watching"
+            }
             videos={filteredVideos}
             onSelect={handleSelectVideo}
             selectedVideo={selectedVideo}
             onViewAll={() => {
               setSelectedCategory("All");
-              setShowSavedOnly(false);
+              setLibraryView("all");
             }}
           />
           <RecommendedResources onOpenResource={openResource} />

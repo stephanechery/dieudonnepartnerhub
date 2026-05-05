@@ -282,6 +282,30 @@ export const recommendedResources = [
     action: "Open Checklist",
     details:
       "Pack IDs, insurance cards, chargers, lip balm, a refillable water bottle, snacks, a sweater, a phone tripod if desired, toiletries, a folder for discharge papers, and one comfort item mom chooses.",
+    sections: [
+      {
+        title: "Documents",
+        items: ["Photo ID and insurance cards", "Hospital registration details", "Printed birth preferences", "Pediatrician contact information"],
+      },
+      {
+        title: "Comfort",
+        items: ["Sweater or hoodie", "Lip balm and hair ties", "Comfort item mom chooses", "Small fan or cooling towel"],
+      },
+      {
+        title: "Tech",
+        items: ["Long phone chargers", "Battery pack", "Phone tripod if desired", "Headphones for rest periods"],
+      },
+      {
+        title: "Food",
+        items: ["Shelf-stable snacks", "Refillable water bottle", "Electrolyte packets", "Small cash or card for vending"],
+      },
+      {
+        title: "Discharge",
+        items: ["Folder for paperwork", "Baby going-home outfit", "Car seat installed", "Simple notes for medication times"],
+      },
+    ],
+    partnerAction:
+      "Pack your bag separately from mom's bag, then review the list together one week before the due date.",
   },
   {
     id: "ask-doula",
@@ -292,6 +316,34 @@ export const recommendedResources = [
     action: "View Questions",
     details:
       "Good questions to ask: What does support look like before active labor? How do we handle consent language? When should I call you? What comfort measures can I practice now?",
+    sections: [
+      {
+        title: "Prenatal",
+        items: [
+          "What should I practice before labor starts?",
+          "How do we decide when to call you?",
+          "What preferences should we review before the hospital?",
+        ],
+      },
+      {
+        title: "Labor",
+        items: [
+          "How do you want me to support mom while you guide comfort measures?",
+          "What signs should tell me to lower the noise or protect rest?",
+          "How can I help ask questions without taking over?",
+        ],
+      },
+      {
+        title: "Postpartum",
+        items: [
+          "What support is most useful in the first 48 hours?",
+          "What recovery signs should I not ignore?",
+          "How can we prepare for feeding, sleep, and emotional changes?",
+        ],
+      },
+    ],
+    partnerAction:
+      "Pick three questions before your next doula or care-team conversation and write down the answers.",
   },
   {
     id: "birth-plan",
@@ -311,6 +363,26 @@ export const recommendedResources = [
     action: "Open Tool",
     details:
       "Try calm reminders, counter-pressure, dim lighting, hydration prompts, quiet advocacy, and short questions: What are the benefits? What are the risks? Can we have a minute?",
+    sections: [
+      {
+        title: "Bedside actions",
+        items: ["Offer water between contractions", "Refresh cold cloths", "Dim lights when possible", "Protect quiet during rest"],
+      },
+      {
+        title: "Comfort measures",
+        items: ["Counter-pressure on lower back", "Slow breathing together", "Position changes with staff support", "Warm pack or cool towel"],
+      },
+      {
+        title: "Advocacy prompts",
+        items: ["What are the benefits?", "What are the risks?", "Are there other options?", "Can we have a minute to talk?"],
+      },
+      {
+        title: "Calming phrases",
+        items: ["I am right here.", "One contraction at a time.", "You are doing the work.", "Let's breathe together."],
+      },
+    ],
+    partnerAction:
+      "Save two comfort actions and two advocacy prompts before labor so you do not have to think from scratch.",
   },
   {
     id: "relationship-changes",
@@ -320,6 +392,22 @@ export const recommendedResources = [
       "Warm guidance for communication, intimacy, sleep strain, and shared recovery.",
     action: "Watch",
     videoId: "postpartum-depression-need-to-know",
+    sections: [
+      {
+        title: "Check-in prompts",
+        items: ["What feels heaviest today?", "What would make the next two hours easier?", "Do you want help, listening, or quiet?"],
+      },
+      {
+        title: "Practical support",
+        items: ["Own one daily household task", "Protect a rest block", "Track follow-up appointments", "Notice mood changes without judgment"],
+      },
+      {
+        title: "Connection",
+        items: ["Use short repair conversations", "Name appreciation out loud", "Do not rush intimacy", "Ask before inviting visitors"],
+      },
+    ],
+    partnerAction:
+      "Choose one support task you can fully own for the next week, then ask what else would help today.",
   },
 ];
 
