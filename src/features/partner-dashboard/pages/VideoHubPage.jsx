@@ -251,33 +251,16 @@ function TopSearchBar({ query, onQueryChange, onMenu }) {
 
 function HeroVisualCard() {
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_18%,rgba(34,211,238,0.2),transparent_34%),radial-gradient(circle_at_88%_72%,rgba(217,70,239,0.2),transparent_34%)]" />
-      <div className="relative z-[1] overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950/50">
-        <img
-          src="/hero-reference.png"
-          alt="Partner video hub visual for prenatal care, labor support, fetal support, and postpartum recovery"
-          className="aspect-[1.45] w-full object-cover"
-        />
-      </div>
-      <div className="relative z-[1] mt-4 grid gap-3 sm:grid-cols-3">
-        {[
-          ["Evidence-first", "Trusted sources"],
-          ["Watch here", "No app switching"],
-          ["Partner-ready", "Clear next steps"],
-        ].map(([label, value]) => (
-          <div
-            key={label}
-            className="rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3"
-          >
-            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-300">
-              {label}
-            </p>
-            <p className="mt-1 text-sm font-black text-white">{value}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+    <section
+      className="relative w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#070d1d] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.45)] md:p-4"
+      aria-label="Dieudonne Partner Video Hub visual"
+    >
+      <img
+        src="/hero-reference.png"
+        alt="Partner and expecting mother watching support videos together on a tablet"
+        className="block aspect-[4/3] w-full rounded-[1.55rem] object-cover object-center md:aspect-[4/3]"
+      />
+    </section>
   );
 }
 
