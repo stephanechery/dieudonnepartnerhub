@@ -31,6 +31,25 @@ const createEmptyModules = () =>
     return acc;
   }, {});
 
+const normalizeIdList = (value) => {
+  if (!Array.isArray(value)) return [];
+  return Array.from(
+    new Set(
+      value
+        .map((item) => (typeof item === "string" ? item.trim() : ""))
+        .filter(Boolean)
+    )
+  );
+};
+
+const extendProfileVideoHub = (profile) => ({
+  ...profile,
+  videoHub: {
+    savedVideoIds: normalizeIdList(profile.videoHub?.savedVideoIds),
+    watchLaterIds: normalizeIdList(profile.videoHub?.watchLaterIds),
+  },
+});
+
 const extendProfileModules = (profile) => {
   if (!profile.modules) {
     profile.modules = {};
@@ -54,7 +73,7 @@ const extendProfileModules = (profile) => {
       scenarioResponses: existingModule.scenarioResponses || {},
     };
   }
-  return profile;
+  return extendProfileVideoHub(profile);
 };
 
 const createBaseProfile = (sessionUser) => ({
@@ -66,6 +85,10 @@ const createBaseProfile = (sessionUser) => ({
   lastActiveAt: new Date().toISOString(),
   modules: createEmptyModules(),
   recentlyCompleted: [],
+  videoHub: {
+    savedVideoIds: [],
+    watchLaterIds: [],
+  },
 });
 
 const cacheProfile = (profile) => {

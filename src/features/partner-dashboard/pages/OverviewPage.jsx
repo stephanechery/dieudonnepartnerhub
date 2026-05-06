@@ -1,8 +1,10 @@
 import React from "react";
-import { ArrowRight, BarChart3, BookMarked, Clock3, GraduationCap, Library, Video } from "lucide-react";
+import { ArrowRight, BarChart3, BookMarked, Clock3, ExternalLink, GraduationCap, HeartHandshake, Library, Video } from "lucide-react";
 import ModuleCard from "../components/ModuleCard";
 import ProgressBar from "../components/ProgressBar";
 import { partnerInteractiveGuides } from "../data/interactiveGuides";
+
+const DOULA_MATCH_URL = "https://dieudonnematch.org";
 
 export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpenLesson, onOpenGuides, onOpenVideoHub, darkMode = false, translateText = (value) => value }) {
   const tx = (value) => translateText(value);
@@ -334,6 +336,34 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
           >
             {tx("Open Video Hub")} <ArrowRight className="h-4 w-4" />
           </button>
+        </div>
+      </section>
+
+      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-cyan-400/20 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/35 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/60 to-indigo-50 shadow-sm"}`}>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-3xl">
+            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+              <HeartHandshake className="h-4 w-4" /> {tx("Care-Team Support")}
+            </p>
+            <h2 className={`mt-2 text-2xl font-black tracking-tight sm:text-3xl ${darkMode ? "text-white" : "text-slate-950"}`}>
+              {tx("Match mom with a doula")}
+            </h2>
+            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
+              {tx("When mom wants more hands-on birth or recovery support, submit an intake through Dieudonne Match while you keep building your partner support skills here.")}
+            </p>
+          </div>
+          <a
+            href={DOULA_MATCH_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-black transition ${
+              darkMode
+                ? "border border-cyan-300/30 bg-cyan-400/10 text-cyan-100 hover:border-cyan-200/60 hover:bg-cyan-400/15"
+                : "border border-cyan-200 bg-cyan-700 text-white hover:bg-cyan-800"
+            }`}
+          >
+            {tx("Match Mom with a Doula")} <ExternalLink className="h-4 w-4" />
+          </a>
         </div>
       </section>
 

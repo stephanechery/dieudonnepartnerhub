@@ -37,12 +37,16 @@ import {
   ArrowRight,
   Users,
   Lock,
-  Rocket
+  Rocket,
+  HeartHandshake,
+  ExternalLink
 } from 'lucide-react';
 import dieudonneDarkLogo from './assets/Dieudonne_Dark_Logo.png';
 import heroPartnerJourney from './assets/hero-partner-tablet.svg';
 const PartnerDashboardModule = React.lazy(() => import('./features/partner-dashboard'));
 import { partnerCurriculum } from './features/partner-dashboard/data/curriculum';
+
+const DOULA_MATCH_URL = 'https://dieudonnematch.org';
 
 // --- Gemini API Utilities (Single Shared Auth Configuration) ---
 const apiKey = (import.meta.env.VITE_GEMINI_API_KEY || '').trim();
@@ -1904,6 +1908,129 @@ Partner Execution Tip:
 ${idea.execution.map((item) => `- ${item}`).join('\n')}`;
 };
 
+const prenatalSupportPacks = [
+  {
+    focus: 'Appointment language and next-step clarity',
+    explain:
+      'If a term from an appointment feels unclear, write it down, repeat back what you heard, and ask the care team what it means for mom today.',
+    examples: [
+      'Ask: What should we watch for before the next appointment?',
+      'Ask: Is this expected, or does it change her care plan?',
+      'Ask: What would make this urgent tonight?'
+    ],
+    support: [
+      'Take notes during the visit so mom does not have to hold every detail.',
+      'Confirm the pharmacy, lab, or follow-up task before leaving.',
+      'Keep the explanation calm and plain when you talk about it later.'
+    ]
+  },
+  {
+    focus: 'Comfort, hydration, and body-change support',
+    explain:
+      'Pregnancy symptoms can shift quickly. Your job is to lower friction: water nearby, food before she crashes, rest protected, and comfort options ready.',
+    examples: [
+      'For back or hip pain: offer pillows, warm packs, and slower transitions.',
+      'For nausea: keep bland snacks close and reduce strong smells.',
+      'For fatigue: handle one household task before she asks.'
+    ],
+    support: [
+      'Set up her rest spot with water, charger, and snacks.',
+      'Track symptom patterns without making her feel monitored.',
+      'Call the provider when symptoms feel new, severe, or concerning.'
+    ]
+  },
+  {
+    focus: 'Warning-sign awareness',
+    explain:
+      'Some prenatal symptoms need fast action. Partners help by noticing changes early and making the call without waiting for mom to carry the decision alone.',
+    examples: [
+      'Call for heavy bleeding, severe headache, chest pain, or trouble breathing.',
+      'Call for regular contractions before 37 weeks.',
+      'Call for decreased fetal movement after mom has started tracking movement.'
+    ],
+    support: [
+      'Keep the provider number and hospital location saved.',
+      'Use clear language: We are concerned and need guidance now.',
+      'If symptoms feel urgent, choose emergency care over waiting.'
+    ]
+  },
+  {
+    focus: 'Emotional steadiness before birth',
+    explain:
+      'Pregnancy can bring excitement and fear at the same time. Steady support means listening first, validating what she says, and helping turn worry into a next action.',
+    examples: [
+      'Say: I hear you. What would feel most helpful in the next hour?',
+      'Say: Let us write that question down for the provider.',
+      'Say: You do not have to figure this out alone.'
+    ],
+    support: [
+      'Avoid fixing before listening.',
+      'Protect quiet time after hard appointments.',
+      'Bring up mental health support early if fear or sadness starts taking over daily life.'
+    ]
+  }
+];
+
+const buildPrenatalSupportPack = (term = '', historyLength = 0) => {
+  const cleanTerm = term.trim();
+  const pack = prenatalSupportPacks[historyLength % prenatalSupportPacks.length];
+
+  return `Prenatal focus: ${cleanTerm || pack.focus}
+
+Plain-language explanation:
+${cleanTerm ? `${cleanTerm} is worth clarifying with the care team in plain terms. Ask what it means for mom, baby, and the next care step.` : pack.explain}
+
+Applied examples:
+${pack.examples.map((item) => `- ${item}`).join('\n')}
+
+Partner support actions:
+${pack.support.map((item) => `- ${item}`).join('\n')}
+
+Quick check:
+- What is the one question you should ask next?
+- What symptom or instruction should you track?
+- What can you take off mom's plate today?`;
+};
+
+const buildLaborCoachPack = (historyLength = 0) => {
+  const focus = coachFocusModes[historyLength % coachFocusModes.length];
+  const packs = [
+    {
+      affirmations: ['Breathe low and slow.', 'You are doing this.', 'One wave at a time.', 'I am right here.', 'This contraction is ending.'],
+      support: ['Offer water between contractions.', 'Use a hip squeeze during back pressure.', 'Dim lights and reduce room noise.', 'Guide her into a new position every 30 minutes.', 'Keep your voice slow and low.'],
+      scripts: ['Your body knows this rhythm.', 'Let your shoulders drop.', 'We only have to do this one wave.', 'You are safe and supported.'],
+      prompts: ['What are the benefits of this option?', 'What are the risks if we wait?', 'Can we have a minute to talk privately?']
+    },
+    {
+      affirmations: ['Your breath is leading us.', 'You are powerful.', 'Let the wave pass through.', 'I have you.', 'Rest your jaw and hands.'],
+      support: ['Apply sacral counter-pressure during back labor.', 'Offer cool cloths after each contraction.', 'Remind her to empty her bladder.', 'Ask staff about position options.', 'Protect quiet between checks.'],
+      scripts: ['You do not have to answer anyone quickly.', 'I can ask the question for us.', 'Let us take the next breath together.', 'You are making progress.'],
+      prompts: ['Are there alternatives we can try first?', 'What happens if we do nothing for now?', 'Is this urgent, or do we have time to decide?']
+    },
+    {
+      affirmations: ['Stay with my voice.', 'You can soften into this.', 'Your baby is moving closer.', 'I see how hard you are working.', 'The next rest is coming.'],
+      support: ['Count four slow breaths with her.', 'Anchor eye contact during transition.', 'Offer ice chips or sips if allowed.', 'Support side-lying or hands-and-knees positions.', 'Repeat only the phrase that calms her.'],
+      scripts: ['I am proud of you.', 'You are not alone in this room.', 'The wave is peaking, now it is coming down.', 'Let us ask what this means before we decide.'],
+      prompts: ['What is the medical reason for this recommendation?', 'How will this affect her pain or mobility?', 'What signs are you watching before the next step?']
+    }
+  ];
+  const pack = packs[historyLength % packs.length];
+
+  return `Labor focus: ${focus}
+
+Affirmations:
+${pack.affirmations.map((item) => `- ${item}`).join('\n')}
+
+Hands-On Support:
+${pack.support.map((item) => `- ${item}`).join('\n')}
+
+Real-Time Scripts:
+${pack.scripts.map((item) => `- ${item}`).join('\n')}
+
+Advocacy Prompts:
+${pack.prompts.map((item) => `- ${item}`).join('\n')}`;
+};
+
 const buildShareHref = ({ type, subject, body }) => {
   const encodedSubject = encodeURIComponent(subject || 'Dieudonne Partner Hub meal idea');
   const encodedBody = encodeURIComponent(body || '');
@@ -3083,9 +3210,16 @@ const App = () => {
   const [aiResult, setAiResult] = useState(null);
   const [aiResultMeta, setAiResultMeta] = useState(null);
   const [userInput, setUserInput] = useState('');
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const savedTheme = window.localStorage.getItem('dieudonne-theme');
+    if (savedTheme === 'light') return false;
+    if (savedTheme === 'dark') return true;
+    return true;
+  });
   const [guideStep, setGuideStep] = useState(0);
   const [winCelebration, setWinCelebration] = useState(null);
+  const [prenatalSupportHistory, setPrenatalSupportHistory] = useState([]);
   const [coachHistory, setCoachHistory] = useState([]);
   const [mealHistory, setMealHistory] = useState([]);
   const celebrationTimerRef = useRef(null);
@@ -3106,11 +3240,6 @@ const App = () => {
   const translationBackoffRef = useRef(1500);
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem('dieudonne-theme');
-    if (savedTheme === 'dark') setDarkMode(true);
-  }, []);
-
-  useEffect(() => {
     if (typeof window === 'undefined') return;
     const currentVersion = window.sessionStorage.getItem(LANGUAGE_CACHE_VERSION_KEY);
     if (currentVersion === LANGUAGE_CACHE_VERSION) return;
@@ -3124,6 +3253,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     window.localStorage.setItem('dieudonne-theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
 
@@ -3718,6 +3848,32 @@ ${JSON.stringify(keyedSource)}`,
       return;
     }
 
+    if (type === 'clarify') {
+      const generatedSupport = buildPrenatalSupportPack(userInput, prenatalSupportHistory.length);
+      setAiResultMeta({
+        type: 'clarify',
+        title: 'Prenatal Support Pack',
+        eyebrow: 'Instant Prenatal Support',
+        shareSubject: 'Prenatal support pack from Dieudonne Partner Hub'
+      });
+      setAiResult(generatedSupport);
+      setPrenatalSupportHistory((prev) => [...prev.slice(-9), generatedSupport]);
+      return;
+    }
+
+    if (type === 'coach') {
+      const generatedCoachPack = buildLaborCoachPack(coachHistory.length);
+      setAiResultMeta({
+        type: 'coach',
+        title: 'Labor Coaching Pack',
+        eyebrow: 'Instant Labor Coach',
+        shareSubject: 'Labor coaching pack from Dieudonne Partner Hub'
+      });
+      setAiResult(generatedCoachPack);
+      setCoachHistory((prev) => [...prev.slice(-9), generatedCoachPack]);
+      return;
+    }
+
     setAiLoading(true);
     setAiResult(null);
     setAiResultMeta(null);
@@ -3972,38 +4128,66 @@ ${cleanedResult}`,
         }
       ],
       aiTool: (
-        <div className={`mt-8 rounded-3xl border p-6 shadow-sm transition-colors duration-300 ${darkMode ? 'border-slate-700 bg-slate-900' : 'border-teal-100 bg-teal-50'}`}>
-          <h4 className={`mb-4 flex items-center gap-2 font-bold ${darkMode ? 'text-teal-400' : 'text-teal-900'}`}>
-            <Sparkles className="h-5 w-5" />
-            {translateText('Intelligent Prenatal Support')}
-          </h4>
-          <p className={`mb-6 text-sm font-medium leading-relaxed ${darkMode ? 'text-slate-400' : 'text-teal-700'}`}>
-            {translateText('Confused by a term from an appointment? Ask Gemini to simplify it for you.')}
-          </p>
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-              <Search className={`h-4 w-4 ${darkMode ? 'text-slate-500' : 'text-teal-400'}`} />
+        <div className={`mt-8 overflow-hidden rounded-2xl border shadow-sm transition-colors duration-300 ${darkMode ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-white'}`}>
+          <div className={`border-b px-4 py-4 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className={`mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-teal-300' : 'text-teal-700'}`}>
+                  <Sparkles className="h-4 w-4" />
+                  {translateText('Instant Prenatal Support')}
+                </p>
+                <h4 className={`text-xl font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
+                  {translateText('Prenatal Support Builder')}
+                </h4>
+                <p className={`mt-2 max-w-xl text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                  {translateText('Type an appointment term or concern and get a partner-ready support pack instantly.')}
+                </p>
+              </div>
+              <div className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${
+                darkMode ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+              }`}>
+                <Zap className="h-3.5 w-3.5" />
+                {translateText('Instant')}
+              </div>
             </div>
-            <input
-              type="text"
-              placeholder={translateText('e.g. Anterior Placenta...')}
-              className={`w-full rounded-2xl border py-3 pl-10 pr-24 text-sm shadow-inner transition-all focus:outline-none focus:ring-2 ${
-                darkMode
-                  ? 'border-slate-700 bg-slate-800 text-slate-100 focus:ring-teal-500'
-                  : 'border-teal-200 bg-white text-slate-900 focus:ring-teal-500'
-              }`}
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-            />
-            <button
-              onClick={() => handleAiAction('clarify')}
-              disabled={aiLoading || !userInput}
-              className={`absolute inset-y-1.5 right-1.5 flex items-center gap-2 rounded-xl px-4 text-xs font-bold text-white transition-colors disabled:opacity-50 ${
-                darkMode ? 'bg-teal-600 hover:bg-teal-500' : 'bg-teal-600 hover:bg-teal-700'
-              }`}
-            >
-              {aiLoading ? translateText('Working...') : translateText('Explain')}
-            </button>
+          </div>
+          <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3">
+            {['Plain-language explanation', 'Questions to ask', 'Support actions'].map((label) => (
+              <div
+                key={label}
+                className={`rounded-xl border px-3 py-3 text-sm font-bold ${
+                  darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
+                }`}
+              >
+                {translateText(label)}
+              </div>
+            ))}
+          </div>
+          <div className="px-4 pb-4">
+            <div className="relative">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                <Search className={`h-4 w-4 ${darkMode ? 'text-slate-500' : 'text-teal-400'}`} />
+              </div>
+              <input
+                type="text"
+                placeholder={translateText('e.g. Anterior Placenta...')}
+                className={`w-full rounded-2xl border py-3 pl-10 pr-24 text-sm shadow-inner transition-all focus:outline-none focus:ring-2 ${
+                  darkMode
+                    ? 'border-slate-700 bg-slate-800 text-slate-100 focus:ring-teal-500'
+                    : 'border-teal-200 bg-white text-slate-900 focus:ring-teal-500'
+                }`}
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+              />
+              <button
+                onClick={() => handleAiAction('clarify')}
+                className={`absolute inset-y-1.5 right-1.5 flex items-center gap-2 rounded-xl px-4 text-xs font-bold text-white transition-colors disabled:opacity-50 ${
+                  darkMode ? 'bg-teal-600 hover:bg-teal-500' : 'bg-teal-600 hover:bg-teal-700'
+                }`}
+              >
+                {translateText('Get Pack')}
+              </button>
+            </div>
           </div>
         </div>
       )
@@ -4107,24 +4291,52 @@ ${cleanedResult}`,
         }
       ],
       aiTool: (
-        <div className={`mt-8 rounded-3xl border p-6 shadow-sm transition-colors duration-300 ${darkMode ? 'border-slate-700 bg-slate-900' : 'border-cyan-100 bg-cyan-50'}`}>
-          <h4 className={`mb-2 flex items-center gap-2 font-bold ${darkMode ? 'text-cyan-400' : 'text-cyan-900'}`}>
-            <Sparkles className="h-5 w-5" />
-            {translateText('Intelligent Labor & Delivery Coach')}
-          </h4>
-          <p className={`mb-6 text-sm font-medium ${darkMode ? 'text-slate-400' : 'text-cyan-700'}`}>
-            {translateText('Need fresh affirmations or support ideas for right now?')}
-          </p>
+        <div className={`mt-8 overflow-hidden rounded-2xl border shadow-sm transition-colors duration-300 ${darkMode ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-white'}`}>
+          <div className={`border-b px-4 py-4 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className={`mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`}>
+                  <Sparkles className="h-4 w-4" />
+                  {translateText('Instant Labor Coach')}
+                </p>
+                <h4 className={`text-xl font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
+                  {translateText('Labor Coaching Pack')}
+                </h4>
+                <p className={`mt-2 max-w-xl text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                  {translateText('Get fresh affirmations, hands-on support ideas, scripts, and advocacy prompts instantly.')}
+                </p>
+              </div>
+              <div className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${
+                darkMode ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+              }`}>
+                <Zap className="h-3.5 w-3.5" />
+                {translateText('Instant')}
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-4">
+            {['Affirmations', 'Hands-on support', 'Real-time scripts', 'Advocacy prompts'].map((label) => (
+              <div
+                key={label}
+                className={`rounded-xl border px-3 py-3 text-sm font-bold ${
+                  darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
+                }`}
+              >
+                {translateText(label)}
+              </div>
+            ))}
+          </div>
+          <div className="px-4 pb-4">
           <button
             onClick={() => handleAiAction('coach')}
-            disabled={aiLoading}
             className={`flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold text-white shadow-md transition-all active:scale-95 ${
               darkMode ? 'bg-cyan-600 hover:bg-cyan-500' : 'bg-cyan-600 hover:bg-cyan-700'
             }`}
           >
-            {aiLoading ? <MessageSquare className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}
-            {aiLoading ? translateText('Generating Coach Tips...') : translateText('Generate Coach Tips ✨')}
+            <MessageSquare className="h-4 w-4" />
+            {translateText('Get Instant Coach Pack')}
           </button>
+          </div>
         </div>
       )
     },
@@ -4788,7 +5000,9 @@ ${cleanedResult}`,
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={() => setDarkMode((current) => !current)}
+            aria-pressed={darkMode}
+            aria-label={translateText(darkMode ? 'Switch to light mode' : 'Switch to dark mode')}
             className={`group flex min-h-11 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-all sm:px-4 sm:text-sm ${
               darkMode
                 ? 'border-slate-700 bg-slate-900 text-amber-300 hover:border-slate-600'
@@ -4924,9 +5138,22 @@ ${cleanedResult}`,
                   <BookOpen className="h-4 w-4" />
                   {translateText('Explore Main Guide')}
                 </button>
+                <a
+                  href={DOULA_MATCH_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3 text-base font-bold transition-colors ${
+                    darkMode
+                      ? 'border-cyan-400/35 bg-cyan-400/10 text-cyan-100 hover:border-cyan-300/70 hover:bg-cyan-400/15'
+                      : 'border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100'
+                  }`}
+                >
+                  <HeartHandshake className="h-4 w-4" />
+                  {translateText('Match Mom with a Doula')}
+                </a>
               </div>
 
-              <div className="hidden gap-3 sm:flex">
+              <div className="hidden flex-wrap gap-3 sm:flex">
                 <button
                   onClick={handleHeroEnterPlatform}
                   className={`hero-cta-button hero-cta-primary inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl px-6 py-3 text-base font-extrabold text-white shadow-lg transition-all active:scale-95 ${
@@ -4947,6 +5174,20 @@ ${cleanedResult}`,
                   <BookOpen className="h-5 w-5" />
                   {translateText('Explore Main Guide')}
                 </button>
+                <a
+                  href={DOULA_MATCH_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`hero-cta-button inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-base font-extrabold transition-colors ${
+                    darkMode
+                      ? 'border-cyan-400/35 bg-cyan-400/10 text-cyan-100 hover:border-cyan-300/70 hover:bg-cyan-400/15'
+                      : 'border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100'
+                  }`}
+                >
+                  <HeartHandshake className="h-5 w-5" />
+                  {translateText('Match Mom with a Doula')}
+                  <ExternalLink className="h-4 w-4" />
+                </a>
               </div>
 
               <p className={`max-w-lg text-[13px] font-medium sm:text-sm ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>

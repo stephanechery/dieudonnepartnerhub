@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-const DARK={bg:"#080d1a",card:"#0f1628",cardAlt:"#111827",border:"rgba(148,163,184,0.1)",text:"#f1f5f9",muted:"#e2e8f0",faint:"rgba(226,232,240,0.55)",accent:"#f59e0b",teal:"#22d3ee",purple:"#a78bfa",gold:"#fbbf24",green:"#34d399",red:"#f87171",orange:"#fb923c",blue:"#60a5fa",pink:"#e879f9",navBg:"rgba(8,13,26,0.96)",shadow:"0 4px 24px rgba(0,0,0,0.4)",inputBg:"rgba(255,255,255,0.06)",toggleBg:"rgba(255,255,255,0.08)"};
-const LIGHT={bg:"#f4f6fb",card:"#ffffff",cardAlt:"#f8fafc",border:"rgba(15,22,40,0.1)",text:"#0f1628",muted:"#1e293b",faint:"rgba(30,41,59,0.5)",accent:"#d97706",teal:"#0891b2",purple:"#7c3aed",gold:"#d97706",green:"#059669",red:"#dc2626",orange:"#ea580c",blue:"#2563eb",pink:"#c026d3",navBg:"rgba(244,246,251,0.97)",shadow:"0 4px 24px rgba(15,22,40,0.1)",inputBg:"rgba(15,22,40,0.04)",toggleBg:"rgba(15,22,40,0.06)"};
+const DARK={bg:"#050914",card:"#0f172a",cardAlt:"#111c33",border:"rgba(148,163,184,0.16)",text:"#f8fafc",muted:"#cbd5e1",faint:"rgba(203,213,225,0.62)",accent:"#22d3ee",teal:"#22d3ee",purple:"#d946ef",gold:"#a78bfa",green:"#34d399",red:"#fb7185",orange:"#60a5fa",blue:"#38bdf8",pink:"#f472b6",navBg:"rgba(5,9,20,0.96)",shadow:"0 24px 80px rgba(0,0,0,0.45)",inputBg:"rgba(255,255,255,0.06)",toggleBg:"rgba(255,255,255,0.08)"};
+const LIGHT={bg:"#f8fbff",card:"#ffffff",cardAlt:"#eef6ff",border:"rgba(15,23,42,0.12)",text:"#0f172a",muted:"#334155",faint:"rgba(51,65,85,0.58)",accent:"#0891b2",teal:"#0891b2",purple:"#7c3aed",gold:"#6d5dfc",green:"#059669",red:"#e11d48",orange:"#2563eb",blue:"#0284c7",pink:"#c026d3",navBg:"rgba(248,251,255,0.97)",shadow:"0 20px 55px rgba(15,23,42,0.12)",inputBg:"rgba(15,23,42,0.04)",toggleBg:"rgba(15,23,42,0.06)"};
 const LANGS=[{code:"en",label:"English",flag:"🇺🇸"},{code:"es",label:"Español",flag:"🇪🇸"},{code:"ht",label:"Kreyol",flag:"🇭🇹"},{code:"fr",label:"Français",flag:"🇫🇷"}];
 const NAV={
   en:["You Matter Too","Paternal Depression","Identity Shift","Relationship Changes","Practical Coping","When to Get Help","Supporting Each Other","Moving Forward Together"],
@@ -316,9 +316,10 @@ const GENERIC_DATA={
 export default function PartnerMentalHealthGuide(){
   const [lang,setLang]=useState("en");
   const [section,setSection]=useState(0);
-  const [dark,setDark]=useState(true);
+  const [dark,setDark]=useState(()=>{if(typeof window==="undefined")return true;return window.localStorage.getItem("dph-guide-theme")!=="light";});
   const [ready,setReady]=useState(false);
   useEffect(()=>{setTimeout(()=>setReady(true),80);},[]);
+  useEffect(()=>{if(typeof window!=="undefined")window.localStorage.setItem("dph-guide-theme",dark?"dark":"light");},[dark]);
   const C=dark?DARK:LIGHT;
   const navLabels=NAV[lang];
   const g=GENERIC_DATA[lang]||GENERIC_DATA.en;

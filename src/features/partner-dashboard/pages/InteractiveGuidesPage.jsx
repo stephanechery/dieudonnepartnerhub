@@ -21,6 +21,21 @@ const guideComponents = {
   "partner-mentalhealth-guide": lazy(() =>
     import("../interactive-guides/PartnerMentalHealthGuide")
   ),
+  "partner-anatomy-guide": lazy(() =>
+    import("../interactive-guides/PartnerAnatomyGuide")
+  ),
+  "partner-complications-guide": lazy(() =>
+    import("../interactive-guides/PartnerComplicationsGuide")
+  ),
+  "partner-feeding-guide": lazy(() =>
+    import("../interactive-guides/PartnerFeedingGuide")
+  ),
+  "partner-finance-guide": lazy(() =>
+    import("../interactive-guides/PartnerFinanceGuide")
+  ),
+  "partner-village-guide": lazy(() =>
+    import("../interactive-guides/PartnerVillageGuide")
+  ),
 };
 
 const accentClasses = {

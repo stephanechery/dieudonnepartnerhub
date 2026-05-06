@@ -1,9 +1,13 @@
 import {
   Baby,
   Brain,
+  CircleDollarSign,
   HeartPulse,
   MessageCircleHeart,
+  Milk,
+  ShieldAlert,
   Stethoscope,
+  UsersRound,
 } from "lucide-react";
 
 export const partnerInteractiveGuides = [
@@ -51,6 +55,51 @@ export const partnerInteractiveGuides = [
     phase: "Mental Health",
     accent: "emerald",
     Icon: Brain,
+  },
+  {
+    id: "partner-anatomy-guide",
+    title: "Pregnancy Anatomy Guide",
+    summary:
+      "Understand the pregnant body, cervix, fetal position, monitors, appointments, and clinical language.",
+    phase: "Prenatal",
+    accent: "cyan",
+    Icon: Stethoscope,
+  },
+  {
+    id: "partner-complications-guide",
+    title: "Complications and Warning Signs Guide",
+    summary:
+      "Learn what symptoms need fast action, how to communicate clearly, and when to seek urgent care.",
+    phase: "Safety",
+    accent: "rose",
+    Icon: ShieldAlert,
+  },
+  {
+    id: "partner-feeding-guide",
+    title: "Feeding Support Guide",
+    summary:
+      "Build practical confidence around breastfeeding, pumping, formula, feeding cues, and partner support.",
+    phase: "Newborn Care",
+    accent: "violet",
+    Icon: Milk,
+  },
+  {
+    id: "partner-finance-guide",
+    title: "Baby Budget and Benefits Guide",
+    summary:
+      "Plan for real newborn costs, leave, insurance, benefits, and household money conversations.",
+    phase: "Planning",
+    accent: "amber",
+    Icon: CircleDollarSign,
+  },
+  {
+    id: "partner-village-guide",
+    title: "Support Village Guide",
+    summary:
+      "Design a reliable support circle for visits, meals, boundaries, rest, and recovery needs.",
+    phase: "Partner Skills",
+    accent: "emerald",
+    Icon: UsersRound,
   },
 ];
 

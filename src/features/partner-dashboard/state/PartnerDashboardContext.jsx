@@ -40,6 +40,17 @@ const normalizeIndexArray = (value) => {
   ).sort((a, b) => a - b);
 };
 
+const normalizeStringArray = (value) => {
+  if (!Array.isArray(value)) return [];
+  return Array.from(
+    new Set(
+      value
+        .map((item) => (typeof item === "string" ? item.trim() : ""))
+        .filter(Boolean)
+    )
+  );
+};
+
 const isMultiQuestion = (question) =>
   question?.type === "multi" || Array.isArray(question?.answerIndexes);
 
@@ -252,6 +263,24 @@ export const PartnerDashboardProvider = ({ children }) => {
     return true;
   };
 
+  const saveVideoHubPreferences = (updates = {}) => {
+    if (!profile) return;
+
+    const nextProfile = {
+      ...profile,
+      videoHub: {
+        savedVideoIds: normalizeStringArray(
+          updates.savedVideoIds ?? profile.videoHub?.savedVideoIds
+        ),
+        watchLaterIds: normalizeStringArray(
+          updates.watchLaterIds ?? profile.videoHub?.watchLaterIds
+        ),
+      },
+    };
+
+    persistProfile(nextProfile);
+  };
+
   const dashboardMetrics = useMemo(() => {
     if (!profile) {
       return null;
@@ -314,6 +343,7 @@ export const PartnerDashboardProvider = ({ children }) => {
     saveScenarioReflection,
     submitQuiz,
     markLessonCompleted,
+    saveVideoHubPreferences,
   };
 
   return <PartnerDashboardContext.Provider value={value}>{children}</PartnerDashboardContext.Provider>;

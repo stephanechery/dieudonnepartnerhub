@@ -32,6 +32,7 @@ import {
   videoCategories,
   videoHubVideos,
 } from "../data/videoHub";
+import { usePartnerDashboard } from "../state/PartnerDashboardContext";
 
 const navGroups = [
   {
@@ -771,6 +772,7 @@ function ResourceModal({ resource, onClose }) {
 }
 
 export default function VideoHubPage() {
+  const { profile, saveVideoHubPreferences } = usePartnerDashboard();
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [libraryView, setLibraryView] = useState("all");
@@ -780,6 +782,11 @@ export default function VideoHubPage() {
   const [resourceModal, setResourceModal] = useState(null);
   const [savedVideoIds, setSavedVideoIds] = useState([]);
   const [watchLaterIds, setWatchLaterIds] = useState([]);
+
+  useEffect(() => {
+    setSavedVideoIds(profile?.videoHub?.savedVideoIds || []);
+    setWatchLaterIds(profile?.videoHub?.watchLaterIds || []);
+  }, [profile?.uid]);
 
   const filteredVideos = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -883,19 +890,29 @@ export default function VideoHubPage() {
   };
 
   const toggleSaved = (videoId) => {
-    setSavedVideoIds((current) =>
-      current.includes(videoId)
+    setSavedVideoIds((current) => {
+      const nextSaved = current.includes(videoId)
         ? current.filter((id) => id !== videoId)
-        : [...current, videoId]
-    );
+        : [...current, videoId];
+      saveVideoHubPreferences({
+        savedVideoIds: nextSaved,
+        watchLaterIds,
+      });
+      return nextSaved;
+    });
   };
 
   const toggleWatchLater = (videoId) => {
-    setWatchLaterIds((current) =>
-      current.includes(videoId)
+    setWatchLaterIds((current) => {
+      const nextWatchLater = current.includes(videoId)
         ? current.filter((id) => id !== videoId)
-        : [...current, videoId]
-    );
+        : [...current, videoId];
+      saveVideoHubPreferences({
+        savedVideoIds,
+        watchLaterIds: nextWatchLater,
+      });
+      return nextWatchLater;
+    });
   };
 
   return (
