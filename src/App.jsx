@@ -4151,11 +4151,11 @@ ${cleanedResult}`,
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(9.5rem,1fr))] gap-3 p-4">
             {['Plain-language explanation', 'Questions to ask', 'Support actions'].map((label) => (
               <div
                 key={label}
-                className={`rounded-xl border px-3 py-3 text-sm font-bold ${
+                className={`flex min-h-[4.75rem] items-center rounded-xl border px-3 py-3 text-sm font-bold leading-tight ${
                   darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
                 }`}
               >
@@ -4164,24 +4164,26 @@ ${cleanedResult}`,
             ))}
           </div>
           <div className="px-4 pb-4">
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                <Search className={`h-4 w-4 ${darkMode ? 'text-slate-500' : 'text-teal-400'}`} />
+            <div className="flex flex-col gap-3 rounded-2xl sm:flex-row">
+              <div className="relative min-w-0 flex-1">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                  <Search className={`h-4 w-4 ${darkMode ? 'text-slate-500' : 'text-teal-400'}`} />
+                </div>
+                <input
+                  type="text"
+                  placeholder={translateText('e.g. Anterior Placenta...')}
+                  className={`min-h-12 w-full rounded-2xl border py-3 pl-10 pr-4 text-sm shadow-inner transition-all focus:outline-none focus:ring-2 ${
+                    darkMode
+                      ? 'border-slate-700 bg-slate-800 text-slate-100 focus:ring-teal-500'
+                      : 'border-teal-200 bg-white text-slate-900 focus:ring-teal-500'
+                  }`}
+                  value={userInput}
+                  onChange={(e) => setUserInput(e.target.value)}
+                />
               </div>
-              <input
-                type="text"
-                placeholder={translateText('e.g. Anterior Placenta...')}
-                className={`w-full rounded-2xl border py-3 pl-10 pr-24 text-sm shadow-inner transition-all focus:outline-none focus:ring-2 ${
-                  darkMode
-                    ? 'border-slate-700 bg-slate-800 text-slate-100 focus:ring-teal-500'
-                    : 'border-teal-200 bg-white text-slate-900 focus:ring-teal-500'
-                }`}
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-              />
               <button
                 onClick={() => handleAiAction('clarify')}
-                className={`absolute inset-y-1.5 right-1.5 flex items-center gap-2 rounded-xl px-4 text-xs font-bold text-white transition-colors disabled:opacity-50 ${
+                className={`flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl px-5 text-sm font-black text-white transition-colors disabled:opacity-50 sm:min-w-[7rem] ${
                   darkMode ? 'bg-teal-600 hover:bg-teal-500' : 'bg-teal-600 hover:bg-teal-700'
                 }`}
               >
@@ -4314,11 +4316,11 @@ ${cleanedResult}`,
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-4">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(8.75rem,1fr))] gap-3 p-4">
             {['Affirmations', 'Hands-on support', 'Real-time scripts', 'Advocacy prompts'].map((label) => (
               <div
                 key={label}
-                className={`rounded-xl border px-3 py-3 text-sm font-bold ${
+                className={`flex min-h-[4.75rem] items-center rounded-xl border px-3 py-3 text-sm font-bold leading-tight ${
                   darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
                 }`}
               >
