@@ -17,6 +17,7 @@ import {
   MessageCircleQuestion,
   Play,
   Search,
+  Settings,
   ShieldCheck,
   Sparkles,
   Stethoscope,
@@ -32,6 +33,7 @@ import {
   videoCategories,
   videoHubVideos,
 } from "../data/videoHub";
+import { trackPartnerEvent } from "../services/analyticsService";
 import { usePartnerDashboard } from "../state/PartnerDashboardContext";
 
 const navGroups = [
@@ -233,10 +235,12 @@ function TopSearchBar({ query, onQueryChange, onMenu }) {
           <ChevronDown className="h-4 w-4 text-slate-500" />
         </button>
         <a
-          href="/partner-dashboard/guides"
-          className="hidden h-12 items-center rounded-2xl border border-cyan-300/25 bg-cyan-300/10 px-4 text-sm font-black text-cyan-100 transition hover:bg-cyan-300/15 xl:flex"
+          href="/admin-dashboard"
+          aria-label="Open admin hub"
+          title="Admin hub"
+          className="hidden h-12 w-12 items-center justify-center rounded-2xl border border-cyan-300/25 bg-cyan-300/10 text-cyan-100 transition hover:bg-cyan-300/15 xl:flex"
         >
-          Full Journey Support Guide
+          <Settings className="h-5 w-5" />
         </a>
         <button className="hidden h-12 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-3 text-sm font-black text-slate-100 transition hover:bg-white/[0.07] sm:flex">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-cyan-300/70 to-fuchsia-300/70 text-slate-950">
@@ -815,6 +819,12 @@ export default function VideoHubPage() {
   const handleSelectVideo = (video) => {
     setSelectedVideo(video);
     setVideoModalOpen(true);
+    trackPartnerEvent("video_view", {
+      uid: profile?.uid,
+      email: profile?.email,
+      videoId: video.id,
+      category: video.category,
+    });
   };
 
   const scrollToSection = (sectionId) => {
@@ -894,6 +904,15 @@ export default function VideoHubPage() {
       const nextSaved = current.includes(videoId)
         ? current.filter((id) => id !== videoId)
         : [...current, videoId];
+      if (!current.includes(videoId)) {
+        const video = findVideo(videoId);
+        trackPartnerEvent("video_save", {
+          uid: profile?.uid,
+          email: profile?.email,
+          videoId,
+          category: video?.category,
+        });
+      }
       saveVideoHubPreferences({
         savedVideoIds: nextSaved,
         watchLaterIds,
@@ -907,6 +926,15 @@ export default function VideoHubPage() {
       const nextWatchLater = current.includes(videoId)
         ? current.filter((id) => id !== videoId)
         : [...current, videoId];
+      if (!current.includes(videoId)) {
+        const video = findVideo(videoId);
+        trackPartnerEvent("video_watch_later", {
+          uid: profile?.uid,
+          email: profile?.email,
+          videoId,
+          category: video?.category,
+        });
+      }
       saveVideoHubPreferences({
         savedVideoIds,
         watchLaterIds: nextWatchLater,

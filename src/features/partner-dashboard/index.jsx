@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import AuthPanel from "./components/AuthPanel";
 import DashboardShell from "./components/DashboardShell";
@@ -8,6 +8,7 @@ import LessonPage from "./pages/LessonPage";
 import InteractiveGuidesPage from "./pages/InteractiveGuidesPage";
 import VideoHubPage from "./pages/VideoHubPage";
 import { PartnerDashboardProvider, usePartnerDashboard } from "./state/PartnerDashboardContext";
+import { trackPartnerEvent } from "./services/analyticsService";
 import { getModuleState, isLessonUnlocked, isModuleUnlocked } from "./utils/progress";
 
 const BASE_PATH = "/partner-dashboard";
@@ -35,6 +36,36 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   } = usePartnerDashboard();
 
   const subPath = useMemo(() => getSubPath(pathname), [pathname]);
+  const lastTrackedPath = useRef("");
+
+  useEffect(() => {
+    if (!authUser || lastTrackedPath.current === subPath) return;
+
+    const lessonMatchForTracking = subPath.match(/^\/module\/([a-z0-9-]+)\/lesson\/([a-z0-9-]+)$/i);
+    const guideMatchForTracking = subPath.match(/^\/guides(?:\/([a-z0-9-]+))?$/i);
+
+    if (lessonMatchForTracking) {
+      trackPartnerEvent("lesson_start", {
+        uid: authUser.uid,
+        email: authUser.email,
+        moduleId: lessonMatchForTracking[1],
+        lessonId: lessonMatchForTracking[2],
+      });
+    } else if (guideMatchForTracking) {
+      trackPartnerEvent("guide_open", {
+        uid: authUser.uid,
+        email: authUser.email,
+        guideId: guideMatchForTracking[1] || "guide-library",
+      });
+    } else if (subPath === "/video-hub") {
+      trackPartnerEvent("video_hub_open", {
+        uid: authUser.uid,
+        email: authUser.email,
+      });
+    }
+
+    lastTrackedPath.current = subPath;
+  }, [authUser, subPath]);
 
   if (authLoading) {
     return (
