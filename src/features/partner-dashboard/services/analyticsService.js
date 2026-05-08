@@ -5,7 +5,10 @@ import { getAllLocalProfiles } from "./profileService";
 
 const EVENTS_KEY = "dph_learning_events_v1";
 const ACTIVE_WINDOW_DAYS = 14;
-const DEFAULT_ADMIN_EMAILS = ["stephanchery@gmail.com"];
+const DEFAULT_ADMIN_EMAILS = [
+  "stephanechery@dieudonnefoudation.org",
+  "stephanechery@dieudonnefoundation.org",
+];
 
 const safeJsonParse = (value, fallback) => {
   try {

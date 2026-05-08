@@ -39,7 +39,8 @@ import {
   Lock,
   Rocket,
   HeartHandshake,
-  ExternalLink
+  ExternalLink,
+  Settings
 } from 'lucide-react';
 import dieudonneDarkLogo from './assets/Dieudonne_Dark_Logo.png';
 import heroPartnerJourney from './assets/hero-partner-tablet.svg';
@@ -5070,18 +5071,17 @@ ${cleanedResult}`,
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={handleHeroExploreGuide}
+          <a
+            href="/admin-dashboard"
             className={`hidden min-h-11 items-center gap-2 rounded-full px-5 text-sm font-extrabold text-white shadow-lg transition-all hover:-translate-y-0.5 sm:inline-flex ${
               darkMode
-                ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-fuchsia-600 shadow-indigo-950/35'
-                : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-rose-500 shadow-indigo-200'
+                ? 'bg-gradient-to-r from-slate-800 via-indigo-700 to-violet-700 shadow-indigo-950/35'
+                : 'bg-gradient-to-r from-slate-900 via-indigo-700 to-violet-600 shadow-indigo-200'
             }`}
           >
-            {translateText('Full Journey Support Guide')}
-            <ArrowRight className="h-4 w-4" />
-          </button>
+            <Settings className="h-4 w-4" />
+            {translateText('Admin Dashboard')}
+          </a>
         </div>
       </header>
 
@@ -5153,17 +5153,6 @@ ${cleanedResult}`,
                   <HeartHandshake className="h-4 w-4" />
                   {translateText('Match Mom with a Doula')}
                 </a>
-                <a
-                  href="/admin-dashboard"
-                  className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3 text-base font-bold transition-colors ${
-                    darkMode
-                      ? 'border-violet-400/35 bg-violet-400/10 text-violet-100 hover:border-violet-300/70 hover:bg-violet-400/15'
-                      : 'border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100'
-                  }`}
-                >
-                  <ShieldCheck className="h-4 w-4" />
-                  {translateText('Admin Dashboard')}
-                </a>
               </div>
 
               <div className="hidden flex-wrap gap-3 sm:flex">
@@ -5200,17 +5189,6 @@ ${cleanedResult}`,
                   <HeartHandshake className="h-5 w-5" />
                   {translateText('Match Mom with a Doula')}
                   <ExternalLink className="h-4 w-4" />
-                </a>
-                <a
-                  href="/admin-dashboard"
-                  className={`hero-cta-button inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-base font-extrabold transition-colors ${
-                    darkMode
-                      ? 'border-violet-400/35 bg-violet-400/10 text-violet-100 hover:border-violet-300/70 hover:bg-violet-400/15'
-                      : 'border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100'
-                  }`}
-                >
-                  <ShieldCheck className="h-5 w-5" />
-                  {translateText('Admin Dashboard')}
                 </a>
               </div>
 
