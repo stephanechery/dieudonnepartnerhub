@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { partnerCurriculum } from "../data/curriculum";
+import { trackPartnerEvent } from "../services/analyticsService";
 import {
   clearSession,
   confirmPasswordReset,
@@ -215,6 +216,20 @@ export const PartnerDashboardProvider = ({ children }) => {
     };
 
     persistProfile(nextProfile);
+    trackPartnerEvent("quiz_completed", {
+      uid: profile.uid,
+      email: profile.email,
+      moduleId,
+      lessonId,
+    });
+    if (shouldAutoComplete) {
+      trackPartnerEvent("lesson_completed", {
+        uid: profile.uid,
+        email: profile.email,
+        moduleId,
+        lessonId,
+      });
+    }
     return score;
   };
 
@@ -260,6 +275,12 @@ export const PartnerDashboardProvider = ({ children }) => {
     };
 
     persistProfile(nextProfile);
+    trackPartnerEvent("lesson_completed", {
+      uid: profile.uid,
+      email: profile.email,
+      moduleId,
+      lessonId,
+    });
     return true;
   };
 

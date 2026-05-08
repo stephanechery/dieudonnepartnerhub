@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import App from "./App";
 const PartnerDashboardApp = React.lazy(() => import("./features/partner-dashboard"));
+const AdminDashboardApp = React.lazy(() => import("./features/admin-dashboard"));
 
 function usePathRouter() {
   const [pathname, setPathname] = useState(window.location.pathname);
@@ -37,6 +38,19 @@ export default function RootApp() {
           }
         >
           <PartnerDashboardApp pathname={pathname} navigate={navigate} />
+        </React.Suspense>
+      );
+    }
+    if (pathname.startsWith("/admin-dashboard")) {
+      return (
+        <React.Suspense
+          fallback={
+            <div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">
+              Loading admin dashboard...
+            </div>
+          }
+        >
+          <AdminDashboardApp pathname={pathname} navigate={navigate} />
         </React.Suspense>
       );
     }

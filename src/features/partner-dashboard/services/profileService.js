@@ -269,3 +269,6 @@ export const saveProfile = async (profile) => {
 };
 
 export const getProfile = (uid) => getLocalProfile(uid);
+
+export const getAllLocalProfiles = () =>
+  Object.values(readProfiles()).map((profile) => extendProfileModules({ ...profile }));
