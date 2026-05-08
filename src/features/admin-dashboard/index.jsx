@@ -175,8 +175,7 @@ function AccessDenied({ authUser, onBack }) {
             <p className="text-xs font-black uppercase tracking-[0.18em] text-amber-200">Admin access required</p>
             <h1 className="mt-2 text-2xl font-black text-white">This dashboard is restricted.</h1>
             <p className="mt-3 text-sm leading-relaxed text-slate-300">
-              Signed in as {authUser?.email || "an unknown user"}. Add this email to
-              VITE_ADMIN_EMAILS, set the profile role to admin, or add the email to the local admin allowlist for development.
+              Signed in as {authUser?.email || "an unknown user"}. This hub only opens for the configured owner email.
             </p>
             <button
               type="button"

@@ -4,8 +4,8 @@ import { videoHubVideos } from "../data/videoHub";
 import { getAllLocalProfiles } from "./profileService";
 
 const EVENTS_KEY = "dph_learning_events_v1";
-const ADMIN_ALLOWLIST_KEY = "dph_admin_allowlist_v1";
 const ACTIVE_WINDOW_DAYS = 14;
+const DEFAULT_ADMIN_EMAILS = ["stephanchery@gmail.com"];
 
 const safeJsonParse = (value, fallback) => {
   try {
@@ -37,26 +37,18 @@ const daysAgo = (days) => {
 const normalizeEmail = (email) => String(email || "").trim().toLowerCase();
 
 const configuredAdminEmails = () =>
-  (import.meta.env.VITE_ADMIN_EMAILS || "")
-    .split(",")
+  [
+    ...DEFAULT_ADMIN_EMAILS,
+    ...(import.meta.env.VITE_ADMIN_EMAILS || "").split(","),
+  ]
     .map(normalizeEmail)
     .filter(Boolean);
-
-const localAdminEmails = () => {
-  if (!isBrowser()) return [];
-  return safeJsonParse(window.localStorage.getItem(ADMIN_ALLOWLIST_KEY), [])
-    .map(normalizeEmail)
-    .filter(Boolean);
-};
 
 export const isAdminUser = (authUser, profile) => {
-  const role = String(profile?.role || profile?.adminRole || "").toLowerCase();
-  if (["admin", "owner", "staff"].includes(role)) return true;
-
   const email = normalizeEmail(authUser?.email || profile?.email);
   if (!email) return false;
 
-  return [...configuredAdminEmails(), ...localAdminEmails()].includes(email);
+  return configuredAdminEmails().includes(email);
 };
 
 export const trackPartnerEvent = (eventName, payload = {}) => {
