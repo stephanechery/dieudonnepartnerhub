@@ -5153,6 +5153,17 @@ ${cleanedResult}`,
                   <HeartHandshake className="h-4 w-4" />
                   {translateText('Match Mom with a Doula')}
                 </a>
+                <a
+                  href="/admin-dashboard"
+                  className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3 text-base font-bold transition-colors ${
+                    darkMode
+                      ? 'border-violet-400/35 bg-violet-400/10 text-violet-100 hover:border-violet-300/70 hover:bg-violet-400/15'
+                      : 'border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100'
+                  }`}
+                >
+                  <ShieldCheck className="h-4 w-4" />
+                  {translateText('Admin Dashboard')}
+                </a>
               </div>
 
               <div className="hidden flex-wrap gap-3 sm:flex">
@@ -5189,6 +5200,17 @@ ${cleanedResult}`,
                   <HeartHandshake className="h-5 w-5" />
                   {translateText('Match Mom with a Doula')}
                   <ExternalLink className="h-4 w-4" />
+                </a>
+                <a
+                  href="/admin-dashboard"
+                  className={`hero-cta-button inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-base font-extrabold transition-colors ${
+                    darkMode
+                      ? 'border-violet-400/35 bg-violet-400/10 text-violet-100 hover:border-violet-300/70 hover:bg-violet-400/15'
+                      : 'border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100'
+                  }`}
+                >
+                  <ShieldCheck className="h-5 w-5" />
+                  {translateText('Admin Dashboard')}
                 </a>
               </div>
 
