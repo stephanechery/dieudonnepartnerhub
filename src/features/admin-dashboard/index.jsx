@@ -364,9 +364,9 @@ function AdminDashboardInner({ navigate }) {
           />
           <KpiTile
             icon={Video}
-            label="Video hub"
-            value={formatNumber(data.totals.videoViews)}
-            detail={`${formatNumber(data.totals.savedVideos)} saves and ${formatNumber(data.totals.watchLaterAdds)} watch-later adds.`}
+            label="Video hub opens"
+            value={formatNumber(data.totals.videoHubViews)}
+            detail={`${formatNumber(data.totals.videoViews)} video plays, ${formatNumber(data.totals.savedVideos)} saves, and ${formatNumber(data.totals.watchLaterAdds)} watch-later adds.`}
             tone="rose"
             darkMode={darkMode}
           />
