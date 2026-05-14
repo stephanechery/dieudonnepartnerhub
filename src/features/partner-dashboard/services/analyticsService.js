@@ -201,6 +201,17 @@ const makeMockEvents = () => {
         occurredAt,
         uid: `mock-${((day + 4) % 5) + 1}`,
       });
+      events.push({
+        id: `mock-recommendation-${day}`,
+        eventName: "recommendation_click",
+        occurredAt,
+        uid: `mock-${((day + 2) % 5) + 1}`,
+        moduleId: module.id,
+        lessonId: lesson.id,
+        guideId: guide.id,
+        videoId: video.id,
+        category: day % 2 === 0 ? "lesson" : "guide",
+      });
     }
 
     if (day % 4 === 0) {
@@ -357,6 +368,49 @@ const buildInsights = ({ moduleProgress, dropOffs, topicInterest, guideUsage }) 
   ];
 };
 
+const buildContentHealth = ({ moduleProgress, dropOffs, mostUsedVideos, recommendationClicks }) => {
+  const weakestModule = [...moduleProgress].sort((a, b) => a.completion - b.completion)[0];
+  const topDrop = dropOffs[0];
+  const topVideo = mostUsedVideos[0];
+  const totalRecommendationClicks = recommendationClicks.reduce((count, item) => count + item.value, 0);
+  const topRecommendation = recommendationClicks[0];
+
+  return [
+    {
+      id: "weak-module",
+      label: "Weakest module",
+      value: `${weakestModule?.completion || 0}%`,
+      detail: weakestModule?.title || "No module signal yet",
+      action: "Tighten the next lesson prompt and add a short recap before the quiz.",
+    },
+    {
+      id: "drop-off",
+      label: "Largest drop-off",
+      value: formatHealthValue(topDrop?.value),
+      detail: topDrop?.lessonTitle || "No drop-off signal yet",
+      action: "Review lesson length, quiz timing, and the first action after the lesson opens.",
+    },
+    {
+      id: "video-interest",
+      label: "Top video signal",
+      value: formatHealthValue(topVideo?.value),
+      detail: topVideo?.label || "No video signal yet",
+      action: "Pair this video with the matching module and companion guide.",
+    },
+    {
+      id: "recommendations",
+      label: "Recommendation clicks",
+      value: formatHealthValue(totalRecommendationClicks),
+      detail: topRecommendation
+        ? `${topRecommendation.label} recommendations lead right now`
+        : "No recommendation clicks yet",
+      action: "Keep the highest-clicked recommendation visible above the module grid on mobile.",
+    },
+  ];
+};
+
+const formatHealthValue = (value) => String(value || 0);
+
 export const getAdminDashboardData = () => {
   const localProfiles = getAllLocalProfiles();
   const profiles = localProfiles.length ? localProfiles : makeMockProfiles();
@@ -396,6 +450,11 @@ export const getAdminDashboardData = () => {
   const guideMap = new Map(partnerInteractiveGuides.map((guide) => [guide.id, 0]));
   const topicMap = new Map();
   const videoMap = new Map(videoHubVideos.map((video) => [video.id, 0]));
+  const recommendationMap = new Map([
+    ["lesson", 0],
+    ["guide", 0],
+    ["video", 0],
+  ]);
   const resumeMap = new Map();
   const dropOffMap = new Map();
 
@@ -414,6 +473,9 @@ export const getAdminDashboardData = () => {
     }
     if (event.eventName === "lesson_completed") {
       increment(dropOffMap, `${event.moduleId}:${event.lessonId}`, -1);
+    }
+    if (event.eventName === "recommendation_click") {
+      increment(recommendationMap, event.category);
     }
   });
 
@@ -470,6 +532,17 @@ export const getAdminDashboardData = () => {
       label: videoHubVideos.find((video) => video.id === item.id)?.title || item.id,
       category: videoHubVideos.find((video) => video.id === item.id)?.category || "Video",
     }));
+  const recommendationClicks = sortMap(recommendationMap)
+    .filter((item) => item.value > 0)
+    .map((item) => ({
+      ...item,
+      label:
+        item.id === "lesson"
+          ? "Lesson"
+          : item.id === "guide"
+            ? "Guide"
+            : "Video",
+    }));
 
   const resumePoints = sortMap(resumeMap)
     .slice(0, 5)
@@ -505,6 +578,7 @@ export const getAdminDashboardData = () => {
     guideUsage,
     topicInterest,
     mostUsedVideos,
+    recommendationClicks,
     resumePoints,
     dropOffs,
     trends: buildTrend(events),
@@ -513,5 +587,6 @@ export const getAdminDashboardData = () => {
   return {
     ...data,
     insights: buildInsights(data),
+    contentHealth: buildContentHealth(data),
   };
 };

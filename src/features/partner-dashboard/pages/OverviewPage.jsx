@@ -1,14 +1,18 @@
 import React from "react";
-import { ArrowRight, BarChart3, BookMarked, Clock3, ExternalLink, GraduationCap, HeartHandshake, Library, Video } from "lucide-react";
+import { ArrowRight, BarChart3, BookMarked, Clock3, ExternalLink, GraduationCap, HeartHandshake, Library, Sparkles, Video } from "lucide-react";
 import ModuleCard from "../components/ModuleCard";
 import ProgressBar from "../components/ProgressBar";
 import { partnerInteractiveGuides } from "../data/interactiveGuides";
 
 const DOULA_MATCH_URL = "https://dieudonnematch.org";
 
-export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpenLesson, onOpenGuides, onOpenVideoHub, darkMode = false, translateText = (value) => value }) {
+export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpenLesson, onOpenGuides, onOpenGuide = onOpenGuides, onOpenVideoHub, onRecommendationClick = () => {}, darkMode = false, translateText = (value) => value }) {
   const tx = (value) => translateText(value);
   const hasNextLesson = Boolean(metrics.nextLesson.lessonId);
+  const nextActions = metrics.nextActions || {};
+  const recommendedLesson = nextActions.lesson || metrics.nextLesson;
+  const recommendedGuide = nextActions.guide;
+  const recommendedVideo = nextActions.video;
   const latestCompleted = metrics.recentlyCompleted[0] || null;
   const latestCompletedTime = latestCompleted?.completedAt
     ? new Date(latestCompleted.completedAt).toLocaleDateString(undefined, {
@@ -107,6 +111,96 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
                 {metrics.recentlyCompleted.length}
               </p>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-cyan-400/20 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/35 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/70 to-indigo-50 shadow-sm"}`}>
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-stretch">
+          <div className="min-w-0 lg:w-[34%]">
+            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+              <Sparkles className="h-4 w-4" /> {tx("Next Best Action")}
+            </p>
+            <h2 className={`mt-2 text-2xl font-black tracking-tight ${darkMode ? "text-white" : "text-slate-950"}`}>
+              {tx("Pick up with one clear path")}
+            </h2>
+            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
+              {tx("Start with the next lesson, then use the matching guide or video if you need a faster refresher.")}
+            </p>
+          </div>
+
+          <div className="grid flex-1 grid-cols-1 gap-3 md:grid-cols-3">
+            <article className={`flex min-h-[178px] flex-col rounded-2xl border p-4 ${darkMode ? "border-white/10 bg-white/[0.045]" : "border-slate-200 bg-white/82"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+                {tx("Lesson")}
+              </p>
+              <h3 className={`mt-2 text-base font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+                {tx(recommendedLesson.lessonTitle)}
+              </h3>
+              <p className={`mt-1 text-xs font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+                {tx(recommendedLesson.moduleTitle)}
+              </p>
+              {recommendedLesson.lessonId && (
+                <button
+                  type="button"
+                  className={`mt-auto flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black text-white transition ${darkMode ? "bg-cyan-600 hover:bg-cyan-500" : "bg-slate-900 hover:bg-slate-800"}`}
+                  onClick={() => {
+                    onRecommendationClick("lesson", recommendedLesson);
+                    onOpenLesson(recommendedLesson.moduleId, recommendedLesson.lessonId);
+                  }}
+                >
+                  {tx("Continue")} <ArrowRight className="h-4 w-4" />
+                </button>
+              )}
+            </article>
+
+            {recommendedGuide && (
+              <article className={`flex min-h-[178px] flex-col rounded-2xl border p-4 ${darkMode ? "border-white/10 bg-white/[0.045]" : "border-slate-200 bg-white/82"}`}>
+                <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-emerald-300" : "text-emerald-700"}`}>
+                  {tx("Guide")}
+                </p>
+                <h3 className={`mt-2 text-base font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+                  {tx(recommendedGuide.title)}
+                </h3>
+                <p className={`mt-1 text-xs font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+                  {tx(recommendedGuide.phase)}
+                </p>
+                <button
+                  type="button"
+                  className={`mt-auto flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black transition ${darkMode ? "border border-emerald-300/20 bg-emerald-300/10 text-emerald-100 hover:bg-emerald-300/15" : "border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"}`}
+                  onClick={() => {
+                    onRecommendationClick("guide", { guideId: recommendedGuide.id, moduleId: recommendedLesson.moduleId });
+                    onOpenGuide(recommendedGuide.id);
+                  }}
+                >
+                  {tx("Open Guide")} <ArrowRight className="h-4 w-4" />
+                </button>
+              </article>
+            )}
+
+            {recommendedVideo && (
+              <article className={`flex min-h-[178px] flex-col rounded-2xl border p-4 ${darkMode ? "border-white/10 bg-white/[0.045]" : "border-slate-200 bg-white/82"}`}>
+                <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-violet-300" : "text-violet-700"}`}>
+                  {tx("Video")}
+                </p>
+                <h3 className={`mt-2 text-base font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+                  {tx(recommendedVideo.title)}
+                </h3>
+                <p className={`mt-1 text-xs font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+                  {tx(recommendedVideo.category)}
+                </p>
+                <button
+                  type="button"
+                  className={`mt-auto flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black transition ${darkMode ? "border border-violet-300/20 bg-violet-300/10 text-violet-100 hover:bg-violet-300/15" : "border border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100"}`}
+                  onClick={() => {
+                    onRecommendationClick("video", { videoId: recommendedVideo.id, moduleId: recommendedLesson.moduleId });
+                    onOpenVideoHub();
+                  }}
+                >
+                  {tx("Watch")} <ArrowRight className="h-4 w-4" />
+                </button>
+              </article>
+            )}
           </div>
         </div>
       </section>
