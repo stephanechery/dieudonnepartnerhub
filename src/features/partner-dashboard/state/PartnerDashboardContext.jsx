@@ -132,7 +132,7 @@ export const PartnerDashboardProvider = ({ children }) => {
 
   const register = (payload) => runAuthAction(() => registerWithEmail(payload));
   const login = (payload) => runAuthAction(() => loginWithEmail(payload));
-  const loginGoogle = () => runAuthAction(() => loginWithGoogle());
+  const loginGoogle = (options) => runAuthAction(() => loginWithGoogle(options));
 
   const logout = async () => {
     await clearSession();
@@ -140,7 +140,7 @@ export const PartnerDashboardProvider = ({ children }) => {
     setProfile(null);
   };
 
-  const requestReset = (email) => requestPasswordReset(email);
+  const requestReset = (email, redirectPath) => requestPasswordReset(email, redirectPath);
 
   const confirmReset = (payload) => runAuthAction(() => confirmPasswordReset(payload));
 

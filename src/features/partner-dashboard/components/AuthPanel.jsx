@@ -6,7 +6,11 @@ import { isGoogleLoginConfigured, isSupabaseAuthEnabled } from "../services/auth
 const initialLogin = { email: "", password: "" };
 const initialRegister = { displayName: "", email: "", password: "", confirmPassword: "" };
 
-export default function AuthPanel({ darkMode = false, translateText = (value) => value }) {
+export default function AuthPanel({
+  darkMode = false,
+  translateText = (value) => value,
+  authRedirectPath = "/partner-dashboard",
+}) {
   const tx = (value) => translateText(value);
   const managedAuthMode = isSupabaseAuthEnabled();
   const googleLoginConfigured = isGoogleLoginConfigured();
@@ -63,7 +67,7 @@ export default function AuthPanel({ darkMode = false, translateText = (value) =>
   const onRequestReset = (event) => {
     event.preventDefault();
     run(async () => {
-      const response = await requestReset(resetEmail);
+      const response = await requestReset(resetEmail, authRedirectPath);
       if (response?.code) {
         setPendingResetCode(response.code);
         setMessage(`${tx("Reset code generated")}: ${response.code}. ${tx("In production this code should be emailed securely.")}`);
@@ -161,7 +165,7 @@ export default function AuthPanel({ darkMode = false, translateText = (value) =>
               type="button"
               className={`${secondaryBtnClass} w-full sm:w-auto`}
               disabled={loading || !googleLoginConfigured}
-              onClick={() => run(() => loginGoogle())}
+              onClick={() => run(() => loginGoogle({ redirectPath: authRedirectPath }))}
               title={
                 googleLoginConfigured
                   ? tx("Continue with Google")
