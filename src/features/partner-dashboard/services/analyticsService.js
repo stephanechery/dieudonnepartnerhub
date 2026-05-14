@@ -1,10 +1,15 @@
 import { partnerCurriculum } from "../data/curriculum";
 import { partnerInteractiveGuides } from "../data/interactiveGuides";
 import { videoHubVideos } from "../data/videoHub";
+import { getCurrentAccessToken } from "./authService";
 import { getAllLocalProfiles } from "./profileService";
 
 const EVENTS_KEY = "dph_learning_events_v1";
 const ACTIVE_WINDOW_DAYS = 14;
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || "").trim();
+const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || "").trim();
+const SUPABASE_ANALYTICS_TABLE =
+  (import.meta.env.VITE_SUPABASE_ANALYTICS_TABLE || "").trim();
 const DEFAULT_ADMIN_EMAILS = [
   "stephanchery@gmail.com",
   "stephanechery@dieudonnefoundation.org",
@@ -30,6 +35,44 @@ const readEvents = () => {
 const writeEvents = (events) => {
   if (!isBrowser()) return;
   window.localStorage.setItem(EVENTS_KEY, JSON.stringify(events.slice(-800)));
+};
+
+const isSupabaseAnalyticsEnabled = () =>
+  Boolean(SUPABASE_URL && SUPABASE_ANON_KEY && SUPABASE_ANALYTICS_TABLE);
+
+const eventToSupabaseRow = (event) => ({
+  id: event.id,
+  event_name: event.eventName,
+  occurred_at: event.occurredAt,
+  uid: event.uid,
+  email: event.email,
+  module_id: event.moduleId,
+  lesson_id: event.lessonId,
+  guide_id: event.guideId,
+  video_id: event.videoId,
+  category: event.category,
+});
+
+const syncEventToSupabase = async (event) => {
+  if (!isSupabaseAnalyticsEnabled()) return;
+
+  const accessToken = getCurrentAccessToken();
+  if (!accessToken) return;
+
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_ANALYTICS_TABLE}`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify([eventToSupabaseRow(event)]),
+    });
+  } catch {
+    // Local analytics remains the durable fallback when remote writes are unavailable.
+  }
 };
 
 const daysAgo = (days) => {
@@ -72,6 +115,8 @@ export const trackPartnerEvent = (eventName, payload = {}) => {
   };
 
   writeEvents([...readEvents(), event]);
+  syncEventToSupabase(event);
+  return event;
 };
 
 const makeMockProfiles = () => {
@@ -149,6 +194,37 @@ const makeMockEvents = () => {
       }
     );
 
+    if (day % 3 === 0) {
+      events.push({
+        id: `mock-video-hub-${day}`,
+        eventName: "video_hub_open",
+        occurredAt,
+        uid: `mock-${((day + 4) % 5) + 1}`,
+      });
+    }
+
+    if (day % 4 === 0) {
+      events.push({
+        id: `mock-video-save-${day}`,
+        eventName: "video_save",
+        occurredAt,
+        uid: `mock-${((day + 2) % 5) + 1}`,
+        videoId: video.id,
+        category: video.category,
+      });
+    }
+
+    if (day % 5 === 0) {
+      events.push({
+        id: `mock-video-watch-later-${day}`,
+        eventName: "video_watch_later",
+        occurredAt,
+        uid: `mock-${((day + 1) % 5) + 1}`,
+        videoId: video.id,
+        category: video.category,
+      });
+    }
+
     if (day % 2 === 0) {
       events.push({
         id: `mock-quiz-${day}`,
@@ -214,7 +290,12 @@ const buildTrend = (events) => {
     if (event.eventName === "lesson_start" || event.eventName === "lesson_completed") {
       row.lessons += 1;
     }
-    if (event.eventName === "video_view") {
+    if (
+      event.eventName === "video_hub_open" ||
+      event.eventName === "video_view" ||
+      event.eventName === "video_save" ||
+      event.eventName === "video_watch_later"
+    ) {
       row.videos += 1;
     }
     if (event.eventName === "guide_open") {
@@ -320,7 +401,11 @@ export const getAdminDashboardData = () => {
 
   events.forEach((event) => {
     if (event.eventName === "guide_open") increment(guideMap, event.guideId);
-    if (event.eventName === "video_view") {
+    if (
+      event.eventName === "video_view" ||
+      event.eventName === "video_save" ||
+      event.eventName === "video_watch_later"
+    ) {
       increment(videoMap, event.videoId);
       increment(topicMap, event.category);
     }
@@ -355,12 +440,15 @@ export const getAdminDashboardData = () => {
   const quizCompletions =
     profiles.reduce((count, profile) => count + countQuizScores(profile), 0) +
     events.filter((event) => event.eventName === "quiz_completed").length;
+  const videoHubViews = events.filter((event) => event.eventName === "video_hub_open").length;
   const videoViews = events.filter((event) => event.eventName === "video_view").length;
-  const savedVideos = profiles.reduce(
+  const savedVideoEvents = events.filter((event) => event.eventName === "video_save").length;
+  const watchLaterEvents = events.filter((event) => event.eventName === "video_watch_later").length;
+  const savedVideos = savedVideoEvents || profiles.reduce(
     (count, profile) => count + (profile.videoHub?.savedVideoIds || []).length,
     0
   );
-  const watchLaterAdds = profiles.reduce(
+  const watchLaterAdds = watchLaterEvents || profiles.reduce(
     (count, profile) => count + (profile.videoHub?.watchLaterIds || []).length,
     0
   );
@@ -408,6 +496,7 @@ export const getAdminDashboardData = () => {
       lessonCompletions,
       quizCompletions,
       guideOpens: events.filter((event) => event.eventName === "guide_open").length,
+      videoHubViews,
       videoViews,
       savedVideos,
       watchLaterAdds,

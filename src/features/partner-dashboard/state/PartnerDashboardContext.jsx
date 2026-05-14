@@ -163,6 +163,12 @@ export const PartnerDashboardProvider = ({ children }) => {
     };
 
     persistProfile(nextProfile);
+    trackPartnerEvent("scenario_saved", {
+      uid: profile.uid,
+      email: profile.email,
+      moduleId,
+      lessonId,
+    });
   };
 
   const submitQuiz = (moduleId, lessonId, answersByQuestion) => {

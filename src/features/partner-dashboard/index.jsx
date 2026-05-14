@@ -51,11 +51,16 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         moduleId: lessonMatchForTracking[1],
         lessonId: lessonMatchForTracking[2],
       });
-    } else if (guideMatchForTracking) {
+    } else if (guideMatchForTracking?.[1]) {
       trackPartnerEvent("guide_open", {
         uid: authUser.uid,
         email: authUser.email,
-        guideId: guideMatchForTracking[1] || "guide-library",
+        guideId: guideMatchForTracking[1],
+      });
+    } else if (guideMatchForTracking) {
+      trackPartnerEvent("guide_library_open", {
+        uid: authUser.uid,
+        email: authUser.email,
       });
     } else if (subPath === "/video-hub") {
       trackPartnerEvent("video_hub_open", {

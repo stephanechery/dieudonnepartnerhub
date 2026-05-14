@@ -5073,14 +5073,16 @@ ${cleanedResult}`,
 
           <a
             href="/admin-dashboard"
-            className={`hidden min-h-11 items-center gap-2 rounded-full px-5 text-sm font-extrabold text-white shadow-lg transition-all hover:-translate-y-0.5 sm:inline-flex ${
+            aria-label={translateText('Open Admin Dashboard')}
+            title={translateText('Admin Dashboard')}
+            className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full px-3 text-sm font-extrabold text-white shadow-lg transition-all hover:-translate-y-0.5 sm:px-5 ${
               darkMode
                 ? 'bg-gradient-to-r from-slate-800 via-indigo-700 to-violet-700 shadow-indigo-950/35'
                 : 'bg-gradient-to-r from-slate-900 via-indigo-700 to-violet-600 shadow-indigo-200'
             }`}
           >
             <Settings className="h-4 w-4" />
-            {translateText('Admin Dashboard')}
+            <span className="hidden sm:inline">{translateText('Admin Dashboard')}</span>
           </a>
         </div>
       </header>
