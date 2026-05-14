@@ -400,6 +400,32 @@ function AdminDashboardInner({ navigate }) {
           </SectionPanel>
         </div>
 
+        <SectionPanel title="Content Health Scorecard" eyebrow="Decision support" className="mt-5" darkMode={darkMode}>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {data.contentHealth.map((item) => (
+              <article
+                key={item.id}
+                className={`rounded-2xl border p-4 ${
+                  darkMode ? "border-white/10 bg-white/[0.04]" : "border-slate-200 bg-slate-50"
+                }`}
+              >
+                <p className={`text-[10px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+                  {item.label}
+                </p>
+                <p className={`mt-2 text-2xl font-black ${darkMode ? "text-white" : "text-slate-950"}`}>
+                  {item.value}
+                </p>
+                <p className={`mt-1 min-h-10 text-sm font-bold leading-snug ${darkMode ? "text-slate-300" : "text-slate-700"}`}>
+                  {item.detail}
+                </p>
+                <p className={`mt-3 rounded-xl border p-3 text-xs font-bold leading-relaxed ${darkMode ? "border-cyan-300/15 bg-cyan-300/10 text-cyan-100" : "border-cyan-200 bg-cyan-50 text-cyan-800"}`}>
+                  {item.action}
+                </p>
+              </article>
+            ))}
+          </div>
+        </SectionPanel>
+
         <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-3">
           <SectionPanel title="Module Progress" eyebrow="Learning" className="xl:col-span-2" darkMode={darkMode}>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -433,6 +459,10 @@ function AdminDashboardInner({ navigate }) {
             <RankedList rows={data.dropOffs} emptyLabel="No drop-off pattern detected yet." valueLabel="starts without completion" darkMode={darkMode} />
           </SectionPanel>
         </div>
+
+        <SectionPanel title="Recommendation Follow-Through" eyebrow="Next action" className="mt-5" darkMode={darkMode}>
+          <RankedList rows={data.recommendationClicks} emptyLabel="No recommendation clicks tracked yet." valueLabel="clicks" darkMode={darkMode} />
+        </SectionPanel>
 
         <SectionPanel title="Video Decision Table" eyebrow="Content library" className="mt-5" darkMode={darkMode}>
           <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">

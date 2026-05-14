@@ -1,5 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { partnerCurriculum } from "../data/curriculum";
+import { partnerInteractiveGuides } from "../data/interactiveGuides";
+import { videoHubVideos } from "../data/videoHub";
 import { trackPartnerEvent } from "../services/analyticsService";
 import {
   clearSession,
@@ -54,6 +56,21 @@ const normalizeStringArray = (value) => {
 
 const isMultiQuestion = (question) =>
   question?.type === "multi" || Array.isArray(question?.answerIndexes);
+
+const recommendationsByModule = {
+  prenatal: {
+    guideId: "partner-trimester-guide",
+    videoId: "healthy-pregnancy-prenatal-care",
+  },
+  labor: {
+    guideId: "partner-labor-guide",
+    videoId: "inducing-labor",
+  },
+  postpartum: {
+    guideId: "partner-postpartum-guide",
+    videoId: "postpartum-warning-signs",
+  },
+};
 
 const getQuestionCorrect = (question, response) => {
   if (isMultiQuestion(question)) {
@@ -334,6 +351,15 @@ export const PartnerDashboardProvider = ({ children }) => {
     const nextLesson = getNextRecommendedLesson(partnerCurriculum.modules, profile);
 
     const currentModule = modules.find((module) => module.unlocked && module.completion < 100) || modules[modules.length - 1];
+    const recommendationModuleId = nextLesson.lessonId ? nextLesson.moduleId : currentModule.id;
+    const recommendationTargets =
+      recommendationsByModule[recommendationModuleId] || recommendationsByModule.prenatal;
+    const recommendedGuide =
+      partnerInteractiveGuides.find((guide) => guide.id === recommendationTargets.guideId) ||
+      partnerInteractiveGuides[0];
+    const recommendedVideo =
+      videoHubVideos.find((video) => video.id === recommendationTargets.videoId) ||
+      videoHubVideos[0];
 
     const recentlyCompleted = (profile.recentlyCompleted || []).map((entry) => {
       const module = partnerCurriculum.modules.find((item) => item.id === entry.moduleId);
@@ -350,6 +376,11 @@ export const PartnerDashboardProvider = ({ children }) => {
       overallProgress,
       overallQuizAverage,
       nextLesson,
+      nextActions: {
+        lesson: nextLesson,
+        guide: recommendedGuide,
+        video: recommendedVideo,
+      },
       currentModule,
       recentlyCompleted,
     };
