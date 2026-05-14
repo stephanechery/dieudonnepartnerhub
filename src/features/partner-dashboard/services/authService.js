@@ -16,11 +16,19 @@ const isBrowser = () => typeof window !== "undefined";
 
 const isSupabaseAuthEnabled = () => Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 
-const getAuthRedirectUrl = () => {
+const normalizeRedirectPath = (redirectPath = AUTH_REDIRECT_PATH) => {
+  const path = String(redirectPath || AUTH_REDIRECT_PATH).trim();
+  if (!path.startsWith("/") || path.startsWith("//")) {
+    return AUTH_REDIRECT_PATH;
+  }
+  return path;
+};
+
+const getAuthRedirectUrl = (redirectPath = AUTH_REDIRECT_PATH) => {
   const fallbackOrigin = isBrowser() ? window.location.origin : "";
   const configuredOrigin = AUTH_REDIRECT_ORIGIN || fallbackOrigin;
   const normalizedOrigin = configuredOrigin.replace(/\/+$/, "");
-  return `${normalizedOrigin}${AUTH_REDIRECT_PATH}`;
+  return `${normalizedOrigin}${normalizeRedirectPath(redirectPath)}`;
 };
 
 const toHex = (buffer) =>
@@ -406,7 +414,7 @@ export const loginWithEmail = async ({ email, password }) => {
   });
 };
 
-export const requestPasswordReset = async (email) => {
+export const requestPasswordReset = async (email, redirectPath = AUTH_REDIRECT_PATH) => {
   if (!isSupabaseAuthEnabled()) {
     const normalizedEmail = normalizeEmail(email);
     const users = readUsers();
@@ -427,7 +435,7 @@ export const requestPasswordReset = async (email) => {
   }
 
   const normalizedEmail = normalizeEmail(email);
-  const redirectTo = getAuthRedirectUrl();
+  const redirectTo = getAuthRedirectUrl(redirectPath);
   await supabaseAuthRequest("recover", {
     method: "POST",
     body: { email: normalizedEmail, redirect_to: redirectTo },
@@ -524,9 +532,9 @@ const upsertGoogleUserLocal = (profile) => {
   return user;
 };
 
-export const loginWithGoogle = async () => {
+export const loginWithGoogle = async ({ redirectPath = AUTH_REDIRECT_PATH } = {}) => {
   if (isSupabaseAuthEnabled()) {
-    const redirectTo = getAuthRedirectUrl();
+    const redirectTo = getAuthRedirectUrl(redirectPath);
     const authorizeUrl = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(
       redirectTo
     )}`;

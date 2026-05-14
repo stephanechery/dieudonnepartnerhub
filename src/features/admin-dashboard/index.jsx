@@ -35,7 +35,7 @@ function KpiTile({ icon: Icon, label, value, detail, tone = "cyan", darkMode = t
   }[tone];
 
   return (
-    <article className={`rounded-2xl border p-4 transition hover:-translate-y-0.5 ${
+    <article className={`rounded-2xl border p-3 transition hover:-translate-y-0.5 sm:p-4 ${
       darkMode
         ? "border-white/10 bg-white/[0.045] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-white/[0.065]"
         : "border-slate-200 bg-white shadow-sm hover:border-cyan-200"
@@ -58,7 +58,7 @@ function KpiTile({ icon: Icon, label, value, detail, tone = "cyan", darkMode = t
 
 function SectionPanel({ title, eyebrow, children, className = "", darkMode = true }) {
   return (
-    <section className={`rounded-[1.6rem] border p-4 ${
+    <section className={`rounded-[1.6rem] border p-3 sm:p-4 ${
       darkMode ? "border-white/10 bg-slate-900/72 shadow-xl shadow-black/15" : "border-slate-200 bg-white shadow-sm"
     } ${className}`}>
       <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
@@ -98,22 +98,22 @@ function TrendChart({ rows, darkMode = true }) {
   const guidesMax = maxValue(rows, "guides");
 
   return (
-    <div className={`grid h-64 grid-cols-7 items-end gap-2 rounded-2xl border p-4 ${darkMode ? "border-white/10 bg-slate-950/70" : "border-slate-200 bg-slate-50"}`}>
+    <div className={`grid h-52 grid-cols-7 items-end gap-1.5 rounded-2xl border p-3 sm:h-64 sm:gap-2 sm:p-4 ${darkMode ? "border-white/10 bg-slate-950/70" : "border-slate-200 bg-slate-50"}`}>
       {rows.map((row) => (
         <div key={row.key} className="flex h-full min-w-0 flex-col justify-end gap-2">
           <div className="flex flex-1 items-end justify-center gap-1">
             <span
-              className="w-2 rounded-t-full bg-cyan-300"
+              className="w-1.5 rounded-t-full bg-cyan-300 sm:w-2"
               style={{ height: `${Math.max(7, (row.lessons / lessonsMax) * 100)}%` }}
               title={`${row.lessons} lesson events`}
             />
             <span
-              className="w-2 rounded-t-full bg-violet-300"
+              className="w-1.5 rounded-t-full bg-violet-300 sm:w-2"
               style={{ height: `${Math.max(7, (row.videos / videosMax) * 100)}%` }}
               title={`${row.videos} video views`}
             />
             <span
-              className="w-2 rounded-t-full bg-emerald-300"
+              className="w-1.5 rounded-t-full bg-emerald-300 sm:w-2"
               style={{ height: `${Math.max(7, (row.guides / guidesMax) * 100)}%` }}
               title={`${row.guides} guide opens`}
             />
@@ -225,7 +225,7 @@ function AdminDashboardInner({ navigate }) {
     return (
       <main className={`min-h-screen px-4 py-8 ${darkMode ? "bg-slate-950" : "bg-slate-50"}`}>
         <div className="mx-auto max-w-5xl">
-          <AuthPanel darkMode={darkMode} />
+          <AuthPanel darkMode={darkMode} authRedirectPath="/admin-dashboard" />
         </div>
       </main>
     );
@@ -242,38 +242,38 @@ function AdminDashboardInner({ navigate }) {
           ? "bg-[radial-gradient(circle_at_16%_10%,rgba(34,211,238,0.13),transparent_30%),radial-gradient(circle_at_82%_4%,rgba(167,139,250,0.13),transparent_28%),linear-gradient(180deg,rgba(15,23,42,0.38),rgba(2,6,23,0.96))]"
           : "bg-[radial-gradient(circle_at_14%_8%,rgba(14,165,233,0.12),transparent_30%),radial-gradient(circle_at_82%_6%,rgba(99,102,241,0.09),transparent_28%),linear-gradient(180deg,rgba(248,250,252,0.92),rgba(241,245,249,0.98))]"
       }`} />
-      <div className="relative mx-auto max-w-[1440px] px-4 py-5 sm:px-6 lg:px-8">
-        <header className={`mb-5 rounded-[1.7rem] border p-4 backdrop-blur-xl ${
+      <div className="relative mx-auto max-w-[1440px] px-3 py-4 sm:px-6 sm:py-5 lg:px-8">
+        <header className={`mb-5 rounded-[1.7rem] border p-3 backdrop-blur-xl sm:p-4 ${
           darkMode ? "border-white/10 bg-slate-950/72 shadow-2xl shadow-black/25" : "border-slate-200 bg-white/88 shadow-sm"
         }`}>
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-            <div className="flex min-w-0 items-center gap-4">
+            <div className="flex min-w-0 items-start gap-3 sm:items-center sm:gap-4">
               <img
                 src={dieudonneDarkLogo}
                 alt="Dieudonne logo"
-                className={`h-12 w-auto rounded-xl border p-1 ${darkMode ? "border-white/10 bg-slate-950" : "border-slate-200 bg-slate-950"}`}
+                className={`h-10 w-auto shrink-0 rounded-xl border p-1 sm:h-12 ${darkMode ? "border-white/10 bg-slate-950" : "border-slate-200 bg-slate-950"}`}
               />
               <div className="min-w-0">
                 <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
                   Dieudonne Partner Hub
                 </p>
-                <h1 className={`mt-1 text-2xl font-black tracking-tight sm:text-3xl ${darkMode ? "text-white" : "text-slate-950"}`}>
+                <h1 className={`mt-1 text-xl font-black tracking-tight sm:text-3xl ${darkMode ? "text-white" : "text-slate-950"}`}>
                   Admin Dashboard
                 </h1>
-                <p className={`mt-1 max-w-3xl text-sm font-semibold leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+                <p className={`mt-1 max-w-3xl text-xs font-semibold leading-relaxed sm:text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
                   Product signals for learning progress, guide usage, video interest, and content decisions.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-              <div className={`inline-flex rounded-2xl border p-1 ${darkMode ? "border-white/10 bg-white/[0.04]" : "border-slate-200 bg-slate-100"}`}>
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:items-center">
+              <div className={`col-span-2 inline-flex w-full rounded-2xl border p-1 sm:col-span-1 sm:w-auto ${darkMode ? "border-white/10 bg-white/[0.04]" : "border-slate-200 bg-slate-100"}`}>
                 {["7d", "14d", "30d"].map((item) => (
                   <button
                     key={item}
                     type="button"
                     onClick={() => setRange(item)}
-                    className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wide transition ${
+                    className={`flex-1 rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wide transition sm:flex-none ${
                       range === item
                         ? "bg-cyan-300 text-slate-950"
                         : darkMode
@@ -290,7 +290,7 @@ function AdminDashboardInner({ navigate }) {
                 onClick={() => setDarkMode((current) => !current)}
                 aria-pressed={darkMode}
                 aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-                className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-4 py-2 text-sm font-black transition ${
+                className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl border px-3 py-2 text-sm font-black transition sm:w-auto sm:px-4 ${
                   darkMode
                     ? "border-white/10 bg-white/[0.04] text-amber-200 hover:bg-white/[0.08]"
                     : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
@@ -302,7 +302,7 @@ function AdminDashboardInner({ navigate }) {
               <button
                 type="button"
                 onClick={() => setRefreshKey((value) => value + 1)}
-                className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-4 py-2 text-sm font-black transition ${
+                className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl border px-3 py-2 text-sm font-black transition sm:w-auto sm:px-4 ${
                   darkMode ? "border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
                 }`}
               >
@@ -312,7 +312,7 @@ function AdminDashboardInner({ navigate }) {
               <button
                 type="button"
                 onClick={() => navigate("/partner-dashboard")}
-                className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-4 py-2 text-sm font-black transition ${
+                className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl border px-3 py-2 text-sm font-black transition sm:w-auto sm:px-4 ${
                   darkMode ? "border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
                 }`}
               >
@@ -322,7 +322,7 @@ function AdminDashboardInner({ navigate }) {
               <button
                 type="button"
                 onClick={logout}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-rose-500 px-4 py-2 text-sm font-black text-white transition hover:bg-rose-400"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-rose-500 px-3 py-2 text-sm font-black text-white transition hover:bg-rose-400 sm:w-auto sm:px-4"
               >
                 Log out
               </button>
@@ -455,30 +455,32 @@ function AdminDashboardInner({ navigate }) {
             </div>
           </div>
 
-          <div className={`overflow-hidden rounded-2xl border ${darkMode ? "border-white/10" : "border-slate-200"}`}>
-            <div className={`grid grid-cols-[1.5fr_0.8fr_0.4fr] px-4 py-3 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500 ${
-              darkMode ? "bg-white/[0.06]" : "bg-slate-50"
-            }`}>
-              <span>Video</span>
-              <span>Topic</span>
-              <span className="text-right">Signals</span>
-            </div>
-            {filteredVideos.length ? (
-              filteredVideos.map((video) => (
-                <div
-                  key={video.id}
-                  className={`grid grid-cols-[1.5fr_0.8fr_0.4fr] items-center gap-3 border-t px-4 py-3 text-sm ${darkMode ? "border-white/10" : "border-slate-200"}`}
-                >
-                  <span className={`min-w-0 truncate font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{video.label}</span>
-                  <span className={`min-w-0 truncate font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{video.category}</span>
-                  <span className={`text-right font-black ${darkMode ? "text-cyan-100" : "text-cyan-700"}`}>{formatNumber(video.value)}</span>
-                </div>
-              ))
-            ) : (
-              <div className={`border-t px-4 py-8 text-center text-sm font-semibold text-slate-500 ${darkMode ? "border-white/10" : "border-slate-200"}`}>
-                No videos match that filter.
+          <div className={`overflow-x-auto rounded-2xl border ${darkMode ? "border-white/10" : "border-slate-200"}`}>
+            <div className="min-w-[560px]">
+              <div className={`grid grid-cols-[1.5fr_0.8fr_0.4fr] px-4 py-3 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500 ${
+                darkMode ? "bg-white/[0.06]" : "bg-slate-50"
+              }`}>
+                <span>Video</span>
+                <span>Topic</span>
+                <span className="text-right">Signals</span>
               </div>
-            )}
+              {filteredVideos.length ? (
+                filteredVideos.map((video) => (
+                  <div
+                    key={video.id}
+                    className={`grid grid-cols-[1.5fr_0.8fr_0.4fr] items-center gap-3 border-t px-4 py-3 text-sm ${darkMode ? "border-white/10" : "border-slate-200"}`}
+                  >
+                    <span className={`min-w-0 truncate font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{video.label}</span>
+                    <span className={`min-w-0 truncate font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{video.category}</span>
+                    <span className={`text-right font-black ${darkMode ? "text-cyan-100" : "text-cyan-700"}`}>{formatNumber(video.value)}</span>
+                  </div>
+                ))
+              ) : (
+                <div className={`border-t px-4 py-8 text-center text-sm font-semibold text-slate-500 ${darkMode ? "border-white/10" : "border-slate-200"}`}>
+                  No videos match that filter.
+                </div>
+              )}
+            </div>
           </div>
         </SectionPanel>
 
