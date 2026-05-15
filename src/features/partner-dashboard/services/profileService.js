@@ -81,6 +81,7 @@ const createBaseProfile = (sessionUser) => ({
   email: sessionUser.email,
   displayName: sessionUser.displayName,
   provider: sessionUser.provider,
+  role: sessionUser.role || "learner",
   createdAt: new Date().toISOString(),
   lastActiveAt: new Date().toISOString(),
   modules: createEmptyModules(),
@@ -153,6 +154,7 @@ const rowToProfile = (row, sessionUser) => {
     email: sessionUser.email,
     displayName: fromRow.displayName || sessionUser.displayName,
     provider: sessionUser.provider,
+    role: sessionUser.role || fromRow.role || "learner",
     createdAt: row?.created_at || fromRow.createdAt || new Date().toISOString(),
     lastActiveAt:
       row?.last_active_at || fromRow.lastActiveAt || new Date().toISOString(),

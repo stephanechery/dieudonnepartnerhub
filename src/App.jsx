@@ -49,45 +49,16 @@ import { partnerCurriculum } from './features/partner-dashboard/data/curriculum'
 
 const DOULA_MATCH_URL = 'https://dieudonnematch.org';
 
-// --- Gemini API Utilities (Single Shared Auth Configuration) ---
-const apiKey = (import.meta.env.VITE_GEMINI_API_KEY || '').trim();
-const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
-const configuredTextModel = (import.meta.env.VITE_GEMINI_TEXT_MODEL || '').trim();
-const configuredTtsModel = (import.meta.env.VITE_GEMINI_TTS_MODEL || '').trim();
-const GEMINI_MODELS = {
-  text: configuredTextModel || 'gemini-2.5-flash',
-  tts: configuredTtsModel || 'gemini-2.5-flash-preview-tts'
-};
+// --- Gemini API Utilities ---
+const aiFeaturesEnabled = import.meta.env.VITE_ENABLE_AI_FEATURES !== 'false';
 
-const geminiUrl = (model) => `${GEMINI_BASE_URL}/${model}:generateContent?key=${apiKey}`;
-const textModelFallbacks = Array.from(new Set([GEMINI_MODELS.text, 'gemini-2.5-flash', 'gemini-2.5-flash-lite']));
-
-const extractGeminiError = async (response) => {
-  let errorPayload = null;
+const extractGeminiProxyError = async (response) => {
   try {
-    errorPayload = await response.json();
+    const errorPayload = await response.json();
+    return errorPayload?.error || `Gemini request failed with status ${response.status}.`;
   } catch (error) {
-    errorPayload = null;
+    return `Gemini request failed with status ${response.status}.`;
   }
-
-  const detail =
-    errorPayload?.error?.message ||
-    `Gemini request failed with status ${response.status}.`;
-
-  return detail;
-};
-
-const extractGeminiText = (data) => {
-  const parts = data?.candidates?.[0]?.content?.parts;
-  if (!Array.isArray(parts)) {
-    return '';
-  }
-
-  return parts
-    .map((part) => part?.text || '')
-    .filter(Boolean)
-    .join('\n')
-    .trim();
 };
 
 const looksTruncatedResponse = (text) => {
@@ -104,81 +75,47 @@ const looksTruncatedResponse = (text) => {
 };
 
 const fetchGemini = async (prompt, systemInstruction = '', generationConfig = {}) => {
-  if (!apiKey) {
-    throw new Error('Missing VITE_GEMINI_API_KEY');
+  if (!aiFeaturesEnabled) {
+    throw new Error('AI support is disabled.');
   }
 
-  let lastError = null;
+  const response = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt, systemInstruction, generationConfig })
+  });
 
-  for (const model of textModelFallbacks) {
-    let delay = 800;
-
-    for (let i = 0; i < 3; i++) {
-      try {
-        const response = await fetch(geminiUrl(model), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            systemInstruction: systemInstruction
-              ? { parts: [{ text: systemInstruction }] }
-              : undefined,
-            generationConfig: Object.keys(generationConfig).length
-              ? generationConfig
-              : undefined
-          })
-        });
-
-        if (!response.ok) {
-          const detail = await extractGeminiError(response);
-          throw new Error(`${detail} (model: ${model})`);
-        }
-
-        const data = await response.json();
-        const text = extractGeminiText(data);
-        if (!text) {
-          throw new Error(`Gemini returned an empty response. (model: ${model})`);
-        }
-        return text;
-      } catch (error) {
-        lastError = error;
-        if (i < 2) {
-          await new Promise((resolve) => setTimeout(resolve, delay));
-          delay *= 2;
-        }
-      }
-    }
+  if (!response.ok) {
+    throw new Error(await extractGeminiProxyError(response));
   }
 
-  throw lastError || new Error('Gemini text request failed.');
+  const data = await response.json();
+  if (!data?.text) {
+    throw new Error('Gemini returned an empty response.');
+  }
+  return data.text;
 };
 
 const fetchTTS = async (text) => {
-  if (!apiKey) {
-    throw new Error('Missing VITE_GEMINI_API_KEY');
+  if (!aiFeaturesEnabled) {
+    throw new Error('AI support is disabled.');
   }
 
   try {
-    const response = await fetch(geminiUrl(GEMINI_MODELS.tts), {
+    const response = await fetch('/api/gemini', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text }] }],
-        generationConfig: {
-          responseModalities: ['AUDIO'],
-          speechConfig: {
-            voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Aoede' } }
-          }
-        }
+        type: 'tts',
+        text
       })
     });
 
     if (!response.ok) {
-      const detail = await extractGeminiError(response);
-      throw new Error(`${detail} (model: ${GEMINI_MODELS.tts})`);
+      throw new Error(await extractGeminiProxyError(response));
     }
     const data = await response.json();
-    const pcmData = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    const pcmData = data.audioBase64;
     if (!pcmData) return null;
 
     const binaryString = window.atob(pcmData);
@@ -301,7 +238,7 @@ const getCardSpeechText = (translate, item) =>
   `${translate('Partner Actions')}: ${item.checklist.map((task) => translate(task)).join('. ')}`;
 
 const primeTtsAudio = async (speechText) => {
-  if (!speechText || !apiKey) return null;
+  if (!speechText || !aiFeaturesEnabled) return null;
 
   const cachedUrl = ttsAudioCache.get(speechText);
   if (cachedUrl) {
@@ -354,7 +291,7 @@ const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (valu
     e.stopPropagation();
     if (audioState !== 'idle') return;
 
-    if (!apiKey) {
+    if (!aiFeaturesEnabled) {
       return;
     }
 
@@ -414,7 +351,7 @@ const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (valu
                 className={`rounded-full border p-2.5 shadow-md transition-colors ${
                   darkMode ? 'border-slate-700 bg-slate-800 hover:bg-slate-700' : 'border-slate-100 bg-white hover:bg-slate-50'
                 }`}
-                disabled={audioState !== 'idle' || !apiKey}
+                disabled={audioState !== 'idle' || !aiFeaturesEnabled}
                 title={tx('Play checklist audio')}
               >
                 <Volume2 className={`h-5 w-5 ${audioState === 'playing' ? 'text-rose-500' : audioState === 'loading' ? 'animate-pulse text-cyan-500' : darkMode ? 'text-slate-300' : 'text-slate-500'}`} />
@@ -531,8 +468,8 @@ const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (valu
               className={`rounded-full border p-2.5 shadow-md transition-colors ${
                 darkMode ? 'border-slate-700 bg-slate-800 hover:bg-slate-700' : 'border-slate-100 bg-white hover:bg-slate-50'
               }`}
-              disabled={audioState !== 'idle' || !apiKey}
-              title={apiKey ? tx('Play checklist audio') : tx('Set VITE_GEMINI_API_KEY to enable audio')}
+              disabled={audioState !== 'idle' || !aiFeaturesEnabled}
+              title={aiFeaturesEnabled ? tx('Play checklist audio') : tx('AI support is disabled')}
             >
               <Volume2 className={`h-5 w-5 ${audioState === 'playing' ? 'text-rose-500' : audioState === 'loading' ? 'animate-pulse text-cyan-500' : darkMode ? 'text-slate-300' : 'text-slate-500'}`} />
             </button>
@@ -2182,7 +2119,7 @@ const STATIC_UI_TRANSLATIONS = {
     'Escalation Trigger': 'Detonante de Escalamiento',
     'Clinical Training': 'Entrenamiento Clínico',
     'Play checklist audio': 'Reproducir audio de la lista',
-    'Set VITE_GEMINI_API_KEY to enable audio': 'Configura VITE_GEMINI_API_KEY para activar audio',
+    'AI support is disabled': 'El soporte de IA está desactivado',
     'Uterus:': 'Útero:',
     'Organs:': 'Órganos:',
     'Hormones:': 'Hormonas:',
@@ -2413,7 +2350,7 @@ const STATIC_UI_TRANSLATIONS = {
     'Escalation Trigger': 'Déclencheur d’Escalade',
     'Clinical Training': 'Formation Clinique',
     'Play checklist audio': 'Lire l’audio de la checklist',
-    'Set VITE_GEMINI_API_KEY to enable audio': 'Définissez VITE_GEMINI_API_KEY pour activer l’audio',
+    'AI support is disabled': 'Le support IA est désactivé',
     'Uterus:': 'Utérus :',
     'Organs:': 'Organes :',
     'Hormones:': 'Hormones :',
@@ -2618,7 +2555,7 @@ const STATIC_UI_TRANSLATIONS = {
     'Escalation Trigger': 'Deklanche Eskalasyon',
     'Clinical Training': 'Fòmasyon Klinik',
     'Play checklist audio': 'Jwe odyo lis verifikasyon an',
-    'Set VITE_GEMINI_API_KEY to enable audio': 'Mete VITE_GEMINI_API_KEY pou aktive odyo',
+    'AI support is disabled': 'Sipò IA dezaktive',
     'Uterus:': 'Matris:',
     'Organs:': 'Ògàn:',
     'Hormones:': 'Òmòn:',
@@ -3353,7 +3290,7 @@ ${JSON.stringify(keyedSource)}`,
   const flushPendingTranslations = useCallback(async () => {
     if (language === 'en' || translationFlushRef.current) return;
     if (!pendingTranslationsRef.current.size) return;
-    if (!apiKey) return;
+    if (!aiFeaturesEnabled) return;
 
     translationFlushRef.current = true;
     setTranslationLoading(true);
@@ -4018,8 +3955,8 @@ ${cleanedResult}`,
         eyebrow: 'Support Tool',
         shareSubject: 'Dieudonne Partner Hub support note'
       });
-      if (!apiKey) {
-        setAiResult('Gemini API key missing. Set VITE_GEMINI_API_KEY so text and audio requests can authenticate.');
+      if (!aiFeaturesEnabled) {
+        setAiResult('AI support is disabled for this environment.');
       } else {
         const detail = (error?.message || '').trim();
         setAiResult(
@@ -5070,6 +5007,28 @@ ${cleanedResult}`,
               </div>
             )}
           </div>
+
+          <a
+            href="/organizations"
+            className={`inline-flex min-h-11 items-center justify-center rounded-full border px-3.5 text-xs font-semibold transition-all sm:px-4 sm:text-sm ${
+              darkMode
+                ? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-slate-600'
+                : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+            }`}
+          >
+            {translateText('Organizations')}
+          </a>
+
+          <a
+            href="/demo"
+            className={`hidden min-h-11 items-center justify-center rounded-full border px-4 text-sm font-semibold transition-all md:inline-flex ${
+              darkMode
+                ? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-slate-600'
+                : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+            }`}
+          >
+            {translateText('Demo')}
+          </a>
 
           <a
             href="/admin-dashboard"
