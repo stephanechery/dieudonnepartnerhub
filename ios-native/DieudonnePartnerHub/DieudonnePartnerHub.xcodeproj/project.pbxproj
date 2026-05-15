@@ -11,6 +11,7 @@
 		26091264613528E5595EDADD /* guides.json in Resources */ = {isa = PBXBuildFile; fileRef = 75509BDAB26364F6E76E22F7 /* guides.json */; };
 		28492C70C246E95E35BFCD92 /* curriculum.json in Resources */ = {isa = PBXBuildFile; fileRef = DA3FD56C3F51C612421B63C8 /* curriculum.json */; };
 		2E44B849613E114676068EDD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5305580BAC29A1EC4036DC1D /* Foundation.framework */; };
+		3489684F07F4C87BF5EDE492 /* home-hero-pregnant.png in Resources */ = {isa = PBXBuildFile; fileRef = D8B20990977B1338CF0C6B5A /* home-hero-pregnant.png */; };
 		4654E6D05D856D0FF12D9C56 /* LessonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEAF873E720103362F25AE6 /* LessonDetailView.swift */; };
 		4E57F61E8730A21A278839A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFD5CA82E6FBA3B8DBF037F8 /* Assets.xcassets */; };
 		54AD91B7A2D4FA8A1C72603E /* AdminHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECC165F968338D68F152C79 /* AdminHubView.swift */; };
@@ -35,6 +36,7 @@
 		7CBD60B434A383EF57F3D478 /* PartnerHubRootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PartnerHubRootView.swift; path = PartnerHubRootView.swift; sourceTree = "<group>"; };
 		7CEAF873E720103362F25AE6 /* LessonDetailView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LessonDetailView.swift; sourceTree = "<group>"; };
 		AD82EEA159156D632F7B9A30 /* DieudonnePartnerHubApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DieudonnePartnerHubApp.swift; path = DieudonnePartnerHubApp.swift; sourceTree = "<group>"; };
+		D8B20990977B1338CF0C6B5A /* home-hero-pregnant.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "home-hero-pregnant.png"; sourceTree = "<group>"; };
 		DA3FD56C3F51C612421B63C8 /* curriculum.json */ = {isa = PBXFileReference; includeInIndex = 1; path = curriculum.json; sourceTree = "<group>"; };
 		DF12AAE01DF4A2BCF490990E /* PartnerHubStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PartnerHubStore.swift; sourceTree = "<group>"; };
 		DFFA412275F265A38647AFC2 /* VideoHubView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VideoHubView.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				DA3FD56C3F51C612421B63C8 /* curriculum.json */,
 				54766D81510AE8275F3AF5C2 /* videos.json */,
 				75509BDAB26364F6E76E22F7 /* guides.json */,
+				D8B20990977B1338CF0C6B5A /* home-hero-pregnant.png */,
 			);
 			name = Resources;
 			path = Resources;
@@ -192,6 +195,7 @@
 				28492C70C246E95E35BFCD92 /* curriculum.json in Resources */,
 				87226CBCD29CCD7C4D3F10F8 /* videos.json in Resources */,
 				26091264613528E5595EDADD /* guides.json in Resources */,
+				3489684F07F4C87BF5EDE492 /* home-hero-pregnant.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

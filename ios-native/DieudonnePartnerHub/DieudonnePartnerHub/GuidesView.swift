@@ -75,7 +75,7 @@ private struct GuideRow: View {
     }
 }
 
-private struct GuideDetailView: View {
+struct GuideDetailView: View {
     let store: PartnerHubStore
     let guide: InteractiveGuide
 

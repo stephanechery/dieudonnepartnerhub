@@ -1,24 +1,43 @@
 import SwiftUI
 
+enum PartnerHubTab: Hashable {
+    case today
+    case learn
+    case guides
+    case videos
+    case admin
+}
+
 struct PartnerHubRootView: View {
     @State private var store = PartnerHubStore()
+    @State private var selectedTab: PartnerHubTab = .today
 
     var body: some View {
-        TabView {
-            TodayView(store: store)
+        TabView(selection: $selectedTab) {
+            TodayView(
+                store: store,
+                openLearn: { selectedTab = .learn },
+                openGuides: { selectedTab = .guides },
+                openVideos: { selectedTab = .videos }
+            )
                 .tabItem { Label("Today", systemImage: "sparkles") }
+                .tag(PartnerHubTab.today)
 
             LearnView(store: store)
                 .tabItem { Label("Learn", systemImage: "graduationcap.fill") }
+                .tag(PartnerHubTab.learn)
 
             GuidesView(store: store)
                 .tabItem { Label("Guides", systemImage: "book.pages.fill") }
+                .tag(PartnerHubTab.guides)
 
             VideoHubView(store: store)
                 .tabItem { Label("Videos", systemImage: "play.rectangle.fill") }
+                .tag(PartnerHubTab.videos)
 
             AdminHubView(store: store)
                 .tabItem { Label("Admin", systemImage: "gearshape.fill") }
+                .tag(PartnerHubTab.admin)
         }
         .tint(.cyan)
         .preferredColorScheme(.dark)
