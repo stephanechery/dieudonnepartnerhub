@@ -151,6 +151,7 @@ export default function LessonPage({
   const [quizStep, setQuizStep] = useState(0);
   const [courseStep, setCourseStep] = useState(0);
   const quizSectionRef = useRef(null);
+  const lastLessonIdRef = useRef(lesson.id);
 
   const lessonIndex = module.lessons.findIndex((item) => item.id === lesson.id);
   const lessonNumber = lessonIndex + 1;
@@ -187,15 +188,21 @@ export default function LessonPage({
   const lessonStepPercent = Math.round(((lessonStep + 1) / lessonDeckSteps.length) * 100);
 
   useEffect(() => {
+    const lessonChanged = lastLessonIdRef.current !== lesson.id;
+    lastLessonIdRef.current = lesson.id;
+
     setAnswers(normalizeSavedAnswers(savedQuizResponses || {}));
     setSubmitted(Boolean(savedQuizResponses));
     setScore(moduleState.quizScores[lesson.id] ?? null);
     setCompleteStatus(isLessonComplete(moduleState, lesson.id));
-    setScenarioResponse(moduleState.scenarioResponses[lesson.id] || "");
-    setLessonStep(0);
-    setQuizStep(0);
-    setCourseStep(0);
-    setCourseChecks(buildCourseCheckState(getCourseSections(lesson)));
+
+    if (lessonChanged) {
+      setScenarioResponse(moduleState.scenarioResponses[lesson.id] || "");
+      setLessonStep(0);
+      setQuizStep(0);
+      setCourseStep(0);
+      setCourseChecks(buildCourseCheckState(getCourseSections(lesson)));
+    }
   }, [lesson.id, moduleState, savedQuizResponses]);
 
   const answeredAll = lesson.quiz.every((question) => {
