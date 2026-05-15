@@ -5,70 +5,1928 @@
       "title": "Trimester Body Guide",
       "summary": "Explore pregnancy anatomy, hormone changes, posture shifts, and trimester checkpoints.",
       "phase": "Prenatal",
-      "accent": "cyan"
+      "accent": "cyan",
+      "detailSections": [
+        {
+          "id": "data-why",
+          "title": "Why Your Presence Changes Everything",
+          "body": "Research is clear: when partners are actively involved during pregnancy, birth outcomes improve. Partners who are present, informed, and emotionally engaged reduce maternal stress hormones, improve satisfaction with the birth experience, and are more likely to form strong early bonds with their baby. You don't need to have all the answers. You need to show up.\n\nMany partners feel sidelined during pregnancy. The appointments feel clinical, the body changes are happening to someone else, and it can be hard to know your role. That feeling is real. But the antidote isn't stepping back  -  it's stepping in. Learning. Attending. Asking. The partner who reads this guide is already doing it right.\n\nWhen did you first realize this pregnancy was real for you? What do you want her to know about how you feel? What worries you most about the next several months?",
+          "bullets": [
+            {
+              "label": "What She Needs",
+              "items": [
+                "To feel like you are going through this with her  -  not watching from the sideline",
+                "To know you have read something, learned something, asked a question",
+                "To not have to manage your emotions about the pregnancy on top of her own",
+                "For practical help, not just offers of help that she has to direct",
+                "To be asked how she feels  -  and for you to actually listen to the answer",
+                "To feel chosen and supported even when pregnancy makes her feel unlike herself"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "28%",
+              "icon": null,
+              "body": "Lower stress hormones when partner is actively supportive",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "2x",
+              "icon": null,
+              "body": "More likely to breastfeed successfully with partner support",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "40%",
+              "icon": null,
+              "body": "Lower postpartum depression risk with engaged partner involvement",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Stronger",
+              "icon": null,
+              "body": "Early father-child bond when present at birth and postpartum",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "data-t1",
+          "title": "First Trimester: Weeks 1-13",
+          "body": "Her body is undergoing a seismic hormonal shift. Progesterone, estrogen, and hCG surge dramatically. She may feel nauseous  -  sometimes all day, not just in the morning. She's exhausted in a way that sleep doesn't fix. Her emotions may swing quickly. She may not look pregnant yet but feel profoundly different.\n\nWhat has surprised you most about the first trimester? What has been hardest for you to understand or accept? What does she need most right now that you haven't figured out how to give yet?",
+          "bullets": [
+            {
+              "label": "Key Symptoms",
+              "items": [
+                "Nausea and vomiting  -  often worst in weeks 6-10",
+                "Extreme fatigue that hits without warning",
+                "Breast tenderness and sensitivity",
+                "Food aversions  -  smells that never bothered her may now trigger nausea",
+                "Heightened emotions and anxiety",
+                "Frequent urination",
+                "Headaches"
+              ]
+            },
+            {
+              "label": "Avoid",
+              "items": [
+                "Complaining about her changed appetite or energy",
+                "Telling her she should be excited when she feels terrible",
+                "Sharing the news before she is ready",
+                "Dismissing her symptoms as 'just pregnancy'",
+                "Asking if the baby is yours to joke  -  this lands differently than you think"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "Your Role 1",
+              "icon": "🍳",
+              "body": "Take over cooking if smells trigger her nausea",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 2",
+              "icon": "🏥",
+              "body": "Go to the first prenatal appointment  -  all of them if possible",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 3",
+              "icon": "😴",
+              "body": "Stop expecting her to entertain, socialize, or perform at previous energy levels",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 4",
+              "icon": "🍪",
+              "body": "Stock snacks she can tolerate  -  crackers, ginger candies, cold foods",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 5",
+              "icon": "🤐",
+              "body": "Do not tell her she 'doesn't look pregnant'  -  she feels it intensely",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 6",
+              "icon": "📖",
+              "body": "Research the pregnancy with her  -  read the same app or book she is reading",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 7",
+              "icon": "🏠",
+              "body": "Handle household tasks she can no longer tolerate (strong smells, heavy lifting)",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 8",
+              "icon": "💤",
+              "body": "Let her rest without guilt, commentary, or suggestions to 'push through'",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "data-t2",
+          "title": "Second Trimester: Weeks 14-27",
+          "body": "For many people, the second trimester brings relief  -  nausea fades, energy returns, and the pregnancy becomes visible. She starts feeling the baby move. This is often when the pregnancy becomes emotionally real for partners too. But body image shifts, round ligament pain, heartburn, and growing anxiety about birth are also present.\n\nHave you felt the baby move yet? What did that feel like? What conversations have you been avoiding that you need to have before the birth?",
+          "bullets": [
+            {
+              "label": "Key Symptoms",
+              "items": [
+                "Visible baby bump  -  she may feel self-conscious or proud or both",
+                "Baby movement begins (quickening)  -  around weeks 18-22",
+                "Round ligament pain  -  sharp pains on the sides of the abdomen",
+                "Heartburn and indigestion",
+                "Back pain begins",
+                "Possible sex drive changes  -  in either direction",
+                "Increased emotional investment and anxiety about the future"
+              ]
+            },
+            {
+              "label": "Avoid",
+              "items": [
+                "Commenting on her weight or size  -  even positively, unless she invites it",
+                "Assuming her energy return means everything is 'back to normal'",
+                "Skipping the anatomy scan",
+                "Postponing the important conversations about birth and parenting"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "Your Role 1",
+              "icon": "🤲",
+              "body": "Feel the baby move with her  -  put your hand on her belly when she invites you",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 2",
+              "icon": "🔬",
+              "body": "Attend the anatomy scan (20-week ultrasound)  -  this is a major milestone",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 3",
+              "icon": "💛",
+              "body": "Affirm her changing body  -  with words and presence, not just performance",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 4",
+              "icon": "🛏️",
+              "body": "Begin building the nursery or baby space together",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 5",
+              "icon": "📚",
+              "body": "Take a childbirth education class together this trimester",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 6",
+              "icon": "👩‍⚕️",
+              "body": "Help her research pediatricians and build the care team",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 7",
+              "icon": "💬",
+              "body": "Have the hard conversations now: birth preferences, parenting values, finances",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 8",
+              "icon": "💑",
+              "body": "Plan something special together  -  babymoon, date nights, connection time",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "data-t3",
+          "title": "Third Trimester: Weeks 28-40",
+          "body": "The third trimester is the home stretch  -  and often the hardest. Her body is carrying significant weight, sleep becomes difficult, and birth anxiety is real. The baby is running out of room. She is likely doing her own internal preparation  -  mentally rehearsing birth, thinking about who she is becoming as a mother, potentially experiencing fear. She needs a partner who is prepared, calm, and actively ready.\n\nHave you read the birth plan? What parts feel unclear or uncomfortable to you? What is your biggest fear about the birth itself? Have you told her that?",
+          "bullets": [
+            {
+              "label": "Key Symptoms",
+              "items": [
+                "Difficulty sleeping  -  cannot find a comfortable position",
+                "Shortness of breath as baby crowds the diaphragm",
+                "Swelling in feet, ankles, hands",
+                "Braxton Hicks contractions (practice contractions)",
+                "Increased back and pelvic pain",
+                "Frequent urination returns",
+                "Nesting energy  -  strong drive to prepare and organize",
+                "Anxiety and emotional intensity about birth and becoming a parent"
+              ]
+            },
+            {
+              "label": "Avoid",
+              "items": [
+                "'You're almost there' as if it's a complaint to be managed",
+                "Waiting for her to tell you what to do  -  anticipate",
+                "Leaving town or being unavailable after Week 36",
+                "Underestimating how physically uncomfortable she is"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "Your Role 1",
+              "icon": "📋",
+              "body": "Know the birth plan  -  read it, discuss it, be able to speak to it",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 2",
+              "icon": "🎒",
+              "body": "Prepare the hospital bag together before Week 36",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 3",
+              "icon": "🗺️",
+              "body": "Know the route to the hospital and backup routes",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 4",
+              "icon": "⏱️",
+              "body": "Learn the 5-1-1 rule for when to go to the hospital",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 5",
+              "icon": "🏠",
+              "body": "Help her set up for postpartum recovery at home",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 6",
+              "icon": "💪",
+              "body": "Take over as many physical tasks as possible  -  dishes, laundry, groceries",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 7",
+              "icon": "🤝",
+              "body": "Sit with her anxiety  -  do not dismiss it or try to fix it immediately",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 8",
+              "icon": "💼",
+              "body": "Make sure your own bags are packed and your job knows about leave plans",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "data-labor_prep",
+          "title": "Preparing for Labor: Your Homework",
+          "body": "Labor support is a skill. Partners who have done zero preparation freeze, panic, or become bystanders. Partners who have done even basic preparation are calmer, more helpful, and better advocates. Here is your minimum preparation list.\n\nHave you done the items on this list? Which ones feel most intimidating? What would make you feel more prepared?",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "data-hospital",
+          "title": "At the Hospital: Your Job Description",
+          "body": "When labor begins and you walk into that hospital, your role shifts from supporter to active partner. Here is what that actually looks like  -  moment by moment.\n\nWhat part of being in the labor room feels most intimidating to you? Have you told her? What do you think she needs most from you in that room?",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "data-mistakes",
+          "title": "Common Partner Mistakes  -  and How to Course Correct",
+          "body": "These are the most common ways partners, with genuinely good intentions, make things harder. None of these make you a bad partner. They make you a normal one. The goal is awareness  -  so you can catch yourself and shift.\n\nWhich of these have you done? Which does she wish you would stop doing? What is the single most useful change you could make this week?",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "data-wellness",
+          "title": "Your Wellbeing Matters Too",
+          "body": "You cannot pour from an empty cup. Partners who neglect their own mental health, physical health, and emotional needs during pregnancy end up less available, more reactive, and more likely to struggle postpartum. This is not selfishness  -  it is sustainability.\n\nMost pregnancy content is written for mothers. You have been navigating a major life change with very little directed support. That is real. The fact that you are reading this guide is a significant act of investment in your family. That matters.\n\nHow are you actually doing? Not 'fine'  -  actually. What do you need that you haven't asked for? Who in your life can you talk to about this honestly?",
+          "bullets": [
+            {
+              "label": "Your Experience",
+              "items": [
+                "Your feelings about the pregnancy are valid  -  even if they are complicated",
+                "Fear, uncertainty, financial worry, and grief about the relationship change are all normal",
+                "You do not have to pretend to feel ready if you do not",
+                "You are allowed to have a support system  -  friends, a therapist, other fathers",
+                "Your relationship with the pregnancy will likely deepen when the baby arrives and becomes real"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "Needs 1",
+              "icon": null,
+              "body": "Do not isolate. Find other expectant or new fathers to talk to. Their experience normalizes yours.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Needs 2",
+              "icon": null,
+              "body": "Sleep, exercise, and eating well during pregnancy support your availability postpartum. You cannot show up depleted.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Needs 3",
+              "icon": null,
+              "body": "Find somewhere to process your feelings that is not her. A therapist, a close friend, a journal. Your emotions need a container too.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Needs 4",
+              "icon": null,
+              "body": "Date nights, non-baby conversations, physical affection, and laughter matter. Do not let the pregnancy consume the relationship.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Needs 5",
+              "icon": null,
+              "body": "Read. Watch. Ask questions. Preparation reduces anxiety and increases confidence  -  for you and for her.",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "partner-labor-guide",
       "title": "Labor Readiness Guide",
       "summary": "Learn labor signs, stages, pain options, hospital navigation, and decision language.",
       "phase": "Labor and Delivery",
-      "accent": "violet"
+      "accent": "violet",
+      "detailSections": [
+        {
+          "id": "content-techniques",
+          "title": "Techniques",
+          "cards": [
+            {
+              "title": "Double Hip Squeeze",
+              "icon": "🤲",
+              "body": "More pressure than you expect. Use body weight, not just arms. Switch off with the doula if your arms fatigue.\n\nBack labor, posterior baby. One of the highest-impact techniques available.\n\nStand behind her as she leans forward. Cup both hands on the back of her hip bones and push inward and slightly upward. Ask: More? Less? Move higher or lower?",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Sacral Counterpressure",
+              "icon": "✊",
+              "body": "She will tell you if you are in the right spot - immediate relief is the signal. Ask her to rate and guide.\n\nBack labor. If she grabs your hand and presses it there, that is your answer.\n\nMake a fist or use the heel of your hand. Press firmly and steadily on the sacrum - the flat bone at the base of her spine between the two back dimples. Hold through the contraction.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Breathing Together",
+              "icon": "🌬",
+              "body": "Your voice lower. Your pace slower. She will follow.\n\nAny time she is escalating, panicking, or losing her breath rhythm.\n\nMake eye contact. Inhale slowly and audibly. Let her match your breath. Your calm nervous system co-regulates hers.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Position Change",
+              "icon": "🔄",
+              "body": "Hands and knees is the most underused position. Suggest it confidently for back labor.\n\nThroughout active labor especially if progress is slow.\n\nSuggest a new position every 20-30 minutes. Help her move - support her weight, guide her limbs.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Cool Cloth / Warm Compress",
+              "icon": "🌡",
+              "body": "Always ask before applying. Temperature preferences change rapidly in labor.\n\nBetween contractions. During transition especially.\n\nCool damp cloth on forehead and neck between contractions. Warm compress on lower back.",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "content-say",
+          "title": "Say",
+          "body": "",
+          "bullets": [],
+          "cards": [
+            {
+              "title": "I am right here.",
+              "icon": null,
+              "body": "Presence confirmed. No pressure. No expectation.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "You are doing it.",
+              "icon": null,
+              "body": "Present tense. Not you can do it. You ARE doing it. Fact.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "One more. Just this one.",
+              "icon": null,
+              "body": "Narrows the world to one contraction.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Breathe with me. [then demonstrate]",
+              "icon": null,
+              "body": "Co-regulation. Her nervous system follows yours when you are calm.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Tell me what you need.",
+              "icon": null,
+              "body": "Opens the floor to her without assuming.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "[silent - hand on her back]",
+              "icon": null,
+              "body": "Sometimes wordless presence is the most powerful support.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Avoid 1",
+              "icon": null,
+              "body": "Cheerleader energy lands wrong in active labor. It feels dismissive.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Avoid 2",
+              "icon": null,
+              "body": "She does not know. Asking puts pressure on her to manage your anxiety.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Avoid 3",
+              "icon": null,
+              "body": "Unless she asks, do not offer. Offering is pressure.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Avoid 4",
+              "icon": null,
+              "body": "Breathe WITH her instead of instructing.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Avoid 5",
+              "icon": null,
+              "body": "Broken promises in labor destroy trust quickly.",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "section_data-0",
+          "title": "Your Role Defined",
+          "body": "Your job in the labor room is not to fix, manage, or direct. It is to be a steady, informed, present witness. Prepared means you know the birth plan. Present means your phone is away. Calm means your steadiness is her steadiness. Humble means this is her birth, not your performance.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "section_data-1",
+          "title": "Reading the Room",
+          "body": "In active labor she communicates mostly through sound, breath, and movement - not words. Learn to read: is she holding her breath (needs coaching), is she gripping you tighter (contraction peak), is she pulling away from touch (do not push). Follow her body language, not your assumptions.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "section_data-3",
+          "title": "Emotional Support",
+          "body": "Emotional support in labor is not cheerleading. It is grounded presence - sitting with her in the intensity without trying to manage, minimize or accelerate it. The most emotionally supportive thing you can do is stay calm and stay close. Her nervous system responds to yours. Your calm is not passive - it is the intervention.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "section_data-6",
+          "title": "When Plans Change",
+          "body": "When birth plans change your job is to help her make informed decisions, not to panic. Ask what the alternatives are. Ask what happens if we wait. Then support whatever she decides. A change in plan is not a failure. Some of the most beautiful birth experiences happen when flexibility meets presence.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "section_data-7",
+          "title": "After Birth",
+          "body": "Give her the first moments. Facilitate skin-to-skin. Do not immediately announce to the world - ask when she is ready. Take photos she can use later. Tell her she was extraordinary. Then take care of yourself too - you have been through something significant. Both of you have.",
+          "bullets": [],
+          "cards": []
+        }
+      ]
     },
     {
       "id": "partner-postpartum-guide",
       "title": "Postpartum Recovery Guide",
       "summary": "Walk through recovery phases, hormones, body systems, warning signs, and partner support.",
       "phase": "Postpartum",
-      "accent": "rose"
+      "accent": "rose",
+      "detailSections": [
+        {
+          "id": "healing",
+          "title": "Her Body Is Healing  -  What You Need to Know",
+          "body": "Birth is a major physical event. Whether vaginal or cesarean, her body has done something extraordinary and needs significant time to recover. Understanding what she is going through helps you show up with appropriate support instead of unintentional pressure.\n\nWhat surprised you most about her physical recovery? What have you done that helped? What do you wish you had known sooner?",
+          "bullets": [
+            {
+              "label": "Your Job",
+              "items": [
+                "Keep the peri bottle filled and near the toilet",
+                "Stock the medicine basket: ibuprofen, Dermoplast, witch hazel pads, stool softeners",
+                "Help her position safely for breastfeeding  -  pillows, height, angle",
+                "Handle all heavy lifting, especially if c-section",
+                "Bring food and water to wherever she is",
+                "Do not expect her to host, explain herself, or be available to visitors"
+              ]
+            }
+          ],
+          "cards": []
+        },
+        {
+          "id": "mood",
+          "title": "Postpartum Mood: What Is Normal and What Is Not",
+          "body": "Up to 80% of new mothers experience some form of postpartum mood change. Knowing the difference between baby blues, postpartum depression, and postpartum anxiety helps you respond appropriately  -  and potentially save her life.\n\nDo you know the warning signs for postpartum depression? Has she told you how she is feeling emotionally? What would you do if you noticed the signs?",
+          "bullets": [
+            {
+              "label": "Your Signs",
+              "items": [
+                "She seems to not connect with the baby",
+                "She cries most of the day and it is not improving",
+                "She says she made a mistake having this baby",
+                "She is not sleeping even when the baby sleeps",
+                "She seems afraid of being alone with the baby",
+                "She says she wishes she were not here"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "Baby Blues",
+              "icon": null,
+              "body": "Caused by the dramatic hormonal drop after delivery. Estrogen and progesterone crash from pregnancy levels in 24-48 hours.\n\nListen. Do not fix. Ensure rest and nutrition. If it persists past 2 weeks, contact her provider.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Postpartum Depression",
+              "icon": null,
+              "body": "A clinical condition, not a character failure. Hormonal, genetic, and situational factors combine. Affects 1 in 5 new mothers.\n\nDo not wait. Contact her OB or midwife immediately. Offer to make the call or go to the appointment with her. This is medical, not a sign of weakness.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Postpartum Anxiety",
+              "icon": null,
+              "body": "Often underdiagnosed. Can occur without depression. Very treatable.\n\nTake it seriously. Help her describe her symptoms to her provider. Do not minimize or reassure away  -  she needs professional evaluation.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Postpartum Psychosis",
+              "icon": null,
+              "body": "Medical emergency. Requires immediate psychiatric care.\n\nThis is a psychiatric emergency. Call her OB and if she is in danger, call 911. Do not leave her alone.",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "sleep",
+          "title": "Protecting Her Sleep",
+          "body": "Sleep deprivation is one of the most dangerous and underestimated factors in postpartum health. It amplifies postpartum depression, impairs judgment, and makes everything harder. Protecting her sleep is not a luxury. It is medical support.\n\nHow are you currently splitting overnight duties? What shift are you taking? What would change if you took the first shift every night for two weeks?",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic-0",
+          "title": "What Is Postpartum?",
+          "body": "The postpartum period is the first 12 weeks after birth  -  sometimes called the fourth trimester. Her body is healing, her hormones are resetting, she is learning to feed a newborn, and her identity is shifting. This is the most vulnerable period in new parenthood. Your presence, your effort, and your willingness to do things without being asked are the most important factors in how this period goes for your whole family.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic-4",
+          "title": "Baby Care Basics",
+          "body": "Learn to diaper, swaddle, soothe, and put down to sleep. These are learnable skills. Do not wait for her to teach you. Watch videos. Ask the pediatric nurse. When you can do these things independently, she gets actual rest. If you need her to supervise you with the baby, she cannot rest. Own at least one full care routine completely.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic-5",
+          "title": "Supporting Breastfeeding",
+          "body": "Breastfeeding is hard. It is a skill that takes weeks to establish and can involve pain, supply anxiety, latch issues, and massive time investment. Your job is not to suggest formula when it gets hard. Your job is to make breastfeeding easier by handling everything else, bringing the baby to her and taking the baby back, making sure she has water and food at every feeding, and asking what she needs without directing her choices.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic-7",
+          "title": "Your Role Summary",
+          "body": "In the postpartum period your job is physical, not emotional performance. Do the laundry. Cook the food. Take the night shift. Call the pediatrician. Manage the visitors. You do not need to be the perfect emotional support person every moment. You need to reduce the load so her body and mind can recover. The most loving thing you can do in the fourth trimester is reduce the number of decisions she has to make.",
+          "bullets": [],
+          "cards": []
+        }
+      ]
     },
     {
       "id": "partner-communication-guide",
       "title": "Communication and Advocacy Guide",
       "summary": "Practice consent questions, support scripts, advocacy moments, and family communication.",
       "phase": "Partner Skills",
-      "accent": "amber"
+      "accent": "amber",
+      "detailSections": [
+        {
+          "id": "birth_prefs",
+          "title": "Birth Preferences: The Conversation That Cannot Wait",
+          "body": "The birth plan is not bureaucracy. It is a communication tool that tells every provider, nurse, and support person what she wants  -  and what she does not. Your job is to know it better than she does, because she will not be able to speak for herself at peak labor.\n\nHave you read her birth plan? What parts feel unclear to you? What would you do if a nurse recommended something not on the plan?",
+          "bullets": [],
+          "cards": [
+            {
+              "title": "Topics 1",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "Questions",
+                  "items": [
+                    "Does she want to try unmedicated birth?",
+                    "If so, at what point is she open to reconsidering?",
+                    "What comfort measures does she want tried first?",
+                    "What words does she want you to use if she asks for an epidural mid-labor?"
+                  ]
+                }
+              ],
+              "cards": []
+            },
+            {
+              "title": "Topics 2",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "Questions",
+                  "items": [
+                    "How does she feel about induction if offered?",
+                    "What is her preference about breaking her water artificially?",
+                    "Under what conditions would she want a cesarean discussed?",
+                    "What does she want to know before consenting to anything?"
+                  ]
+                }
+              ],
+              "cards": []
+            },
+            {
+              "title": "Topics 3",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "Questions",
+                  "items": [
+                    "Who does she want in the room?",
+                    "Who does she NOT want?",
+                    "Does she want photos taken? Video?",
+                    "At what point does she want visitors after birth?"
+                  ]
+                }
+              ],
+              "cards": []
+            },
+            {
+              "title": "Topics 4",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "Questions",
+                  "items": [
+                    "Does she want delayed cord clamping?",
+                    "Who cuts the cord?",
+                    "Skin-to-skin immediately  -  for how long?",
+                    "When does she want the baby bathed and weighed?"
+                  ]
+                }
+              ],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "fear",
+          "title": "Managing Fear Together",
+          "body": "Fear during pregnancy is normal  -  for her and for you. The mistake is managing fear alone or pretending it does not exist. Shared fear is lighter. Named fear is less powerful. Here is how to create a space where both of you can be honest.\n\nWhat are you most afraid of? Have you told her? What is she most afraid of that you think you can actually help with?",
+          "bullets": [
+            {
+              "label": "Her Fears",
+              "items": [
+                "That something will go wrong with the birth",
+                "That she will be a bad mother",
+                "That the baby will not be healthy",
+                "That her body will not work the way it should",
+                "That she will lose herself in motherhood",
+                "That you will not show up the way she needs"
+              ]
+            },
+            {
+              "label": "Your Fears",
+              "items": [
+                "That something will go wrong and you will be helpless",
+                "That she will be in pain you cannot fix",
+                "That you will not know what to do",
+                "That you will not be a good father",
+                "That your relationship will not survive the change",
+                "That you are not ready financially or emotionally"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "How 1",
+              "icon": null,
+              "body": "Name your fears out loud to each other",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "How 2",
+              "icon": null,
+              "body": "Do not compete for who has it harder",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "How 3",
+              "icon": null,
+              "body": "Ask: What would help you feel less scared?",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "How 4",
+              "icon": null,
+              "body": "Let preparation be your answer to fear",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "not_say",
+          "title": "NOT SAY",
+          "cards": [
+            {
+              "title": "You're so big now.",
+              "icon": null,
+              "body": "She knows. This is not a compliment regardless of how it is meant.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "My mom did it fine without all this.",
+              "icon": null,
+              "body": "Dismisses her experience and positions you against her care choices.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Are you sure you should be eating that?",
+              "icon": null,
+              "body": "Her provider is managing her nutrition. You are not.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "You just need to relax.",
+              "icon": null,
+              "body": "Not actionable. Creates shame. Never helpful.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "When do you think you'll feel normal again?",
+              "icon": null,
+              "body": "Puts a timeline on recovery that she cannot control.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "I'm tired too.",
+              "icon": null,
+              "body": "In the first weeks postpartum especially, this comparison is not helpful even if true.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Other babies sleep through the night at this age.",
+              "icon": null,
+              "body": "Every baby is different. This adds pressure and implies failure.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Do you think it could be postpartum depression?",
+              "icon": null,
+              "body": "If you genuinely think this, the right path is to gently encourage her to call her provider  -  not to diagnose her yourself in a moment of frustration.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "What do you do all day?",
+              "icon": null,
+              "body": "She is keeping a human alive. The answer to this question is always more than you realize.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "I can't wait for things to go back to normal.",
+              "icon": null,
+              "body": "This signals that her current state is a problem to be managed rather than a season to walk through together.",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "generic_data-0",
+          "title": "0",
+          "body": "The conversations that happen during pregnancy shape the birth experience and the early parenting relationship. Partners who wait until labor to communicate preferences, fears, and expectations arrive unprepared. Start the hard conversations now  -  not because it is comfortable, but because it becomes significantly harder later.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_data-2",
+          "title": "Parenting Values",
+          "body": "What values do you want to raise this child with? How will you handle discipline  -  and what does discipline even mean to you both? What role will your families of origin play? What are your non-negotiables? These conversations do not need to be resolved in one sitting. They need to begin. Couples who discover they have fundamentally different values at month six postpartum have missed a significant window.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_data-5",
+          "title": "Hard Conversations",
+          "body": "The hardest conversations during pregnancy are often about finances, division of labor, and what happens to the relationship. How are you splitting parental leave? Who handles what at night? What is the plan if she develops postpartum depression? These are not romantic conversations. They are necessary ones. The couples who have them early weather the transition better.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_data-6",
+          "title": "Staying Connected",
+          "body": "Pregnancy and new parenthood put enormous strain on the relationship. Date nights, uninterrupted conversation, physical affection, and laughter require intentional investment. You do not stay connected by accident. Schedule the time. Ask her what connection feels like for her right now. Do not assume it looks the same as before pregnancy.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_data-7",
+          "title": "Discussion Starters",
+          "body": "Try these: What are you most excited about? What are you most afraid of? What do you wish I would do more of? What do you wish I would stop doing? What does support feel like to you right now? What would make you feel more ready? What do you need from me this week specifically?",
+          "bullets": [],
+          "cards": []
+        }
+      ]
     },
     {
       "id": "partner-mentalhealth-guide",
       "title": "Mental Health Support Guide",
       "summary": "Recognize emotional warning signs, use supportive language, and connect to help early.",
       "phase": "Mental Health",
-      "accent": "emerald"
+      "accent": "emerald",
+      "detailSections": [
+        {
+          "id": "ppd_partner",
+          "title": "Paternal Postpartum Depression: It Is Real and It Is Common",
+          "body": "Up to 1 in 10 fathers and partners experience postpartum depression. This number is likely higher because it is significantly underreported  -  partners are rarely screened, rarely asked, and often carry the cultural expectation of being strong for the family. You cannot pour from an empty cup. Your mental health is not a luxury. It is infrastructure.\n\nThe causes are hormonal (testosterone levels drop in new fathers), psychological (identity shift, loss of the previous life), and social (isolation, lack of support, cultural expectations to be stoic). This is not weakness. It is a medical condition with biological roots.\n\nHave you noticed any of these signs in yourself? When was the last time someone asked how you were doing  -  not as a parent, but as a person?",
+          "bullets": [
+            {
+              "label": "Signs",
+              "items": [
+                "Persistent irritability or anger that feels disproportionate",
+                "Withdrawing from the baby, the partner, or social life",
+                "Numbness  -  feeling very little rather than feeling sad",
+                "Increasing use of alcohol or other numbing behaviors",
+                "Difficulty sleeping even when you have the opportunity",
+                "Intrusive thoughts about something bad happening to the baby",
+                "Feeling like a fraud or like you made a terrible mistake",
+                "Loss of interest in things you used to enjoy",
+                "Feeling like everyone would be better off without you"
+              ]
+            }
+          ],
+          "cards": []
+        },
+        {
+          "id": "identity",
+          "title": "Identity Shift: Who Are You Now?",
+          "body": "Becoming a parent is one of the most significant identity shifts a person experiences. It is not just a role change  -  it is a fundamental reorganization of how you understand yourself, your time, your relationships, and your future. Most partners are not prepared for how disorienting this is.\n\nIf you feel like you are losing yourself in parenthood, that feeling is real and valid. The goal is not to return to who you were before. The goal is to integrate who you are now with who you are becoming. That takes time, support, and grace.\n\nHow has your sense of yourself changed since you found out about the pregnancy? What parts of your previous life do you most miss? What new parts of yourself have surprised you?",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "coping",
+          "title": "Practical Coping: What Actually Helps",
+          "body": "Coping during this season is not about being stoic or pushing through. It is about building sustainable habits that preserve your capacity. Here is what research and experience say actually helps for partners.\n\nWhat is your current primary coping strategy? Is it actually helping or is it numbing? What would it take to add one healthy strategy this week?",
+          "bullets": [
+            {
+              "label": "Not Helpful",
+              "items": [
+                "Alcohol or substances as the primary coping mechanism",
+                "Disappearing into work as a way to avoid the emotional intensity at home",
+                "Minimizing your feelings ('I shouldn't feel this way, she has it harder')",
+                "Waiting until crisis to seek help"
+              ]
+            }
+          ],
+          "cards": []
+        },
+        {
+          "id": "generic_data-0",
+          "title": "0",
+          "body": "This guide is not about making you a better partner. It is about making sure you survive this season too. Partners are expected to support, provide, protect, and be present  -  while receiving very little specific support themselves. The mental health of the partner matters for the family's wellbeing, the baby's development, and the relationship's survival. You are not secondary. You are essential. And essential things require care.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_data-3",
+          "title": "Relationship Changes",
+          "body": "Your relationship before baby and your relationship after baby are two different relationships. The transition can feel like loss even when it is also growth. Less spontaneous time together, changed intimacy, new friction over division of labor  -  all of this is normal and all of it is workable with communication. The couples who name what is hard are better positioned to navigate it. The couples who pretend nothing has changed are the ones who drift.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_data-5",
+          "title": "When to Get Help",
+          "body": "Get help when: you cannot feel anything positive for several weeks running, you are using alcohol or substances daily to cope, you have thoughts of harming yourself or the family, you cannot function at work or at home, she is scared of you, you are scared of yourself, or you have not slept more than 3 hours in multiple days. In the US: call your primary care doctor, call 988 (Crisis Lifeline), or go to your nearest emergency room. Getting help is the most courageous and the most responsible thing you can do for your family.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_data-6",
+          "title": "Supporting Each Other",
+          "body": "Two depleted people cannot pour from empty cups into each other. Supporting each other during this season requires honesty about your own state, tolerance for imperfection, gratitude for small things, and a commitment to not making the other person's exhaustion a competition. The most powerful thing you can do is ask: How are you actually doing? And then listen to the answer without immediately pivoting to yourself or trying to fix it.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_data-7",
+          "title": "Moving Forward Together",
+          "body": "This season is temporary. The overwhelm, the exhaustion, the identity confusion, the relationship friction  -  these are features of a transition, not permanent states. The families who navigate new parenthood best are not the ones who feel it less. They are the ones who face it together, ask for help, say what is hard, and choose each other deliberately even when it is not easy. You are doing something extraordinary. Give yourself the grace you give everyone else.",
+          "bullets": [],
+          "cards": []
+        }
+      ]
     },
     {
       "id": "partner-anatomy-guide",
       "title": "Pregnancy Anatomy Guide",
       "summary": "Understand the pregnant body, cervix, fetal position, monitors, appointments, and clinical language.",
       "phase": "Prenatal",
-      "accent": "cyan"
+      "accent": "cyan",
+      "detailSections": [
+        {
+          "id": "body_overview",
+          "title": "What Is Happening Inside  -  The Big Picture",
+          "body": "Most partners understand pregnancy in terms of what they can see: the growing belly, the ultrasound images, the due date on the calendar. But understanding what is happening inside gives you a completely different level of presence. When you know what the placenta actually does, what the cervix is, and how labor physically unfolds, you stop being a visitor at your own child's birth.\n\nWhat has surprised you most about how pregnancy actually works? What would you ask your provider if you understood the biology better?",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "cervix",
+          "title": "The Cervix Explained: The Number Everyone Watches",
+          "body": "During labor, the question everyone keeps asking is 'how dilated is she?' Understanding what dilation and effacement actually mean makes you a better advocate and reduces your anxiety when you hear the numbers.\n\nHave you asked your provider to explain what they find at each prenatal exam? What numbers have you already heard that you did not fully understand?",
+          "bullets": [
+            {
+              "label": "Partner Notes",
+              "items": [
+                "When she is at 4 cm she is in early active labor  -  this is significant progress, not 'only 4 cm'",
+                "Progress from 1-4 cm can take many hours. Progress from 7-10 cm often happens much faster.",
+                "A cervical exam tells you where she is right now  -  not how long until birth",
+                "She can go from 5 cm to pushing in two hours or in ten hours. Both are within normal range.",
+                "If you hear 'no change' after several hours, this is information for clinical assessment  -  not cause for panic"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "Effacement",
+              "icon": null,
+              "body": "Effacement is the thinning and shortening of the cervix. Before labor the cervix is about 3-4 cm long and firm. As labor begins it thins out to become part of the lower uterine wall. 0% = thick and uneffaced. 100% = completely thinned. Effacement often begins before dilation.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Dilation",
+              "icon": null,
+              "body": "Dilation is the opening of the cervix. It progresses from 0 (closed) to 10 cm (fully open). Latent labor is 0-6 cm. Active labor is 6-10 cm. Active labor typically progresses faster than latent labor. At 10 cm pushing can begin. Partners often feel like 1-2 cm of progress is too slow  -  in early labor this is normal.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Station",
+              "icon": null,
+              "body": "Station describes how far down the baby's head has descended into the pelvis. Negative stations (-3, -2, -1) mean the head is above the ischial spines. Zero station means the head is at the spines. Positive stations (+1, +2, +3) mean the head is descending. +3 is crowning. A baby at -3 station with a closed cervix at 38 weeks may still have weeks to go.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Position",
+              "icon": null,
+              "body": "Cervical position refers to where the cervix is pointing. A posterior cervix (pointing toward the back) is typical early in labor. An anterior cervix (pointing toward the front) means labor is progressing well. 'The cervix is becoming anterior' is good news.",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "glossary",
+          "title": "GLOSSARY",
+          "cards": [
+            {
+              "title": "Braxton Hicks",
+              "icon": null,
+              "body": "Practice contractions that tighten and release without progressing. Usually irregular and not intensifying. Real labor contractions get longer, stronger, and closer together.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Effacement",
+              "icon": null,
+              "body": "Thinning of the cervix, measured 0-100%. Must happen along with dilation for birth to occur.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Dilation",
+              "icon": null,
+              "body": "Opening of the cervix from 0-10 centimeters. 10 cm is fully dilated and ready to push.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Station",
+              "icon": null,
+              "body": "How far down the baby's head has descended in the pelvis. Scale from -3 (high) to +3 (crowning).",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Fundal height",
+              "icon": null,
+              "body": "Measurement from pubic bone to top of uterus in centimeters. Roughly correlates with weeks of pregnancy.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Crowning",
+              "icon": null,
+              "body": "When the baby's head is visible at the vaginal opening during pushing. This is station +3.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Engagement / Lightening",
+              "icon": null,
+              "body": "When the baby drops lower into the pelvis. She may feel she can breathe better but has more pelvic pressure.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Bloody show",
+              "icon": null,
+              "body": "Mucus tinged with blood that indicates the cervix is beginning to change. Normal sign of early labor.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Rupture of membranes",
+              "icon": null,
+              "body": "Water breaking. Can be a gush or a trickle. Call the provider immediately.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Oxytocin",
+              "icon": null,
+              "body": "The hormone that drives contractions. Synthetic oxytocin (Pitocin) is used to induce or augment labor.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Epidural",
+              "icon": null,
+              "body": "Regional anesthesia injected into the epidural space in the lower back. Reduces or eliminates pain below the injection site.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "VBAC",
+              "icon": null,
+              "body": "Vaginal Birth After Cesarean. A vaginal birth attempted by someone who had a previous c-section.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Meconium",
+              "icon": null,
+              "body": "Baby's first bowel movement. If present in amniotic fluid before birth, providers monitor closely.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Apgar score",
+              "icon": null,
+              "body": "Assessment of the newborn at 1 and 5 minutes after birth. Scores 0-10. 7-10 is reassuring.",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "generic-1",
+          "title": "Trimester by Trimester  -  Inside View",
+          "body": "First trimester (weeks 1-13): Organs form, the neural tube closes, the heart begins beating, limb buds appear. The embryo becomes a fetus at week 8. This is the period of greatest vulnerability to environmental factors. Second trimester (weeks 14-27): Rapid growth. Fetal movement begins. The baby develops distinct sleep and wake cycles. By week 20 the baby can hear. Third trimester (weeks 28-40): Significant brain development, fat accumulation, lung maturation. The baby positions for birth, usually head-down by week 36. These are the weeks when your presence at appointments starts to feel most urgent and most real.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic-3",
+          "title": "Fetal Positioning: Why It Matters",
+          "body": "The position of the baby in the uterus affects how labor unfolds. Vertex (head-down, facing back) is ideal  -  this is occiput anterior, the most favorable position for birth. Posterior position (facing forward) causes back labor  -  intense back pain with contractions. This is when hip squeezes and position changes make the biggest difference. Breech (bottom-down or feet-first) may require cesarean. Transverse (sideways) is rare at term. Providers check positioning at late prenatal visits. Partners who understand positioning understand why movement and position changes in labor matter.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic-4",
+          "title": "Labor Progress: What You Are Watching For",
+          "body": "Labor has three stages. Stage 1 is dilation: latent phase (0-6cm, can be many hours), active phase (6-10cm, faster), and transition (8-10cm, most intense and shortest). Stage 2 is pushing: can be 20 minutes or 3 hours, both normal. Stage 3 is delivery of the placenta: typically 5-30 minutes after birth. A rule of thumb: active labor progresses approximately 0.5-1 cm per hour, but this varies enormously. Partners who understand this do not expect linear, predictable progress  -  and do not panic when progress seems slow.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic-5",
+          "title": "Reading the Monitors",
+          "body": "Electronic fetal monitoring shows two things on the readout: the fetal heart rate (top line) and contraction intensity (bottom line). Normal fetal heart rate is 110-160 beats per minute. Accelerations (brief increases above baseline) are reassuring  -  they mean the baby is responding well. Decelerations (drops below baseline) are assessed by type. Variable decelerations are common and often position-related. Late decelerations after contractions can indicate the baby is not tolerating labor well and require assessment. You do not need to interpret the monitor. You need to know that the nurse is always watching it, and if you see something that concerns you, you can ask.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic-6",
+          "title": "Navigating Prenatal Appointments",
+          "body": "Go to as many appointments as possible  -  especially the anatomy scan (20 weeks), Group B Strep test (35-37 weeks), and all third trimester visits. Prepare two questions before each appointment. Write down what the provider says. If a number is given (blood pressure, fundal height, dilation) ask what it means for your pregnancy specifically. If a recommendation is made, ask: what are the alternatives and what happens if we wait? You are not interrogating the provider. You are practicing informed consent as a team.",
+          "bullets": [],
+          "cards": []
+        }
+      ]
     },
     {
       "id": "partner-complications-guide",
       "title": "Complications and Warning Signs Guide",
       "summary": "Learn what symptoms need fast action, how to communicate clearly, and when to seek urgent care.",
       "phase": "Safety",
-      "accent": "rose"
+      "accent": "rose",
+      "detailSections": [
+        {
+          "id": "complications-gd",
+          "title": "Gestational Diabetes: Your Role",
+          "body": "How has GD changed your daily routines? What has been hardest about managing this? What would make the dietary restrictions easier to live with?",
+          "bullets": [
+            {
+              "label": "Her Experience",
+              "items": [
+                "Blood glucose testing 4+ times per day  -  finger pricks at specific times",
+                "Significant dietary changes  -  lower carbohydrate, higher protein, timed meals",
+                "Possible insulin injections if diet alone does not control blood sugar",
+                "Increased monitoring appointments and ultrasounds",
+                "Anxiety about the baby's size and health",
+                "Possible induction before 40 weeks"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "Your Role 1",
+              "icon": null,
+              "body": "Learn the diet with her",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 2",
+              "icon": null,
+              "body": "Help with blood glucose tracking",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 3",
+              "icon": null,
+              "body": "Never say 'just a little won't hurt'",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 4",
+              "icon": null,
+              "body": "Attend the nutrition counseling appointment",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Your Role 5",
+              "icon": null,
+              "body": "Prepare GD-friendly meals",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "complications-preeclampsia",
+          "title": "Preeclampsia: Warning Signs You Must Know",
+          "body": "Do you know the warning signs of preeclampsia? Have you memorized them? What would you do if she developed a severe headache in the middle of the night?",
+          "bullets": [
+            {
+              "label": "Warning Signs",
+              "items": [
+                "Severe headache that does not respond to acetaminophen",
+                "Visual changes: blurring, seeing spots or flashes, sensitivity to light",
+                "Severe pain in the upper right abdomen or shoulder  -  this is a critical sign",
+                "Sudden significant swelling of face, hands, or feet",
+                "Rapid weight gain (more than 2 lbs in a week from fluid)",
+                "Difficulty breathing"
+              ]
+            },
+            {
+              "label": "Your Role",
+              "items": [
+                "Know the warning signs. Memorize them.",
+                "Do not dismiss any of these symptoms as 'just pregnancy'",
+                "Be the one who insists on calling the provider when she tries to wait it out",
+                "Know which hospital she will deliver at and the fastest route",
+                "If she is admitted for monitoring: be present, take notes, ask questions",
+                "Learn to take her blood pressure if home monitoring is prescribed"
+              ]
+            }
+          ],
+          "cards": []
+        },
+        {
+          "id": "complications-loss",
+          "title": "Pregnancy Loss: How to Walk Alongside Her",
+          "body": "How did you experience the loss differently from her? What did you need that you did not get? What can you do to make sure both of your grief is acknowledged?",
+          "bullets": [
+            {
+              "label": "Her Grief",
+              "items": [
+                "She may feel her body failed her  -  this is almost never true, and rarely something that could have been prevented",
+                "She may feel guilt, even without logical cause",
+                "She may feel angry  -  at you, at pregnant people, at the world",
+                "She may not want comfort, information, or silver linings",
+                "She may need to talk about the baby as a baby  -  not a pregnancy, not a loss",
+                "Her grief does not have a timeline. Yours does not either."
+              ]
+            },
+            {
+              "label": "Your Grief",
+              "items": [
+                "Your grief is real even if it is less visible",
+                "You may feel pressure to be strong for her while having no one to be strong for you",
+                "You may have processed differently  -  faster or slower  -  and this can create distance",
+                "Finding someone to talk to  -  a therapist, a trusted friend, a loss support group  -  is not betrayal",
+                "Your grief does not have to look like hers to be valid"
+              ]
+            },
+            {
+              "label": "Avoid",
+              "items": [
+                "At least you know you can get pregnant",
+                "Everything happens for a reason",
+                "You can always try again",
+                "It was so early",
+                "At least it happened now and not later",
+                "She is in a better place",
+                "Try to stay positive"
+              ]
+            },
+            {
+              "label": "Practical",
+              "items": [
+                "Handle the paperwork and calls she cannot make",
+                "Research whether they want any remembrance items  -  some hospitals offer footprints, photos, or a memory box",
+                "Ask about a memorial or ritual if that would be meaningful",
+                "Check in consistently in the weeks after  -  the world moves on faster than she does",
+                "Mark the due date in your calendar and acknowledge it"
+              ]
+            }
+          ],
+          "cards": [
+            {
+              "title": "I am so sorry.",
+              "icon": null,
+              "body": "Simple. True. Does not ask anything of her.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "You do not have to say anything. I am here.",
+              "icon": null,
+              "body": "Removes the pressure to perform grief in the way others expect.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Tell me about them.",
+              "icon": null,
+              "body": "Treats the baby as a person worth naming and knowing.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "I loved them too.",
+              "icon": null,
+              "body": "Acknowledges that the loss is shared.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "I do not know what to say but I am not going anywhere.",
+              "icon": null,
+              "body": "Honesty about helplessness without abandonment.",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "bedrest",
+          "title": "Bedrest Support: When She Cannot Get Up",
+          "body": "Prescribed bedrest  -  whether partial or complete  -  is one of the most emotionally and practically challenging complications a pregnant person can face. It removes independence, career, social life, and the ability to prepare for the baby. Your role during bedrest is the most concrete care role of the entire pregnancy.\n\nWhat has been the hardest part of bedrest for each of you? What has helped? What is still missing?",
+          "bullets": [
+            {
+              "label": "Practical",
+              "items": [
+                "Handle all cooking, cleaning, laundry, and household management",
+                "Set up her bedrest station: water, snacks, remote, phone charger, medications, comfort items all in reach",
+                "Coordinate visitors so she has company without being drained",
+                "Handle all communications with family who want updates",
+                "Research and order any equipment she may need: bed tray, pregnancy pillow, streaming services",
+                "Attend all appointments  -  she may need assistance getting there"
+              ]
+            },
+            {
+              "label": "Emotional",
+              "items": [
+                "She may feel guilty for 'doing nothing'  -  remind her that keeping the baby safe IS doing something",
+                "She may be bored, frustrated, anxious, or all three simultaneously",
+                "Ask what she needs emotionally each day  -  it changes",
+                "Do not make her feel like a burden by performing martyrdom about how much you are doing",
+                "Find activities you can do together from her bedrest location"
+              ]
+            }
+          ],
+          "cards": []
+        },
+        {
+          "id": "generic_g8-0",
+          "title": "0",
+          "body": "Most partner education assumes a smooth, uncomplicated pregnancy. But gestational diabetes, preeclampsia, preterm labor, bedrest, and pregnancy loss are far more common than most people know. This guide addresses the complications nobody wants to talk about  -  because knowing how to show up when things go wrong is one of the most important things a partner can do.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g8-3",
+          "title": "Preterm Labor and NICU Preparation",
+          "body": "Preterm birth (before 37 weeks) affects approximately 1 in 10 pregnancies in the United States. A NICU stay is one of the most emotionally intense experiences new parents face. Partners should know the signs of preterm labor  -  regular contractions before 37 weeks, pelvic pressure, low back pain, discharge changes, fluid leaking  -  and take them seriously. If a NICU stay occurs: learn the staff names, ask questions at rounds, advocate for skin-to-skin as early as medically possible, take notes, and do not underestimate how much her mental health needs protecting in this period.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g8-6",
+          "title": "High-Risk Mindset",
+          "body": "A high-risk pregnancy requires a partner who can stay calm when information is scary, advocate consistently, absorb information on behalf of both of you, and maintain hope without denying the reality. This is one of the most demanding emotional roles in parenthood. Give yourself permission to struggle. Get support for yourself. You cannot be her rock if you are drowning. The goal is not to be fearless. The goal is to be present and functional despite the fear.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g8-7",
+          "title": "Finding Support",
+          "body": "High-risk pregnancy and pregnancy loss both come with inadequate support systems. For complications: ask your provider specifically for a social worker referral, a maternal-fetal medicine specialist if not already involved, and support resources for partners. For pregnancy loss: The National Share Office (nationalshare.org), Still Standing Magazine, and local hospital grief programs serve both parents. You are not expected to navigate this without support. Finding it is not weakness. It is wisdom.",
+          "bullets": [],
+          "cards": []
+        }
+      ]
     },
     {
       "id": "partner-feeding-guide",
       "title": "Feeding Support Guide",
       "summary": "Build practical confidence around breastfeeding, pumping, formula, feeding cues, and partner support.",
       "phase": "Newborn Care",
-      "accent": "violet"
+      "accent": "violet",
+      "detailSections": [
+        {
+          "id": "how_works",
+          "title": "How Breastfeeding Actually Works",
+          "body": "Most people think breastfeeding is instinctive and easy. It is neither. It is a skill that takes 2-6 weeks to establish and requires significant effort, support, and often professional help. Understanding the mechanics helps you support effectively.\n\nHave you learned about breastfeeding specifically  -  not just that it is recommended, but how it actually works? What questions do you have?",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "hard",
+          "title": "What Makes Breastfeeding Hard",
+          "body": "Breastfeeding difficulties are the norm, not the exception. Being prepared for the most common challenges means you will not be blindsided  -  and you will not accidentally undermine her by suggesting formula at the first obstacle.\n\nWhat breastfeeding challenges have come up or do you anticipate? How do you plan to respond without accidentally undermining her?",
+          "bullets": [],
+          "cards": [
+            {
+              "title": "Challenges 1",
+              "icon": null,
+              "body": "Do not minimize this. Latch pain in early breastfeeding is extremely common and often severe. Help her contact a lactation consultant quickly  -  within the first 72 hours if possible. A correct latch should not hurt.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Challenges 2",
+              "icon": null,
+              "body": "Help her feed frequently. Offer warm compresses before feeding, cool compresses after. If severe, a lactation consultant or her provider can advise. Engorgement typically resolves within 24-72 hours.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Challenges 3",
+              "icon": null,
+              "body": "The most common breastfeeding anxiety. Signs of adequate intake are wet diapers (6-8 per day) and weight gain  -  not how much you can see in a bottle. Do not reinforce supply anxiety by suggesting supplementation without professional guidance.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Challenges 4",
+              "icon": null,
+              "body": "This is not sustainable without your active help. Your job: bring the baby, help position, burp, return the baby. She should be able to hand the baby off immediately after feeding. The burden of night feeds should not fall entirely on her.",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Challenges 5",
+              "icon": null,
+              "body": "If supplementing with a bottle, ask the lactation consultant about paced bottle feeding technique to reduce nipple preference. This is worth knowing.",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "formula",
+          "title": "When Formula Is the Right Choice",
+          "body": "Formula feeding is a legitimate, valid choice. There are many reasons a family chooses or needs formula  -  medical necessity, adoption, personal choice, failed lactation despite best effort, return to work, or simply preference. A well-fed baby is the goal. How that happens is for the family to decide.\n\nWhat is your honest feeling about formula feeding? Have you said anything about it  -  directly or indirectly  -  that may have added pressure?",
+          "bullets": [
+            {
+              "label": "Reasons",
+              "items": [
+                "Medical contraindication to breastfeeding  -  certain infections, medications, or conditions",
+                "Adoption or surrogacy  -  the birth parent may not be present",
+                "Insufficient milk supply despite professional support and full effort",
+                "Baby has a condition requiring specialized formula",
+                "Return to work or schedule makes breastfeeding unsustainable",
+                "Personal choice  -  this is sufficient",
+                "Partner is the primary parent and will be feeding alone"
+              ]
+            },
+            {
+              "label": "Respect",
+              "items": [
+                "Her feeding decision is hers  -  and it may be medically determined",
+                "Do not ask her to justify formula feeding to you or to others",
+                "Do not repeat things you have heard about 'breast is best' unless asked",
+                "If relatives ask, redirect: 'She is feeding the baby and that is what matters'",
+                "Formula-fed babies grow up healthy. This is not a compromise."
+              ]
+            },
+            {
+              "label": "Your Role",
+              "items": [
+                "Learn to prepare formula correctly  -  temperature, ratio, storage",
+                "Take formula feeds so she can sleep  -  this is one of your greatest assets",
+                "Never express disappointment about formula feeding even subtly",
+                "Know the cost and have it in your budget",
+                "Build formula prep into the night routine so she is not doing it alone at 3 AM"
+              ]
+            }
+          ],
+          "cards": []
+        },
+        {
+          "id": "generic_g9-0",
+          "title": "0",
+          "body": "Partner support is one of the strongest predictors of breastfeeding success and duration. A partner who understands how breastfeeding works, what makes it hard, and what their specific role is gives a breastfeeding parent a significant advantage. A partner who does not understand, offers formula at the first difficulty, or makes the feeding parent feel unsupported is a primary reason people stop breastfeeding before they want to.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g9-3",
+          "title": "Your Role at Every Feeding",
+          "body": "At every feeding your job is the same: bring the baby, help her get comfortable, have water and a snack ready, handle the burping and the return, then take care of cleanup. She should not have to get up, ask for anything, or manage logistics. The feeding itself is her work. Everything around it is yours. In the early weeks a feeding happens every 2-3 hours around the clock. That is 8-12 sessions per day. If you take half the surrounding tasks, you have just cut her workload in half.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g9-4",
+          "title": "Latch, Supply and Pumping Basics",
+          "body": "A good latch is wide and asymmetric  -  more areola visible above the nipple than below, chin touching the breast, lips flanged out. Shallow latch causes pain and poor milk transfer. If she is in significant pain beyond the first few days, a lactation consultant can assess and correct the latch. Supply is maintained by consistent removal of milk. If she is returning to work, a pumping schedule that mimics feeding frequency helps maintain supply. Pump parts must be sterilized and storage guidelines followed. Pumped milk keeps 4 hours at room temperature, 4 days in the refrigerator, and 6-12 months in the freezer.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g9-6",
+          "title": "Supporting Her Decision",
+          "body": "Whatever she decides about feeding, your job is to support it without reservation. If she wants to breastfeed and it is hard: do not suggest formula. Get help. If she wants to stop breastfeeding: support her fully without expressing disappointment. If she chooses formula from the start: this is her choice and it is enough. Your opinion about how the baby is fed is secondary to her lived experience, her body, and her choice. The goal is a fed baby and a supported parent. Both of those are achievable regardless of method.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g9-7",
+          "title": "Bottle Feeding Together",
+          "body": "If bottle feeding  -  whether with formula or pumped milk  -  you have an opportunity that breastfeeding does not as easily offer: you can feed the baby. Take it. Skin-to-skin bottle feeding, responding to hunger cues rather than a schedule, paced bottle feeding (holding the bottle horizontally to slow flow), and consistent physical closeness during feeding build the same bond that breastfeeding builds. Feeding is connection time. Make it yours too.",
+          "bullets": [],
+          "cards": []
+        }
+      ]
     },
     {
       "id": "partner-finance-guide",
       "title": "Baby Budget and Benefits Guide",
       "summary": "Plan for real newborn costs, leave, insurance, benefits, and household money conversations.",
       "phase": "Planning",
-      "accent": "amber"
+      "accent": "amber",
+      "detailSections": [
+        {
+          "id": "costs",
+          "title": "What Baby Actually Costs  -  Marketing vs Reality",
+          "body": "The baby industry is a multi-billion dollar business designed to make new parents feel like they need everything. You do not. Here is what you actually need, what is optional, and what is a waste of money.\n\nHave you sat down and run the actual numbers? What is your plan for childcare? What expenses are you most worried about?",
+          "bullets": [
+            {
+              "label": "Skip",
+              "items": [
+                "Wipe warmer  -  unnecessary and one more thing to fail at 3 AM",
+                "Diaper Genie  -  a regular trash can with a lid works fine",
+                "Fancy baby monitor with 10 features  -  basic audio monitor is sufficient",
+                "Coordinated nursery furniture sets  -  baby does not care",
+                "Baby shoes before walking  -  purely decorative",
+                "Dedicated changing table  -  a mat on any flat surface works"
+              ]
+            }
+          ],
+          "cards": []
+        },
+        {
+          "id": "leave",
+          "title": "Parental Leave: Know Your Rights Before You Need Them",
+          "body": "Parental leave in the United States is among the least generous in the developed world. Understanding what you are entitled to  -  and what you might negotiate  -  before the birth gives you time to plan.\n\nHave you read your parental leave policy? Do you know how many weeks you are entitled to and whether they are paid? Have you talked to HR yet?",
+          "bullets": [
+            {
+              "label": "Steps",
+              "items": [
+                "Locate your employee handbook and read the parental leave policy completely",
+                "Talk to HR at least 8 weeks before the due date to understand paperwork requirements",
+                "Ask specifically: Is leave paid, unpaid, or partial? How many weeks? Do I need to use PTO first?",
+                "If your partner's employer offers leave, understand their policy too",
+                "If you are self-employed or freelance: plan 4-8 weeks of reduced income into your budget",
+                "Do not assume your manager knows the policy  -  go to HR directly"
+              ]
+            }
+          ],
+          "cards": []
+        },
+        {
+          "id": "budget",
+          "title": "The 90-Day Postpartum Budget",
+          "body": "The first 90 days after birth are the most financially disruptive. Income may drop due to leave. Expenses surge. This is the window to plan specifically.\n\nHave you built a 90-day postpartum budget? What is the biggest financial gap you need to close before the birth? What resources have you not fully explored?",
+          "bullets": [],
+          "cards": [
+            {
+              "title": "Categories 1",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "Items",
+                  "items": [
+                    "Calculate your take-home pay during leave (0%, 60%, or 100% depending on your leave policy)",
+                    "Factor in your partner's leave income",
+                    "Identify any government benefits you may qualify for: SNAP, WIC, Medicaid, CHIP",
+                    "Note any savings you plan to draw down"
+                  ]
+                }
+              ],
+              "cards": []
+            },
+            {
+              "title": "Categories 2",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "Items",
+                  "items": [
+                    "Rent or mortgage",
+                    "Car payment and insurance",
+                    "Health insurance (does the baby need to be added within 30 days of birth?)",
+                    "Utilities",
+                    "Debt payments"
+                  ]
+                }
+              ],
+              "cards": []
+            },
+            {
+              "title": "Categories 3",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "Items",
+                  "items": [
+                    "Diapers and wipes: $80-100/month",
+                    "Formula if not breastfeeding: $150-250/month",
+                    "Pediatric visits and copays",
+                    "Any medications or supplements",
+                    "Childcare if returning to work"
+                  ]
+                }
+              ],
+              "cards": []
+            },
+            {
+              "title": "Categories 4",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "Items",
+                  "items": [
+                    "Postpartum supplies (pads, sitz bath, witch hazel, stool softeners)",
+                    "Lactation consultant if needed ($100-300 per session, often covered by insurance)",
+                    "Mental health support if needed",
+                    "Food delivery or meal prep  -  this is not a luxury, it is injury recovery logistics"
+                  ]
+                }
+              ],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "generic_text-0",
+          "title": "0",
+          "body": "Most couples do not talk about money until it becomes a crisis. The birth of a child is the single largest financial event most families experience in a decade  -  not because babies are expensive (they can be surprisingly affordable), but because it coincides with income disruption, unexpected costs, and the highest stress period in the relationship. This guide helps you have the conversation before it becomes a conflict.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_text-2",
+          "title": "The Money Conversation",
+          "body": "The money conversation that matters most is not about how much you earn. It is about values, expectations, and division of financial labor. Who pays which bills? Who tracks the budget? What happens if one of you stops working? How do you make financial decisions together? Couples who have explicit conversations about money before the baby arrives are better equipped to handle the financial stress that comes after. The goal is not agreement on every detail. The goal is no surprises.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_text-4",
+          "title": "Insurance and Benefits You May Be Missing",
+          "body": "Review your health insurance and add the baby within 30 days of birth  -  this is a qualifying life event. Check if your plan covers lactation consultants and mental health services. Life insurance: if you do not have it, get it before the birth. Disability insurance protects your income if you cannot work. Ask your employer about dependent care FSA  -  pre-tax dollars for childcare expenses. WIC provides nutritional support for pregnant women and children under 5 and is income-based. Do not leave these on the table.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_text-5",
+          "title": "Financial Stress and Mental Health",
+          "body": "Financial stress is one of the strongest predictors of postpartum depression and relationship conflict. When money feels unmanageable, everything else feels harder too. If you are in financial difficulty, the most important thing is to name it honestly with your partner and make a specific plan  -  not to avoid the conversation. A plan, even an imperfect one, reduces anxiety more than avoidance. Free financial counseling is available through many community organizations, credit unions, and nonprofits. You do not have to figure this out alone.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_text-6",
+          "title": "Protecting Your Household",
+          "body": "Review your will and beneficiaries. If you do not have a will, get a basic one before the birth  -  many states have free or low-cost resources. Update the beneficiary on your retirement accounts, life insurance, and any financial accounts. Create a shared document with passwords, account information, and emergency contacts. This is not morbid. It is responsible. The person who handles the family finances should not be the only one who knows how everything works.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_text-7",
+          "title": "Moving Forward Financially",
+          "body": "Financial preparation for parenthood is not about having everything figured out. It is about reducing uncertainty enough that money is not the thing that breaks you in the hardest months. Know your leave. Know your budget. Know your insurance. Know what you need versus what you think you need. The families who navigate the financial transition best are not the wealthiest ones. They are the ones who communicated honestly, planned specifically, and gave each other grace when the plan did not survive contact with reality.",
+          "bullets": [],
+          "cards": []
+        }
+      ]
     },
     {
       "id": "partner-village-guide",
       "title": "Support Village Guide",
       "summary": "Design a reliable support circle for visits, meals, boundaries, rest, and recovery needs.",
       "phase": "Partner Skills",
-      "accent": "emerald"
+      "accent": "emerald",
+      "detailSections": [
+        {
+          "id": "visitors",
+          "title": "Setting Visitor Boundaries  -  and Actually Enforcing Them",
+          "body": "Every new parent has experienced the visitor who stayed too long, the family member who gave unsolicited opinions, the well-meaning relative who woke the baby. Visitor boundaries are not antisocial. They are medical support for postpartum recovery. Your job is to set them and enforce them so she does not have to.\n\nHave you and she agreed on a visitor policy? Have you communicated it to both families? Who is the person most likely to violate it and how will you handle that?",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "advice",
+          "title": "Responding to Unsolicited Advice  -  Without Starting a War",
+          "body": "New parents receive an avalanche of unsolicited advice  -  from both families, from strangers, from social media. Most of it comes from love. None of it was asked for. Your job as the buffer is to intercept, redirect, and protect her from having to manage other people's feelings on top of her recovery.\n\nWho in your family is most likely to give unsolicited advice? Have you and she agreed on how to handle it? Have you practiced your responses?",
+          "bullets": [],
+          "cards": [
+            {
+              "title": "Types 1",
+              "icon": null,
+              "body": "'Guidelines have changed a lot since then. We are following what our pediatrician recommended.'",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Types 2",
+              "icon": null,
+              "body": "'She is working with her provider and a lactation consultant on feeding. It is going well.'",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Types 3",
+              "icon": null,
+              "body": "'We are figuring out what works for our family. Thanks for thinking of us.'",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Types 4",
+              "icon": null,
+              "body": "'Every family is different. This is what is working for us.'",
+              "bullets": [],
+              "cards": []
+            },
+            {
+              "title": "Types 5",
+              "icon": null,
+              "body": "'She just had a baby. She is doing exactly what she should be doing  -  recovering.'",
+              "bullets": [],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "village",
+          "title": "Building the Postpartum Village Before You Need It",
+          "body": "The village does not assemble itself. It is recruited, organized, and activated intentionally  -  before the birth, while you have the energy to do it. Families who try to build their support network in the fourth trimester are doing it during the hardest possible time.\n\nWho is in your village right now? Who needs to be added? What has been the hardest support to find? Who can coordinate the meal train?",
+          "bullets": [],
+          "cards": [
+            {
+              "title": "Categories 1",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "People",
+                  "items": [
+                    "Someone who can make and deliver food  -  2-3 people committed to specific days",
+                    "Someone who can do a load of laundry or dishes without needing direction",
+                    "Someone who can run errands or pick up groceries",
+                    "Someone who can watch older children if you have them"
+                  ]
+                }
+              ],
+              "cards": []
+            },
+            {
+              "title": "Categories 2",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "People",
+                  "items": [
+                    "One or two friends she can be honest with  -  not just supportive, but honest",
+                    "A therapist or counselor she has already met with before the birth if possible",
+                    "Other new mothers at similar stages  -  a mom group, a birth cohort"
+                  ]
+                }
+              ],
+              "cards": []
+            },
+            {
+              "title": "Categories 3",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "People",
+                  "items": [
+                    "A pediatrician selected before birth, with a first appointment scheduled",
+                    "A lactation consultant identified and contacted before birth",
+                    "A postpartum doula if the budget allows  -  even a few visits make a significant difference",
+                    "Her OB or midwife's after-hours contact information saved in both your phones"
+                  ]
+                }
+              ],
+              "cards": []
+            },
+            {
+              "title": "Categories 4",
+              "icon": null,
+              "body": "",
+              "bullets": [
+                {
+                  "label": "People",
+                  "items": [
+                    "One person you can be honest with about how you are doing  -  not just how she is doing",
+                    "A new father or partner in a similar stage you can talk to",
+                    "Access to mental health support if needed",
+                    "Physical help: someone who can take a shift so you can sleep"
+                  ]
+                }
+              ],
+              "cards": []
+            }
+          ]
+        },
+        {
+          "id": "generic_g10-0",
+          "title": "0",
+          "body": "Most of the burden of managing family expectations, setting visitor boundaries, receiving unsolicited advice, and building a postpartum support network falls on the birthing person by default. This is unfair and unsustainable. This guide equips you to take that load. You become the buffer, the scheduler, the boundary enforcer, and the village architect. When you do this well, she can focus on recovering and bonding. When you do not, she manages her own recovery AND everyone else's feelings simultaneously.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g10-1",
+          "title": "Managing Family Excitement",
+          "body": "Family excitement about a new baby is beautiful and also relentless. Your job is to channel it productively. Create specific ways for excited family members to help: sign up for a meal, offer to do laundry on a specific date, watch older children for a specific window. This redirects energy from dropping by and holding the baby into actual support. Acknowledge the excitement genuinely and then give it a job.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g10-4",
+          "title": "Cultural Traditions and Respect",
+          "body": "Many families have cultural traditions around birth and postpartum that carry deep meaning  -  confinement periods, specific foods, visitors who come to support not socialize, rituals that honor the new mother. These traditions deserve respect and exploration. Ask both of your families what matters to them. Share what you discover with each other. Look for the overlap between cultural practice and evidence-based care. When there is tension, have the conversation openly rather than dismissing either side.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g10-6",
+          "title": "When Family Becomes a Source of Stress",
+          "body": "Sometimes family presence is not supportive  -  it is additional work. A parent who criticizes, a sibling who needs reassurance, an in-law who takes over. When this happens your job is not to manage her relationship with her family for her. It is to reduce your family's impact on her. Limit visits when she says she is tired. Intercept difficult relatives before they reach her. If someone has repeatedly caused stress, it is appropriate to limit access temporarily. Protecting her is not keeping family away. It is ensuring that contact happens on terms that support her recovery.",
+          "bullets": [],
+          "cards": []
+        },
+        {
+          "id": "generic_g10-7",
+          "title": "Your Village Checklist",
+          "body": "Before the birth: Who brings meals and on which days? Who has agreed to be on call for specific tasks? Is the pediatrician selected and the first appointment scheduled? Is the lactation consultant identified? Is the meal train set up? Does your family know the visitor policy? Does her family know the visitor policy? Do both of your phones have the after-hours number for her provider? Do you have a therapist or support person of your own identified? If you cannot answer yes to most of these: start there.",
+          "bullets": [],
+          "cards": []
+        }
+      ]
     }
   ]
 }

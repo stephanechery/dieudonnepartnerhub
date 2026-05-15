@@ -79,6 +79,10 @@ struct GuideDetailView: View {
     let store: PartnerHubStore
     let guide: InteractiveGuide
 
+    private var sections: [GuideDetailSection] {
+        guide.detailSections ?? []
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -103,14 +107,20 @@ struct GuideDetailView: View {
                     .tint(guide.tint)
                 }
 
-                HubCard {
-                    Text("Use this in the moment")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                    ForEach(actionItems(for: guide), id: \.self) { item in
-                        Label(item, systemImage: "checkmark.circle.fill")
-                            .font(.subheadline)
-                            .foregroundStyle(.white.opacity(0.78))
+                if sections.isEmpty {
+                    HubCard {
+                        Text("Use this in the moment")
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                        ForEach(actionItems(for: guide), id: \.self) { item in
+                            Label(item, systemImage: "checkmark.circle.fill")
+                                .font(.subheadline)
+                                .foregroundStyle(.white.opacity(0.78))
+                        }
+                    }
+                } else {
+                    ForEach(sections) { section in
+                        GuideDetailSectionView(section: section, tint: guide.tint)
                     }
                 }
             }
@@ -134,6 +144,98 @@ struct GuideDetailView: View {
             return ["Protect rest windows.", "Handle food, water, and home tasks first.", "Watch for mood or recovery changes that need help."]
         default:
             return ["Listen first.", "Choose one useful support action.", "Follow up after the moment passes."]
+        }
+    }
+}
+
+private struct GuideDetailSectionView: View {
+    let section: GuideDetailSection
+    let tint: Color
+
+    var body: some View {
+        HubCard {
+            Text(section.title)
+                .font(.title3.bold())
+                .foregroundStyle(.white)
+
+            if let body = section.body, !body.isEmpty {
+                Text(body)
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.72))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            ForEach(section.bullets ?? []) { group in
+                GuideBulletGroupView(group: group, tint: tint)
+            }
+
+            ForEach(section.cards ?? []) { card in
+                GuideDetailCardView(card: card, tint: tint, depth: 0)
+            }
+        }
+    }
+}
+
+private struct GuideDetailCardView: View {
+    let card: GuideDetailCard
+    let tint: Color
+    let depth: Int
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                if let icon = card.icon, !icon.isEmpty {
+                    Text(icon)
+                        .font(.title3)
+                }
+                Text(card.title)
+                    .font(depth == 0 ? .headline : .subheadline.weight(.bold))
+                    .foregroundStyle(.white)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            if let body = card.body, !body.isEmpty {
+                Text(body)
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.68))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            ForEach(card.bullets ?? []) { group in
+                GuideBulletGroupView(group: group, tint: tint)
+            }
+
+            ForEach(card.cards ?? []) { nested in
+                GuideDetailCardView(card: nested, tint: tint, depth: depth + 1)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(AppTheme.inset.opacity(depth == 0 ? 1 : 0.72), in: RoundedRectangle(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(tint.opacity(depth == 0 ? 0.16 : 0.08), lineWidth: 1)
+        )
+    }
+}
+
+private struct GuideBulletGroupView: View {
+    let group: GuideBulletGroup
+    let tint: Color
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(group.label)
+                .font(.caption.weight(.bold))
+                .textCase(.uppercase)
+                .foregroundStyle(tint)
+
+            ForEach(group.items, id: \.self) { item in
+                Label(item, systemImage: "checkmark.circle.fill")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.76))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
     }
 }

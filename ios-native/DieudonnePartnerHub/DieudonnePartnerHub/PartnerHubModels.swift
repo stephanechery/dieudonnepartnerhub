@@ -137,6 +137,7 @@ struct InteractiveGuide: Decodable, Identifiable, Hashable {
     let summary: String
     let phase: String
     let accent: String
+    let detailSections: [GuideDetailSection]?
 
     var tint: Color {
         switch accent {
@@ -148,6 +149,29 @@ struct InteractiveGuide: Decodable, Identifiable, Hashable {
         default: .teal
         }
     }
+}
+
+struct GuideDetailSection: Decodable, Identifiable, Hashable {
+    let id: String
+    let title: String
+    let body: String?
+    let bullets: [GuideBulletGroup]?
+    let cards: [GuideDetailCard]?
+}
+
+struct GuideBulletGroup: Decodable, Identifiable, Hashable {
+    var id: String { label }
+    let label: String
+    let items: [String]
+}
+
+struct GuideDetailCard: Decodable, Identifiable, Hashable {
+    var id: String { "\(title)-\(body ?? "")" }
+    let title: String
+    let icon: String?
+    let body: String?
+    let bullets: [GuideBulletGroup]?
+    let cards: [GuideDetailCard]?
 }
 
 struct PersistedPartnerState: Codable {
