@@ -11,6 +11,33 @@ import { getModuleState, isLessonComplete } from "../utils/progress";
 const isMultiQuestion = (question) =>
   question.type === "multi" || Array.isArray(question.answerIndexes);
 
+const getCorrectAnswerIndexes = (question) =>
+  isMultiQuestion(question)
+    ? Array.isArray(question.answerIndexes)
+      ? question.answerIndexes
+      : []
+    : [question.answerIndex].filter((value) => Number.isInteger(value));
+
+const getSelectedAnswerIndexes = (question, value) => {
+  if (isMultiQuestion(question)) {
+    return Array.isArray(value) ? value : [];
+  }
+  return Number.isInteger(value) ? [value] : [];
+};
+
+const answerIndexesMatch = (left, right) => {
+  if (left.length !== right.length) return false;
+  const sortedLeft = [...left].sort((a, b) => a - b);
+  const sortedRight = [...right].sort((a, b) => a - b);
+  return sortedLeft.every((value, index) => value === sortedRight[index]);
+};
+
+const isQuestionAnswerCorrect = (question, value) =>
+  answerIndexesMatch(
+    getSelectedAnswerIndexes(question, value),
+    getCorrectAnswerIndexes(question)
+  );
+
 const buildFallbackCourseSections = (lesson) => [
   {
     id: "concept",
@@ -281,6 +308,20 @@ export default function LessonPage({
     }
     return !Number.isInteger(value);
   });
+  const quizResults = lesson.quiz.map((question, questionIndex) => {
+    const selectedIndexes = getSelectedAnswerIndexes(question, answers[question.id]);
+    const correctIndexes = getCorrectAnswerIndexes(question);
+    return {
+      question,
+      questionIndex,
+      selectedIndexes,
+      correctIndexes,
+      correct: isQuestionAnswerCorrect(question, answers[question.id]),
+    };
+  });
+  const missedQuestions = submitted
+    ? quizResults.filter((result) => !result.correct)
+    : [];
 
   const mobileQuestionAnswered = mobileQuestion
     ? isMultiQuestion(mobileQuestion)
@@ -344,74 +385,203 @@ export default function LessonPage({
     quizSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const renderQuestionCard = (question, questionIndex, isMobile = false) => (
-    <div
-      key={question.id}
-      className={`rounded-2xl border p-3 sm:p-4 ${
-        darkMode ? "border-slate-800 bg-slate-800/70" : "border-slate-100 bg-slate-50"
-      }`}
-    >
-      <p className={`mb-2 text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-        {questionIndex + 1}. {tx(question.question)}
-      </p>
-      {isMultiQuestion(question) && (
-        <p className={`mb-2 text-xs font-semibold ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-          {tx("Select all that apply.")}
-        </p>
-      )}
-      <div className="space-y-2">
-        {question.options.map((option, optionIndex) => {
-          const selected = isMultiQuestion(question)
-            ? Array.isArray(answers[question.id]) &&
-              answers[question.id].includes(optionIndex)
-            : answers[question.id] === optionIndex;
+  const formatAnswerOptions = (question, indexes) =>
+    indexes.map((index) => tx(question.options[index])).filter(Boolean).join(", ");
 
-          return (
-            <label
-              key={option}
-              className={`flex ${isMobile ? "min-h-12 rounded-xl" : "min-h-11 rounded-lg"} items-start gap-3 px-3 py-3 text-sm leading-relaxed transition ${
-                darkMode ? "text-slate-300 hover:bg-slate-700/50" : "text-slate-700 hover:bg-white"
-              } ${
-                selected
+  const renderQuestionCard = (question, questionIndex, isMobile = false) => {
+    const selectedIndexes = getSelectedAnswerIndexes(question, answers[question.id]);
+    const correctIndexes = getCorrectAnswerIndexes(question);
+    const questionCorrect = isQuestionAnswerCorrect(question, answers[question.id]);
+    const selectedAnswerText = formatAnswerOptions(question, selectedIndexes);
+    const correctAnswerText = formatAnswerOptions(question, correctIndexes);
+
+    return (
+      <div
+        key={question.id}
+        className={`rounded-2xl border p-3 sm:p-4 ${
+          darkMode ? "border-slate-800 bg-slate-800/70" : "border-slate-100 bg-slate-50"
+        }`}
+      >
+        <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+          <p className={`text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+            {questionIndex + 1}. {tx(question.question)}
+          </p>
+          {submitted && (
+            <span
+              className={`inline-flex w-fit items-center gap-1 rounded-full border px-2 py-1 text-[11px] font-black uppercase tracking-wide ${
+                questionCorrect
                   ? darkMode
-                    ? "bg-cyan-900/30 ring-1 ring-cyan-700/60"
-                    : "bg-cyan-50 ring-1 ring-cyan-300"
-                  : ""
+                    ? "border-emerald-900/60 bg-emerald-950/30 text-emerald-200"
+                    : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                  : darkMode
+                    ? "border-amber-900/60 bg-amber-950/30 text-amber-200"
+                    : "border-amber-200 bg-amber-50 text-amber-700"
               }`}
             >
-              {isMultiQuestion(question) ? (
-                <input
-                  type="checkbox"
-                  name={`${question.id}-${optionIndex}`}
-                  value={optionIndex}
-                  checked={selected}
-                  onChange={(event) =>
-                    updateAnswer(question, optionIndex, event.target.checked)
-                  }
-                  className="mt-0.5 h-4 w-4 shrink-0"
-                />
+              {questionCorrect ? (
+                <CheckCircle2 className="h-3.5 w-3.5" />
               ) : (
-                <input
-                  type="radio"
-                  name={question.id}
-                  value={optionIndex}
-                  checked={selected}
-                  onChange={() => updateAnswer(question, optionIndex)}
-                  className="mt-0.5 h-4 w-4 shrink-0"
-                />
+                <AlertTriangle className="h-3.5 w-3.5" />
               )}
-              <span>{tx(option)}</span>
-            </label>
-          );
-        })}
+              {questionCorrect ? tx("Correct") : tx("Review")}
+            </span>
+          )}
+        </div>
+        {isMultiQuestion(question) && (
+          <p className={`mb-2 text-xs font-semibold ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+            {tx("Select all that apply.")}
+          </p>
+        )}
+        <div className="space-y-2">
+          {question.options.map((option, optionIndex) => {
+            const selected = selectedIndexes.includes(optionIndex);
+            const correct = correctIndexes.includes(optionIndex);
+            const missedCorrect = submitted && correct && !selected;
+            const wrongSelected = submitted && selected && !correct;
+            const optionStateClass = submitted
+              ? correct
+                ? darkMode
+                  ? "bg-emerald-950/40 ring-1 ring-emerald-700/70 text-emerald-100"
+                  : "bg-emerald-50 ring-1 ring-emerald-300 text-emerald-900"
+                : wrongSelected
+                  ? darkMode
+                    ? "bg-amber-950/40 ring-1 ring-amber-700/70 text-amber-100"
+                    : "bg-amber-50 ring-1 ring-amber-300 text-amber-900"
+                  : ""
+              : selected
+                ? darkMode
+                  ? "bg-cyan-900/30 ring-1 ring-cyan-700/60"
+                  : "bg-cyan-50 ring-1 ring-cyan-300"
+                : "";
+
+            return (
+              <label
+                key={option}
+                className={`flex ${isMobile ? "min-h-12 rounded-xl" : "min-h-11 rounded-lg"} items-start gap-3 px-3 py-3 text-sm leading-relaxed transition ${
+                  darkMode ? "text-slate-300 hover:bg-slate-700/50" : "text-slate-700 hover:bg-white"
+                } ${optionStateClass}`}
+              >
+                {isMultiQuestion(question) ? (
+                  <input
+                    type="checkbox"
+                    name={`${question.id}-${optionIndex}`}
+                    value={optionIndex}
+                    checked={selected}
+                    onChange={(event) =>
+                      updateAnswer(question, optionIndex, event.target.checked)
+                    }
+                    className="mt-0.5 h-4 w-4 shrink-0"
+                  />
+                ) : (
+                  <input
+                    type="radio"
+                    name={question.id}
+                    value={optionIndex}
+                    checked={selected}
+                    onChange={() => updateAnswer(question, optionIndex)}
+                    className="mt-0.5 h-4 w-4 shrink-0"
+                  />
+                )}
+                <span className="flex-1">{tx(option)}</span>
+                {submitted && correct && (
+                  <span className={`shrink-0 text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-emerald-200" : "text-emerald-700"}`}>
+                    {missedCorrect ? tx("Correct answer") : tx("Right")}
+                  </span>
+                )}
+                {wrongSelected && (
+                  <span className={`shrink-0 text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-amber-200" : "text-amber-700"}`}>
+                    {tx("Your pick")}
+                  </span>
+                )}
+              </label>
+            );
+          })}
+        </div>
+        {submitted && (
+          <div
+            className={`mt-3 rounded-xl border p-3 text-xs leading-relaxed ${
+              questionCorrect
+                ? darkMode
+                  ? "border-emerald-900/50 bg-emerald-950/20 text-emerald-100"
+                  : "border-emerald-200 bg-emerald-50 text-emerald-800"
+                : darkMode
+                  ? "border-amber-900/50 bg-amber-950/20 text-amber-100"
+                  : "border-amber-200 bg-amber-50 text-amber-900"
+            }`}
+          >
+            <p className="font-black">
+              {questionCorrect ? tx("You got this right.") : tx("Review the correct answer.")}
+            </p>
+            {!questionCorrect && (
+              <p className="mt-1">
+                {tx("Your answer:")} {selectedAnswerText || tx("No answer selected.")}
+              </p>
+            )}
+            <p className="mt-1">
+              {tx("Correct answer:")} {correctAnswerText}
+            </p>
+            <p className="mt-2">{tx(question.rationale)}</p>
+          </div>
+        )}
       </div>
-      {submitted && (
-        <p className={`mt-3 text-xs leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-          {tx(question.rationale)}
-        </p>
-      )}
-    </div>
-  );
+    );
+  };
+
+  const renderQuizReviewSummary = () => {
+    if (!submitted) return null;
+
+    return (
+      <div
+        className={`rounded-2xl border p-3 ${
+          missedQuestions.length
+            ? darkMode
+              ? "border-amber-900/60 bg-amber-950/20 text-amber-100"
+              : "border-amber-200 bg-amber-50 text-amber-900"
+            : darkMode
+              ? "border-emerald-900/60 bg-emerald-950/20 text-emerald-100"
+              : "border-emerald-200 bg-emerald-50 text-emerald-800"
+        }`}
+      >
+        <div className="flex items-start gap-2">
+          {missedQuestions.length ? (
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          ) : (
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+          )}
+          <div>
+            <p className="text-sm font-black">
+              {missedQuestions.length
+                ? tx("Review missed questions")
+                : tx("All answers correct")}
+            </p>
+            <p className="mt-1 text-xs leading-relaxed">
+              {missedQuestions.length
+                ? tx("Open each missed question to compare your answer with the correct one and read the teaching note.")
+                : tx("You can still review each explanation before moving on.")}
+            </p>
+          </div>
+        </div>
+        {missedQuestions.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {missedQuestions.map((result) => (
+              <button
+                key={result.question.id}
+                type="button"
+                onClick={() => setQuizStep(result.questionIndex)}
+                className={`min-h-9 rounded-lg border px-3 py-2 text-xs font-bold ${
+                  darkMode
+                    ? "border-amber-800 bg-slate-950/40 text-amber-100"
+                    : "border-amber-300 bg-white text-amber-800"
+                }`}
+              >
+                {tx("Question")} {result.questionIndex + 1}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderCourseSection = (section, index, compact = false) => {
     const selectedAnswer = courseChecks[section.id];
@@ -660,6 +830,7 @@ export default function LessonPage({
             {tx("Score:")} {score}%
           </p>
         )}
+        {renderQuizReviewSummary()}
       </div>
     </form>
   );
@@ -1160,6 +1331,9 @@ export default function LessonPage({
         )}
 
         <form className="space-y-4" onSubmit={handleQuizSubmit}>
+          <div className="hidden sm:block">
+            {renderQuizReviewSummary()}
+          </div>
           <div className="hidden space-y-4 sm:block">
             {lesson.quiz.map((question, questionIndex) =>
               renderQuestionCard(question, questionIndex)
@@ -1237,6 +1411,9 @@ export default function LessonPage({
                 {tx("Score:")} {score}%
               </p>
             )}
+          </div>
+          <div className="sm:hidden">
+            {renderQuizReviewSummary()}
           </div>
         </form>
           </>
