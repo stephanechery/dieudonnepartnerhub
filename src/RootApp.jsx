@@ -2,6 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import App from "./App";
 const PartnerDashboardApp = React.lazy(() => import("./features/partner-dashboard"));
 const AdminDashboardApp = React.lazy(() => import("./features/admin-dashboard"));
+const OrganizationsPage = React.lazy(() => import("./features/public-pages/OrganizationsPage"));
+const DemoPage = React.lazy(() => import("./features/public-pages/DemoPage"));
+const PrivacyPage = React.lazy(() => import("./features/public-pages/PrivacyPage"));
 
 function usePathRouter() {
   const [pathname, setPathname] = useState(window.location.pathname);
@@ -51,6 +54,27 @@ export default function RootApp() {
           }
         >
           <AdminDashboardApp pathname={pathname} navigate={navigate} />
+        </React.Suspense>
+      );
+    }
+    if (pathname.startsWith("/organizations")) {
+      return (
+        <React.Suspense fallback={<div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">Loading organizations page...</div>}>
+          <OrganizationsPage />
+        </React.Suspense>
+      );
+    }
+    if (pathname.startsWith("/demo")) {
+      return (
+        <React.Suspense fallback={<div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">Loading guided demo...</div>}>
+          <DemoPage />
+        </React.Suspense>
+      );
+    }
+    if (pathname.startsWith("/privacy")) {
+      return (
+        <React.Suspense fallback={<div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">Loading privacy page...</div>}>
+          <PrivacyPage />
         </React.Suspense>
       );
     }

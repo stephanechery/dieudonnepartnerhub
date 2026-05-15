@@ -92,6 +92,9 @@ const configuredAdminEmails = () =>
     .filter(Boolean);
 
 export const isAdminUser = (authUser, profile) => {
+  const role = String(authUser?.role || profile?.role || "").trim().toLowerCase();
+  if (role === "admin" || role === "owner") return true;
+
   const email = normalizeEmail(authUser?.email || profile?.email);
   if (!email) return false;
 

@@ -7,6 +7,8 @@ const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || "").trim();
 const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || "").trim();
 const AUTH_REDIRECT_ORIGIN = (import.meta.env.VITE_AUTH_REDIRECT_ORIGIN || "").trim();
 const AUTH_REDIRECT_PATH = "/partner-dashboard";
+const LOCAL_AUTH_ENABLED =
+  import.meta.env.DEV || import.meta.env.VITE_ENABLE_LOCAL_AUTH === "true";
 
 const textEncoder = new TextEncoder();
 
@@ -15,6 +17,11 @@ const normalizeEmail = (email) => email.trim().toLowerCase();
 const isBrowser = () => typeof window !== "undefined";
 
 const isSupabaseAuthEnabled = () => Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+
+const assertLocalAuthEnabled = () => {
+  if (LOCAL_AUTH_ENABLED) return;
+  throw new Error("Production auth is not configured. Please sign in after Supabase auth is enabled.");
+};
 
 const normalizeRedirectPath = (redirectPath = AUTH_REDIRECT_PATH) => {
   const path = String(redirectPath || AUTH_REDIRECT_PATH).trim();
@@ -66,6 +73,7 @@ const createSessionUser = (user) => ({
   email: user.email,
   displayName: user.displayName,
   provider: user.provider,
+  role: user.role || null,
 });
 
 const normalizeStoredSession = (value) => {
@@ -85,6 +93,7 @@ const normalizeStoredSession = (value) => {
         email: value.email,
         displayName: value.displayName,
         provider: value.provider || "password",
+        role: value.role || null,
       },
       accessToken: null,
       refreshToken: null,
@@ -182,6 +191,7 @@ const mapSupabaseUser = (user, fallbackProvider = "password") => ({
     user?.app_metadata?.provider ||
     user?.identities?.[0]?.provider ||
     fallbackProvider,
+  role: user?.app_metadata?.role || user?.user_metadata?.role || null,
 });
 
 const persistSupabaseSession = ({ accessToken, refreshToken, user, fallbackProvider }) => {
@@ -256,6 +266,10 @@ export const validateSupabaseSession = async () => {
   const session = readSession();
   if (!session) return null;
   if (!isSupabaseAuthEnabled() || session.mode !== "supabase") {
+    if (!LOCAL_AUTH_ENABLED) {
+      clearStoredSessionOnly();
+      return null;
+    }
     return session.user;
   }
 
@@ -351,6 +365,7 @@ const loginWithEmailLocal = async ({ email, password }) => {
 
 export const registerWithEmail = async ({ displayName, email, password }) => {
   if (!isSupabaseAuthEnabled()) {
+    assertLocalAuthEnabled();
     return registerWithEmailLocal({ displayName, email, password });
   }
 
@@ -397,6 +412,7 @@ export const registerWithEmail = async ({ displayName, email, password }) => {
 
 export const loginWithEmail = async ({ email, password }) => {
   if (!isSupabaseAuthEnabled()) {
+    assertLocalAuthEnabled();
     return loginWithEmailLocal({ email, password });
   }
 
@@ -416,6 +432,7 @@ export const loginWithEmail = async ({ email, password }) => {
 
 export const requestPasswordReset = async (email, redirectPath = AUTH_REDIRECT_PATH) => {
   if (!isSupabaseAuthEnabled()) {
+    assertLocalAuthEnabled();
     const normalizedEmail = normalizeEmail(email);
     const users = readUsers();
     const user = users[normalizedEmail];
@@ -445,6 +462,7 @@ export const requestPasswordReset = async (email, redirectPath = AUTH_REDIRECT_P
 
 export const confirmPasswordReset = async ({ email, code, newPassword }) => {
   if (!isSupabaseAuthEnabled()) {
+    assertLocalAuthEnabled();
     const normalizedEmail = normalizeEmail(email);
     const users = readUsers();
     const user = users[normalizedEmail];
@@ -542,6 +560,7 @@ export const loginWithGoogle = async ({ redirectPath = AUTH_REDIRECT_PATH } = {}
     return new Promise(() => {});
   }
 
+  assertLocalAuthEnabled();
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   if (!clientId) {
     throw new Error(
@@ -590,7 +609,7 @@ export const loginWithGoogle = async ({ redirectPath = AUTH_REDIRECT_PATH } = {}
 export const isGoogleLoginConfigured = () => {
   if (isSupabaseAuthEnabled()) return true;
   const clientId = (import.meta.env.VITE_GOOGLE_CLIENT_ID || "").trim();
-  return Boolean(clientId);
+  return LOCAL_AUTH_ENABLED && Boolean(clientId);
 };
 
 export { isSupabaseAuthEnabled };
