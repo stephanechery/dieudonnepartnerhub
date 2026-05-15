@@ -211,8 +211,8 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
             lesson={lesson}
             profile={profile}
             onBackToModule={() => openModule(module.id)}
-            onSaveScenario={(responseText) =>
-              saveScenarioReflection(module.id, lesson.id, responseText)
+            onSaveScenario={(responseText, responseKey) =>
+              saveScenarioReflection(module.id, lesson.id, responseText, responseKey)
             }
             onSubmitQuiz={(answers) => submitQuiz(module.id, lesson.id, answers)}
             onCompleteLesson={() => markLessonCompleted(module.id, lesson.id)}

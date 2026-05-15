@@ -81,6 +81,42 @@ const buildFallbackCourseSections = (lesson) => [
 const getCourseSections = (lesson) =>
   lesson.course?.sections?.length ? lesson.course.sections : buildFallbackCourseSections(lesson);
 
+const getReflectionResponseKey = (lessonId, sectionId) =>
+  `${lessonId}:${sectionId}:reflection`;
+
+const getScenarioResponseKey = (lessonId) => `${lessonId}:scenario`;
+
+const isReflectionResponseComplete = (value) => String(value || "").trim().length >= 20;
+
+const buildReflectionResponses = (lesson, courseSections, moduleState) => {
+  const storedResponses = moduleState.scenarioResponses || {};
+  const nextResponses = {};
+  const reflectionSections = courseSections.filter((section) => section.reflectionPrompt);
+
+  reflectionSections.forEach((section, index) => {
+    const responseKey = getReflectionResponseKey(lesson.id, section.id);
+    const hasSectionResponse = Object.prototype.hasOwnProperty.call(
+      storedResponses,
+      responseKey
+    );
+    nextResponses[responseKey] = hasSectionResponse
+      ? storedResponses[responseKey]
+      : index === 0
+        ? storedResponses[lesson.id] || ""
+        : "";
+  });
+
+  const scenarioKey = getScenarioResponseKey(lesson.id);
+  nextResponses[scenarioKey] = Object.prototype.hasOwnProperty.call(
+    storedResponses,
+    scenarioKey
+  )
+    ? storedResponses[scenarioKey]
+    : storedResponses[lesson.id] || "";
+
+  return nextResponses;
+};
+
 const buildCourseCheckState = (sections) =>
   sections.reduce((acc, section) => {
     if (section.quickCheck) {
@@ -138,8 +174,16 @@ export default function LessonPage({
       return acc;
     }, {});
 
-  const [scenarioResponse, setScenarioResponse] = useState(
-    moduleState.scenarioResponses[lesson.id] || ""
+  const lessonIndex = module.lessons.findIndex((item) => item.id === lesson.id);
+  const lessonNumber = lessonIndex + 1;
+  const moduleProgressPercent = Math.round((lessonNumber / module.lessons.length) * 100);
+  const courseSections = useMemo(() => getCourseSections(lesson), [lesson]);
+  const reflectionSections = useMemo(
+    () => courseSections.filter((section) => section.reflectionPrompt),
+    [courseSections]
+  );
+  const [reflectionResponses, setReflectionResponses] = useState(() =>
+    buildReflectionResponses(lesson, courseSections, moduleState)
   );
   const [answers, setAnswers] = useState(() => normalizeSavedAnswers(savedQuizResponses || {}));
   const [submitted, setSubmitted] = useState(Boolean(savedQuizResponses));
@@ -150,17 +194,20 @@ export default function LessonPage({
   const [lessonStep, setLessonStep] = useState(0);
   const [quizStep, setQuizStep] = useState(0);
   const [courseStep, setCourseStep] = useState(0);
+  const mobileQuestion = lesson.quiz[quizStep];
   const quizSectionRef = useRef(null);
   const lastLessonIdRef = useRef(lesson.id);
-
-  const lessonIndex = module.lessons.findIndex((item) => item.id === lesson.id);
-  const lessonNumber = lessonIndex + 1;
-  const moduleProgressPercent = Math.round((lessonNumber / module.lessons.length) * 100);
-  const mobileQuestion = lesson.quiz[quizStep];
-  const courseSections = useMemo(() => getCourseSections(lesson), [lesson]);
   const [courseChecks, setCourseChecks] = useState(() =>
     buildCourseCheckState(courseSections)
   );
+  const scenarioResponseKey = getScenarioResponseKey(lesson.id);
+  const scenarioResponse = reflectionResponses[scenarioResponseKey] || "";
+  const setResponseValue = (responseKey, value) => {
+    setReflectionResponses((current) => ({
+      ...current,
+      [responseKey]: value,
+    }));
+  };
   const courseCheckTotal = courseSections.filter((section) => section.quickCheck).length;
   const courseCheckCorrectCount = courseSections.reduce((count, section) => {
     if (!section.quickCheck) return count;
@@ -169,14 +216,20 @@ export default function LessonPage({
       (isQuickCheckCorrect(section.quickCheck, courseChecks[section.id]) ? 1 : 0)
     );
   }, 0);
-  const reflectionComplete = scenarioResponse.trim().length >= 20;
+  const reflectionTotal = reflectionSections.length;
+  const reflectionCompleteCount = reflectionSections.reduce((count, section) => {
+    const responseKey = getReflectionResponseKey(lesson.id, section.id);
+    return count + (isReflectionResponseComplete(reflectionResponses[responseKey]) ? 1 : 0);
+  }, 0);
+  const reflectionComplete =
+    reflectionTotal === 0 || reflectionCompleteCount === reflectionTotal;
   const courseComplete =
     (courseCheckTotal === 0 || courseCheckCorrectCount === courseCheckTotal) &&
     reflectionComplete;
   const quizUnlocked = Boolean(savedQuizResponses || submitted || score !== null || courseComplete);
   const courseProgressPercent = Math.round(
-    ((courseCheckCorrectCount + (reflectionComplete ? 1 : 0)) /
-      Math.max(1, courseCheckTotal + 1)) *
+    ((courseCheckCorrectCount + reflectionCompleteCount) /
+      Math.max(1, courseCheckTotal + reflectionTotal)) *
       100
   );
   const lessonDeckSteps = [
@@ -197,7 +250,7 @@ export default function LessonPage({
     setCompleteStatus(isLessonComplete(moduleState, lesson.id));
 
     if (lessonChanged) {
-      setScenarioResponse(moduleState.scenarioResponses[lesson.id] || "");
+      setReflectionResponses(buildReflectionResponses(lesson, getCourseSections(lesson), moduleState));
       setLessonStep(0);
       setQuizStep(0);
       setCourseStep(0);
@@ -365,6 +418,14 @@ export default function LessonPage({
     const quickCheckCorrect = section.quickCheck
       ? isQuickCheckCorrect(section.quickCheck, selectedAnswer)
       : true;
+    const reflectionResponseKey = getReflectionResponseKey(lesson.id, section.id);
+    const reflectionResponse = reflectionResponses[reflectionResponseKey] || "";
+    const sectionReflectionComplete =
+      !section.reflectionPrompt || isReflectionResponseComplete(reflectionResponse);
+    const sectionComplete =
+      (section.quickCheck || section.reflectionPrompt) &&
+      quickCheckCorrect &&
+      sectionReflectionComplete;
 
     return (
       <article
@@ -387,7 +448,7 @@ export default function LessonPage({
           </div>
           <span
             className={`w-fit rounded-full border px-3 py-1.5 text-xs font-bold ${
-              quickCheckCorrect && (section.quickCheck || section.reflectionPrompt)
+              sectionComplete
                 ? darkMode
                   ? "border-emerald-900/60 bg-emerald-950/30 text-emerald-200"
                   : "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -396,9 +457,7 @@ export default function LessonPage({
                   : "border-slate-200 bg-slate-50 text-slate-600"
             }`}
           >
-            {quickCheckCorrect && (section.quickCheck || section.reflectionPrompt)
-              ? tx("Completed")
-              : tx("In Progress")}
+            {sectionComplete ? tx("Completed") : tx("In Progress")}
           </span>
         </div>
 
@@ -453,17 +512,19 @@ export default function LessonPage({
             <textarea
               className={`mt-3 min-h-28 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-900 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900"}`}
               placeholder={tx("Write your response plan...")}
-              value={scenarioResponse}
-              onChange={(event) => setScenarioResponse(event.target.value)}
+              value={reflectionResponse}
+              onChange={(event) =>
+                setResponseValue(reflectionResponseKey, event.target.value)
+              }
             />
             <button
               type="button"
-              onClick={() => onSaveScenario(scenarioResponse)}
+              onClick={() => onSaveScenario(reflectionResponse, reflectionResponseKey)}
               className={`mt-3 min-h-11 rounded-lg border px-4 py-3 text-sm font-bold ${darkMode ? "border-slate-700 bg-slate-950 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`}
             >
               {tx("Save Reflection")}
             </button>
-            {!reflectionComplete && (
+            {!sectionReflectionComplete && (
               <p className={`mt-2 text-xs ${darkMode ? "text-amber-200" : "text-amber-800"}`}>
                 {tx("Write at least 20 characters to unlock the quiz.")}
               </p>
@@ -716,11 +777,11 @@ export default function LessonPage({
             className={`mt-3 min-h-32 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900"}`}
             placeholder={tx("Write your response plan...")}
             value={scenarioResponse}
-            onChange={(event) => setScenarioResponse(event.target.value)}
+            onChange={(event) => setResponseValue(scenarioResponseKey, event.target.value)}
           />
           <button
             type="button"
-            onClick={() => onSaveScenario(scenarioResponse)}
+            onClick={() => onSaveScenario(scenarioResponse, scenarioResponseKey)}
             className={`mt-3 min-h-11 w-full rounded-lg border px-4 py-3 text-sm font-bold ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`}
           >
             {tx("Save Scenario Response")}
@@ -923,7 +984,7 @@ export default function LessonPage({
               />
             </div>
             <p className={`mt-3 text-xs leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-              {courseCheckCorrectCount}/{courseCheckTotal} {tx("checks complete")} · {reflectionComplete ? tx("reflection saved") : tx("reflection needed")}
+              {courseCheckCorrectCount}/{courseCheckTotal} {tx("checks complete")} · {reflectionCompleteCount}/{reflectionTotal} {tx("reflections saved")}
             </p>
           </div>
         </div>
@@ -931,9 +992,17 @@ export default function LessonPage({
         <div className="mt-5 flex flex-wrap gap-2">
           {courseSections.map((section, index) => {
             const selected = courseStep === index;
-            const complete = section.quickCheck
+            const sectionQuickCheckComplete = section.quickCheck
               ? isQuickCheckCorrect(section.quickCheck, courseChecks[section.id])
-              : false;
+              : true;
+            const responseKey = getReflectionResponseKey(lesson.id, section.id);
+            const sectionReflectionComplete =
+              !section.reflectionPrompt ||
+              isReflectionResponseComplete(reflectionResponses[responseKey]);
+            const complete =
+              (section.quickCheck || section.reflectionPrompt) &&
+              sectionQuickCheckComplete &&
+              sectionReflectionComplete;
             return (
               <button
                 key={section.id}
@@ -1058,11 +1127,11 @@ export default function LessonPage({
           className={`mt-3 min-h-32 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900"}`}
           placeholder={tx("Write your response plan...")}
           value={scenarioResponse}
-          onChange={(event) => setScenarioResponse(event.target.value)}
+          onChange={(event) => setResponseValue(scenarioResponseKey, event.target.value)}
         />
         <button
           type="button"
-          onClick={() => onSaveScenario(scenarioResponse)}
+          onClick={() => onSaveScenario(scenarioResponse, scenarioResponseKey)}
           className={`mt-3 min-h-11 w-full rounded-lg border px-4 py-3 text-sm font-bold sm:min-h-0 sm:w-auto sm:px-3 sm:py-2 sm:text-xs ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`}
         >
           {tx("Save Scenario Response")}
