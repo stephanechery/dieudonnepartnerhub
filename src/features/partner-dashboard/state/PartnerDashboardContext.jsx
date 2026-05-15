@@ -161,7 +161,7 @@ export const PartnerDashboardProvider = ({ children }) => {
 
   const confirmReset = (payload) => runAuthAction(() => confirmPasswordReset(payload));
 
-  const saveScenarioReflection = (moduleId, lessonId, responseText) => {
+  const saveScenarioReflection = (moduleId, lessonId, responseText, responseKey = lessonId) => {
     if (!profile) return;
 
     const moduleState = getModuleState(profile, moduleId);
@@ -173,7 +173,7 @@ export const PartnerDashboardProvider = ({ children }) => {
           ...moduleState,
           scenarioResponses: {
             ...moduleState.scenarioResponses,
-            [lessonId]: responseText,
+            [responseKey]: responseText,
           },
         },
       },
