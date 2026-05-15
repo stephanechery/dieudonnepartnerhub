@@ -1,170 +1,86 @@
 import SwiftUI
-import WebKit
 
 struct PartnerHubRootView: View {
-    @State private var webState = PartnerHubWebState()
+    @State private var store = PartnerHubStore()
 
     var body: some View {
-        ZStack {
-            PartnerHubWebView(state: webState)
-                .ignoresSafeArea(.container, edges: .bottom)
+        TabView {
+            TodayView(store: store)
+                .tabItem { Label("Today", systemImage: "sparkles") }
 
-            if webState.isLoading {
-                loadingView
-            }
+            LearnView(store: store)
+                .tabItem { Label("Learn", systemImage: "graduationcap.fill") }
 
-            if let errorMessage = webState.errorMessage {
-                errorView(errorMessage)
-            }
+            GuidesView(store: store)
+                .tabItem { Label("Guides", systemImage: "book.pages.fill") }
+
+            VideoHubView(store: store)
+                .tabItem { Label("Videos", systemImage: "play.rectangle.fill") }
+
+            AdminHubView(store: store)
+                .tabItem { Label("Admin", systemImage: "gearshape.fill") }
         }
-        .background(Color(red: 0.02, green: 0.04, blue: 0.09))
+        .tint(.cyan)
+        .preferredColorScheme(.dark)
     }
+}
 
-    private var loadingView: some View {
-        VStack(spacing: 12) {
-            ProgressView()
-                .tint(.cyan)
-                .scaleEffect(1.2)
-            Text("Loading Dieudonne Partner Hub")
-                .font(.headline)
-                .foregroundStyle(.white)
-        }
-        .padding(22)
-        .background(.black.opacity(0.72), in: RoundedRectangle(cornerRadius: 20))
-    }
+struct HubScreen<Content: View>: View {
+    let title: String
+    let subtitle: String
+    @ViewBuilder var content: Content
 
-    private func errorView(_ message: String) -> some View {
-        VStack(spacing: 12) {
-            Image(systemName: "wifi.exclamationmark")
-                .font(.largeTitle)
-                .foregroundStyle(.cyan)
-            Text("Could not load Partner Hub")
-                .font(.headline)
-                .foregroundStyle(.white)
-            Text(message)
-                .font(.subheadline)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.white.opacity(0.72))
-            Button("Try Again") {
-                webState.reload()
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(title)
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(.white)
+                    Text(subtitle)
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.68))
+                }
+                .padding(.top, 12)
+
+                content
             }
-            .font(.headline)
             .padding(.horizontal, 18)
-            .padding(.vertical, 11)
-            .background(.cyan, in: Capsule())
-            .foregroundStyle(.black)
+            .padding(.bottom, 28)
         }
-        .padding(22)
-        .frame(maxWidth: 320)
-        .background(.black.opacity(0.82), in: RoundedRectangle(cornerRadius: 24))
-        .padding()
+        .background(AppTheme.background.ignoresSafeArea())
     }
 }
 
-@Observable
-final class PartnerHubWebState {
-    let startURL = URL(string: "https://www.dieudonnepartnerhub.org/")!
-    weak var webView: WKWebView?
-    var isLoading = true
-    var errorMessage: String?
+struct HubCard<Content: View>: View {
+    @ViewBuilder var content: Content
 
-    func reload() {
-        errorMessage = nil
-        isLoading = true
-        if let webView {
-            webView.reload()
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            content
         }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(.white.opacity(0.08), lineWidth: 1)
+        )
     }
 }
 
-struct PartnerHubWebView: UIViewRepresentable {
-    let state: PartnerHubWebState
+struct AppTheme {
+    static let background = LinearGradient(
+        colors: [
+            Color(red: 0.02, green: 0.04, blue: 0.09),
+            Color(red: 0.06, green: 0.08, blue: 0.15)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
 
-    func makeCoordinator() -> Coordinator {
-        Coordinator(state: state)
-    }
-
-    func makeUIView(context: Context) -> WKWebView {
-        let configuration = WKWebViewConfiguration()
-        configuration.allowsInlineMediaPlayback = true
-        configuration.defaultWebpagePreferences.allowsContentJavaScript = true
-        configuration.websiteDataStore = .default()
-
-        let webView = WKWebView(frame: .zero, configuration: configuration)
-        webView.navigationDelegate = context.coordinator
-        webView.uiDelegate = context.coordinator
-        webView.allowsBackForwardNavigationGestures = true
-        webView.scrollView.contentInsetAdjustmentBehavior = .automatic
-        webView.isOpaque = false
-        webView.backgroundColor = UIColor(red: 0.02, green: 0.04, blue: 0.09, alpha: 1)
-        state.webView = webView
-        webView.load(URLRequest(url: state.startURL))
-        return webView
-    }
-
-    func updateUIView(_ webView: WKWebView, context: Context) {}
-
-    final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
-        let state: PartnerHubWebState
-
-        init(state: PartnerHubWebState) {
-            self.state = state
-        }
-
-        func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-            state.isLoading = true
-            state.errorMessage = nil
-        }
-
-        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            state.isLoading = false
-        }
-
-        func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-            show(error)
-        }
-
-        func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-            show(error)
-        }
-
-        func webView(
-            _ webView: WKWebView,
-            decidePolicyFor navigationAction: WKNavigationAction,
-            decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
-        ) {
-            guard let url = navigationAction.request.url else {
-                decisionHandler(.cancel)
-                return
-            }
-
-            if ["http", "https"].contains(url.scheme?.lowercased() ?? "") {
-                decisionHandler(.allow)
-            } else {
-                UIApplication.shared.open(url)
-                decisionHandler(.cancel)
-            }
-        }
-
-        func webView(
-            _ webView: WKWebView,
-            createWebViewWith configuration: WKWebViewConfiguration,
-            for navigationAction: WKNavigationAction,
-            windowFeatures: WKWindowFeatures
-        ) -> WKWebView? {
-            if navigationAction.targetFrame == nil {
-                webView.load(navigationAction.request)
-            }
-            return nil
-        }
-
-        private func show(_ error: Error) {
-            state.isLoading = false
-            let nsError = error as NSError
-            if nsError.code == NSURLErrorCancelled { return }
-            state.errorMessage = error.localizedDescription
-        }
-    }
+    static let card = Color(red: 0.08, green: 0.11, blue: 0.20).opacity(0.96)
+    static let inset = Color(red: 0.04, green: 0.06, blue: 0.12)
 }
 
 #Preview {

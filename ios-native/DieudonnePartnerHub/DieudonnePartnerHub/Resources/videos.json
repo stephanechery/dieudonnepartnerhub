@@ -1,0 +1,358 @@
+{
+  "categories": [
+    "All",
+    "Doula Basics",
+    "Prenatal Education",
+    "Labor Support",
+    "Postpartum",
+    "Mental Health",
+    "Newborn Care",
+    "Birth Equity",
+    "Professional Development",
+    "Lactation"
+  ],
+  "videos": [
+    {
+      "id": "doulas-what-you-need-to-know",
+      "title": "Doulas: What You Need To Know",
+      "category": "Doula Basics",
+      "source": "March of Dimes",
+      "description": "A clear introduction to doula support and how partners can work alongside doulas during pregnancy, labor, and postpartum care.",
+      "duration": "35:07",
+      "progress": 47,
+      "sourceUrl": "https://www.marchofdimes.org/itstartswithmom/get-to-know-doulas",
+      "tags": [
+        "doula",
+        "birth team",
+        "partner role"
+      ],
+      "videoId": "qXluIjv2w_g",
+      "thumbnail": "https://i.ytimg.com/vi/qXluIjv2w_g/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/qXluIjv2w_g?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "evidence-on-doulas",
+      "title": "Evidence on Doulas",
+      "category": "Doula Basics",
+      "source": "Evidence Based Birth",
+      "description": "A research-focused session on what doulas do, how continuous support can help, and where partners fit on the care team.",
+      "duration": "55:47",
+      "progress": 12,
+      "sourceUrl": "https://evidencebasedbirth.com/",
+      "tags": [
+        "doula",
+        "evidence",
+        "continuous support"
+      ],
+      "videoId": "s2xrpfn-mi4",
+      "thumbnail": "https://i.ytimg.com/vi/s2xrpfn-mi4/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/s2xrpfn-mi4?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "healthy-pregnancy-prenatal-care",
+      "title": "Healthy Pregnancy, Healthy Baby: Prenatal Care",
+      "category": "Prenatal Education",
+      "source": "March of Dimes",
+      "description": "A partner-friendly primer on prenatal care, appointment rhythm, and the basic checks that help keep mom and baby safer.",
+      "duration": "4:58",
+      "progress": 25,
+      "sourceUrl": "https://www.marchofdimes.org/find-support/topics/planning-baby/prenatal-care-checkups",
+      "tags": [
+        "pregnancy",
+        "prenatal care",
+        "appointments"
+      ],
+      "videoId": "AK8z9R4R_Lo",
+      "thumbnail": "https://i.ytimg.com/vi/AK8z9R4R_Lo/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/AK8z9R4R_Lo?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "prenatal-genetic-testing",
+      "title": "ACOG Explains: Prenatal Genetic Testing",
+      "category": "Prenatal Education",
+      "source": "Every Stage Health and ACOG",
+      "description": "A short, clear explainer on prenatal screening and diagnostic testing so partners can support informed conversations before appointments.",
+      "duration": "3:41",
+      "progress": 75,
+      "sourceUrl": "https://www.acog.org/womens-health/videos/prenatal-genetic-testing",
+      "tags": [
+        "pregnancy",
+        "testing",
+        "prenatal"
+      ],
+      "videoId": "MhWpmZIsZxw",
+      "thumbnail": "https://i.ytimg.com/vi/MhWpmZIsZxw/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/MhWpmZIsZxw?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "inducing-labor",
+      "title": "ACOG Explains: Inducing Labor",
+      "category": "Labor Support",
+      "source": "Every Stage Health and ACOG",
+      "description": "A practical overview of why induction may be recommended, what partners can ask, and how to stay calm during care decisions.",
+      "duration": "4:59",
+      "progress": 40,
+      "sourceUrl": "https://www.acog.org/womens-health/videos/inducing-labor",
+      "tags": [
+        "labor",
+        "induction",
+        "birth decisions"
+      ],
+      "videoId": "BW47iTObHmI",
+      "thumbnail": "https://i.ytimg.com/vi/BW47iTObHmI/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/BW47iTObHmI?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "fetal-monitoring-advocacy",
+      "title": "Fetal Monitoring Advocacy Tips",
+      "category": "Labor Support",
+      "source": "Evidence Based Birth",
+      "description": "A deeper partner-focused advocacy session on monitoring, questions to ask, and respectful decision support during labor.",
+      "duration": "53:42",
+      "progress": 0,
+      "sourceUrl": "https://evidencebasedbirth.com/",
+      "tags": [
+        "advocacy",
+        "labor",
+        "monitoring"
+      ],
+      "videoId": "tBiWgCcqfFI",
+      "thumbnail": "https://i.ytimg.com/vi/tBiWgCcqfFI/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/tBiWgCcqfFI?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "postpartum-warning-signs",
+      "title": "Know the Warning Signs During Pregnancy and Postpartum",
+      "category": "Postpartum",
+      "source": "March of Dimes",
+      "description": "A full safety session on when symptoms need fast attention during pregnancy and after birth, useful for partners who want clear escalation cues.",
+      "duration": "60:38",
+      "progress": 8,
+      "sourceUrl": "https://www.marchofdimes.org/find-support/topics/postpartum/postpartum-warning-signs",
+      "tags": [
+        "postpartum",
+        "warning signs",
+        "safety"
+      ],
+      "videoId": "lCMoLEb0rkA",
+      "thumbnail": "https://i.ytimg.com/vi/lCMoLEb0rkA/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/lCMoLEb0rkA?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "urgent-maternal-warning-signs",
+      "title": "Urgent Maternal Warning Signs",
+      "category": "Postpartum",
+      "source": "Shannon M. Clark, MD, CDC Hear Her aligned",
+      "description": "A fast safety review of symptoms partners should take seriously during pregnancy and through the first year after birth.",
+      "duration": "0:59",
+      "progress": 60,
+      "sourceUrl": "https://www.cdc.gov/hearher/maternal-warning-signs/index.html",
+      "tags": [
+        "postpartum",
+        "recovery",
+        "warning signs"
+      ],
+      "videoId": "RImNNSkpMAc",
+      "thumbnail": "https://i.ytimg.com/vi/RImNNSkpMAc/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/RImNNSkpMAc?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "postpartum-discomfort",
+      "title": "Healthy Pregnancy, Healthy Baby: Postpartum Discomfort",
+      "category": "Postpartum",
+      "source": "March of Dimes",
+      "description": "A short review of common recovery discomforts so partners can tell the difference between normal healing and signs to ask about.",
+      "duration": "4:15",
+      "progress": 0,
+      "sourceUrl": "https://www.marchofdimes.org/find-support/topics/postpartum",
+      "tags": [
+        "postpartum",
+        "recovery",
+        "comfort"
+      ],
+      "videoId": "YLVuBAfMxvw",
+      "thumbnail": "https://i.ytimg.com/vi/YLVuBAfMxvw/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/YLVuBAfMxvw?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "postpartum-birth-control",
+      "title": "ACOG Explains: Birth Control",
+      "category": "Postpartum",
+      "source": "Every Stage Health and ACOG",
+      "description": "A concise overview of birth control options that can help partners support respectful postpartum planning conversations.",
+      "duration": "5:06",
+      "progress": 0,
+      "sourceUrl": "https://www.acog.org/womens-health",
+      "tags": [
+        "postpartum",
+        "birth control",
+        "planning"
+      ],
+      "videoId": "Km5oKwrZQZU",
+      "thumbnail": "https://i.ytimg.com/vi/Km5oKwrZQZU/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/Km5oKwrZQZU?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "postpartum-depression-need-to-know",
+      "title": "Postpartum Depression: What You Need to Know",
+      "category": "Mental Health",
+      "source": "Mayo Clinic",
+      "description": "A concise overview of postpartum depression signs so partners know when to listen, support, and connect mom with care.",
+      "duration": "1:17",
+      "progress": 10,
+      "sourceUrl": "https://newsnetwork.mayoclinic.org/discussion/postpartum-depression-what-you-need-to-know/",
+      "tags": [
+        "mental health",
+        "postpartum depression",
+        "support"
+      ],
+      "videoId": "fBYYr_kEjmo",
+      "thumbnail": "https://i.ytimg.com/vi/fBYYr_kEjmo/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/fBYYr_kEjmo?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "postpartum-more-than-baby-blues",
+      "title": "Postpartum Depression Is More Than Baby Blues",
+      "category": "Mental Health",
+      "source": "Mayo Clinic",
+      "description": "A quick explainer partners can watch before a check-in conversation when mood changes seem heavier or longer lasting.",
+      "duration": "0:58",
+      "progress": 0,
+      "sourceUrl": "https://www.mayoclinic.org/diseases-conditions/postpartum-depression/symptoms-causes/syc-20376617",
+      "tags": [
+        "mental health",
+        "baby blues",
+        "postpartum depression"
+      ],
+      "videoId": "WhmJuesp9ck",
+      "thumbnail": "https://i.ytimg.com/vi/WhmJuesp9ck/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/WhmJuesp9ck?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "breastfeeding-basics",
+      "title": "Breastfeeding Basics for Support People",
+      "category": "Lactation",
+      "source": "Stanford Medicine Children's Health",
+      "description": "A careful feeding primer that helps partners understand latch, early feeding patterns, and practical ways to reduce pressure.",
+      "duration": "11:19",
+      "progress": 20,
+      "sourceUrl": "https://med.stanford.edu/newborns/professional-education/breastfeeding/abcs-of-breastfeeding",
+      "tags": [
+        "newborn",
+        "feeding",
+        "lactation"
+      ],
+      "videoId": "Xx_oglyQd0M",
+      "thumbnail": "https://i.ytimg.com/vi/Xx_oglyQd0M/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/Xx_oglyQd0M?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "safe-sleep-cdc",
+      "title": "CDC SIDS: Safe Sleep",
+      "category": "Newborn Care",
+      "source": "CDC",
+      "description": "A practical safety video on infant sleep positioning, sleep spaces, and what support people should know before baby comes home.",
+      "duration": "8:11",
+      "progress": 5,
+      "sourceUrl": "https://www.cdc.gov/sids/",
+      "tags": [
+        "newborn",
+        "safe sleep",
+        "SIDS"
+      ],
+      "videoId": "09kNXxYB_Ko",
+      "thumbnail": "https://i.ytimg.com/vi/09kNXxYB_Ko/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/09kNXxYB_Ko?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "safe-sleep-stanford",
+      "title": "Safe Sleep",
+      "category": "Newborn Care",
+      "source": "Stanford EdTech",
+      "description": "A short, direct safe-sleep refresher that can help partners prepare the home setup before delivery.",
+      "duration": "2:36",
+      "progress": 0,
+      "sourceUrl": "https://www.stanfordchildrens.org/en/services/pregnancy-newborn",
+      "tags": [
+        "newborn",
+        "safe sleep",
+        "home setup"
+      ],
+      "videoId": "wv-k_Sm6p7E",
+      "thumbnail": "https://i.ytimg.com/vi/wv-k_Sm6p7E/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/wv-k_Sm6p7E?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "sarahs-story-maternal-health",
+      "title": "Sarah's Story: A Crisis in Maternal Health",
+      "category": "Birth Equity",
+      "source": "March of Dimes",
+      "description": "A human story that helps partners understand why listening, follow-up, and respectful care can matter so much.",
+      "duration": "5:02",
+      "progress": 0,
+      "sourceUrl": "https://www.marchofdimes.org/",
+      "tags": [
+        "birth equity",
+        "maternal health",
+        "advocacy"
+      ],
+      "videoId": "zWsIWV3UoH4",
+      "thumbnail": "https://i.ytimg.com/vi/zWsIWV3UoH4/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/zWsIWV3UoH4?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "hear-takaylas-story",
+      "title": "Hear Takayla's Story",
+      "category": "Birth Equity",
+      "source": "CDC Hear Her",
+      "description": "A CDC Hear Her story that reinforces how support people can listen closely when something feels wrong.",
+      "duration": "3:29",
+      "progress": 0,
+      "sourceUrl": "https://www.cdc.gov/hearher/",
+      "tags": [
+        "birth equity",
+        "hear her",
+        "warning signs"
+      ],
+      "videoId": "I-IdfHWjhXo",
+      "thumbnail": "https://i.ytimg.com/vi/I-IdfHWjhXo/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/I-IdfHWjhXo?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "black-mamas-matter",
+      "title": "Black Mamas Matter: Advancing Black Maternal Health",
+      "category": "Birth Equity",
+      "source": "Maternal Health Learning & Innovation Center",
+      "description": "A short equity-centered clip that helps partners understand why listening, bias awareness, and respectful care matter.",
+      "duration": "1:06",
+      "progress": 0,
+      "sourceUrl": "https://blackmamasmatter.org/our-work/toolkits/",
+      "tags": [
+        "birth equity",
+        "black maternal health",
+        "advocacy"
+      ],
+      "videoId": "UeY9x4gXKmQ",
+      "thumbnail": "https://i.ytimg.com/vi/UeY9x4gXKmQ/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/UeY9x4gXKmQ?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    },
+    {
+      "id": "doulas-nurses-advocating-together",
+      "title": "Doulas and Nurses Advocating Together",
+      "category": "Professional Development",
+      "source": "Evidence Based Birth",
+      "description": "A longer professional session for partners who want to understand care-team collaboration and respectful advocacy.",
+      "duration": "61:25",
+      "progress": 0,
+      "sourceUrl": "https://evidencebasedbirth.com/",
+      "tags": [
+        "professional development",
+        "doula",
+        "care team"
+      ],
+      "videoId": "TTiNJs0ZXpk",
+      "thumbnail": "https://i.ytimg.com/vi/TTiNJs0ZXpk/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/TTiNJs0ZXpk?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+    }
+  ]
+}

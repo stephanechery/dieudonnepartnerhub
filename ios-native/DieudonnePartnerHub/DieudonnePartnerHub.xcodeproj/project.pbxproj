@@ -7,18 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07E8684575D724FD59254D77 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBB3D0EDE7549E61FB87EDB /* TodayView.swift */; };
+		26091264613528E5595EDADD /* guides.json in Resources */ = {isa = PBXBuildFile; fileRef = 75509BDAB26364F6E76E22F7 /* guides.json */; };
+		28492C70C246E95E35BFCD92 /* curriculum.json in Resources */ = {isa = PBXBuildFile; fileRef = DA3FD56C3F51C612421B63C8 /* curriculum.json */; };
 		2E44B849613E114676068EDD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5305580BAC29A1EC4036DC1D /* Foundation.framework */; };
+		4654E6D05D856D0FF12D9C56 /* LessonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEAF873E720103362F25AE6 /* LessonDetailView.swift */; };
 		4E57F61E8730A21A278839A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFD5CA82E6FBA3B8DBF037F8 /* Assets.xcassets */; };
+		54AD91B7A2D4FA8A1C72603E /* AdminHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECC165F968338D68F152C79 /* AdminHubView.swift */; };
+		59DA9300184C5638FAACFCFE /* VideoHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFFA412275F265A38647AFC2 /* VideoHubView.swift */; };
+		6576743C74FB74DCAD7A6BF2 /* LearnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0888E557C6FD9BAF548723 /* LearnView.swift */; };
+		87226CBCD29CCD7C4D3F10F8 /* videos.json in Resources */ = {isa = PBXBuildFile; fileRef = 54766D81510AE8275F3AF5C2 /* videos.json */; };
+		8B97FDF340E9308573BB8061 /* PartnerHubStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF12AAE01DF4A2BCF490990E /* PartnerHubStore.swift */; };
+		8E0FE0A01A6E1ED04223C15E /* PartnerHubModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D66A92EF27324E8459A4A6 /* PartnerHubModels.swift */; };
+		D9425F5435429F388E7D7E20 /* GuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EC6BA4D3BA85A86DC4E414 /* GuidesView.swift */; };
 		E8AFC24C43ECCD47B28801CB /* PartnerHubRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBD60B434A383EF57F3D478 /* PartnerHubRootView.swift */; };
 		FA1AEBDCE5E2A800725F095B /* DieudonnePartnerHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD82EEA159156D632F7B9A30 /* DieudonnePartnerHubApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1EBB3D0EDE7549E61FB87EDB /* TodayView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		2C0888E557C6FD9BAF548723 /* LearnView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LearnView.swift; sourceTree = "<group>"; };
 		5305580BAC29A1EC4036DC1D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		54766D81510AE8275F3AF5C2 /* videos.json */ = {isa = PBXFileReference; includeInIndex = 1; path = videos.json; sourceTree = "<group>"; };
+		65D66A92EF27324E8459A4A6 /* PartnerHubModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PartnerHubModels.swift; sourceTree = "<group>"; };
 		6B947357266A7B30E619DD9C /* DieudonnePartnerHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DieudonnePartnerHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75509BDAB26364F6E76E22F7 /* guides.json */ = {isa = PBXFileReference; includeInIndex = 1; path = guides.json; sourceTree = "<group>"; };
 		7CBD60B434A383EF57F3D478 /* PartnerHubRootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PartnerHubRootView.swift; path = PartnerHubRootView.swift; sourceTree = "<group>"; };
+		7CEAF873E720103362F25AE6 /* LessonDetailView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LessonDetailView.swift; sourceTree = "<group>"; };
 		AD82EEA159156D632F7B9A30 /* DieudonnePartnerHubApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DieudonnePartnerHubApp.swift; path = DieudonnePartnerHubApp.swift; sourceTree = "<group>"; };
+		DA3FD56C3F51C612421B63C8 /* curriculum.json */ = {isa = PBXFileReference; includeInIndex = 1; path = curriculum.json; sourceTree = "<group>"; };
+		DF12AAE01DF4A2BCF490990E /* PartnerHubStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PartnerHubStore.swift; sourceTree = "<group>"; };
+		DFFA412275F265A38647AFC2 /* VideoHubView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VideoHubView.swift; sourceTree = "<group>"; };
 		EFD5CA82E6FBA3B8DBF037F8 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Assets.xcassets; sourceTree = "<group>"; };
+		F4EC6BA4D3BA85A86DC4E414 /* GuidesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GuidesView.swift; sourceTree = "<group>"; };
+		FECC165F968338D68F152C79 /* AdminHubView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminHubView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +80,17 @@
 			);
 			sourceTree = "<group>";
 		};
+		95FF5E74D7CA3DAA3130C7A9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DA3FD56C3F51C612421B63C8 /* curriculum.json */,
+				54766D81510AE8275F3AF5C2 /* videos.json */,
+				75509BDAB26364F6E76E22F7 /* guides.json */,
+			);
+			name = Resources;
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		9A401EB7C4BE411AB30EE1D8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -66,12 +99,29 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9B4D572E7A3D13B67CA38AE7 /* DieudonnePartnerHub */ = {
+			isa = PBXGroup;
+			children = (
+				65D66A92EF27324E8459A4A6 /* PartnerHubModels.swift */,
+				DF12AAE01DF4A2BCF490990E /* PartnerHubStore.swift */,
+				1EBB3D0EDE7549E61FB87EDB /* TodayView.swift */,
+				2C0888E557C6FD9BAF548723 /* LearnView.swift */,
+				7CEAF873E720103362F25AE6 /* LessonDetailView.swift */,
+				F4EC6BA4D3BA85A86DC4E414 /* GuidesView.swift */,
+				DFFA412275F265A38647AFC2 /* VideoHubView.swift */,
+				FECC165F968338D68F152C79 /* AdminHubView.swift */,
+				95FF5E74D7CA3DAA3130C7A9 /* Resources */,
+			);
+			name = DieudonnePartnerHub;
+			sourceTree = "<group>";
+		};
 		D8C477FF0C585F698DF6D0BC /* DieudonnePartnerHub */ = {
 			isa = PBXGroup;
 			children = (
 				AD82EEA159156D632F7B9A30 /* DieudonnePartnerHubApp.swift */,
 				7CBD60B434A383EF57F3D478 /* PartnerHubRootView.swift */,
 				EFD5CA82E6FBA3B8DBF037F8 /* Assets.xcassets */,
+				9B4D572E7A3D13B67CA38AE7 /* DieudonnePartnerHub */,
 			);
 			name = DieudonnePartnerHub;
 			path = DieudonnePartnerHub;
@@ -139,6 +189,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E57F61E8730A21A278839A3 /* Assets.xcassets in Resources */,
+				28492C70C246E95E35BFCD92 /* curriculum.json in Resources */,
+				87226CBCD29CCD7C4D3F10F8 /* videos.json in Resources */,
+				26091264613528E5595EDADD /* guides.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +204,14 @@
 			files = (
 				FA1AEBDCE5E2A800725F095B /* DieudonnePartnerHubApp.swift in Sources */,
 				E8AFC24C43ECCD47B28801CB /* PartnerHubRootView.swift in Sources */,
+				8E0FE0A01A6E1ED04223C15E /* PartnerHubModels.swift in Sources */,
+				8B97FDF340E9308573BB8061 /* PartnerHubStore.swift in Sources */,
+				07E8684575D724FD59254D77 /* TodayView.swift in Sources */,
+				6576743C74FB74DCAD7A6BF2 /* LearnView.swift in Sources */,
+				4654E6D05D856D0FF12D9C56 /* LessonDetailView.swift in Sources */,
+				D9425F5435429F388E7D7E20 /* GuidesView.swift in Sources */,
+				59DA9300184C5638FAACFCFE /* VideoHubView.swift in Sources */,
+				54AD91B7A2D4FA8A1C72603E /* AdminHubView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
