@@ -32,6 +32,9 @@ Required in Vercel project env:
 - `VITE_AUTH_REDIRECT_ORIGIN=https://www.dieudonnepartnerhub.org`
 - `VITE_GEMINI_API_KEY` (if using Gemini features client-side)
 
+Partner Hub auth must use its own Supabase project. Do not point `VITE_SUPABASE_URL`
+at the shared DieudonneMatch or Dieudonne Doula Network auth backend.
+
 Optional:
 - `VITE_GEMINI_TEXT_MODEL`
 - `VITE_GEMINI_TTS_MODEL`

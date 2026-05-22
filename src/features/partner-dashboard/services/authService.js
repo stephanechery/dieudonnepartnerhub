@@ -16,6 +16,11 @@ const BLOCKED_AUTH_REDIRECT_HOSTS = new Set([
   "dieudonnematch.org",
   "www.dieudonnematch.org",
 ]);
+const BLOCKED_SUPABASE_AUTH_PROJECT_REFS = new Set([
+  // This is the shared Dieudonne Doula Network backend. Partner Hub auth must use
+  // its own Supabase project so Google callbacks cannot land inside DieudonneMatch.
+  "dnpefwnzwzfqpnqyuiof",
+]);
 const LOCAL_AUTH_ENABLED =
   import.meta.env.DEV || import.meta.env.VITE_ENABLE_LOCAL_AUTH === "true";
 
@@ -25,7 +30,21 @@ const normalizeEmail = (email) => email.trim().toLowerCase();
 
 const isBrowser = () => typeof window !== "undefined";
 
-const isSupabaseAuthEnabled = () => Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+const getSupabaseProjectRef = () => {
+  if (!SUPABASE_URL) return "";
+
+  try {
+    return new URL(SUPABASE_URL).hostname.split(".")[0] || "";
+  } catch {
+    return "";
+  }
+};
+
+const isBlockedSupabaseAuthProject = () =>
+  BLOCKED_SUPABASE_AUTH_PROJECT_REFS.has(getSupabaseProjectRef());
+
+const isSupabaseAuthEnabled = () =>
+  Boolean(SUPABASE_URL && SUPABASE_ANON_KEY) && !isBlockedSupabaseAuthProject();
 
 const assertLocalAuthEnabled = () => {
   if (LOCAL_AUTH_ENABLED) return;
