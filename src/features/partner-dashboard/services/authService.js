@@ -7,6 +7,15 @@ const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || "").trim();
 const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || "").trim();
 const AUTH_REDIRECT_ORIGIN = (import.meta.env.VITE_AUTH_REDIRECT_ORIGIN || "").trim();
 const AUTH_REDIRECT_PATH = "/partner-dashboard";
+const PARTNER_HUB_CANONICAL_ORIGIN = "https://www.dieudonnepartnerhub.org";
+const PARTNER_HUB_ALLOWED_HOSTS = new Set([
+  "dieudonnepartnerhub.org",
+  "www.dieudonnepartnerhub.org",
+]);
+const BLOCKED_AUTH_REDIRECT_HOSTS = new Set([
+  "dieudonnematch.org",
+  "www.dieudonnematch.org",
+]);
 const LOCAL_AUTH_ENABLED =
   import.meta.env.DEV || import.meta.env.VITE_ENABLE_LOCAL_AUTH === "true";
 
@@ -31,10 +40,43 @@ const normalizeRedirectPath = (redirectPath = AUTH_REDIRECT_PATH) => {
   return path;
 };
 
-const getAuthRedirectUrl = (redirectPath = AUTH_REDIRECT_PATH) => {
+const isLocalRedirectHost = (host) =>
+  host === "localhost" || host === "127.0.0.1" || host === "[::1]";
+
+const isPartnerHubPreviewHost = (host) =>
+  host.endsWith(".vercel.app") && host.includes("dieudonnepartnerhub");
+
+const isAllowedAuthRedirectOrigin = (origin) => {
+  if (!origin) return false;
+
+  try {
+    const url = new URL(origin);
+    const host = url.hostname.toLowerCase();
+    if (BLOCKED_AUTH_REDIRECT_HOSTS.has(host)) return false;
+    return (
+      PARTNER_HUB_ALLOWED_HOSTS.has(host) ||
+      isLocalRedirectHost(host) ||
+      isPartnerHubPreviewHost(host)
+    );
+  } catch {
+    return false;
+  }
+};
+
+const resolveAuthRedirectOrigin = () => {
   const fallbackOrigin = isBrowser() ? window.location.origin : "";
-  const configuredOrigin = AUTH_REDIRECT_ORIGIN || fallbackOrigin;
-  const normalizedOrigin = configuredOrigin.replace(/\/+$/, "");
+  const candidates = [AUTH_REDIRECT_ORIGIN, fallbackOrigin];
+  const safeOrigin = candidates.find(isAllowedAuthRedirectOrigin);
+
+  if (safeOrigin) {
+    return safeOrigin.replace(/\/+$/, "");
+  }
+
+  return PARTNER_HUB_CANONICAL_ORIGIN;
+};
+
+const getAuthRedirectUrl = (redirectPath = AUTH_REDIRECT_PATH) => {
+  const normalizedOrigin = resolveAuthRedirectOrigin();
   return `${normalizedOrigin}${normalizeRedirectPath(redirectPath)}`;
 };
 

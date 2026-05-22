@@ -12,10 +12,15 @@
 3. In Auth settings:
    - Enable Email/Password.
    - Enable Google provider (optional).
-   - Configure site URL and redirect URL(s):
+   - Configure Site URL:
+     - `https://www.dieudonnepartnerhub.org`
+   - Configure Redirect URLs:
      - `https://www.dieudonnepartnerhub.org/partner-dashboard`
      - `https://dieudonnepartnerhub.org/partner-dashboard` if the apex domain is enabled
+     - `http://localhost:5173/partner-dashboard` for local Vite testing
+     - `http://localhost:5174/partner-dashboard` for local Vite testing if 5173 is in use
      - any Vercel preview domains you want to test with Google OAuth
+   - Do not add `dieudonnematch.org` URLs to the Partner Hub Supabase auth configuration.
 
 ## 3) Configure app env vars
 Use `.env.example` as reference.
