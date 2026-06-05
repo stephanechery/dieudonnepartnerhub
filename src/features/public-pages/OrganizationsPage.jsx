@@ -47,9 +47,6 @@ export default function OrganizationsPage() {
               <a href="/partner-demo" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-500 to-violet-500 px-5 py-3 text-sm font-black text-white transition hover:from-cyan-400 hover:to-violet-400">
                 View 5-minute demo <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="/owner-admin" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-3 text-sm font-black text-white transition hover:bg-white/[0.1]">
-                Owner Admin Login
-              </a>
             </div>
           </div>
 
