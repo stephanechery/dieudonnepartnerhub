@@ -39,8 +39,7 @@ import {
   Lock,
   Rocket,
   HeartHandshake,
-  ExternalLink,
-  Settings
+  ExternalLink
 } from 'lucide-react';
 import dieudonneDarkLogo from './assets/Dieudonne_Dark_Logo.png';
 import heroPartnerJourney from './assets/hero-partner-tablet.svg';
@@ -5009,7 +5008,7 @@ ${cleanedResult}`,
           </div>
 
           <a
-            href="/organizations"
+            href="/partner-orgs"
             className={`inline-flex min-h-11 items-center justify-center rounded-full border px-3.5 text-xs font-semibold transition-all sm:px-4 sm:text-sm ${
               darkMode
                 ? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-slate-600'
@@ -5020,7 +5019,7 @@ ${cleanedResult}`,
           </a>
 
           <a
-            href="/demo"
+            href="/partner-demo"
             className={`hidden min-h-11 items-center justify-center rounded-full border px-4 text-sm font-semibold transition-all md:inline-flex ${
               darkMode
                 ? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-slate-600'
@@ -5030,19 +5029,6 @@ ${cleanedResult}`,
             {translateText('Demo')}
           </a>
 
-          <a
-            href="/admin-dashboard"
-            aria-label={translateText('Open Admin Dashboard')}
-            title={translateText('Admin Dashboard')}
-            className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full px-3 text-sm font-extrabold text-white shadow-lg transition-all hover:-translate-y-0.5 sm:px-5 ${
-              darkMode
-                ? 'bg-gradient-to-r from-slate-800 via-indigo-700 to-violet-700 shadow-indigo-950/35'
-                : 'bg-gradient-to-r from-slate-900 via-indigo-700 to-violet-600 shadow-indigo-200'
-            }`}
-          >
-            <Settings className="h-4 w-4" />
-            <span className="hidden sm:inline">{translateText('Admin Dashboard')}</span>
-          </a>
         </div>
       </header>
 

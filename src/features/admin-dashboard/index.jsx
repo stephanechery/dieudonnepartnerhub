@@ -225,7 +225,7 @@ function AdminDashboardInner({ navigate }) {
     return (
       <main className={`min-h-screen px-4 py-8 ${darkMode ? "bg-slate-950" : "bg-slate-50"}`}>
         <div className="mx-auto max-w-5xl">
-          <AuthPanel darkMode={darkMode} authRedirectPath="/admin-dashboard" />
+          <AuthPanel darkMode={darkMode} authRedirectPath="/owner-admin" />
         </div>
       </main>
     );

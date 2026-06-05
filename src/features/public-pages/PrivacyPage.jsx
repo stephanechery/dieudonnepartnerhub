@@ -35,8 +35,8 @@ export default function PrivacyPage() {
             <span className="text-sm font-black uppercase tracking-[0.16em] text-slate-300">Partner Hub</span>
           </a>
           <div className="flex flex-wrap items-center gap-2">
-            <a href="/organizations" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">For Organizations</a>
-            <a href="/demo" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">Guided Demo</a>
+            <a href="/partner-orgs" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">For Organizations</a>
+            <a href="/partner-demo" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">Guided Demo</a>
           </div>
         </nav>
 
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
           <p className="mt-2 text-sm font-semibold leading-relaxed text-amber-50/85">
             Finalize Supabase RLS policies, server-enforced admin roles, a retention policy, and a public privacy policy reviewed by counsel.
           </p>
-          <a href="/demo" className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-amber-200 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-amber-100">
+          <a href="/partner-demo" className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-amber-200 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-amber-100">
             Open guided demo <ArrowRight className="h-4 w-4" />
           </a>
         </section>

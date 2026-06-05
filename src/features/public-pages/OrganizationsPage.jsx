@@ -26,7 +26,7 @@ export default function OrganizationsPage() {
             <span className="text-sm font-black uppercase tracking-[0.16em] text-slate-300">Partner Hub</span>
           </a>
           <div className="flex flex-wrap items-center gap-2">
-            <a href="/demo" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">Guided Demo</a>
+            <a href="/partner-demo" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">Guided Demo</a>
             <a href="/privacy" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">Privacy</a>
             <a href="/partner-dashboard" className="rounded-full bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-cyan-200">Open Platform</a>
           </div>
@@ -44,11 +44,11 @@ export default function OrganizationsPage() {
               Dieudonne Partner Hub helps support people build practical confidence through lessons, quizzes, video resources, and focused interactive guides.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/demo" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-500 to-violet-500 px-5 py-3 text-sm font-black text-white transition hover:from-cyan-400 hover:to-violet-400">
+              <a href="/partner-demo" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-500 to-violet-500 px-5 py-3 text-sm font-black text-white transition hover:from-cyan-400 hover:to-violet-400">
                 View 5-minute demo <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="/admin-dashboard" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-3 text-sm font-black text-white transition hover:bg-white/[0.1]">
-                Admin Hub
+              <a href="/owner-admin" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-3 text-sm font-black text-white transition hover:bg-white/[0.1]">
+                Owner Admin Login
               </a>
             </div>
           </div>

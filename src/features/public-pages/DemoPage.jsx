@@ -31,7 +31,7 @@ const demoSteps = [
     icon: LayoutDashboard,
     title: "Open the admin hub",
     detail: "Show progress, drop-off areas, content health, and recommendation follow-through.",
-    href: "/admin-dashboard",
+    href: "/owner-admin",
   },
   {
     icon: ShieldCheck,
@@ -51,7 +51,7 @@ export default function DemoPage() {
             <span className="text-sm font-black uppercase tracking-[0.16em] text-slate-300">Partner Hub</span>
           </a>
           <div className="flex flex-wrap items-center gap-2">
-            <a href="/organizations" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">For Organizations</a>
+            <a href="/partner-orgs" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">For Organizations</a>
             <a href="/privacy" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">Privacy</a>
           </div>
         </nav>

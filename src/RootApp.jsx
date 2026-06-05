@@ -44,7 +44,7 @@ export default function RootApp() {
         </React.Suspense>
       );
     }
-    if (pathname.startsWith("/admin-dashboard")) {
+    if (pathname.startsWith("/owner-admin") || pathname.startsWith("/admin-dashboard")) {
       return (
         <React.Suspense
           fallback={
@@ -57,14 +57,14 @@ export default function RootApp() {
         </React.Suspense>
       );
     }
-    if (pathname.startsWith("/organizations")) {
+    if (pathname.startsWith("/partner-orgs") || pathname.startsWith("/organizations")) {
       return (
         <React.Suspense fallback={<div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">Loading organizations page...</div>}>
           <OrganizationsPage />
         </React.Suspense>
       );
     }
-    if (pathname.startsWith("/demo")) {
+    if (pathname.startsWith("/partner-demo") || pathname.startsWith("/demo")) {
       return (
         <React.Suspense fallback={<div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">Loading guided demo...</div>}>
           <DemoPage />

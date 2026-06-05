@@ -235,7 +235,7 @@ function TopSearchBar({ query, onQueryChange, onMenu }) {
           <ChevronDown className="h-4 w-4 text-slate-500" />
         </button>
         <a
-          href="/admin-dashboard"
+          href="/owner-admin"
           aria-label="Open admin hub"
           title="Admin hub"
           className="hidden h-12 w-12 items-center justify-center rounded-2xl border border-cyan-300/25 bg-cyan-300/10 text-cyan-100 transition hover:bg-cyan-300/15 xl:flex"
