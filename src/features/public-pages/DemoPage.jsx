@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, BarChart3, BookOpenCheck, Compass, LayoutDashboard, PlayCircle, ShieldCheck, Video } from "lucide-react";
+import { ArrowRight, BarChart3, BookOpenCheck, Compass, PlayCircle, ShieldCheck, Video } from "lucide-react";
 import dieudonneDarkLogo from "../../assets/Dieudonne_Dark_Logo.png";
 import { ORGANIZATION_DEMO_CREDENTIALS } from "../partner-dashboard/services/authService";
 
@@ -29,21 +29,15 @@ const demoSteps = [
     href: "/partner-dashboard/guides",
   },
   {
-    icon: LayoutDashboard,
-    title: "Open the admin hub",
-    detail: "Show progress, drop-off areas, content health, and recommendation follow-through.",
-    href: "/owner-admin",
-  },
-  {
     icon: ShieldCheck,
     title: "Close with privacy",
-    detail: "Show what the platform tracks, what it avoids, and why the admin hub stays coarse.",
+    detail: "Show what the platform tracks, what it avoids, and how partner privacy stays protected.",
     href: "/privacy",
   },
 ];
 
 const addOrganizationDemoAccess = (href) => {
-  if (!href.startsWith("/partner-dashboard") && !href.startsWith("/owner-admin")) {
+  if (!href.startsWith("/partner-dashboard")) {
     return href;
   }
 
@@ -74,7 +68,7 @@ export default function DemoPage() {
             A simple path for partner conversations.
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg">
-            Use this route to show the product without wandering. It moves from mission, to learner experience, to admin insight, to privacy.
+            Use this route to show the product without wandering. It moves from mission, to learner experience, to guided practice, to privacy.
           </p>
           <div className="mt-6 grid gap-3 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4 text-sm font-bold text-cyan-50 sm:grid-cols-[1fr_auto] sm:items-center">
             <div>

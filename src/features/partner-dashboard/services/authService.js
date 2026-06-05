@@ -206,7 +206,7 @@ const createOrganizationDemoUser = () => ({
   email: ORGANIZATION_DEMO_CREDENTIALS.email,
   displayName: "Organization Demo",
   provider: "demo-org",
-  role: "admin",
+  role: "learner",
 });
 
 const writeSession = ({ mode, user, accessToken = null, refreshToken = null }) => {
