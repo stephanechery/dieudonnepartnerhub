@@ -8,6 +8,10 @@ const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || "").trim();
 const AUTH_REDIRECT_ORIGIN = (import.meta.env.VITE_AUTH_REDIRECT_ORIGIN || "").trim();
 const AUTH_REDIRECT_PATH = "/partner-dashboard";
 const PARTNER_HUB_CANONICAL_ORIGIN = "https://www.dieudonnepartnerhub.org";
+export const ORGANIZATION_DEMO_CREDENTIALS = Object.freeze({
+  email: "orgdemo@dieudonnepartnerhub.org",
+  password: "PartnerDemo2026",
+});
 const PARTNER_HUB_ALLOWED_HOSTS = new Set([
   "dieudonnepartnerhub.org",
   "www.dieudonnepartnerhub.org",
@@ -197,6 +201,14 @@ const clearStoredSessionOnly = () => {
   window.localStorage.removeItem(LEGACY_SESSION_KEY);
 };
 
+const createOrganizationDemoUser = () => ({
+  uid: "organization-demo-reviewer",
+  email: ORGANIZATION_DEMO_CREDENTIALS.email,
+  displayName: "Organization Demo",
+  provider: "demo-org",
+  role: "admin",
+});
+
 const writeSession = ({ mode, user, accessToken = null, refreshToken = null }) => {
   if (!isBrowser()) return;
   const payload = {
@@ -208,6 +220,25 @@ const writeSession = ({ mode, user, accessToken = null, refreshToken = null }) =
   };
   window.localStorage.setItem(SESSION_KEY, JSON.stringify(payload));
   window.localStorage.removeItem(LEGACY_SESSION_KEY);
+};
+
+export const startOrganizationDemoSession = async () => {
+  const sessionUser = createOrganizationDemoUser();
+  writeSession({ mode: "demo", user: sessionUser });
+  return sessionUser;
+};
+
+export const loginWithOrganizationDemo = async ({ email, password }) => {
+  const normalizedEmail = normalizeEmail(email || "");
+
+  if (
+    normalizedEmail !== ORGANIZATION_DEMO_CREDENTIALS.email ||
+    password !== ORGANIZATION_DEMO_CREDENTIALS.password
+  ) {
+    throw new Error("Invalid email or password.");
+  }
+
+  return startOrganizationDemoSession();
 };
 
 const supabaseAuthRequest = async (path, { method = "GET", body, accessToken } = {}) => {
@@ -326,6 +357,11 @@ export const clearSession = async () => {
 export const validateSupabaseSession = async () => {
   const session = readSession();
   if (!session) return null;
+
+  if (session.mode === "demo" && session.user?.provider === "demo-org") {
+    return session.user;
+  }
+
   if (!isSupabaseAuthEnabled() || session.mode !== "supabase") {
     if (!LOCAL_AUTH_ENABLED) {
       clearStoredSessionOnly();
@@ -472,6 +508,10 @@ export const registerWithEmail = async ({ displayName, email, password }) => {
 };
 
 export const loginWithEmail = async ({ email, password }) => {
+  if (normalizeEmail(email || "") === ORGANIZATION_DEMO_CREDENTIALS.email) {
+    return loginWithOrganizationDemo({ email, password });
+  }
+
   if (!isSupabaseAuthEnabled()) {
     assertLocalAuthEnabled();
     return loginWithEmailLocal({ email, password });

@@ -107,6 +107,7 @@ const getLocalProfile = (uid) => {
 const shouldUseSupabaseProfiles = (sessionUser) =>
   isSupabaseAuthEnabled() &&
   sessionUser?.provider !== "test-mode" &&
+  sessionUser?.provider !== "demo-org" &&
   Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 
 const encodeFilterValue = (value) =>

@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowRight, BarChart3, BookOpenCheck, Compass, LayoutDashboard, PlayCircle, ShieldCheck, Video } from "lucide-react";
 import dieudonneDarkLogo from "../../assets/Dieudonne_Dark_Logo.png";
+import { ORGANIZATION_DEMO_CREDENTIALS } from "../partner-dashboard/services/authService";
 
 const demoSteps = [
   {
@@ -41,6 +42,15 @@ const demoSteps = [
   },
 ];
 
+const addOrganizationDemoAccess = (href) => {
+  if (!href.startsWith("/partner-dashboard") && !href.startsWith("/owner-admin")) {
+    return href;
+  }
+
+  const separator = href.includes("?") ? "&" : "?";
+  return `${href}${separator}org_demo=1`;
+};
+
 export default function DemoPage() {
   return (
     <main className="min-h-screen bg-[#050914] px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
@@ -66,6 +76,24 @@ export default function DemoPage() {
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg">
             Use this route to show the product without wandering. It moves from mission, to learner experience, to admin insight, to privacy.
           </p>
+          <div className="mt-6 grid gap-3 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4 text-sm font-bold text-cyan-50 sm:grid-cols-[1fr_auto] sm:items-center">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-200">Organization demo access</p>
+              <dl className="mt-2 grid gap-1 text-slate-200">
+                <div className="grid gap-0.5 sm:grid-cols-[4.5rem_1fr] sm:gap-2">
+                  <dt className="text-cyan-100">Email</dt>
+                  <dd className="break-all">{ORGANIZATION_DEMO_CREDENTIALS.email}</dd>
+                </div>
+                <div className="grid gap-0.5 sm:grid-cols-[4.5rem_1fr] sm:gap-2">
+                  <dt className="text-cyan-100">Password</dt>
+                  <dd>{ORGANIZATION_DEMO_CREDENTIALS.password}</dd>
+                </div>
+              </dl>
+            </div>
+            <a href="/partner-dashboard?org_demo=1" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-cyan-200">
+              Open demo access
+            </a>
+          </div>
         </section>
 
         <section className="mt-6 grid gap-4 md:grid-cols-2">
@@ -83,7 +111,7 @@ export default function DemoPage() {
                     <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-400">{step.detail}</p>
                   </div>
                 </div>
-                <a href={step.href} className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.06] px-4 py-2 text-sm font-black text-white transition hover:bg-white/[0.1]">
+                <a href={addOrganizationDemoAccess(step.href)} className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.06] px-4 py-2 text-sm font-black text-white transition hover:bg-white/[0.1]">
                   Open step <ArrowRight className="h-4 w-4" />
                 </a>
               </article>

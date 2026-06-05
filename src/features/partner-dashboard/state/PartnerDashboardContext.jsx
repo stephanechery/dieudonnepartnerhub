@@ -12,6 +12,7 @@ import {
   loginWithGoogle,
   registerWithEmail,
   requestPasswordReset,
+  startOrganizationDemoSession,
   validateSupabaseSession,
 } from "../services/authService";
 import { ensureUserProfile, saveProfile } from "../services/profileService";
@@ -28,6 +29,24 @@ import {
 } from "../utils/progress";
 
 const PartnerDashboardContext = createContext(null);
+
+const shouldStartOrganizationDemoSession = () => {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).get("org_demo") === "1";
+};
+
+const clearOrganizationDemoQuery = () => {
+  if (typeof window === "undefined") return;
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has("org_demo")) return;
+  params.delete("org_demo");
+  const nextSearch = params.toString();
+  window.history.replaceState(
+    {},
+    "",
+    `${window.location.pathname}${nextSearch ? `?${nextSearch}` : ""}${window.location.hash}`
+  );
+};
 
 const sortRecent = (items) =>
   [...items].sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime());
@@ -109,7 +128,10 @@ export const PartnerDashboardProvider = ({ children }) => {
     setAuthLoading(true);
     try {
       await hydrateSessionFromUrl();
-      const session = (await validateSupabaseSession()) || getCurrentSession();
+      const session = shouldStartOrganizationDemoSession()
+        ? await startOrganizationDemoSession()
+        : (await validateSupabaseSession()) || getCurrentSession();
+      clearOrganizationDemoQuery();
       if (!session) {
         setAuthUser(null);
         setProfile(null);
