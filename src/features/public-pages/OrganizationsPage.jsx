@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, BarChart3, BookOpenCheck, Building2, CheckCircle2, LineChart, ShieldCheck, Users } from "lucide-react";
+import { ArrowRight, BarChart3, BookOpenCheck, Building2, CheckCircle2, LineChart, Moon, ShieldCheck, Sun, Users } from "lucide-react";
 import dieudonneDarkLogo from "../../assets/Dieudonne_Dark_Logo.png";
 
 const partnerOutcomes = [
@@ -16,31 +16,54 @@ const pilotSteps = [
   "Decide which modules need stronger support.",
 ];
 
+const getInitialDarkMode = () => {
+  if (typeof window === "undefined") return true;
+  return window.localStorage.getItem("dieudonne-theme") !== "light";
+};
+
+const toggleStoredTheme = (darkMode) => {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem("dieudonne-theme", darkMode ? "light" : "dark");
+  window.location.reload();
+};
+
 export default function OrganizationsPage() {
+  const darkMode = getInitialDarkMode();
+
   return (
-    <main className="min-h-screen bg-[#050914] px-4 py-5 text-slate-100 sm:px-6 lg:px-8">
+    <main className={`min-h-screen px-4 py-5 sm:px-6 lg:px-8 ${darkMode ? "public-page-dark" : "public-page-light"}`}>
       <div className="mx-auto max-w-7xl">
-        <nav className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border border-white/10 bg-slate-950/78 px-4 py-3 shadow-2xl shadow-black/20">
+        <nav className="public-nav mb-6 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border px-4 py-3">
           <a href="/" className="flex items-center gap-3">
-            <img src={dieudonneDarkLogo} alt="Dieudonne logo" className="h-10 w-auto rounded-xl border border-white/10 bg-black p-1" />
-            <span className="text-sm font-black uppercase tracking-[0.16em] text-slate-300">Partner Hub</span>
+            <img src={dieudonneDarkLogo} alt="Dieudonne logo" className="public-logo h-10 w-auto rounded-xl border p-1" />
+            <span className="public-brand text-sm font-black uppercase tracking-[0.16em]">Partner Hub</span>
           </a>
           <div className="flex flex-wrap items-center gap-2">
-            <a href="/partner-demo" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">Guided Demo</a>
-            <a href="/privacy" className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-100 transition hover:bg-white/[0.09]">Privacy</a>
+            <button
+              type="button"
+              onClick={() => toggleStoredTheme(darkMode)}
+              aria-pressed={darkMode}
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              className="public-theme-toggle inline-flex min-h-10 items-center gap-2 rounded-full border px-3.5 text-sm font-bold"
+            >
+              {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {darkMode ? "Light Mode" : "Dark Mode"}
+            </button>
+            <a href="/partner-demo" className="public-nav-link rounded-full border px-4 py-2 text-sm font-bold">Guided Demo</a>
+            <a href="/privacy" className="public-nav-link rounded-full border px-4 py-2 text-sm font-bold">Privacy</a>
             <a href="/partner-dashboard" className="rounded-full bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-cyan-200">Open Platform</a>
           </div>
         </nav>
 
-        <section className="grid gap-6 rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/40 p-5 shadow-2xl shadow-black/25 sm:p-8 lg:grid-cols-[1.05fr_0.95fr] lg:p-10">
+        <section className="public-hero grid gap-6 rounded-[2rem] border p-5 sm:p-8 lg:grid-cols-[1.05fr_0.95fr] lg:p-10">
           <div>
-            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+            <p className="public-eyebrow flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em]">
               <Building2 className="h-4 w-4" /> For community partners
             </p>
-            <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl">
+            <h1 className="public-heading mt-4 max-w-3xl text-4xl font-black leading-tight tracking-tight sm:text-5xl">
               A learning platform for fathers, dads, partners, and support people.
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
+            <p className="public-body mt-5 max-w-2xl text-base leading-relaxed sm:text-lg">
               Dieudonne Partner Hub helps support people build practical confidence through lessons, quizzes, video resources, and focused interactive guides.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -59,12 +82,12 @@ export default function OrganizationsPage() {
             ].map((item) => {
               const Icon = item.icon;
               return (
-                <article key={item.label} className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
-                  <span className="inline-flex rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-3 text-cyan-200">
+                <article key={item.label} className="public-card rounded-2xl border p-4">
+                  <span className="public-icon-wrap inline-flex rounded-2xl border p-3">
                     <Icon className="h-5 w-5" />
                   </span>
-                  <p className="mt-4 text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">{item.label}</p>
-                  <p className="mt-1 text-lg font-black text-white">{item.value}</p>
+                  <p className="public-muted mt-4 text-[11px] font-black uppercase tracking-[0.16em]">{item.label}</p>
+                  <p className="public-card-title mt-1 text-lg font-black">{item.value}</p>
                 </article>
               );
             })}
@@ -72,27 +95,27 @@ export default function OrganizationsPage() {
         </section>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <section className="rounded-[1.8rem] border border-white/10 bg-slate-900/72 p-5 shadow-xl shadow-black/15 sm:p-6">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">What a partner org gets</p>
+          <section className="public-panel rounded-[1.8rem] border p-5 sm:p-6">
+            <p className="public-eyebrow text-xs font-black uppercase tracking-[0.18em]">What a partner org gets</p>
             <div className="mt-5 space-y-3">
               {partnerOutcomes.map((item) => (
-                <div key={item} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.035] p-3">
+                <div key={item} className="public-soft-card flex gap-3 rounded-2xl border p-3">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
-                  <p className="text-sm font-semibold leading-relaxed text-slate-300">{item}</p>
+                  <p className="public-body text-sm font-semibold leading-relaxed">{item}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          <section className="rounded-[1.8rem] border border-white/10 bg-slate-900/72 p-5 shadow-xl shadow-black/15 sm:p-6">
-            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-violet-300">
+          <section className="public-panel rounded-[1.8rem] border p-5 sm:p-6">
+            <p className="public-violet-eyebrow flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em]">
               <BarChart3 className="h-4 w-4" /> Pilot path
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {pilotSteps.map((item, index) => (
-                <article key={item} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                  <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">Step {index + 1}</p>
-                  <p className="mt-2 text-sm font-bold leading-relaxed text-slate-100">{item}</p>
+                <article key={item} className="public-soft-card rounded-2xl border p-4">
+                  <p className="public-muted text-xs font-black uppercase tracking-[0.16em]">Step {index + 1}</p>
+                  <p className="public-card-title mt-2 text-sm font-bold leading-relaxed">{item}</p>
                 </article>
               ))}
             </div>
