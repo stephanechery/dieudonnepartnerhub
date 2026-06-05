@@ -2033,7 +2033,7 @@ const STATIC_UI_TRANSLATIONS = {
     'Core Partner Wins': 'Logros Clave de la Pareja',
     'Core Partner Win Logged': 'Logro Clave Registrado',
     'Full Journey Support Guide': 'Guía Completa de Apoyo en Todo el Proceso',
-    'Mission-Driven Partner Training Platform': 'Plataforma de Formación para Parejas Impulsada por una Misión',
+    'Pregnancy Support Partner Training Hub': 'Centro de Formación para Parejas de Apoyo en el Embarazo',
     'Built for partners. Designed for safer maternal outcomes.': 'Creado para parejas. Diseñado para resultados maternos más seguros.',
     'Dieudonne Partner Hub equips fathers and support people with clinically grounded guidance, interactive training, and intelligent coaching across prenatal, labor, and postpartum recovery.': 'Dieudonne Partner Hub equipa a padres y personas de apoyo con orientación clínicamente fundamentada, entrenamiento interactivo y coaching inteligente durante prenatal, parto y recuperación posparto.',
     'Why this platform works': 'Por qué esta plataforma funciona',
@@ -2250,7 +2250,7 @@ const STATIC_UI_TRANSLATIONS = {
     'Bonding/Soothing Time': 'Temps de lien/apaisement',
     'Active Listening Time': 'Temps d’écoute active',
     'Full Journey Support Guide': 'Guide Complet de Soutien',
-    'Mission-Driven Partner Training Platform': 'Plateforme de Formation des Partenaires Guidée par une Mission',
+    'Pregnancy Support Partner Training Hub': 'Centre de Formation pour Partenaires de Soutien pendant la Grossesse',
     'Built for partners. Designed for safer maternal outcomes.': 'Conçue pour les partenaires. Pensée pour des résultats maternels plus sûrs.',
     'Dieudonne Partner Hub equips fathers and support people with clinically grounded guidance, interactive training, and intelligent coaching across prenatal, labor, and postpartum recovery.': 'Dieudonne Partner Hub accompagne les pères et les personnes de soutien avec des repères cliniquement fondés, une formation interactive et un coaching intelligent pendant le prénatal, le travail et la récupération post-partum.',
     'Why this platform works': 'Pourquoi cette plateforme fonctionne',
@@ -2461,7 +2461,7 @@ const STATIC_UI_TRANSLATIONS = {
   ht: {
     'Core Partner Wins': 'Reyalizasyon Kle Patnè a',
     'Full Journey Support Guide': 'Gid Sipò Konplè',
-    'Mission-Driven Partner Training Platform': 'Platfòm Fòmasyon Patnè ki Kondwi pa Misyon',
+    'Pregnancy Support Partner Training Hub': 'Sant Fòmasyon Patnè Sipò Gwosès',
     'Built for partners. Designed for safer maternal outcomes.': 'Bati pou patnè yo. Fèt pou pi bon sekirite pou manman yo.',
     'Dieudonne Partner Hub equips fathers and support people with clinically grounded guidance, interactive training, and intelligent coaching across prenatal, labor, and postpartum recovery.': 'Dieudonne Partner Hub ekipe papa ak moun sipò yo ak gid ki baze sou klinik, fòmasyon entèaktif, ak antrenman entelijan atravè prenatal, travay akouchman, ak rekiperasyon apre akouchman.',
     'Why this platform works': 'Poukisa platfòm sa a mache',
@@ -4501,7 +4501,7 @@ ${cleanedResult}`,
     const seeds = new Set();
 
     const uiLabels = [
-      'Mission-Driven Partner Training Platform',
+      'Pregnancy Support Partner Training Hub',
       'Built for partners. Designed for safer maternal outcomes.',
       'Built for partners. Designed for safer outcomes.',
       'Dieudonne Partner Hub equips fathers and support people with clinically grounded guidance, interactive training, and intelligent coaching across prenatal, labor, and postpartum recovery.',
@@ -4934,7 +4934,7 @@ ${cleanedResult}`,
             darkMode ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-600'
           }`}>
             <ShieldCheck className="h-4 w-4 text-cyan-400" />
-            {translateText('Mission-Driven Partner Training Platform')}
+            {translateText('Pregnancy Support Partner Training Hub')}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
