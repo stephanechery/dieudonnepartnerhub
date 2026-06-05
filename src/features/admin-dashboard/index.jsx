@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
   BookOpenCheck,
+  Building2,
   CalendarDays,
   Eye,
   Filter,
@@ -20,7 +21,11 @@ import {
 import dieudonneDarkLogo from "../../assets/Dieudonne_Dark_Logo.png";
 import AuthPanel from "../partner-dashboard/components/AuthPanel";
 import { PartnerDashboardProvider, usePartnerDashboard } from "../partner-dashboard/state/PartnerDashboardContext";
-import { getAdminDashboardData, isAdminUser } from "../partner-dashboard/services/analyticsService";
+import {
+  getAdminDashboardData,
+  getAdminDashboardDataAsync,
+  isAdminUser,
+} from "../partner-dashboard/services/analyticsService";
 
 const formatNumber = (value) => new Intl.NumberFormat().format(value || 0);
 
@@ -197,17 +202,36 @@ function AdminDashboardInner({ navigate }) {
   const [range, setRange] = useState("14d");
   const [query, setQuery] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+  const [data, setData] = useState(() => getAdminDashboardData());
+  const [dataLoading, setDataLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window === "undefined") return true;
     return window.localStorage.getItem("dieudonne-theme") !== "light";
   });
 
-  const data = useMemo(() => getAdminDashboardData(), [refreshKey]);
   const allowed = isAdminUser(authUser, profile);
 
   useEffect(() => {
     window.localStorage.setItem("dieudonne-theme", darkMode ? "dark" : "light");
   }, [darkMode]);
+
+  useEffect(() => {
+    if (!authUser || !allowed) return undefined;
+
+    let active = true;
+    setDataLoading(true);
+    getAdminDashboardDataAsync()
+      .then((nextData) => {
+        if (active) setData(nextData);
+      })
+      .finally(() => {
+        if (active) setDataLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [authUser, allowed, refreshKey]);
 
   const filteredVideos = data.mostUsedVideos.filter((video) =>
     `${video.label} ${video.category}`.toLowerCase().includes(query.trim().toLowerCase())
@@ -307,7 +331,7 @@ function AdminDashboardInner({ navigate }) {
                 }`}
               >
                 <RefreshCcw className="h-4 w-4" />
-                Refresh
+                {dataLoading ? "Refreshing" : "Refresh"}
               </button>
               <button
                 type="button"
@@ -337,13 +361,21 @@ function AdminDashboardInner({ navigate }) {
           </div>
         )}
 
-        <section className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
           <KpiTile
             icon={Users}
             label="Total users"
             value={formatNumber(data.totals.totalUsers)}
             detail={`${formatNumber(data.totals.activeUsers)} active in the current activity window.`}
             tone="cyan"
+            darkMode={darkMode}
+          />
+          <KpiTile
+            icon={Building2}
+            label="Organizations"
+            value={formatNumber(data.totals.organizationCount)}
+            detail="Self-reported partner orgs from registration and profile updates."
+            tone="emerald"
             darkMode={darkMode}
           />
           <KpiTile
@@ -424,6 +456,15 @@ function AdminDashboardInner({ navigate }) {
               </article>
             ))}
           </div>
+        </SectionPanel>
+
+        <SectionPanel title="Partner Organizations" eyebrow="Affiliation" className="mt-5" darkMode={darkMode}>
+          <RankedList
+            rows={data.organizationBreakdown}
+            emptyLabel="No organization affiliations yet."
+            valueLabel="users"
+            darkMode={darkMode}
+          />
         </SectionPanel>
 
         <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-3">

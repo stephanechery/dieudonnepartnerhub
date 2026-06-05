@@ -31,6 +31,7 @@ const LOCAL_AUTH_ENABLED =
 const textEncoder = new TextEncoder();
 
 const normalizeEmail = (email) => email.trim().toLowerCase();
+const normalizeOrganizationName = (value) => String(value || "").trim();
 
 const isBrowser = () => typeof window !== "undefined";
 
@@ -137,6 +138,7 @@ const createSessionUser = (user) => ({
   uid: user.uid,
   email: user.email,
   displayName: user.displayName,
+  organizationName: normalizeOrganizationName(user.organizationName),
   provider: user.provider,
   role: user.role || null,
 });
@@ -157,6 +159,7 @@ const normalizeStoredSession = (value) => {
         uid: value.uid,
         email: value.email,
         displayName: value.displayName,
+        organizationName: normalizeOrganizationName(value.organizationName),
         provider: value.provider || "password",
         role: value.role || null,
       },
@@ -205,6 +208,7 @@ const createOrganizationDemoUser = () => ({
   uid: "organization-demo-reviewer",
   email: ORGANIZATION_DEMO_CREDENTIALS.email,
   displayName: "Organization Demo",
+  organizationName: "Organization demo",
   provider: "demo-org",
   role: "learner",
 });
@@ -279,6 +283,11 @@ const mapSupabaseUser = (user, fallbackProvider = "password") => ({
     user?.user_metadata?.full_name ||
     user?.identities?.[0]?.identity_data?.full_name ||
     "Partner Learner",
+  organizationName: normalizeOrganizationName(
+    user?.user_metadata?.organization_name ||
+      user?.user_metadata?.organizationName ||
+      user?.identities?.[0]?.identity_data?.organization_name
+  ),
   provider:
     user?.app_metadata?.provider ||
     user?.identities?.[0]?.provider ||
@@ -410,8 +419,9 @@ export const validateSupabaseSession = async () => {
   }
 };
 
-const registerWithEmailLocal = async ({ displayName, email, password }) => {
+const registerWithEmailLocal = async ({ displayName, email, password, organizationName }) => {
   const normalizedEmail = normalizeEmail(email);
+  const normalizedOrganizationName = normalizeOrganizationName(organizationName);
   const users = readUsers();
 
   if (users[normalizedEmail]) {
@@ -426,6 +436,7 @@ const registerWithEmailLocal = async ({ displayName, email, password }) => {
     uid,
     email: normalizedEmail,
     displayName: displayName?.trim() || "Partner Learner",
+    organizationName: normalizedOrganizationName,
     provider: "password",
     passwordHash,
     salt,
@@ -460,13 +471,14 @@ const loginWithEmailLocal = async ({ email, password }) => {
   return sessionUser;
 };
 
-export const registerWithEmail = async ({ displayName, email, password }) => {
+export const registerWithEmail = async ({ displayName, email, password, organizationName }) => {
   if (!isSupabaseAuthEnabled()) {
     assertLocalAuthEnabled();
-    return registerWithEmailLocal({ displayName, email, password });
+    return registerWithEmailLocal({ displayName, email, password, organizationName });
   }
 
   const normalizedEmail = normalizeEmail(email);
+  const normalizedOrganizationName = normalizeOrganizationName(organizationName);
   const signup = await supabaseAuthRequest("signup", {
     method: "POST",
     body: {
@@ -474,6 +486,7 @@ export const registerWithEmail = async ({ displayName, email, password }) => {
       password,
       data: {
         display_name: displayName?.trim() || "Partner Learner",
+        organization_name: normalizedOrganizationName,
       },
     },
   });

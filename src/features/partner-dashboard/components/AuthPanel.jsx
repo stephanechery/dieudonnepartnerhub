@@ -4,7 +4,13 @@ import { usePartnerDashboard } from "../state/PartnerDashboardContext";
 import { isGoogleLoginConfigured, isSupabaseAuthEnabled } from "../services/authService";
 
 const initialLogin = { email: "", password: "" };
-const initialRegister = { displayName: "", email: "", password: "", confirmPassword: "" };
+const initialRegister = {
+  displayName: "",
+  email: "",
+  organizationName: "",
+  password: "",
+  confirmPassword: "",
+};
 
 export default function AuthPanel({
   darkMode = false,
@@ -205,6 +211,20 @@ export default function AuthPanel({
               onChange={(e) => setRegisterForm((prev) => ({ ...prev, email: e.target.value }))}
               required
             />
+          </label>
+          <label className={labelClass}>
+            {tx("Organization")}
+            <input
+              className={inputClass}
+              value={registerForm.organizationName}
+              onChange={(e) =>
+                setRegisterForm((prev) => ({ ...prev, organizationName: e.target.value }))
+              }
+              placeholder={tx("Optional")}
+            />
+            <span className={`mt-1 block text-xs font-semibold ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              {tx("Add the partner organization, program, or group you came through if one applies.")}
+            </span>
           </label>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <label className={labelClass}>

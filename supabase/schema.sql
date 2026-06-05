@@ -46,6 +46,20 @@ on public.partner_profiles
 for select
 using (auth.uid() = uid);
 
+-- Owner admin can read learner profile summaries for product analytics.
+-- Keep this list aligned with VITE_ADMIN_EMAILS in Vercel.
+drop policy if exists "partner_profiles_select_owner_admin" on public.partner_profiles;
+create policy "partner_profiles_select_owner_admin"
+on public.partner_profiles
+for select
+using (
+  lower(coalesce(auth.jwt() ->> 'email', '')) in (
+    'stephanchery@gmail.com',
+    'stephanechery@dieudonnefoundation.org',
+    'stephanechery@dieudonnefoudation.org'
+  )
+);
+
 -- Users can insert only their own profile
 drop policy if exists "partner_profiles_insert_own" on public.partner_profiles;
 create policy "partner_profiles_insert_own"

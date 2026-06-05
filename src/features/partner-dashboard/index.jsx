@@ -33,6 +33,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     saveScenarioReflection,
     submitQuiz,
     markLessonCompleted,
+    saveProfileDetails,
   } = usePartnerDashboard();
 
   const subPath = useMemo(() => getSubPath(pathname), [pathname]);
@@ -126,6 +127,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     page = (
         <OverviewPage
           metrics={dashboardMetrics}
+          profile={profile}
           curriculum={curriculum}
           onOpenModule={openModule}
           onOpenLesson={openLesson}
@@ -133,6 +135,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           onOpenGuide={openGuide}
           onOpenVideoHub={openVideoHub}
           onRecommendationClick={trackRecommendationClick}
+          onSaveProfileDetails={saveProfileDetails}
           darkMode={darkMode}
           translateText={translateText}
         />

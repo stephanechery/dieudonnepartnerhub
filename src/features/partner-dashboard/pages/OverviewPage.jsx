@@ -1,13 +1,15 @@
-import React from "react";
-import { ArrowRight, BarChart3, BookMarked, Clock3, ExternalLink, GraduationCap, HeartHandshake, Library, Sparkles, Video } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ArrowRight, BarChart3, BookMarked, Building2, Clock3, ExternalLink, GraduationCap, HeartHandshake, Library, Save, Sparkles, Video } from "lucide-react";
 import ModuleCard from "../components/ModuleCard";
 import ProgressBar from "../components/ProgressBar";
 import { partnerInteractiveGuides } from "../data/interactiveGuides";
 
 const DOULA_MATCH_URL = "https://dieudonnematch.org";
 
-export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpenLesson, onOpenGuides, onOpenGuide = onOpenGuides, onOpenVideoHub, onRecommendationClick = () => {}, darkMode = false, translateText = (value) => value }) {
+export default function OverviewPage({ metrics, profile, curriculum, onOpenModule, onOpenLesson, onOpenGuides, onOpenGuide = onOpenGuides, onOpenVideoHub, onRecommendationClick = () => {}, onSaveProfileDetails = () => {}, darkMode = false, translateText = (value) => value }) {
   const tx = (value) => translateText(value);
+  const [organizationName, setOrganizationName] = useState(profile?.organizationName || "");
+  const [organizationSaved, setOrganizationSaved] = useState(false);
   const hasNextLesson = Boolean(metrics.nextLesson.lessonId);
   const nextActions = metrics.nextActions || {};
   const recommendedLesson = nextActions.lesson || metrics.nextLesson;
@@ -20,6 +22,18 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
         day: "numeric",
       })
     : null;
+
+  useEffect(() => {
+    setOrganizationName(profile?.organizationName || "");
+  }, [profile?.organizationName]);
+
+  const saveOrganizationName = (event) => {
+    event.preventDefault();
+    onSaveProfileDetails({ organizationName });
+    setOrganizationSaved(true);
+    window.setTimeout(() => setOrganizationSaved(false), 1800);
+  };
+
   return (
     <div className="space-y-5 pb-24 sm:space-y-6 sm:pb-0">
       <section
@@ -113,6 +127,38 @@ export default function OverviewPage({ metrics, curriculum, onOpenModule, onOpen
             </article>
           </div>
         </div>
+      </section>
+
+      <section className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
+        <form className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between" onSubmit={saveOrganizationName}>
+          <div className="min-w-0 flex-1">
+            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+              <Building2 className="h-4 w-4" /> {tx("Organization")}
+            </p>
+            <label className={`mt-3 block text-sm font-bold ${darkMode ? "text-slate-300" : "text-slate-700"}`}>
+              {tx("Organization or program")}
+              <input
+                value={organizationName}
+                onChange={(event) => {
+                  setOrganizationName(event.target.value);
+                  setOrganizationSaved(false);
+                }}
+                placeholder={tx("Optional")}
+                className={`mt-1 h-12 w-full rounded-xl border px-4 text-base font-semibold outline-none transition focus:border-cyan-400 ${darkMode ? "border-slate-700 bg-slate-950 text-slate-100 placeholder:text-slate-600" : "border-slate-300 bg-white text-slate-900 placeholder:text-slate-400"}`}
+              />
+            </label>
+            <p className={`mt-2 text-xs font-semibold leading-relaxed ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              {tx("If a partner organization referred you, add it here so program leaders can see learning participation by organization.")}
+            </p>
+          </div>
+          <button
+            type="submit"
+            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-black text-white transition ${darkMode ? "bg-cyan-600 hover:bg-cyan-500" : "bg-slate-900 hover:bg-slate-800"}`}
+          >
+            <Save className="h-4 w-4" />
+            {organizationSaved ? tx("Saved") : tx("Save")}
+          </button>
+        </form>
       </section>
 
       <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-cyan-400/20 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/35 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/70 to-indigo-50 shadow-sm"}`}>

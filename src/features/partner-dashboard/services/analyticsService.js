@@ -2,7 +2,7 @@ import { partnerCurriculum } from "../data/curriculum";
 import { partnerInteractiveGuides } from "../data/interactiveGuides";
 import { videoHubVideos } from "../data/videoHub";
 import { getCurrentAccessToken } from "./authService";
-import { getAllLocalProfiles } from "./profileService";
+import { getAllLocalProfiles, getAllRemoteProfilesForAdmin } from "./profileService";
 
 const EVENTS_KEY = "dph_learning_events_v1";
 const ACTIVE_WINDOW_DAYS = 14;
@@ -124,6 +124,7 @@ export const trackPartnerEvent = (eventName, payload = {}) => {
 
 const makeMockProfiles = () => {
   const names = ["R. Carter", "A. Thomas", "M. Green", "J. Lewis", "D. King"];
+  const organizations = ["Cradle Indy", "Community Health Partner", "No organization provided", "Cradle Indy", ""];
   return names.map((displayName, index) => {
     const modules = partnerCurriculum.modules.reduce((acc, module, moduleIndex) => {
       const completedCount = Math.max(
@@ -147,6 +148,7 @@ const makeMockProfiles = () => {
       uid: `mock-${index + 1}`,
       email: `learner${index + 1}@example.com`,
       displayName,
+      organizationName: organizations[index],
       createdAt: daysAgo(36 - index * 5),
       lastActiveAt: daysAgo(index * 3),
       modules,
@@ -414,11 +416,25 @@ const buildContentHealth = ({ moduleProgress, dropOffs, mostUsedVideos, recommen
 
 const formatHealthValue = (value) => String(value || 0);
 
-export const getAdminDashboardData = () => {
-  const localProfiles = getAllLocalProfiles();
-  const profiles = localProfiles.length ? localProfiles : makeMockProfiles();
-  const events = readEvents().length ? readEvents() : makeMockEvents();
-  const usingMockData = !localProfiles.length || !readEvents().length;
+const normalizeOrganizationName = (value) => {
+  const organizationName = String(value || "").trim();
+  return organizationName || "No organization provided";
+};
+
+const buildOrganizationBreakdown = (profiles) => {
+  const organizationMap = new Map();
+
+  profiles.forEach((profile) => {
+    increment(organizationMap, normalizeOrganizationName(profile.organizationName));
+  });
+
+  return sortMap(organizationMap).map((item) => ({
+    ...item,
+    label: item.id,
+  }));
+};
+
+const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
   const activeCutoff = activeSince();
   const profileIds = new Set(profiles.map((profile) => profile.uid));
 
@@ -517,6 +533,10 @@ export const getAdminDashboardData = () => {
     (count, profile) => count + (profile.videoHub?.watchLaterIds || []).length,
     0
   );
+  const organizationBreakdown = buildOrganizationBreakdown(profiles);
+  const organizationCount = organizationBreakdown.filter(
+    (item) => item.id !== "No organization provided"
+  ).length;
 
   const guideUsage = sortMap(guideMap).map((item) => ({
     ...item,
@@ -567,6 +587,7 @@ export const getAdminDashboardData = () => {
     lastUpdatedAt: new Date().toISOString(),
     totals: {
       totalUsers: profiles.length,
+      organizationCount,
       activeUsers: uniqueActiveUsers.size,
       lessonStarts,
       lessonCompletions,
@@ -584,6 +605,7 @@ export const getAdminDashboardData = () => {
     recommendationClicks,
     resumePoints,
     dropOffs,
+    organizationBreakdown,
     trends: buildTrend(events),
   };
 
@@ -592,4 +614,38 @@ export const getAdminDashboardData = () => {
     insights: buildInsights(data),
     contentHealth: buildContentHealth(data),
   };
+};
+
+export const getAdminDashboardData = () => {
+  const localProfiles = getAllLocalProfiles();
+  const localEvents = readEvents();
+
+  return buildAdminDashboardData({
+    profiles: localProfiles.length ? localProfiles : makeMockProfiles(),
+    events: localEvents.length ? localEvents : makeMockEvents(),
+    usingMockData: !localProfiles.length || !localEvents.length,
+  });
+};
+
+export const getAdminDashboardDataAsync = async () => {
+  const localProfiles = getAllLocalProfiles();
+  const localEvents = readEvents();
+  let remoteProfiles = [];
+
+  try {
+    remoteProfiles = await getAllRemoteProfilesForAdmin();
+  } catch {
+    remoteProfiles = [];
+  }
+
+  return buildAdminDashboardData({
+    profiles: remoteProfiles.length
+      ? remoteProfiles
+      : localProfiles.length
+        ? localProfiles
+        : makeMockProfiles(),
+    events: localEvents.length ? localEvents : makeMockEvents(),
+    usingMockData:
+      (!remoteProfiles.length && !localProfiles.length) || !localEvents.length,
+  });
 };

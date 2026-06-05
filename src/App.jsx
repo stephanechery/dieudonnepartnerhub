@@ -4917,7 +4917,7 @@ ${cleanedResult}`,
         </div>
       )}
 
-      <header className={`hero-topbar mx-auto mb-6 flex max-w-7xl flex-col justify-between gap-3 rounded-[1.75rem] border px-4 py-3 shadow-2xl sm:mb-8 sm:flex-row sm:items-center sm:gap-4 sm:rounded-[2.25rem] sm:px-6 ${
+      <header className={`hero-topbar relative z-50 mx-auto mb-6 flex max-w-7xl flex-col justify-between gap-3 rounded-[1.75rem] border px-4 py-3 shadow-2xl sm:mb-8 sm:flex-row sm:items-center sm:gap-4 sm:rounded-[2.25rem] sm:px-6 ${
         darkMode
           ? 'border-slate-700/70 bg-slate-950/86 text-slate-100 shadow-cyan-950/20'
           : 'border-white/80 bg-white/86 text-slate-900 shadow-slate-200/70 backdrop-blur-xl'
@@ -4974,7 +4974,7 @@ ${cleanedResult}`,
 
             {languageMenuOpen && (
               <div
-                className={`absolute right-0 z-30 mt-2 w-56 overflow-hidden rounded-2xl border shadow-xl ${
+                className={`absolute right-0 z-50 mt-2 max-h-80 w-56 overflow-y-auto rounded-2xl border shadow-xl ${
                   darkMode ? 'border-slate-700 bg-slate-900' : 'border-slate-200 bg-white'
                 }`}
               >

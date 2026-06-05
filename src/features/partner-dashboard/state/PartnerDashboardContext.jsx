@@ -347,6 +347,17 @@ export const PartnerDashboardProvider = ({ children }) => {
     persistProfile(nextProfile);
   };
 
+  const saveProfileDetails = (updates = {}) => {
+    if (!profile) return;
+
+    const nextProfile = {
+      ...profile,
+      organizationName: String(updates.organizationName || "").trim(),
+    };
+
+    persistProfile(nextProfile);
+  };
+
   const dashboardMetrics = useMemo(() => {
     if (!profile) {
       return null;
@@ -424,6 +435,7 @@ export const PartnerDashboardProvider = ({ children }) => {
     submitQuiz,
     markLessonCompleted,
     saveVideoHubPreferences,
+    saveProfileDetails,
   };
 
   return <PartnerDashboardContext.Provider value={value}>{children}</PartnerDashboardContext.Provider>;

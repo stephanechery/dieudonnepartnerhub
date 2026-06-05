@@ -42,6 +42,8 @@ const normalizeIdList = (value) => {
   );
 };
 
+const normalizeOrganizationName = (value) => String(value || "").trim();
+
 const extendProfileVideoHub = (profile) => ({
   ...profile,
   videoHub: {
@@ -54,6 +56,8 @@ const extendProfileModules = (profile) => {
   if (!profile.modules) {
     profile.modules = {};
   }
+
+  profile.organizationName = normalizeOrganizationName(profile.organizationName);
 
   for (const module of partnerCurriculum.modules) {
     const existingModule = profile.modules[module.id] || {};
@@ -80,6 +84,7 @@ const createBaseProfile = (sessionUser) => ({
   uid: sessionUser.uid,
   email: sessionUser.email,
   displayName: sessionUser.displayName,
+  organizationName: normalizeOrganizationName(sessionUser.organizationName),
   provider: sessionUser.provider,
   role: sessionUser.role || "learner",
   createdAt: new Date().toISOString(),
@@ -154,12 +159,43 @@ const rowToProfile = (row, sessionUser) => {
     uid: sessionUser.uid,
     email: sessionUser.email,
     displayName: fromRow.displayName || sessionUser.displayName,
+    organizationName: normalizeOrganizationName(
+      fromRow.organizationName || sessionUser.organizationName
+    ),
     provider: sessionUser.provider,
     role: sessionUser.role || fromRow.role || "learner",
     createdAt: row?.created_at || fromRow.createdAt || new Date().toISOString(),
     lastActiveAt:
       row?.last_active_at || fromRow.lastActiveAt || new Date().toISOString(),
   };
+  return extendProfileModules(profile);
+};
+
+const rowToAdminProfile = (row) => {
+  const fromRow = row?.profile_data || {};
+  const sessionUser = {
+    uid: row?.uid,
+    email: row?.email || fromRow.email || "",
+    displayName: row?.display_name || fromRow.displayName || "Partner Learner",
+    organizationName: fromRow.organizationName,
+    provider: row?.provider || fromRow.provider || "password",
+    role: fromRow.role || "learner",
+  };
+
+  const profile = {
+    ...createBaseProfile(sessionUser),
+    ...fromRow,
+    uid: sessionUser.uid,
+    email: sessionUser.email,
+    displayName: fromRow.displayName || sessionUser.displayName,
+    organizationName: normalizeOrganizationName(fromRow.organizationName),
+    provider: sessionUser.provider,
+    role: fromRow.role || "learner",
+    createdAt: row?.created_at || fromRow.createdAt || new Date().toISOString(),
+    lastActiveAt:
+      row?.last_active_at || fromRow.lastActiveAt || new Date().toISOString(),
+  };
+
   return extendProfileModules(profile);
 };
 
@@ -177,6 +213,8 @@ const ensureUserProfileLocal = (sessionUser) => {
   if (existing) {
     const normalized = extendProfileModules({
       ...existing,
+      organizationName:
+        existing.organizationName || normalizeOrganizationName(sessionUser.organizationName),
       lastActiveAt: new Date().toISOString(),
     });
     cacheProfile(normalized);
@@ -275,3 +313,17 @@ export const getProfile = (uid) => getLocalProfile(uid);
 
 export const getAllLocalProfiles = () =>
   Object.values(readProfiles()).map((profile) => extendProfileModules({ ...profile }));
+
+export const getAllRemoteProfilesForAdmin = async () => {
+  if (!isSupabaseAuthEnabled() || !SUPABASE_URL || !SUPABASE_ANON_KEY) return [];
+
+  const accessToken = getCurrentAccessToken();
+  if (!accessToken) return [];
+
+  const rows = await supabaseRestRequest(
+    `${SUPABASE_PROFILES_TABLE}?select=*&order=last_active_at.desc`,
+    { accessToken }
+  );
+
+  return Array.isArray(rows) ? rows.map(rowToAdminProfile) : [];
+};
