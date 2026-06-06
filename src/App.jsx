@@ -4073,7 +4073,7 @@ ${cleanedResult}`,
         <div className={`mt-8 overflow-hidden rounded-2xl border shadow-sm transition-colors duration-300 ${darkMode ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-white'}`}>
           <div className={`border-b px-4 py-3 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
             <div className="relative">
-              <div className="pr-24">
+              <div>
                 <p className={`mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-teal-300' : 'text-teal-700'}`}>
                   <Sparkles className="h-4 w-4" />
                   {translateText('Instant Prenatal Support')}
@@ -4084,12 +4084,6 @@ ${cleanedResult}`,
                 <p className={`mt-2 max-w-xl text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                   {translateText('Get partner-ready support in seconds.')}
                 </p>
-              </div>
-              <div className={`absolute right-0 top-0 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${
-                darkMode ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700'
-              }`}>
-                <Zap className="h-3.5 w-3.5" />
-                {translateText('Instant')}
               </div>
             </div>
           </div>
