@@ -3154,6 +3154,7 @@ const App = () => {
     return true;
   });
   const [guideStep, setGuideStep] = useState(0);
+  const [partnerTipStep, setPartnerTipStep] = useState(0);
   const [winCelebration, setWinCelebration] = useState(null);
   const [prenatalSupportHistory, setPrenatalSupportHistory] = useState([]);
   const [coachHistory, setCoachHistory] = useState([]);
@@ -4838,6 +4839,7 @@ ${cleanedResult}`,
 
   useEffect(() => {
     setGuideStep(0);
+    setPartnerTipStep(0);
   }, [activeStage]);
 
   const isKeyTermsStage = activeStage === 'keyterms';
@@ -4859,9 +4861,10 @@ ${cleanedResult}`,
   const completedSupportTaskCount = supportTasks.filter((task) => checklist[task.id]).length;
   const supportTaskProgress = Math.round((completedSupportTaskCount / supportTasks.length) * 100);
   const openCurrentPartnerTips = () => {
-    if (!currentGuideCard) return;
+    if (!mobileGuideCards.length) return;
 
-    const card = currentGuideCard.card;
+    const tipCard = mobileGuideCards[partnerTipStep % mobileGuideCards.length] || currentGuideCard;
+    const card = tipCard.card;
     const checklistItems = card.checklist || [];
     const tips = `Partner tip focus: ${card.title}
 
@@ -4881,6 +4884,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
       shareSubject: 'Partner tips from Dieudonne Partner Hub'
     });
     setAiResult(tips);
+    setPartnerTipStep((current) => (current + 1) % mobileGuideCards.length);
   };
 
   const focusDailyReminders = () => {
