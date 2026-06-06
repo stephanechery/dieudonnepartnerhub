@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   Utensils,
   Sun,
-  CheckCircle2,
   Clock,
   Activity,
   AlertTriangle,
@@ -4066,21 +4065,21 @@ ${cleanedResult}`,
       ],
       aiTool: (
         <div className={`mt-8 overflow-hidden rounded-2xl border shadow-sm transition-colors duration-300 ${darkMode ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-white'}`}>
-          <div className={`border-b px-4 py-4 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <div>
+          <div className={`border-b px-4 py-3 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
+            <div className="relative">
+              <div className="pr-24">
                 <p className={`mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-teal-300' : 'text-teal-700'}`}>
                   <Sparkles className="h-4 w-4" />
                   {translateText('Instant Prenatal Support')}
                 </p>
-                <h4 className={`text-xl font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
+                <h4 className={`text-lg font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
                   {translateText('Prenatal Support Builder')}
                 </h4>
                 <p className={`mt-2 max-w-xl text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                  {translateText('Type an appointment term or concern and get a partner-ready support pack instantly.')}
+                  {translateText('Get partner-ready support in seconds.')}
                 </p>
               </div>
-              <div className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${
+              <div className={`absolute right-0 top-0 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${
                 darkMode ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700'
               }`}>
                 <Zap className="h-3.5 w-3.5" />
@@ -4088,19 +4087,20 @@ ${cleanedResult}`,
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(9.5rem,1fr))] gap-3 p-4">
+          <div className="grid grid-cols-1 gap-2 p-3">
             {['Plain-language explanation', 'Questions to ask', 'Support actions'].map((label) => (
               <div
                 key={label}
-                className={`flex min-h-[4.75rem] items-center rounded-xl border px-3 py-3 text-sm font-bold leading-tight ${
+                className={`flex min-h-10 items-center justify-between rounded-xl border px-3 py-2 text-sm font-bold leading-tight ${
                   darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
                 }`}
               >
-                {translateText(label)}
+                <span>{translateText(label)}</span>
+                <ChevronRight className="h-4 w-4 text-slate-500" />
               </div>
             ))}
           </div>
-          <div className="px-4 pb-4">
+          <div className="px-3 pb-3">
             <div className="flex flex-col gap-3 rounded-2xl sm:flex-row">
               <div className="relative min-w-0 flex-1">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
@@ -4109,7 +4109,7 @@ ${cleanedResult}`,
                 <input
                   type="text"
                   placeholder={translateText('e.g. Anterior Placenta...')}
-                  className={`min-h-12 w-full rounded-2xl border py-3 pl-10 pr-4 text-sm shadow-inner transition-all focus:outline-none focus:ring-2 ${
+                  className={`min-h-11 w-full rounded-2xl border py-2.5 pl-10 pr-4 text-sm shadow-inner transition-all focus:outline-none focus:ring-2 ${
                     darkMode
                       ? 'border-slate-700 bg-slate-800 text-slate-100 focus:ring-teal-500'
                       : 'border-teal-200 bg-white text-slate-900 focus:ring-teal-500'
@@ -4120,7 +4120,7 @@ ${cleanedResult}`,
               </div>
               <button
                 onClick={() => handleAiAction('clarify')}
-                className={`flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl px-5 text-sm font-black text-white transition-colors disabled:opacity-50 sm:min-w-[7rem] ${
+                className={`flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-5 text-sm font-black text-white transition-colors disabled:opacity-50 sm:min-w-[7rem] ${
                   darkMode ? 'bg-teal-600 hover:bg-teal-500' : 'bg-teal-600 hover:bg-teal-700'
                 }`}
               >
@@ -4231,21 +4231,21 @@ ${cleanedResult}`,
       ],
       aiTool: (
         <div className={`mt-8 overflow-hidden rounded-2xl border shadow-sm transition-colors duration-300 ${darkMode ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-white'}`}>
-          <div className={`border-b px-4 py-4 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <div>
+          <div className={`border-b px-4 py-3 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
+            <div className="relative">
+              <div className="pr-24">
                 <p className={`mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`}>
                   <Sparkles className="h-4 w-4" />
                   {translateText('Instant Labor Coach')}
                 </p>
-                <h4 className={`text-xl font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
+                <h4 className={`text-lg font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
                   {translateText('Labor Coaching Pack')}
                 </h4>
                 <p className={`mt-2 max-w-xl text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                  {translateText('Get fresh affirmations, hands-on support ideas, scripts, and advocacy prompts instantly.')}
+                  {translateText('Get partner-ready coaching prompts in seconds.')}
                 </p>
               </div>
-              <div className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${
+              <div className={`absolute right-0 top-0 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${
                 darkMode ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700'
               }`}>
                 <Zap className="h-3.5 w-3.5" />
@@ -4253,19 +4253,20 @@ ${cleanedResult}`,
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(8.75rem,1fr))] gap-3 p-4">
+          <div className="grid grid-cols-1 gap-2 p-3">
             {['Affirmations', 'Hands-on support', 'Real-time scripts', 'Advocacy prompts'].map((label) => (
               <div
                 key={label}
-                className={`flex min-h-[4.75rem] items-center rounded-xl border px-3 py-3 text-sm font-bold leading-tight ${
+                className={`flex min-h-10 items-center justify-between rounded-xl border px-3 py-2 text-sm font-bold leading-tight ${
                   darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
                 }`}
               >
-                {translateText(label)}
+                <span>{translateText(label)}</span>
+                <ChevronRight className="h-4 w-4 text-slate-500" />
               </div>
             ))}
           </div>
-          <div className="px-4 pb-4">
+          <div className="px-3 pb-3">
           <button
             onClick={() => handleAiAction('coach')}
             className={`flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold text-white shadow-md transition-all active:scale-95 ${
@@ -4842,6 +4843,13 @@ ${cleanedResult}`,
   const guideStepPercent = mobileGuideCards.length
     ? Math.round(((guideStep + 1) / mobileGuideCards.length) * 100)
     : 0;
+  const completedSupportTaskCount = supportTasks.filter((task) => checklist[task.id]).length;
+  const supportTaskProgress = Math.round((completedSupportTaskCount / supportTasks.length) * 100);
+  const quickToolCards = [
+    { label: 'Partner Tips', icon: <Heart className="h-5 w-5" />, detail: 'Review the current card' },
+    { label: 'Reminders', icon: <Calendar className="h-5 w-5" />, detail: 'Track daily support wins' },
+    { label: 'My Notes', icon: <ClipboardList className="h-5 w-5" />, detail: 'Save profile progress' }
+  ];
 
   return (
     <div ref={appRootRef} className={`min-h-screen p-4 font-sans transition-colors duration-500 md:p-8 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
@@ -5210,7 +5218,7 @@ ${cleanedResult}`,
 
       {experienceEntry && (
       <main ref={mainContentRef} className="premium-guide-layout mx-auto grid max-w-7xl grid-cols-1 gap-5 md:gap-7 lg:grid-cols-4">
-        <div className="order-2 space-y-6 lg:order-1 lg:col-span-1">
+        <div className="order-2 space-y-4 lg:sticky lg:top-6 lg:order-1 lg:col-span-1 lg:self-start">
           <div className="relative">
             {winCelebration && (
               <div key={winCelebration.token} className="pointer-events-none z-20 mb-3 md:mb-0 md:absolute md:right-full md:top-4 md:mr-4 md:w-64">
@@ -5237,38 +5245,71 @@ ${cleanedResult}`,
               </div>
             )}
 
-            <section className={`premium-surface overflow-hidden rounded-3xl border p-5 transition-colors ${darkMode ? 'border-slate-800 bg-slate-900/90 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
-              <h2 className={`mb-5 flex items-center gap-2 text-base font-extrabold ${darkMode ? 'text-slate-100' : 'text-slate-800'}`}>
-                <Clock className="h-5 w-5 text-rose-500" />
-                {translateText('Core Partner Wins')}
-              </h2>
+            <section className={`premium-surface overflow-hidden rounded-[1.6rem] border p-4 transition-colors ${
+              darkMode
+                ? 'border-fuchsia-400/35 bg-gradient-to-br from-fuchsia-950/35 via-slate-950/94 to-slate-950/90 shadow-2xl shadow-fuchsia-950/20'
+                : 'border-fuchsia-200 bg-gradient-to-br from-white via-fuchsia-50/55 to-slate-50 shadow-sm'
+            }`}>
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-3">
+                  <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${
+                    darkMode ? 'border-fuchsia-300/30 bg-fuchsia-400/10 text-fuchsia-200' : 'border-fuchsia-200 bg-fuchsia-100 text-fuchsia-700'
+                  }`}>
+                    <Clock className="h-4 w-4" />
+                  </span>
+                  <h2 className={`text-base font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-900'}`}>
+                    {translateText("Today's Partner Focus")}
+                  </h2>
+                </div>
+                <ChevronRight className={`h-5 w-5 shrink-0 ${darkMode ? 'text-fuchsia-300' : 'text-fuchsia-600'}`} />
+              </div>
 
-              <div className="space-y-3">
+              <div className="mb-3 flex items-center gap-3">
+                <div className={`h-2 flex-1 overflow-hidden rounded-full ${darkMode ? 'bg-slate-800' : 'bg-fuchsia-100'}`}>
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-violet-400 to-fuchsia-400"
+                    style={{ width: `${supportTaskProgress}%` }}
+                  />
+                </div>
+                <span className={`shrink-0 text-xs font-bold ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {completedSupportTaskCount} {translateText('of')} {supportTasks.length} {translateText('completed')}
+                </span>
+              </div>
+
+              <div className="space-y-1.5">
                 {supportTasks.map((task) => (
                   <button
                     key={task.id}
                     onClick={() => toggleTask(task.id)}
-                    className={`group flex w-full items-center gap-3 rounded-2xl border px-3.5 py-3 text-left transition-all ${
+                    className={`group flex min-h-10 w-full items-center gap-3 rounded-2xl border px-3 py-1.5 text-left transition-all ${
                       checklist[task.id]
-                        ? 'border-emerald-500/50 bg-emerald-50/10 text-emerald-400'
+                        ? darkMode
+                          ? 'border-fuchsia-300/30 bg-white/[0.055] text-slate-100'
+                          : 'border-fuchsia-200 bg-white text-slate-800 shadow-sm'
                         : darkMode
-                          ? 'border-slate-700 bg-slate-800/50 text-slate-400 hover:bg-slate-800'
+                          ? 'border-white/10 bg-slate-950/38 text-slate-400 hover:bg-white/[0.045]'
                           : 'border-slate-100 bg-slate-50 text-slate-600 hover:border-slate-200 hover:bg-white hover:shadow-md'
                     } ${winCelebration?.taskId === task.id ? 'animate-win-pop ring-2 ring-emerald-300/60 shadow-lg shadow-emerald-400/15' : ''}`}
                   >
                     <div
-                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all ${
                         checklist[task.id]
-                          ? 'border-emerald-500 bg-emerald-500'
-                          : 'border-slate-300 bg-white group-hover:border-rose-400'
+                          ? 'border-fuchsia-400 bg-gradient-to-br from-violet-500 to-fuchsia-500'
+                          : darkMode
+                            ? 'border-slate-500 bg-slate-950 group-hover:border-fuchsia-300'
+                            : 'border-slate-300 bg-white group-hover:border-fuchsia-400'
                       }`}
                     >
-                      {checklist[task.id] && <CheckCircle2 className="h-4 w-4 text-white" />}
+                      {checklist[task.id] && <Check className="h-3.5 w-3.5 text-white" />}
                     </div>
-                    <span className={`text-sm font-bold transition-colors ${checklist[task.id] ? 'text-emerald-500' : ''}`}>{translateText(task.label)}</span>
+                    <span className={`text-sm font-bold transition-colors ${checklist[task.id] ? (darkMode ? 'text-slate-100' : 'text-slate-900') : ''}`}>{translateText(task.label)}</span>
                   </button>
                 ))}
               </div>
+              <p className={`mt-3 flex items-center gap-2 text-xs font-semibold ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                <Sparkles className={`h-3.5 w-3.5 ${darkMode ? 'text-fuchsia-300' : 'text-fuchsia-600'}`} />
+                {translateText('Small actions today, lasting impact tomorrow.')}
+              </p>
             </section>
           </div>
 
@@ -5276,15 +5317,31 @@ ${cleanedResult}`,
             {guideData[activeStage].aiTool}
           </div>
 
-          <div className="group relative overflow-hidden rounded-3xl bg-slate-900 p-6 text-white shadow-2xl">
-            <div className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-amber-400/10 blur-3xl transition-all group-hover:bg-amber-400/20" />
-            <div className="mb-3 flex items-center gap-2 text-sm font-extrabold text-amber-400">
-              <Zap className="h-5 w-5" />
-              {translateText('The "Partner" Role')}
+          <div className={`premium-surface rounded-[1.6rem] border p-5 transition-colors ${
+            darkMode ? 'border-white/10 bg-slate-900/72 shadow-xl shadow-black/20' : 'border-slate-200 bg-white shadow-sm'
+          }`}>
+            <div className="mb-4 flex items-center gap-2">
+              <Zap className={`h-4 w-4 ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`} />
+              <h3 className={`text-sm font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-900'}`}>
+                {translateText('Quick Tools')}
+              </h3>
             </div>
-            <p className="text-sm italic leading-relaxed text-slate-300">
-              {translateText('"Your role is to manage the environment so she can manage the journey. Anticipate, don\'t ask."')}
-            </p>
+            <div className="grid grid-cols-3 gap-2.5">
+              {quickToolCards.map((tool) => (
+                <div
+                  key={tool.label}
+                  className={`flex min-h-[5.4rem] flex-col items-center justify-center rounded-2xl border px-2 py-3 text-center transition ${
+                    darkMode
+                      ? 'border-white/10 bg-slate-950/45 text-slate-300'
+                      : 'border-slate-200 bg-slate-50 text-slate-700'
+                  }`}
+                  title={translateText(tool.detail)}
+                >
+                  <span className={darkMode ? 'text-fuchsia-300' : 'text-fuchsia-600'}>{tool.icon}</span>
+                  <span className="mt-2 text-[11px] font-black leading-tight">{translateText(tool.label)}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
