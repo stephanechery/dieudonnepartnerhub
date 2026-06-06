@@ -3162,6 +3162,7 @@ const App = () => {
   const insightScrollRef = useRef(null);
   const appRootRef = useRef(null);
   const mainContentRef = useRef(null);
+  const supportFocusRef = useRef(null);
   const languageMenuRef = useRef(null);
   const textNodeSourceRef = useRef(new WeakMap());
   const attrSourceRef = useRef(new WeakMap());
@@ -3785,15 +3786,7 @@ ${JSON.stringify(keyedSource)}`,
     }
 
     if (type === 'clarify') {
-      const generatedSupport = buildPrenatalSupportPack(userInput, prenatalSupportHistory.length);
-      setAiResultMeta({
-        type: 'clarify',
-        title: 'Prenatal Support Pack',
-        eyebrow: 'Instant Prenatal Support',
-        shareSubject: 'Prenatal support pack from Dieudonne Partner Hub'
-      });
-      setAiResult(generatedSupport);
-      setPrenatalSupportHistory((prev) => [...prev.slice(-9), generatedSupport]);
+      openPrenatalSupportPack(userInput);
       return;
     }
 
@@ -3967,6 +3960,18 @@ ${cleanedResult}`,
     }
   };
 
+  const openPrenatalSupportPack = (term = userInput) => {
+    const generatedSupport = buildPrenatalSupportPack(term, prenatalSupportHistory.length);
+    setAiResultMeta({
+      type: 'clarify',
+      title: 'Prenatal Support Pack',
+      eyebrow: 'Instant Prenatal Support',
+      shareSubject: 'Prenatal support pack from Dieudonne Partner Hub'
+    });
+    setAiResult(generatedSupport);
+    setPrenatalSupportHistory((prev) => [...prev.slice(-9), generatedSupport]);
+  };
+
   const guideData = {
     prenatal: {
       title: 'Prenatal Support',
@@ -4089,19 +4094,27 @@ ${cleanedResult}`,
           </div>
           <div className="grid grid-cols-1 gap-2 p-3">
             {['Plain-language explanation', 'Questions to ask', 'Support actions'].map((label) => (
-              <div
+              <button
                 key={label}
-                className={`flex min-h-10 items-center justify-between rounded-xl border px-3 py-2 text-sm font-bold leading-tight ${
-                  darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
+                type="button"
+                onClick={() => openPrenatalSupportPack(label)}
+                className={`flex min-h-10 w-full items-center justify-between rounded-xl border px-3 py-2 text-left text-sm font-bold leading-tight transition ${
+                  darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300 hover:border-teal-400/40 hover:bg-slate-900' : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-teal-300 hover:bg-white'
                 }`}
               >
                 <span>{translateText(label)}</span>
                 <ChevronRight className="h-4 w-4 text-slate-500" />
-              </div>
+              </button>
             ))}
           </div>
           <div className="px-3 pb-3">
-            <div className="flex flex-col gap-3 rounded-2xl sm:flex-row">
+            <form
+              className="flex flex-col gap-3 rounded-2xl sm:flex-row"
+              onSubmit={(event) => {
+                event.preventDefault();
+                openPrenatalSupportPack(userInput);
+              }}
+            >
               <div className="relative min-w-0 flex-1">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                   <Search className={`h-4 w-4 ${darkMode ? 'text-slate-500' : 'text-teal-400'}`} />
@@ -4119,14 +4132,14 @@ ${cleanedResult}`,
                 />
               </div>
               <button
-                onClick={() => handleAiAction('clarify')}
+                type="submit"
                 className={`flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-5 text-sm font-black text-white transition-colors disabled:opacity-50 sm:min-w-[7rem] ${
                   darkMode ? 'bg-teal-600 hover:bg-teal-500' : 'bg-teal-600 hover:bg-teal-700'
                 }`}
               >
                 {translateText('Get Pack')}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )
@@ -4845,10 +4858,40 @@ ${cleanedResult}`,
     : 0;
   const completedSupportTaskCount = supportTasks.filter((task) => checklist[task.id]).length;
   const supportTaskProgress = Math.round((completedSupportTaskCount / supportTasks.length) * 100);
+  const openCurrentPartnerTips = () => {
+    if (!currentGuideCard) return;
+
+    const card = currentGuideCard.card;
+    const checklistItems = card.checklist || [];
+    const tips = `Partner tip focus: ${card.title}
+
+Plain-language why it matters:
+${card.description}
+
+Support actions:
+${checklistItems.map((item) => `- ${item}`).join('\n')}
+
+Try this today:
+${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
+
+    setAiResultMeta({
+      type: 'partner-tips',
+      title: 'Partner Tips',
+      eyebrow: 'Quick Tools',
+      shareSubject: 'Partner tips from Dieudonne Partner Hub'
+    });
+    setAiResult(tips);
+  };
+
+  const focusDailyReminders = () => {
+    supportFocusRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    supportFocusRef.current?.focus({ preventScroll: true });
+  };
+
   const quickToolCards = [
-    { label: 'Partner Tips', icon: <Heart className="h-5 w-5" />, detail: 'Review the current card' },
-    { label: 'Reminders', icon: <Calendar className="h-5 w-5" />, detail: 'Track daily support wins' },
-    { label: 'My Notes', icon: <ClipboardList className="h-5 w-5" />, detail: 'Save profile progress' }
+    { label: 'Partner Tips', icon: <Heart className="h-5 w-5" />, detail: 'Open tips for the current card', action: openCurrentPartnerTips },
+    { label: 'Reminders', icon: <Calendar className="h-5 w-5" />, detail: 'Jump to daily support wins', action: focusDailyReminders },
+    { label: 'My Notes', icon: <ClipboardList className="h-5 w-5" />, detail: 'Open your saved dashboard', action: () => navigateWithinApp('/partner-dashboard') }
   ];
 
   return (
@@ -5245,7 +5288,7 @@ ${cleanedResult}`,
               </div>
             )}
 
-            <section className={`premium-surface overflow-hidden rounded-[1.6rem] border p-4 transition-colors ${
+            <section ref={supportFocusRef} tabIndex={-1} className={`premium-surface overflow-hidden rounded-[1.6rem] border p-4 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-fuchsia-300/60 ${
               darkMode
                 ? 'border-fuchsia-400/35 bg-gradient-to-br from-fuchsia-950/35 via-slate-950/94 to-slate-950/90 shadow-2xl shadow-fuchsia-950/20'
                 : 'border-fuchsia-200 bg-gradient-to-br from-white via-fuchsia-50/55 to-slate-50 shadow-sm'
@@ -5317,7 +5360,7 @@ ${cleanedResult}`,
             {guideData[activeStage].aiTool}
           </div>
 
-          <div className={`premium-surface rounded-[1.6rem] border p-5 transition-colors ${
+          <div className={`premium-surface rounded-[1.6rem] border p-4 transition-colors ${
             darkMode ? 'border-white/10 bg-slate-900/72 shadow-xl shadow-black/20' : 'border-slate-200 bg-white shadow-sm'
           }`}>
             <div className="mb-4 flex items-center gap-2">
@@ -5326,20 +5369,22 @@ ${cleanedResult}`,
                 {translateText('Quick Tools')}
               </h3>
             </div>
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-3 gap-2">
               {quickToolCards.map((tool) => (
-                <div
+                <button
                   key={tool.label}
-                  className={`flex min-h-[5.4rem] flex-col items-center justify-center rounded-2xl border px-2 py-3 text-center transition ${
+                  type="button"
+                  onClick={tool.action}
+                  className={`flex min-h-[4.7rem] flex-col items-center justify-center rounded-2xl border px-2 py-2.5 text-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60 ${
                     darkMode
-                      ? 'border-white/10 bg-slate-950/45 text-slate-300'
-                      : 'border-slate-200 bg-slate-50 text-slate-700'
+                      ? 'border-white/10 bg-slate-950/45 text-slate-300 hover:border-fuchsia-300/40 hover:bg-slate-950/70'
+                      : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-fuchsia-200 hover:bg-white'
                   }`}
                   title={translateText(tool.detail)}
                 >
                   <span className={darkMode ? 'text-fuchsia-300' : 'text-fuchsia-600'}>{tool.icon}</span>
                   <span className="mt-2 text-[11px] font-black leading-tight">{translateText(tool.label)}</span>
-                </div>
+                </button>
               ))}
             </div>
           </div>
