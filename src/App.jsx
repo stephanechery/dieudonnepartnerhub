@@ -1987,7 +1987,7 @@ const LANGUAGE_OPTIONS = [
 export const LANGUAGE_SESSION_KEY = 'dieudonne-language';
 const LANGUAGE_TRANSLATION_PREFIX = 'dieudonne-language-map-';
 const LANGUAGE_CACHE_VERSION_KEY = 'dieudonne-language-cache-version';
-const LANGUAGE_CACHE_VERSION = 'v13';
+const LANGUAGE_CACHE_VERSION = 'v14';
 const NON_TRANSLATABLE_TEXT_REGEX = /^[\d\s\W_]+$/;
 const TRANSLATION_BATCH_SIZE = 12;
 const TRANSLATION_PARALLEL_BATCHES = 1;
@@ -2026,6 +2026,7 @@ const LOCALE_TRANSLATION_HINT_WORDS = {
   fr: new Set(['de', 'la', 'le', 'les', 'et', 'pour', 'avec', 'des', 'une', 'du', 'au', 'sur']),
   ht: new Set(['ak', 'nan', 'pou', 'yon', 'se', 'sa', 'li', 'yo', 'sou', 'an', 'pa', 'ki'])
 };
+const EXTERNAL_LANGUAGE_PACKS = {};
 
 const STATIC_UI_TRANSLATIONS = {
   es: {
@@ -3680,6 +3681,42 @@ const App = () => {
       console.warn('Invalid cached translation map. Resetting.', error);
       setTranslationMap(staticBase);
     }
+  }, [language]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || language === 'en') return undefined;
+
+    let cancelled = false;
+    const mergePack = (pack) => {
+      const localePack = pack?.[language];
+      if (!localePack || typeof localePack !== 'object') return;
+
+      setTranslationMap((prev) => {
+        const next = { ...prev, ...localePack };
+        window.sessionStorage.setItem(`${LANGUAGE_TRANSLATION_PREFIX}${language}`, JSON.stringify(next));
+        return next;
+      });
+    };
+
+    if (EXTERNAL_LANGUAGE_PACKS.laborFlipped) {
+      mergePack(EXTERNAL_LANGUAGE_PACKS.laborFlipped);
+      return undefined;
+    }
+
+    fetch('/labor-flipped-translations.json')
+      .then((response) => (response.ok ? response.json() : null))
+      .then((pack) => {
+        if (cancelled || !pack) return;
+        EXTERNAL_LANGUAGE_PACKS.laborFlipped = pack;
+        mergePack(pack);
+      })
+      .catch((error) => {
+        console.warn('Labor language pack unavailable.', error);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [language]);
 
   const translateBatch = useCallback(async (texts, targetLanguage) => {
