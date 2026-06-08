@@ -4065,6 +4065,21 @@ ${cleanedResult}`,
               fact:
                 'If contractions are regular, rhythmic, and increasing in intensity before 37 weeks, it is a clinical priority.',
               isEmergency: true
+            },
+            {
+              title: 'Home Recovery Prep',
+              description: 'Setting up the home before birth so recovery is easier.',
+              clinicalInfo:
+                'Late pregnancy fatigue, pelvic pressure, and sleep disruption make it harder for mom to organize recovery supplies. Partners can reduce stress by preparing rooms before labor begins.',
+              checklist: ['Build a bedside recovery basket', 'Stock bathroom pads and peri care', 'Clear walking paths at night', 'Prep freezer meals and snacks'],
+              scenario:
+                'She comes home from a long appointment exhausted. You show her the bedroom, bathroom, and feeding station are already stocked so she does not have to plan it.',
+              myth: 'Home setup can wait until after the baby arrives.',
+              fact:
+                'A prepared home lowers her mental load and prevents partners from scrambling during the most tender recovery window.',
+              motherImpact:
+                'She can rest instead of giving directions, repeating requests, or moving through the house to find recovery supplies.',
+              isEmergency: false
             }
           ]
         }
@@ -4349,6 +4364,21 @@ ${cleanedResult}`,
               fact:
                 'Baby Blues are expected for 14 days. Symptoms beyond 2 weeks or thoughts of self-harm require professional medical intervention.',
               isEmergency: false
+            },
+            {
+              title: 'Recovery Home Base',
+              description: 'Keeping recovery supplies within reach so she can heal.',
+              clinicalInfo:
+                'Postpartum healing requires limited strain, steady hydration, pain control, feeding support, and quick access to bathroom care. A stocked recovery station prevents unnecessary walking and asking.',
+              checklist: ['Keep meds and water by the bed', 'Refill pads before they run out', 'Place snacks near feeding spots', 'Take over laundry without reminders'],
+              scenario:
+                'She sits down to feed the baby and realizes her water is empty. Before she asks, you refill it, bring a snack, and check if she needs fresh pads nearby.',
+              myth: 'If she needs something, she will ask.',
+              fact:
+                'Many mothers avoid asking because they feel like a burden. Anticipating needs protects rest and emotional safety.',
+              motherImpact:
+                'She feels cared for and can stay settled during feeding, bleeding, cramping, and sleep-deprived recovery moments.',
+              isEmergency: false
             }
           ]
         },
@@ -4466,6 +4496,257 @@ ${cleanedResult}`,
               <Utensils className="h-4 w-4" />
               {translateText('Get Instant Meal Pack')}
             </button>
+          </div>
+        </div>
+      )
+    },
+    homeSetup: {
+      title: 'Home Setup & Recovery Support',
+      description: 'Room-by-room planning that protects mom\'s healing, lowers stress, and keeps support practical.',
+      icon: <ShieldCheck />,
+      subsections: [
+        {
+          heading: 'Before Baby Arrives',
+          icon: <ClipboardList className="w-5 h-5" />,
+          color: 'bg-teal-100 text-teal-700',
+          cards: [
+            {
+              title: 'Prenatal Home Prep',
+              description: 'Prepare the house before labor so she does not manage setup while exhausted.',
+              clinicalInfo:
+                'The final weeks of pregnancy can bring pelvic pain, swelling, sleep loss, and shortness of breath. Home setup should remove stairs, clutter, and repeated decisions from her day.',
+              checklist: ['Clear walkways from bed to bathroom', 'Place night lights near pathways', 'Wash baby and mom laundry early', 'Create a simple hospital return plan'],
+              scenario:
+                'She worries the house will not be ready. You walk through the plan: clean sheets, stocked bathroom, freezer meals, and a clear path from bedroom to baby area.',
+              myth: 'Preparing the home is nesting work for mom.',
+              fact:
+                'Home prep is partner work because it protects her body and lowers the number of decisions she has to carry.',
+              motherImpact:
+                'She can enter birth knowing the recovery space is ready and she will not be responsible for last-minute household instructions.',
+              isEmergency: false
+            },
+            {
+              title: 'First 72-Hour Landing Plan',
+              description: 'Protect the first days home with quiet, supplies, and clear roles.',
+              clinicalInfo:
+                'The first 72 hours often include bleeding, soreness, feeding learning, hormone shifts, and very little sleep. The home should function like a calm recovery unit.',
+              checklist: ['Limit visitors unless she asks', 'Set alarms for meds and meals', 'Track pads, fluids, and symptoms', 'Keep phone chargers and documents ready'],
+              scenario:
+                'Family asks to come over the day she gets home. You say, "We are keeping the first few days quiet for healing. We will share a time when she is ready."',
+              myth: 'Visitors help if they want to hold the baby.',
+              fact:
+                'Helpful visitors bring food, clean, or leave quickly. Holding the baby while mom hosts is not recovery support.',
+              motherImpact:
+                'She gets space to bleed, feed, cry, sleep, and learn without feeling watched or responsible for other people.',
+              isEmergency: false
+            },
+            {
+              title: 'Six-Week Support Rhythm',
+              description: 'Keep household support steady after the first week fades.',
+              clinicalInfo:
+                'Postpartum recovery can last 6 weeks or longer. Bleeding, pelvic floor healing, incision recovery, feeding demands, and mood symptoms may continue after visitors stop checking in.',
+              checklist: ['Own laundry and dishes daily', 'Protect one sleep block', 'Plan follow-up visits', 'Check mood and pain trends'],
+              scenario:
+                'At week 3, everyone assumes she is fine. You keep the same routine: breakfast ready, laundry moving, baby care covered, and a quiet check-in before bed.',
+              myth: 'Recovery is mostly over after the first week.',
+              fact:
+                'The 6-week window still requires practical support, symptom tracking, and steady household ownership.',
+              motherImpact:
+                'She does not have to prove she still needs help just because the first rush of support has ended.',
+              isEmergency: false
+            }
+          ]
+        },
+        {
+          heading: 'Room-Based Recovery Stations',
+          icon: <Heart className="w-5 h-5" />,
+          color: 'bg-fuchsia-100 text-fuchsia-700',
+          cards: [
+            {
+              title: 'Bedroom Recovery Setup',
+              description: 'Make the bed area a rest, feeding, and healing zone.',
+              clinicalInfo:
+                'The bedroom should reduce lifting, bending, and unnecessary walking. Supplies should be reachable from bed or a nearby chair.',
+              checklist: ['Set water, snacks, and meds nearby', 'Keep burp cloths and pads within reach', 'Use pillows for body support', 'Place trash bags beside the bed'],
+              scenario:
+                'She is settled in bed with the baby. You check the basket before leaving the room: water full, pain meds timed, burp cloths ready, and phone charged.',
+              myth: 'The bedroom only needs the baby bassinet.',
+              fact:
+                'The bedroom also needs mom care supplies so her recovery is treated as important as newborn care.',
+              motherImpact:
+                'She can rest without getting up for every small need or asking for the same items repeatedly.',
+              isEmergency: false
+            },
+            {
+              title: 'Bathroom Recovery Setup',
+              description: 'Stock the bathroom for bleeding, soreness, and private care.',
+              clinicalInfo:
+                'Post-birth bathroom care may include heavy pads, peri bottles, ice packs, witch hazel, stool softeners, and careful monitoring for bleeding changes.',
+              checklist: ['Restock pads before each night', 'Keep peri bottle filled', 'Place clean towels within reach', 'Watch for heavy bleeding or odor'],
+              scenario:
+                'She goes to the bathroom and realizes the pads are low. You already restocked them and left a small bin for used supplies so she can move slowly and privately.',
+              myth: 'Bathroom supplies are her personal responsibility.',
+              fact:
+                'Partners can stock supplies without invading privacy. That support protects dignity and healing.',
+              motherImpact:
+                'She does not have to bend, search, or call out for sensitive recovery items while bleeding or in pain.',
+              isEmergency: false
+            },
+            {
+              title: 'Feeding Station Setup',
+              description: 'Build feeding spots that support mom whether breast, bottle, or both.',
+              clinicalInfo:
+                'Feeding sessions are frequent and can be physically draining. Good stations reduce dehydration, back strain, and decision fatigue.',
+              checklist: ['Add water and one-hand snacks', 'Keep burp cloths and wipes nearby', 'Set up back and arm support', 'Refill station after each feed'],
+              scenario:
+                'She sits down to feed and everything is ready: pillow, water, snack, burp cloth, and charger. You take the next diaper change after the feed.',
+              myth: 'Feeding support only means feeding the baby.',
+              fact:
+                'Feeding support also means caring for mom while her body is doing the work.',
+              motherImpact:
+                'She feels supported during long feeds and has fewer reasons to push through discomfort alone.',
+              isEmergency: false
+            },
+            {
+              title: 'Baby Care Station Setup',
+              description: 'Keep baby care organized so mom is not the household supply manager.',
+              clinicalInfo:
+                'Diapers, wipes, clothes, swaddles, and safe sleep items should be easy to find so partners can take over care without asking mom where everything is.',
+              checklist: ['Stock diapers and wipes daily', 'Sort clothes by easy sizes', 'Keep safe sleep area clear', 'Learn the care flow without asking'],
+              scenario:
+                'The baby needs a change at 3 a.m. You handle it from start to finish without waking her to ask where the wipes or pajamas are.',
+              myth: 'Mom knows where everything is, so asking is fine.',
+              fact:
+                'Repeated questions keep the mental load on her. Partners should learn the system and maintain it.',
+              motherImpact:
+                'She can sleep or recover while baby care continues without her managing every detail.',
+              isEmergency: false
+            }
+          ]
+        },
+        {
+          heading: 'Household Load Protection',
+          icon: <CheckSquare className="w-5 h-5" />,
+          color: 'bg-cyan-100 text-cyan-700',
+          cards: [
+            {
+              title: 'Kitchen and Meal Support',
+              description: 'Keep food simple, nourishing, and ready before hunger turns into stress.',
+              clinicalInfo:
+                'Recovery, milk production, wound healing, and mood stability all depend on steady hydration and food. Partners should make meals easy to reach and easy to eat.',
+              checklist: ['Prep protein-rich grab foods', 'Refill water bottles all day', 'Label freezer meals clearly', 'Handle dishes before they pile up'],
+              scenario:
+                'She has not eaten since morning. You bring a plate she can eat with one hand and place tomorrow\'s breakfast in the front of the fridge.',
+              myth: 'Meal support means asking what she wants every time.',
+              fact:
+                'A better support move is offering two simple choices or bringing food you already know works for her.',
+              motherImpact:
+                'She gets steady nutrition without having to plan meals, answer repeated questions, or cook while healing.',
+              isEmergency: false
+            },
+            {
+              title: 'Laundry and Cleaning Support',
+              description: 'Take over repeat chores before they become her problem.',
+              clinicalInfo:
+                'Laundry, dishes, floors, and trash can quickly become infection, stress, and safety issues when recovery and newborn care are happening at the same time.',
+              checklist: ['Run one laundry load daily', 'Empty trash in recovery areas', 'Sanitize bottles or pump parts', 'Keep floors clear for walking'],
+              scenario:
+                'The hamper is full and pump parts are in the sink. You start laundry, wash the parts, and reset the feeding station without announcing it as a favor.',
+              myth: 'Helping counts only when she asks for it.',
+              fact:
+                'The strongest support is owning predictable chores without making her assign them.',
+              motherImpact:
+                'She can focus on healing and bonding instead of scanning the house for work that still needs to be done.',
+              isEmergency: false
+            },
+            {
+              title: 'Shared Living Space Setup',
+              description: 'Create calm common areas that are easy for mom to use.',
+              clinicalInfo:
+                'Living spaces should support short rests, feeding, safe baby placement, and low-stimulation recovery without clutter or visitor pressure.',
+              checklist: ['Create one clear sitting area', 'Keep blankets and pillows ready', 'Set a small supply basket nearby', 'Lower noise and bright lights'],
+              scenario:
+                'She wants to sit with the family but feels sore. You clear the couch, add pillows, bring water, and keep the room calm before she walks in.',
+              myth: 'Recovery only happens in the bedroom.',
+              fact:
+                'Every room she uses should protect her body, privacy, and energy.',
+              motherImpact:
+                'She can be part of the home without the home demanding more from her body than she has to give.',
+              isEmergency: false
+            }
+          ]
+        },
+        {
+          heading: 'Boundaries and Safety',
+          icon: <ShieldAlert className="w-5 h-5" />,
+          color: 'bg-rose-100 text-rose-700',
+          cards: [
+            {
+              title: 'Visitor Boundaries',
+              description: 'Protect mom from hosting, explaining, and overextending.',
+              clinicalInfo:
+                'Visitors can raise stress, interrupt feeding, reduce sleep, and increase the pressure to perform wellness. Partners should manage access and expectations.',
+              checklist: ['Set visiting hours in advance', 'Require help or short visits', 'Say no without blaming mom', 'End visits when she looks tired'],
+              scenario:
+                'A relative wants to stay longer. You say, "We are closing visits now so she can rest," and walk them out without making her be the bad guy.',
+              myth: 'Good support means letting everyone meet the baby.',
+              fact:
+                'Good support means protecting mom\'s healing even when other people are excited.',
+              motherImpact:
+                'She does not have to spend recovery energy managing other adults or defending her need for quiet.',
+              isEmergency: false
+            },
+            {
+              title: 'Emergency Readiness',
+              description: 'Know when home support is not enough.',
+              clinicalInfo:
+                'Some postpartum symptoms need urgent medical help, including soaking one pad per hour, chest pain, shortness of breath, severe headache, vision changes, fever, or thoughts of self-harm.',
+              checklist: ['Save OB and nurse line numbers', 'Know nearest emergency location', 'Track bleeding and mood changes', 'Call 911 for chest pain or breathing trouble'],
+              scenario:
+                'She says her headache is severe and her vision looks sparkly. You do not wait for it to pass. You call the provider and prepare to go in.',
+              myth: 'A partner should wait until she decides it is serious.',
+              fact:
+                'Partners should listen to her and also recognize warning signs that require urgent care.',
+              motherImpact:
+                'She is safer because someone else is watching for patterns while she is exhausted and recovering.',
+              isEmergency: true
+            }
+          ]
+        }
+      ],
+      aiTool: (
+        <div className={`mt-8 overflow-hidden rounded-2xl border shadow-sm transition-colors duration-300 ${darkMode ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-white'}`}>
+          <div className={`border-b px-4 py-4 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
+            <p className={`mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-teal-300' : 'text-teal-700'}`}>
+              <Sparkles className="h-4 w-4" />
+              {translateText('Recovery Home Planner')}
+            </p>
+            <h4 className={`text-xl font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
+              {translateText('Room-by-room support checklist')}
+            </h4>
+            <p className={`mt-2 max-w-xl text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+              {translateText('Use these rooms as a quick reset plan before birth and through the first 6 weeks.')}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2">
+            {[
+              ['Bedroom', 'Water, meds, pads, snacks, pillows, charger.'],
+              ['Bathroom', 'Pads, peri bottle, towels, trash, bleeding checks.'],
+              ['Kitchen', 'Simple meals, labeled food, dishes handled daily.'],
+              ['Baby area', 'Diapers, wipes, clothes, safe sleep space.'],
+              ['Living space', 'Clear seat, low noise, supply basket, visitor control.'],
+              ['Emergency plan', 'Provider numbers, symptoms, ride plan, 911 triggers.']
+            ].map(([label, detail]) => (
+              <div
+                key={label}
+                className={`rounded-xl border px-3 py-3 ${
+                  darkMode ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-slate-50'
+                }`}
+              >
+                <p className={`text-sm font-black ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>{translateText(label)}</p>
+                <p className={`mt-1 text-xs font-semibold leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>{translateText(detail)}</p>
+              </div>
+            ))}
           </div>
         </div>
       )
@@ -5389,7 +5670,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
         </div>
 
         <div className="order-1 space-y-6 md:space-y-8 lg:order-2 lg:col-span-3">
-          <div className={`premium-tab-rail flex gap-2 overflow-x-auto rounded-[1.55rem] border p-1.5 transition-colors [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-5 md:overflow-visible ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
+          <div className={`premium-tab-rail flex gap-2 overflow-x-auto rounded-[1.55rem] border p-1.5 transition-colors [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-6 md:overflow-visible ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
             {Object.entries(guideData).map(([key, data]) => (
               <button
                 key={key}
