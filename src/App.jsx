@@ -1987,9 +1987,9 @@ const LANGUAGE_OPTIONS = [
 const LANGUAGE_SESSION_KEY = 'dieudonne-language';
 const LANGUAGE_TRANSLATION_PREFIX = 'dieudonne-language-map-';
 const LANGUAGE_CACHE_VERSION_KEY = 'dieudonne-language-cache-version';
-const LANGUAGE_CACHE_VERSION = 'v8';
+const LANGUAGE_CACHE_VERSION = 'v9';
 const NON_TRANSLATABLE_TEXT_REGEX = /^[\d\s\W_]+$/;
-const TRANSLATION_BATCH_SIZE = 20;
+const TRANSLATION_BATCH_SIZE = 12;
 const TRANSLATION_PARALLEL_BATCHES = 1;
 const TRANSLATION_RETRY_LIMIT = 4;
 const ENGLISH_TRANSLATION_STOP_WORDS = new Set([
@@ -2772,6 +2772,54 @@ const isRateLimitError = (error) => {
 
 const OFFLINE_PHRASE_TRANSLATIONS = {
   es: {
+    'Built for partners. Designed for safer outcomes.': 'Creado para parejas. Diseñado para resultados más seguros.',
+    'Dieudonne Partner Hub equips fathers and support people with clinically grounded guidance, interactive training, and intelligent coaching across prenatal, labor, and postpartum recovery.': 'Dieudonne Partner Hub equipa a padres y personas de apoyo con orientación clínicamente fundamentada, entrenamiento interactivo y apoyo inteligente durante el embarazo, el parto y la recuperación posparto.',
+    'Built for partners': 'Creado para parejas',
+    'Evidence-Informed': 'Basado en evidencia',
+    'Clinically reviewed content you can trust.': 'Contenido revisado clínicamente en el que puedes confiar.',
+    'Interactive Training': 'Entrenamiento interactivo',
+    'Lessons that build confidence.': 'Lecciones que fortalecen la confianza.',
+    'Smart Coaching': 'Apoyo inteligente',
+    'Guidance when it matters most.': 'Orientación cuando más importa.',
+    'Real-Time Support': 'Apoyo en tiempo real',
+    'Tools for every moment.': 'Herramientas para cada momento.',
+    'Clinically Grounded': 'Clínicamente fundamentado',
+    'Guidance backed by evidence and best practices.': 'Orientación respaldada por evidencia y buenas prácticas.',
+    'Private & Secure': 'Privado y seguro',
+    'Progress and profile data stay protected.': 'El progreso y los datos del perfil se mantienen protegidos.',
+    'Built for Real Families': 'Creado para familias reales',
+    'Practical tools for partners in daily care.': 'Herramientas prácticas para parejas en el cuidado diario.',
+    'Continuously Evolving': 'Mejora continua',
+    'New content shaped by partner feedback.': 'Nuevo contenido guiado por comentarios de parejas.',
+    'Postpartum Meal Builder': 'Constructor de comidas posparto',
+    'Instant Recovery Nutrition': 'Nutrición de recuperación inmediata',
+    'Generate a recovery meal pack instantly, then send it by email or text.': 'Genera un paquete de comidas de recuperación y envíalo por correo o texto.',
+    'Iron + protein': 'Hierro y proteína',
+    'Hydration support': 'Apoyo de hidratación',
+    'Low-effort prep': 'Preparación sencilla',
+    'Get Instant Meal Pack': 'Crear paquete de comidas',
+    'Today\'s Partner Focus': 'Enfoque de la pareja de hoy',
+    'Small actions today, lasting impact tomorrow.': 'Acciones pequeñas hoy, impacto duradero mañana.',
+    'Partner Tips': 'Consejos para parejas',
+    'Reminders': 'Recordatorios',
+    'My Notes': 'Mis notas',
+    'Quick Tools': 'Herramientas rápidas',
+    'Home Setup & Recovery Support': 'Preparación del hogar y apoyo de recuperación',
+    'Room-by-room planning that protects mom\'s healing, lowers stress, and keeps support practical.': 'Planificación por habitación que protege la recuperación de mamá, reduce el estrés y mantiene el apoyo práctico.',
+    'Recovery Home Planner': 'Planificador del hogar de recuperación',
+    'Room-by-room support checklist': 'Lista de apoyo por habitación',
+    'Use these rooms as a quick reset plan before birth and through the first 6 weeks.': 'Usa estas habitaciones como plan rápido antes del parto y durante las primeras 6 semanas.',
+    'Bedroom': 'Dormitorio',
+    'Bathroom': 'Baño',
+    'Kitchen': 'Cocina',
+    'Baby area': 'Área del bebé',
+    'Living space': 'Sala compartida',
+    'Emergency plan': 'Plan de emergencia',
+    of: 'de',
+    completed: 'completadas',
+    'Card': 'Tarjeta',
+    'Back': 'Atrás',
+    'Next': 'Siguiente',
     'Managing trimester-specific changes and becoming a clinical advocate.': 'Gestionar cambios específicos de cada trimestre y convertirse en un defensor clínico.',
     'Tactical support, physiological stages, and clinical decision-making.': 'Apoyo táctico, etapas fisiológicas y toma de decisiones clínicas.',
     'Physiological restoration and critical safety thresholds.': 'Restauración fisiológica y umbrales críticos de seguridad.',
@@ -3124,6 +3172,20 @@ const localizeUiString = (value, locale, translationMap) => {
   return `${leading}${fallback}${trailing}`;
 };
 
+const isKnownLocalizedValue = (currentValue, sourceValue, locale, translationMap) => {
+  if (locale === 'en') return false;
+
+  const current = `${currentValue || ''}`.trim();
+  const source = `${sourceValue || ''}`.trim();
+  if (!current || !source || current === source) return false;
+
+  const mapped = translationMap?.[source];
+  if (mapped && current === `${mapped}`.trim()) return true;
+
+  const fallback = offlineTranslateText(source, locale);
+  return Boolean(fallback && fallback !== source && current === `${fallback}`.trim());
+};
+
 const App = () => {
   const [activeStage, setActiveStage] = useState('prenatal');
   const [experienceEntry, setExperienceEntry] = useState(null);
@@ -3270,7 +3332,7 @@ Rules:
 Source object:
 ${JSON.stringify(keyedSource)}`,
         'You are a strict medical UI localization engine. Output valid JSON only.',
-        { temperature: 0.05, topP: 0.7, maxOutputTokens: 2600 }
+        { temperature: 0.05, topP: 0.7, maxOutputTokens: 8000 }
       );
 
       const parsedMap = parseTranslationObjectPayload(response, keyList);
@@ -3427,6 +3489,15 @@ ${JSON.stringify(keyedSource)}`,
     let queuedMissingTranslations = false;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     const ignoredTags = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA']);
+    const queueVisibleTranslation = (normalized) => {
+      if (!normalized || translationAttemptsRef.current.get(normalized) >= TRANSLATION_RETRY_LIMIT) return;
+      const pending = pendingTranslationsRef.current;
+      if (pending.has(normalized)) {
+        pending.delete(normalized);
+      }
+      pendingTranslationsRef.current = new Set([normalized, ...pending]);
+      queuedMissingTranslations = true;
+    };
 
     let node = walker.nextNode();
     while (node) {
@@ -3449,7 +3520,8 @@ ${JSON.stringify(keyedSource)}`,
           language !== 'en' &&
           currentValue &&
           currentValue !== original &&
-          (!translatedOriginalText || currentValue !== translatedOriginalText)
+          (!translatedOriginalText || currentValue !== translatedOriginalText) &&
+          !isKnownLocalizedValue(currentValue, original, language, translationMapRef.current)
         ) {
           original = currentValue;
           textNodeSourceRef.current.set(node, original);
@@ -3481,9 +3553,8 @@ ${JSON.stringify(keyedSource)}`,
                 const leading = original.match(/^\s*/)?.[0] || '';
                 const trailing = original.match(/\s*$/)?.[0] || '';
                 node.nodeValue = `${leading}${fallback}${trailing}`;
-              } else if (!(translationAttemptsRef.current.get(normalized) >= TRANSLATION_RETRY_LIMIT)) {
-                pendingTranslationsRef.current.add(normalized);
-                queuedMissingTranslations = true;
+              } else {
+                queueVisibleTranslation(normalized);
               }
             }
           }
@@ -3510,7 +3581,8 @@ ${JSON.stringify(keyedSource)}`,
           language !== 'en' &&
           currentValue &&
           currentValue !== source &&
-          (!translatedSource || currentValue !== translatedSource)
+          (!translatedSource || currentValue !== translatedSource) &&
+          !isKnownLocalizedValue(currentValue, source, language, translationMapRef.current)
         ) {
           source = currentValue;
           currentSources[attrName] = source;
@@ -3541,9 +3613,8 @@ ${JSON.stringify(keyedSource)}`,
           if (fallback && fallback !== normalized) {
             fallbackUpdates[normalized] = fallback;
             element.setAttribute(attrName, fallback);
-          } else if (!(translationAttemptsRef.current.get(normalized) >= TRANSLATION_RETRY_LIMIT)) {
-            pendingTranslationsRef.current.add(normalized);
-            queuedMissingTranslations = true;
+          } else {
+            queueVisibleTranslation(normalized);
           }
         }
       });
@@ -4447,29 +4518,21 @@ ${cleanedResult}`,
           darkMode ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-white'
         }`}>
           <div className={`border-b px-4 py-4 ${darkMode ? 'border-slate-800 bg-slate-900/80' : 'border-slate-100 bg-slate-50'}`}>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <p className={`mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-rose-300' : 'text-rose-700'}`}>
-                  <Sparkles className="h-4 w-4" />
-                  {translateText('Instant Recovery Nutrition')}
-                </p>
-                <h4 className={`text-xl font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
-                  {translateText('Postpartum Meal Builder')}
-                </h4>
-                <p className={`mt-2 max-w-xl text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                  {translateText('Generate a recovery meal pack instantly, then send it by email or text.')}
-                </p>
-              </div>
-              <div className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${
-                darkMode ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700'
-              }`}>
-                <Zap className="h-3.5 w-3.5" />
-                {translateText('Instant')}
-              </div>
+            <div>
+              <p className={`mb-2 flex items-center gap-2 text-[10px] font-black uppercase leading-relaxed tracking-[0.16em] ${darkMode ? 'text-rose-300' : 'text-rose-700'}`}>
+                <Sparkles className="h-4 w-4 shrink-0" />
+                <span>{translateText('Instant Recovery Nutrition')}</span>
+              </p>
+              <h4 className={`text-xl font-black leading-tight tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-950'}`}>
+                {translateText('Postpartum Meal Builder')}
+              </h4>
+              <p className={`mt-2 text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                {translateText('Generate a recovery meal pack instantly, then send it by email or text.')}
+              </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-2 p-4">
             {[
               'Iron + protein',
               'Hydration support',
@@ -4477,7 +4540,7 @@ ${cleanedResult}`,
             ].map((label) => (
               <div
                 key={label}
-                className={`rounded-xl border px-3 py-3 text-sm font-bold ${
+                className={`flex min-h-11 items-center rounded-xl border px-3 py-2.5 text-sm font-bold ${
                   darkMode ? 'border-slate-800 bg-slate-900/70 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
                 }`}
               >
@@ -4854,6 +4917,17 @@ ${cleanedResult}`,
       'Clinical Language Support',
       'Request Needs Attention',
       'Support Tool',
+      'Home Setup & Recovery Support',
+      'Room-by-room planning that protects mom\'s healing, lowers stress, and keeps support practical.',
+      'Recovery Home Planner',
+      'Room-by-room support checklist',
+      'Use these rooms as a quick reset plan before birth and through the first 6 weeks.',
+      'Bedroom',
+      'Bathroom',
+      'Kitchen',
+      'Baby area',
+      'Living space',
+      'Emergency plan',
       'Got it',
       'Interactive Anatomy Guide',
       'Interactive Labor Physiology Guide',
@@ -4948,11 +5022,10 @@ ${cleanedResult}`,
 
     supportTasks.forEach((task) => addStringToSeedSet(seeds, task.label));
 
-    const currentStage = guideData[activeStage];
-    if (currentStage) {
-      addStringToSeedSet(seeds, currentStage.title);
-      addStringToSeedSet(seeds, currentStage.description);
-      currentStage.subsections?.forEach((sub) => {
+    Object.values(guideData).forEach((stage) => {
+      addStringToSeedSet(seeds, stage.title);
+      addStringToSeedSet(seeds, stage.description);
+      stage.subsections?.forEach((sub) => {
         addStringToSeedSet(seeds, sub.heading);
         sub.cards?.forEach((card) => {
           addStringToSeedSet(seeds, card.title);
@@ -4961,144 +5034,141 @@ ${cleanedResult}`,
           addStringToSeedSet(seeds, card.scenario);
           addStringToSeedSet(seeds, card.myth);
           addStringToSeedSet(seeds, card.fact);
+          addStringToSeedSet(seeds, card.motherImpact);
           addStringToSeedSet(seeds, card.redFlag);
           addStringToSeedSet(seeds, card.tip);
           card.checklist?.forEach((item) => addStringToSeedSet(seeds, item));
           card.partnerTips?.forEach((item) => addStringToSeedSet(seeds, item));
         });
       });
-    }
+    });
 
-    if (activeStage === 'dashboard') {
-      const dashboardLabels = [
-        'Partner Education Dashboard',
-        'Structured Training Environment',
-        'Secure sign-in to track module progress, quiz scores, and lesson completion.',
-        'Loading partner dashboard...',
-        'Back to Main Guide',
-        'Site Home',
-        'Log Out',
-        'Current Module',
-        'Overall Progress',
-        'Next Lesson',
-        'Recently Completed',
-        'Module Progress',
-        'Training Approach',
-        'Review',
-        'Resume',
-        'Lessons tracked in profile',
-        'Responses saved',
-        'Lesson',
-        'Lessons',
-        'Locked',
-        'Open',
-        'Open Module',
-        'Back to Dashboard',
-        'Back to Module',
-        'Step',
-        'Continue Learning',
-        'Take Quiz',
-        'Structured Course',
-        'Complete the learning path before the quiz',
-        'Move through concept explanation, applied examples, reflection, and quick checks. The knowledge quiz opens when the course work is complete.',
-        'Course Progress',
-        'checks complete',
-        'reflection needed',
-        'reflection saved',
-        'Build Understanding',
-        'Applied Examples',
-        'Reflection',
-        'Save Reflection',
-        'Write at least 20 characters to unlock the quiz.',
-        'Quick Knowledge Check',
-        'Correct.',
-        'Review this section and try again.',
-        'Quiz locked until course work is complete.',
-        'Complete each quick knowledge check and write a reflection response before opening the quiz.',
-        'Complete the quick checks and reflection first.',
-        'Cultural Notes',
-        'Scenario Practice',
-        'Finish Lesson',
-        'Back',
-        'Next',
-        'Clinical Learning',
-        'Medical Terms',
-        'Cultural Sensitivity Notes',
-        'Scenario Exercise',
-        'Write your response plan...',
-        'Save Scenario Response',
-        'Knowledge Quiz',
-        'Quiz Progress',
-        'Select all that apply.',
-        'Submit Quiz',
-        'Next Question',
-        'answered',
-        'Ready to submit your quiz.',
-        'Jump to the next unanswered question.',
-        'Score:',
-        'Lesson Completion',
-        'Mark Lesson Complete',
-        'Lesson completed and progress saved.',
-        'Saved responses loaded. You can review or edit before resubmitting.',
-        'Retake quiz to reach 70% and unlock progression.',
-        'Postpartum Warning Signs',
-        'Call Provider',
-        'Seek Emergency Care'
-      ];
-      dashboardLabels.forEach((text) => addStringToSeedSet(seeds, text));
+    const dashboardLabels = [
+      'Partner Education Dashboard',
+      'Structured Training Environment',
+      'Secure sign-in to track module progress, quiz scores, and lesson completion.',
+      'Loading partner dashboard...',
+      'Back to Main Guide',
+      'Site Home',
+      'Log Out',
+      'Current Module',
+      'Overall Progress',
+      'Next Lesson',
+      'Recently Completed',
+      'Module Progress',
+      'Training Approach',
+      'Review',
+      'Resume',
+      'Lessons tracked in profile',
+      'Responses saved',
+      'Lesson',
+      'Lessons',
+      'Locked',
+      'Open',
+      'Open Module',
+      'Back to Dashboard',
+      'Back to Module',
+      'Step',
+      'Continue Learning',
+      'Take Quiz',
+      'Structured Course',
+      'Complete the learning path before the quiz',
+      'Move through concept explanation, applied examples, reflection, and quick checks. The knowledge quiz opens when the course work is complete.',
+      'Course Progress',
+      'checks complete',
+      'reflection needed',
+      'reflection saved',
+      'Build Understanding',
+      'Applied Examples',
+      'Reflection',
+      'Save Reflection',
+      'Write at least 20 characters to unlock the quiz.',
+      'Quick Knowledge Check',
+      'Correct.',
+      'Review this section and try again.',
+      'Quiz locked until course work is complete.',
+      'Complete each quick knowledge check and write a reflection response before opening the quiz.',
+      'Complete the quick checks and reflection first.',
+      'Cultural Notes',
+      'Scenario Practice',
+      'Finish Lesson',
+      'Back',
+      'Next',
+      'Clinical Learning',
+      'Medical Terms',
+      'Cultural Sensitivity Notes',
+      'Scenario Exercise',
+      'Write your response plan...',
+      'Save Scenario Response',
+      'Knowledge Quiz',
+      'Quiz Progress',
+      'Select all that apply.',
+      'Submit Quiz',
+      'Next Question',
+      'answered',
+      'Ready to submit your quiz.',
+      'Jump to the next unanswered question.',
+      'Score:',
+      'Lesson Completion',
+      'Mark Lesson Complete',
+      'Lesson completed and progress saved.',
+      'Saved responses loaded. You can review or edit before resubmitting.',
+      'Retake quiz to reach 70% and unlock progression.',
+      'Postpartum Warning Signs',
+      'Call Provider',
+      'Seek Emergency Care'
+    ];
+    dashboardLabels.forEach((text) => addStringToSeedSet(seeds, text));
 
-      partnerCurriculum.modules.forEach((module) => {
-        addStringToSeedSet(seeds, module.title);
-        addStringToSeedSet(seeds, module.subtitle);
-        addStringToSeedSet(seeds, module.objective);
-        module.warningSigns?.callProvider?.forEach((line) => addStringToSeedSet(seeds, line));
-        module.warningSigns?.emergency?.forEach((line) => addStringToSeedSet(seeds, line));
-        module.lessons.forEach((lesson) => {
-          addStringToSeedSet(seeds, lesson.title);
-          addStringToSeedSet(seeds, lesson.summary);
-          lesson.clinicalContent?.forEach((line) => addStringToSeedSet(seeds, line));
-          lesson.definitions?.forEach((entry) => {
-            addStringToSeedSet(seeds, entry.term);
-            addStringToSeedSet(seeds, entry.definition);
-          });
-          lesson.culturalNotes?.forEach((note) => addStringToSeedSet(seeds, note));
-          if (lesson.scenario) {
-            addStringToSeedSet(seeds, lesson.scenario.prompt);
-            addStringToSeedSet(seeds, lesson.scenario.guidance);
-          }
-          lesson.quiz?.forEach((question) => {
-            addStringToSeedSet(seeds, question.question);
-            question.options?.forEach((option) => addStringToSeedSet(seeds, option));
-            addStringToSeedSet(seeds, question.rationale);
-          });
+    partnerCurriculum.modules.forEach((module) => {
+      addStringToSeedSet(seeds, module.title);
+      addStringToSeedSet(seeds, module.subtitle);
+      addStringToSeedSet(seeds, module.objective);
+      module.warningSigns?.callProvider?.forEach((line) => addStringToSeedSet(seeds, line));
+      module.warningSigns?.emergency?.forEach((line) => addStringToSeedSet(seeds, line));
+      module.lessons.forEach((lesson) => {
+        addStringToSeedSet(seeds, lesson.title);
+        addStringToSeedSet(seeds, lesson.summary);
+        lesson.clinicalContent?.forEach((line) => addStringToSeedSet(seeds, line));
+        lesson.definitions?.forEach((entry) => {
+          addStringToSeedSet(seeds, entry.term);
+          addStringToSeedSet(seeds, entry.definition);
+        });
+        lesson.culturalNotes?.forEach((note) => addStringToSeedSet(seeds, note));
+        if (lesson.scenario) {
+          addStringToSeedSet(seeds, lesson.scenario.prompt);
+          addStringToSeedSet(seeds, lesson.scenario.guidance);
+        }
+        lesson.quiz?.forEach((question) => {
+          addStringToSeedSet(seeds, question.question);
+          question.options?.forEach((option) => addStringToSeedSet(seeds, option));
+          addStringToSeedSet(seeds, question.rationale);
         });
       });
-    }
+    });
 
-    if (activeStage === 'keyterms') {
-      keyTermSections.forEach((section) => {
-        addStringToSeedSet(seeds, section.title);
-        section.terms.forEach((term) => {
-          addStringToSeedSet(seeds, term.term);
-          addStringToSeedSet(seeds, term.stage);
-          addStringToSeedSet(seeds, term.definition);
-          addStringToSeedSet(seeds, term.deepDive);
-          addStringToSeedSet(seeds, term.hormoneImpact);
-          addStringToSeedSet(seeds, term.redFlag);
-          term.partnerTips?.forEach((item) => addStringToSeedSet(seeds, item));
-        });
+    keyTermSections.forEach((section) => {
+      addStringToSeedSet(seeds, section.title);
+      section.terms.forEach((term) => {
+        addStringToSeedSet(seeds, term.term);
+        addStringToSeedSet(seeds, term.stage);
+        addStringToSeedSet(seeds, term.definition);
+        addStringToSeedSet(seeds, term.deepDive);
+        addStringToSeedSet(seeds, term.hormoneImpact);
+        addStringToSeedSet(seeds, term.redFlag);
+        term.partnerTips?.forEach((item) => addStringToSeedSet(seeds, item));
       });
+    });
 
-      Object.values(keyTermStructuredContent).forEach((item) => {
-        addStringToSeedSet(seeds, item.definition);
-        addStringToSeedSet(seeds, item.bodyChanges);
-        addStringToSeedSet(seeds, item.clinicalSignificance);
-        addStringToSeedSet(seeds, item.motherImpact);
-      });
-    }
+    Object.values(keyTermStructuredContent).forEach((item) => {
+      addStringToSeedSet(seeds, item.definition);
+      addStringToSeedSet(seeds, item.bodyChanges);
+      addStringToSeedSet(seeds, item.clinicalSignificance);
+      addStringToSeedSet(seeds, item.motherImpact);
+    });
 
     return Array.from(seeds);
-  }, [guideData, activeStage]);
+  }, [guideData]);
 
   useEffect(() => {
     translationSeedRef.current = translationSeedStrings;
