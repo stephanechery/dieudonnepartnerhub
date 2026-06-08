@@ -1987,7 +1987,7 @@ const LANGUAGE_OPTIONS = [
 export const LANGUAGE_SESSION_KEY = 'dieudonne-language';
 const LANGUAGE_TRANSLATION_PREFIX = 'dieudonne-language-map-';
 const LANGUAGE_CACHE_VERSION_KEY = 'dieudonne-language-cache-version';
-const LANGUAGE_CACHE_VERSION = 'v15';
+const LANGUAGE_CACHE_VERSION = 'v16';
 const NON_TRANSLATABLE_TEXT_REGEX = /^[\d\s\W_]+$/;
 const TRANSLATION_BATCH_SIZE = 12;
 const TRANSLATION_PARALLEL_BATCHES = 1;
@@ -3777,21 +3777,32 @@ const App = () => {
       });
     };
 
-    if (EXTERNAL_LANGUAGE_PACKS.laborFlipped) {
-      mergePack(EXTERNAL_LANGUAGE_PACKS.laborFlipped);
+    const externalPacks = [
+      { key: 'mainGuide', path: '/main-guide-translations.json', label: 'Main guide' },
+      { key: 'laborFlipped', path: '/labor-flipped-translations.json', label: 'Labor' }
+    ];
+
+    const pendingPacks = externalPacks.filter(({ key }) => !EXTERNAL_LANGUAGE_PACKS[key]);
+    externalPacks.forEach(({ key }) => {
+      if (EXTERNAL_LANGUAGE_PACKS[key]) mergePack(EXTERNAL_LANGUAGE_PACKS[key]);
+    });
+
+    if (!pendingPacks.length) {
       return undefined;
     }
 
-    fetch('/labor-flipped-translations.json')
-      .then((response) => (response.ok ? response.json() : null))
-      .then((pack) => {
-        if (cancelled || !pack) return;
-        EXTERNAL_LANGUAGE_PACKS.laborFlipped = pack;
-        mergePack(pack);
-      })
-      .catch((error) => {
-        console.warn('Labor language pack unavailable.', error);
-      });
+    pendingPacks.forEach(({ key, path, label }) => {
+      fetch(path)
+        .then((response) => (response.ok ? response.json() : null))
+        .then((pack) => {
+          if (cancelled || !pack) return;
+          EXTERNAL_LANGUAGE_PACKS[key] = pack;
+          mergePack(pack);
+        })
+        .catch((error) => {
+          console.warn(`${label} language pack unavailable.`, error);
+        });
+    });
 
     return () => {
       cancelled = true;
