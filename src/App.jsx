@@ -975,7 +975,7 @@ const keyTermSections = [
           'Higher estrogen supports placental and uterine development, but changes in neurotransmitter signaling can increase mood sensitivity, nausea, and headaches in some mothers.',
         hormoneImpact:
           'Hormone Impact: Estrogen shifts can amplify emotional sensitivity and headache thresholds during pregnancy.',
-        partnerTips: ['Offer hydration and protein snacks before nausea worsens', 'Use low-stimulus environments on headache days', 'Validate mood shifts as biological, not dramatic']
+        partnerTips: ['Give hydration and protein snacks before nausea worsens', 'Use low-stimulus environments on headache days', 'Validate mood shifts as biological, not dramatic']
       },
       {
         term: 'Progesterone',
@@ -1984,10 +1984,10 @@ const LANGUAGE_OPTIONS = [
   { code: 'fr', short: 'FR', flag: '🇫🇷', label: 'Français', modelLabel: 'French' }
 ];
 
-const LANGUAGE_SESSION_KEY = 'dieudonne-language';
+export const LANGUAGE_SESSION_KEY = 'dieudonne-language';
 const LANGUAGE_TRANSLATION_PREFIX = 'dieudonne-language-map-';
 const LANGUAGE_CACHE_VERSION_KEY = 'dieudonne-language-cache-version';
-const LANGUAGE_CACHE_VERSION = 'v10';
+const LANGUAGE_CACHE_VERSION = 'v13';
 const NON_TRANSLATABLE_TEXT_REGEX = /^[\d\s\W_]+$/;
 const TRANSLATION_BATCH_SIZE = 12;
 const TRANSLATION_PARALLEL_BATCHES = 1;
@@ -2791,6 +2791,10 @@ const OFFLINE_PHRASE_TRANSLATIONS = {
     'Practical tools for partners in daily care.': 'Herramientas prácticas para parejas en el cuidado diario.',
     'Continuously Evolving': 'Mejora continua',
     'New content shaped by partner feedback.': 'Nuevo contenido guiado por comentarios de parejas.',
+    Organizations: 'Organizaciones',
+    Demo: 'Demo',
+    'Match Mom with a Doula': 'Conectar a mamá con una doula',
+    'Review this tab to decode anatomy, medical decisions, and emotional language so you can respond with confidence in real time.': 'Revisa esta pestaña para entender anatomía, decisiones médicas y lenguaje emocional, para responder con confianza en tiempo real.',
     'Postpartum Meal Builder': 'Constructor de comidas posparto',
     'Instant Recovery Nutrition': 'Nutrición de recuperación inmediata',
     'Generate a recovery meal pack instantly, then send it by email or text.': 'Genera un paquete de comidas de recuperación y envíalo por correo o texto.',
@@ -2817,9 +2821,74 @@ const OFFLINE_PHRASE_TRANSLATIONS = {
     'Emergency plan': 'Plan de emergencia',
     of: 'de',
     completed: 'completadas',
+    'Instant Prenatal Support': 'Apoyo prenatal inmediato',
+    'Prenatal Support Builder': 'Constructor de apoyo prenatal',
+    'Get partner-ready support in seconds.': 'Obtén apoyo listo para la pareja en segundos.',
+    'Plain-language explanation': 'Explicación en lenguaje sencillo',
+    'Questions to ask': 'Preguntas para hacer',
+    'Support actions': 'Acciones de apoyo',
+    'Get Pack': 'Crear paquete',
+    'e.g. Anterior Placenta...': 'ej. placenta anterior...',
     'Card': 'Tarjeta',
     'Back': 'Atrás',
     'Next': 'Siguiente',
+    'Anatomical & Hormonal Shifts': 'Cambios anatómicos y hormonales',
+    'Center of Gravity': 'Centro de gravedad',
+    'Her spine is curving to balance a 10-25lb weight shift.': 'Su columna se está curvando para equilibrar un cambio de peso de 10 a 25 lb.',
+    'As the uterus grows, the center of gravity moves forward, causing lordosis (exaggerated spinal curve) and loosening of the sacroiliac joints.': 'A medida que el útero crece, el centro de gravedad se mueve hacia adelante, causando lordosis, una curvatura exagerada de la columna, y aflojamiento de las articulaciones sacroilíacas.',
+    'Targeted support and pelvic floor awareness can significantly reduce prenatal back pain.': 'El apoyo dirigido y la conciencia del suelo pélvico pueden reducir significativamente el dolor lumbar prenatal.',
+    'She winces while standing.': 'Ella hace una mueca de dolor al ponerse de pie.',
+    'She winces while standing. You support her lower back and give your arm for stability.': 'Ella hace una mueca de dolor al ponerse de pie. Tú apoyas su espalda baja y le das tu brazo para darle estabilidad.',
+    'Back pain is just part of the process.': 'El dolor de espalda es solo parte del proceso.',
+    'Provide supportive footwear': 'Proporciona calzado de apoyo',
+    'Give nightly lower back massage': 'Da masaje nocturno en la espalda baja',
+    'Check posture during long walks': 'Revisa su postura durante caminatas largas',
+    'Adjust pillows for side-sleeping': 'Ajusta almohadas para dormir de lado',
+    'Hormonal Mood Dynamics': 'Dinámica hormonal del ánimo',
+    'Progesterone and Estrogen levels are up to 100x higher than normal.': 'Los niveles de progesterona y estrógeno pueden estar hasta 100 veces más altos de lo normal.',
+    'These hormones relax smooth muscles and support the placenta, but they also significantly impact neurotransmitters like serotonin and GABA.': 'Estas hormonas relajan los músculos lisos y apoyan la placenta, pero también afectan de forma importante neurotransmisores como la serotonina y el GABA.',
+    'Her body is undergoing a massive neurochemical shift that directly impacts physical and emotional regulation.': 'Su cuerpo atraviesa un gran cambio neuroquímico que afecta directamente la regulación física y emocional.',
+    'Validate feelings without fixing': 'Valida sus sentimientos sin intentar arreglar todo',
+    'Track her fatigue patterns': 'Observa sus patrones de fatiga',
+    'Stock iron-rich snacks': 'Ten meriendas ricas en hierro',
+    'Limit overwhelming social invites': 'Limita invitaciones sociales abrumadoras',
+    'She bursts into tears because the grocery store was out of a specific yogurt. You hold her, say \'I hear you, that is frustrating,\' and offer to check the next store later.': 'Ella rompe en llanto porque la tienda no tenía un yogur específico. La abrazas, dices "Te escucho, eso es frustrante", y ofreces revisar otra tienda más tarde.',
+    "She is just being 'hormonal'.": 'Solo está siendo hormonal.',
+    'Vital Tracking (BP & Glucose)': 'Seguimiento vital (presión arterial y glucosa)',
+    'Understanding the numbers that prevent complications.': 'Comprender los números que ayudan a prevenir complicaciones.',
+    "Blood pressure trends identify Preeclampsia risks; Glucose screening (1hr/3hr tests) detects Gestational Diabetes, affecting baby's birth weight.": 'Las tendencias de presión arterial identifican riesgo de preeclampsia. Las pruebas de glucosa de 1 o 3 horas detectan diabetes gestacional, que puede afectar el peso del bebé al nacer.',
+    'Unmanaged gestational diabetes can lead to complex deliveries and neonatal blood sugar issues.': 'La diabetes gestacional no controlada puede llevar a partos complejos y problemas de azúcar en sangre del recién nacido.',
+    'Log clinic BP results together': 'Registren juntos los resultados de presión arterial de la clínica',
+    'Help prep for glucose tests': 'Ayuda a prepararse para las pruebas de glucosa',
+    'Watch for sudden limb swelling': 'Vigila hinchazón repentina en extremidades',
+    'Identify severe headaches': 'Identifica dolores de cabeza severos',
+    'Glucose tests are optional.': 'Las pruebas de glucosa son opcionales.',
+    'Dilation & Effacement': 'Dilatación y borramiento',
+    'Tracking the gateway to birth.': 'Seguimiento de la puerta de entrada al nacimiento.',
+    'Effacement (0-100%) is the thinning of the cervix; Dilation (0-10cm) is the widening. Both must be complete before pushing.': 'El borramiento (0 a 100%) es el adelgazamiento del cuello uterino. La dilatación (0 a 10 cm) es la apertura. Ambos deben completarse antes de pujar.',
+    'Pushing before full effacement and dilation can cause cervical swelling and stall labor progress.': 'Pujar antes de completar el borramiento y la dilatación puede causar hinchazón del cuello uterino y detener el progreso del parto.',
+    'Timed contractions (start/duration)': 'Cronometra contracciones (inicio y duración)',
+    'Encourage frequent bladder empty': 'Anima a vaciar la vejiga con frecuencia',
+    'Give sips of water or ice': 'Da sorbos de agua o hielo',
+    'Change positions every 30min': 'Cambia posiciones cada 30 minutos',
+    "The nurse says she is '70% and 4cm'. You explain to her: 'Your body is doing great work thinning out the cervix to make way for the baby.'": 'La enfermera dice que está "70% y 4 cm". Tú le explicas: "Tu cuerpo está haciendo un gran trabajo adelgazando el cuello uterino para abrir paso al bebé."',
+    'You only push at 10cm.': 'Solo se puja a los 10 cm.',
+    'Instant Labor Coach': 'Coach de parto inmediato',
+    'Labor Coaching Pack': 'Paquete de acompañamiento del parto',
+    'Get partner-ready coaching prompts in seconds.': 'Obtén frases de acompañamiento listas para la pareja en segundos.',
+    Affirmations: 'Afirmaciones',
+    'Hands-on support': 'Apoyo práctico',
+    'Real-time scripts': 'Guiones en tiempo real',
+    'Advocacy prompts': 'Frases de defensa',
+    'Get Instant Coach Pack': 'Crear paquete de acompañamiento',
+    'She may experience both physical strain and emotional intensity during this stage of care.': 'Ella puede sentir esfuerzo físico e intensidad emocional durante esta etapa de cuidado.',
+    'Tactical Labor Support': 'Apoyo táctico durante el parto',
+    'Oxytocin: The Labor Engine': 'Oxitocina: el motor del parto',
+    'Fetal Station & Rotation': 'Estación y rotación fetal',
+    'Coaching Prompts': 'Frases de acompañamiento',
+    'Clinical Interventions': 'Intervenciones clínicas',
+    'The B.R.A.I.N. Method': 'El método B.R.A.I.N.',
+    'Cesarean Pivot': 'Cambio hacia cesárea',
     'Before Baby Arrives': 'Antes de que llegue el bebé',
     'Prenatal Home Prep': 'Preparación prenatal del hogar',
     'Prepare the house before labor so she does not manage setup while exhausted.': 'Prepara la casa antes del parto para que ella no tenga que organizarla mientras está agotada.',
@@ -2962,6 +3031,50 @@ const OFFLINE_PHRASE_TRANSLATIONS = {
     'Diapers, wipes, clothes, safe sleep space.': 'Pañales, toallitas, ropa, espacio de sueño seguro.',
     'Clear seat, low noise, supply basket, visitor control.': 'Asiento despejado, poco ruido, canasta de suministros, control de visitas.',
     'Provider numbers, symptoms, ride plan, 911 triggers.': 'Números del proveedor, síntomas, plan de transporte, señales para llamar al 911.',
+    'Hormones & Neurochemistry': 'Hormonas y neuroquímica',
+    'Anatomy & Physiology Terms': 'Términos de anatomía y fisiología',
+    'Clinical Safety Terms': 'Términos de seguridad clínica',
+    'Emotional & Clinical Language': 'Lenguaje emocional y clínico',
+    Term: 'Término',
+    Pregnancy: 'Embarazo',
+    Labor: 'Parto',
+    'Labor/Postpartum': 'Parto/posparto',
+    'Pregnancy/Postpartum': 'Embarazo/posparto',
+    'First Trimester': 'Primer trimestre',
+    'First 14 Days Postpartum': 'Primeros 14 días posparto',
+    'Immediate Postpartum': 'Posparto inmediato',
+    Estrogen: 'Estrógeno',
+    Progesterone: 'Progesterona',
+    'Human Chorionic Gonadotropin (hCG)': 'Gonadotropina coriónica humana (hCG)',
+    Relaxin: 'Relaxina',
+    Oxytocin: 'Oxitocina',
+    Prolactin: 'Prolactina',
+    Cortisol: 'Cortisol',
+    'Thyroid Hormones': 'Hormonas tiroideas',
+    'Postpartum Hormonal Shift': 'Cambio hormonal posparto',
+    Effacement: 'Borramiento',
+    Dilation: 'Dilatación',
+    'Fetal Station': 'Estación fetal',
+    Lochia: 'Loquios',
+    Preeclampsia: 'Preeclampsia',
+    'Gestational Diabetes': 'Diabetes gestacional',
+    'Postpartum Hemorrhage': 'Hemorragia posparto',
+    'DVT / Pulmonary Embolism': 'TVP / embolia pulmonar',
+    'Baby Blues': 'Tristeza posparto',
+    'Postpartum Depression / Anxiety': 'Depresión o ansiedad posparto',
+    'Informed Consent': 'Consentimiento informado',
+    'Golden Hour': 'Hora dorada',
+    'Training Deep Dive': 'Profundización de entrenamiento',
+    'Estrogen is a hormone produced by the ovaries early and the placenta later that supports uterine and placental growth.': 'El estrógeno es una hormona producida primero por los ovarios y luego por la placenta, que apoya el crecimiento del útero y la placenta.',
+    'Levels increase across pregnancy, expanding uterine blood flow and modulating serotonin and dopamine signaling in the brain.': 'Los niveles aumentan durante el embarazo, expanden el flujo sanguíneo uterino y modulan las señales de serotonina y dopamina en el cerebro.',
+    'Shifts in estrogen can change nausea, migraine, and sleep patterns, so tracking symptoms helps prevent dehydration and missed nutrition.': 'Los cambios de estrógeno pueden modificar náuseas, migrañas y sueño, por eso registrar síntomas ayuda a prevenir deshidratación y pérdida de nutrición.',
+    'She may experience smell sensitivity, nausea, headaches, and increased emotional sensitivity when estrogen is rapidly changing.': 'Ella puede sentir sensibilidad a olores, náuseas, dolores de cabeza y mayor sensibilidad emocional cuando el estrógeno cambia rápido.',
+    'Increases steadily to support uterine growth and blood flow; also modulates serotonin and dopamine pathways.': 'Aumenta de forma constante para apoyar el crecimiento uterino y el flujo sanguíneo. También modula vías de serotonina y dopamina.',
+    'Higher estrogen supports placental and uterine development, but changes in neurotransmitter signaling can increase mood sensitivity, nausea, and headaches in some mothers.': 'Un estrógeno más alto apoya el desarrollo de la placenta y el útero, pero los cambios en neurotransmisores pueden aumentar sensibilidad emocional, náuseas y dolores de cabeza en algunas madres.',
+    'Hormone Impact: Estrogen shifts can amplify emotional sensitivity and headache thresholds during pregnancy.': 'Impacto hormonal: los cambios de estrógeno pueden aumentar la sensibilidad emocional y bajar el umbral de dolor de cabeza durante el embarazo.',
+    'Give hydration and protein snacks before nausea worsens': 'Da hidratación y meriendas con proteína antes de que empeoren las náuseas',
+    'Use low-stimulus environments on headache days': 'Usa ambientes tranquilos en días de dolor de cabeza',
+    'Validate mood shifts as biological, not dramatic': 'Valida los cambios de ánimo como biológicos, no como drama',
     'Physiological Restoration': 'Restauración fisiológica',
     'Uterine Involution': 'Involución uterina',
     'The shrinking of the uterus post-birth.': 'La reducción del útero después del parto.',
@@ -3370,6 +3483,10 @@ const offlineTranslateText = (text, locale) => {
       output = output.replace(new RegExp(escaped, 'gi'), (match) => matchCase(match, target));
     });
 
+  if (output !== text) {
+    return output;
+  }
+
   // Prevent mixed-language long sentences: only allow word-level fallback
   // on very short labels where phrase-level mapping is unavailable.
   const compact = output.trim();
@@ -3409,6 +3526,9 @@ const localizeUiString = (value, locale, translationMap) => {
   return `${leading}${fallback}${trailing}`;
 };
 
+export const translateStaticText = (value, locale) =>
+  localizeUiString(value, locale, STATIC_UI_TRANSLATIONS[locale] || {});
+
 const isKnownLocalizedValue = (currentValue, sourceValue, locale, translationMap) => {
   if (locale === 'en') return false;
 
@@ -3421,6 +3541,20 @@ const isKnownLocalizedValue = (currentValue, sourceValue, locale, translationMap
 
   const fallback = offlineTranslateText(source, locale);
   return Boolean(fallback && fallback !== source && current === `${fallback}`.trim());
+};
+
+const isMappedLocalizedText = (value, locale, translationMap) => {
+  if (locale === 'en') return false;
+
+  const current = `${value || ''}`.trim();
+  if (!current) return false;
+
+  const translatedValues = [
+    ...Object.values(translationMap || {}),
+    ...Object.values(OFFLINE_PHRASE_TRANSLATIONS[locale] || {})
+  ];
+
+  return translatedValues.some((translated) => `${translated || ''}`.trim() === current);
 };
 
 const App = () => {
@@ -3703,8 +3837,9 @@ ${JSON.stringify(keyedSource)}`,
     }
   }, [language, translateBatch]);
 
-  const queueTranslations = useCallback((strings) => {
+  const queueTranslations = useCallback((strings, options = {}) => {
     if (language === 'en') return;
+    const nextStrings = [];
 
     strings.forEach((value) => {
       const normalized = (value || '').trim();
@@ -3712,10 +3847,22 @@ ${JSON.stringify(keyedSource)}`,
       if (translationMapRef.current[normalized]) return;
       if ((translationAttemptsRef.current.get(normalized) || 0) >= TRANSLATION_RETRY_LIMIT) return;
       if (!shouldQueueTranslationCandidate(normalized)) return;
+      if (options.priority) {
+        nextStrings.push(normalized);
+        return;
+      }
       pendingTranslationsRef.current.add(normalized);
     });
 
-    flushPendingTranslations();
+    if (nextStrings.length) {
+      const pending = pendingTranslationsRef.current;
+      nextStrings.forEach((value) => pending.delete(value));
+      pendingTranslationsRef.current = new Set([...nextStrings, ...pending]);
+    }
+
+    if (options.flush !== false) {
+      flushPendingTranslations();
+    }
   }, [language, flushPendingTranslations]);
 
   const applyLanguageToDom = useCallback(() => {
@@ -3774,6 +3921,10 @@ ${JSON.stringify(keyedSource)}`,
           }
         } else {
           const normalized = original.trim();
+          if (isMappedLocalizedText(normalized, language, translationMapRef.current)) {
+            node = walker.nextNode();
+            continue;
+          }
           if (shouldQueueTranslationCandidate(normalized)) {
             const translated = translationMapRef.current[normalized];
             if (translated) {
@@ -3839,6 +3990,10 @@ ${JSON.stringify(keyedSource)}`,
         }
 
         if (!shouldQueueTranslationCandidate(normalized)) {
+          return;
+        }
+
+        if (isMappedLocalizedText(normalized, language, translationMapRef.current)) {
           return;
         }
 
@@ -4297,9 +4452,9 @@ ${cleanedResult}`,
               description: 'Her spine is curving to balance a 10-25lb weight shift.',
               clinicalInfo:
                 'As the uterus grows, the center of gravity moves forward, causing lordosis (exaggerated spinal curve) and loosening of the sacroiliac joints.',
-              checklist: ['Provide supportive footwear', 'Offer nightly lower back massage', 'Check posture during long walks', 'Adjust pillows for side-sleeping'],
+              checklist: ['Provide supportive footwear', 'Give nightly lower back massage', 'Check posture during long walks', 'Adjust pillows for side-sleeping'],
               scenario:
-                "She's wincing while standing up from the couch. Instead of asking 'What\'s wrong?', you place a hand on her lower back and offer your arm for stability.",
+                'She winces while standing. You support her lower back and give your arm for stability.',
               myth: 'Back pain is just part of the process.',
               fact: 'Targeted support and pelvic floor awareness can significantly reduce prenatal back pain.',
               isEmergency: false
@@ -4477,7 +4632,7 @@ ${cleanedResult}`,
               description: 'Tracking the gateway to birth.',
               clinicalInfo:
                 'Effacement (0-100%) is the thinning of the cervix; Dilation (0-10cm) is the widening. Both must be complete before pushing.',
-              checklist: ['Timed contractions (start/duration)', 'Encourage frequent bladder empty', 'Offer sips of water/ice', 'Change positions every 30min'],
+              checklist: ['Timed contractions (start/duration)', 'Encourage frequent bladder empty', 'Give sips of water or ice', 'Change positions every 30min'],
               scenario:
                 "The nurse says she is '70% and 4cm'. You explain to her: 'Your body is doing great work thinning out the cervix to make way for the baby.'",
               myth: 'You only push at 10cm.',
@@ -5414,10 +5569,10 @@ ${cleanedResult}`,
   useEffect(() => {
     if (language === 'en') return;
     const timer = window.setTimeout(() => {
-      queueTranslations(translationSeedRef.current);
-    }, 250);
+      queueTranslations(translationSeedRef.current, { flush: false });
+    }, 5000);
     return () => window.clearTimeout(timer);
-  }, [language, activeStage, queueTranslations]);
+  }, [language, queueTranslations]);
 
   useEffect(() => {
     setGuideStep(0);
@@ -5442,6 +5597,7 @@ ${cleanedResult}`,
     : 0;
   const completedSupportTaskCount = supportTasks.filter((task) => checklist[task.id]).length;
   const supportTaskProgress = Math.round((completedSupportTaskCount / supportTasks.length) * 100);
+
   const openCurrentPartnerTips = () => {
     if (!mobileGuideCards.length) return;
 

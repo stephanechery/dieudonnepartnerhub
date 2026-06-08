@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import App from "./App";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import App, { LANGUAGE_SESSION_KEY, translateStaticText } from "./App";
 const PartnerDashboardApp = React.lazy(() => import("./features/partner-dashboard"));
 const AdminDashboardApp = React.lazy(() => import("./features/admin-dashboard"));
 const OrganizationsPage = React.lazy(() => import("./features/public-pages/OrganizationsPage"));
@@ -29,6 +29,11 @@ function usePathRouter() {
 
 export default function RootApp() {
   const { pathname, navigate } = usePathRouter();
+  const language =
+    typeof window === "undefined"
+      ? "en"
+      : window.sessionStorage.getItem(LANGUAGE_SESSION_KEY) || "en";
+  const translateText = useCallback((value) => translateStaticText(value, language), [language]);
 
   const page = useMemo(() => {
     if (pathname.startsWith("/partner-dashboard")) {
@@ -40,7 +45,7 @@ export default function RootApp() {
             </div>
           }
         >
-          <PartnerDashboardApp pathname={pathname} navigate={navigate} />
+          <PartnerDashboardApp pathname={pathname} navigate={navigate} translateText={translateText} />
         </React.Suspense>
       );
     }
@@ -79,7 +84,7 @@ export default function RootApp() {
       );
     }
     return <App />;
-  }, [navigate, pathname]);
+  }, [navigate, pathname, translateText]);
 
   return page;
 }
