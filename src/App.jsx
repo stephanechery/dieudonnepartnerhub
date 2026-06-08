@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import mainGuideTranslationPack from './features/language/main-guide-translations.json';
 import {
   Heart,
   Brain,
@@ -1987,7 +1988,7 @@ const LANGUAGE_OPTIONS = [
 export const LANGUAGE_SESSION_KEY = 'dieudonne-language';
 const LANGUAGE_TRANSLATION_PREFIX = 'dieudonne-language-map-';
 const LANGUAGE_CACHE_VERSION_KEY = 'dieudonne-language-cache-version';
-const LANGUAGE_CACHE_VERSION = 'v16';
+const LANGUAGE_CACHE_VERSION = 'v17';
 const NON_TRANSLATABLE_TEXT_REGEX = /^[\d\s\W_]+$/;
 const TRANSLATION_BATCH_SIZE = 12;
 const TRANSLATION_PARALLEL_BATCHES = 1;
@@ -2027,6 +2028,9 @@ const LOCALE_TRANSLATION_HINT_WORDS = {
   ht: new Set(['ak', 'nan', 'pou', 'yon', 'se', 'sa', 'li', 'yo', 'sou', 'an', 'pa', 'ki'])
 };
 const EXTERNAL_LANGUAGE_PACKS = {};
+const LOCAL_LANGUAGE_PACKS = {
+  mainGuide: mainGuideTranslationPack
+};
 
 const STATIC_UI_TRANSLATIONS = {
   es: {
@@ -3589,6 +3593,12 @@ const offlineTranslateText = (text, locale) => {
   return output;
 };
 
+const getStaticTranslationMap = (locale) => ({
+  ...(STATIC_UI_TRANSLATIONS[locale] || {}),
+  ...(OFFLINE_PHRASE_TRANSLATIONS[locale] || {}),
+  ...(LOCAL_LANGUAGE_PACKS.mainGuide?.[locale] || {})
+});
+
 const localizeUiString = (value, locale, translationMap) => {
   if (value == null) return value;
   const text = `${value}`;
@@ -3607,7 +3617,7 @@ const localizeUiString = (value, locale, translationMap) => {
 };
 
 export const translateStaticText = (value, locale) =>
-  localizeUiString(value, locale, STATIC_UI_TRANSLATIONS[locale] || {});
+  localizeUiString(value, locale, getStaticTranslationMap(locale));
 
 const isKnownLocalizedValue = (currentValue, sourceValue, locale, translationMap) => {
   if (locale === 'en') return false;
@@ -3724,7 +3734,7 @@ const App = () => {
     translationAttemptsRef.current.clear();
     textNodeSourceRef.current = new WeakMap();
     attrSourceRef.current = new WeakMap();
-    const staticBase = STATIC_UI_TRANSLATIONS[language] || {};
+    const staticBase = getStaticTranslationMap(language);
 
     if (language === 'en') {
       setTranslationMap({});
@@ -3938,7 +3948,7 @@ ${JSON.stringify(keyedSource)}`,
 
         setTranslationMap((prev) => {
           const next = { ...prev };
-          const staticBase = STATIC_UI_TRANSLATIONS[language] || {};
+          const staticBase = getStaticTranslationMap(language);
           Object.entries(updates).forEach(([source, value]) => {
             if (staticBase[source]) {
               next[source] = staticBase[source];
@@ -4143,7 +4153,7 @@ ${JSON.stringify(keyedSource)}`,
 
     if (Object.keys(fallbackUpdates).length) {
       setTranslationMap((prev) => {
-        const staticBase = STATIC_UI_TRANSLATIONS[language] || {};
+        const staticBase = getStaticTranslationMap(language);
         const next = { ...prev };
         Object.entries(fallbackUpdates).forEach(([source, translated]) => {
           if (staticBase[source]) return;
