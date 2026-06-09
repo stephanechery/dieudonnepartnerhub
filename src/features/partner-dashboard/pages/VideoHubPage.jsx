@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Baby,
   Bookmark,
@@ -777,6 +777,7 @@ function ResourceModal({ resource, onClose }) {
 
 export default function VideoHubPage() {
   const { profile, saveVideoHubPreferences } = usePartnerDashboard();
+  const openedDeepLinkVideoRef = useRef("");
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [libraryView, setLibraryView] = useState("all");
@@ -826,6 +827,29 @@ export default function VideoHubPage() {
       category: video.category,
     });
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const videoId = new URLSearchParams(window.location.search).get("video");
+    if (!videoId || openedDeepLinkVideoRef.current === videoId) return;
+
+    const linkedVideo = findVideo(videoId);
+    if (!linkedVideo) return;
+
+    openedDeepLinkVideoRef.current = videoId;
+    setSelectedCategory("All");
+    setLibraryView("all");
+    setSelectedVideo(linkedVideo);
+    setVideoModalOpen(true);
+    trackPartnerEvent("video_view", {
+      uid: profile?.uid,
+      email: profile?.email,
+      videoId: linkedVideo.id,
+      category: linkedVideo.category,
+      source: "recommendation_deep_link",
+    });
+  }, [profile?.email, profile?.uid]);
 
   const scrollToSection = (sectionId) => {
     requestAnimationFrame(() => {

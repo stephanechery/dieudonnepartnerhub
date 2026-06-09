@@ -240,7 +240,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
                   className={`mt-auto flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black transition ${darkMode ? "border border-violet-300/20 bg-violet-300/10 text-violet-100 hover:bg-violet-300/15" : "border border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100"}`}
                   onClick={() => {
                     onRecommendationClick("video", { videoId: recommendedVideo.id, moduleId: recommendedLesson.moduleId });
-                    onOpenVideoHub();
+                    onOpenVideoHub(recommendedVideo.id);
                   }}
                 >
                   {tx("Watch")} <ArrowRight className="h-4 w-4" />

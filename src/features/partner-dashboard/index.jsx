@@ -104,7 +104,10 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     navigate(`${BASE_PATH}/module/${moduleId}/lesson/${lessonId}`);
   const openGuides = () => navigate(`${BASE_PATH}/guides`);
   const openGuide = (guideId) => navigate(`${BASE_PATH}/guides/${guideId}`);
-  const openVideoHub = () => navigate(`${BASE_PATH}/video-hub`);
+  const openVideoHub = (videoId) => {
+    const videoParam = videoId ? `?video=${encodeURIComponent(videoId)}` : "";
+    navigate(`${BASE_PATH}/video-hub${videoParam}`);
+  };
   const trackRecommendationClick = (kind, target = {}) => {
     trackPartnerEvent("recommendation_click", {
       uid: authUser.uid,
