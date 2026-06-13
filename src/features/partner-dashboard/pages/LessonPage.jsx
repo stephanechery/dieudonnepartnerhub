@@ -223,6 +223,8 @@ export default function LessonPage({
   const [courseStep, setCourseStep] = useState(0);
   const mobileQuestion = lesson.quiz[quizStep];
   const quizSectionRef = useRef(null);
+  const quizStepHeaderRef = useRef(null);
+  const lastQuizStepRef = useRef(quizStep);
   const lastLessonIdRef = useRef(lesson.id);
   const [courseChecks, setCourseChecks] = useState(() =>
     buildCourseCheckState(courseSections)
@@ -284,6 +286,18 @@ export default function LessonPage({
       setCourseChecks(buildCourseCheckState(getCourseSections(lesson)));
     }
   }, [lesson.id, moduleState, savedQuizResponses]);
+
+  useEffect(() => {
+    if (lastQuizStepRef.current === quizStep) return;
+    lastQuizStepRef.current = quizStep;
+
+    window.requestAnimationFrame(() => {
+      quizStepHeaderRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  }, [quizStep]);
 
   const answeredAll = lesson.quiz.every((question) => {
     const value = answers[question.id];
@@ -754,8 +768,8 @@ export default function LessonPage({
     );
   };
 
-  const renderMobileQuizPanel = () => (
-    <form className="space-y-3" onSubmit={handleQuizSubmit}>
+  const renderPagedQuizPanel = () => (
+    <form ref={quizStepHeaderRef} className="space-y-3" onSubmit={handleQuizSubmit}>
       {savedQuizResponses && (
         <p className={`rounded-xl border px-3 py-2 text-xs font-semibold ${darkMode ? "border-cyan-900/60 bg-cyan-950/30 text-cyan-200" : "border-cyan-200 bg-cyan-50 text-cyan-800"}`}>
           {tx("Saved responses loaded. You can review or edit before resubmitting.")}
@@ -851,7 +865,7 @@ export default function LessonPage({
           </div>
         );
       }
-      return renderMobileQuizPanel();
+      return renderPagedQuizPanel();
     }
 
     if (lessonStep > courseSections.length) {
@@ -972,7 +986,7 @@ export default function LessonPage({
           </div>
         );
       }
-      return renderMobileQuizPanel();
+      return renderPagedQuizPanel();
     }
 
     return (
@@ -1323,100 +1337,7 @@ export default function LessonPage({
             </p>
           </div>
         ) : (
-          <>
-        {savedQuizResponses && (
-          <p className={`mb-3 rounded-xl border px-3 py-2 text-xs font-semibold ${darkMode ? "border-cyan-900/60 bg-cyan-950/30 text-cyan-200" : "border-cyan-200 bg-cyan-50 text-cyan-800"}`}>
-            {tx("Saved responses loaded. You can review or edit before resubmitting.")}
-          </p>
-        )}
-
-        <form className="space-y-4" onSubmit={handleQuizSubmit}>
-          <div className="hidden sm:block">
-            {renderQuizReviewSummary()}
-          </div>
-          <div className="hidden space-y-4 sm:block">
-            {lesson.quiz.map((question, questionIndex) =>
-              renderQuestionCard(question, questionIndex)
-            )}
-          </div>
-
-          <div className="space-y-3 sm:hidden">
-            <div className={`flex items-center justify-between rounded-2xl border px-3 py-2 ${darkMode ? "border-slate-800 bg-slate-900" : "border-slate-200 bg-slate-50"}`}>
-              <div>
-                <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
-                  {tx("Quiz Progress")}
-                </p>
-                <p className={`text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                  {tx("Question")} {quizStep + 1}/{lesson.quiz.length}
-                </p>
-                <p className={`text-xs ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-                  {answeredCount}/{lesson.quiz.length} {tx("answered")}
-                </p>
-              </div>
-              <div className={`text-xs font-bold ${mobileQuestionAnswered ? (darkMode ? "text-emerald-300" : "text-emerald-700") : (darkMode ? "text-slate-400" : "text-slate-500")}`}>
-                {mobileQuestionAnswered ? tx("Answered") : tx("In Progress")}
-              </div>
-            </div>
-
-            {mobileQuestion && renderQuestionCard(mobileQuestion, quizStep, true)}
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setQuizStep((current) => Math.max(0, current - 1))}
-                disabled={quizStep === 0}
-                className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-sm font-bold disabled:opacity-40 ${
-                  darkMode ? "border-slate-700 bg-slate-900 text-slate-200" : "border-slate-300 bg-white text-slate-700"
-                }`}
-              >
-                <ChevronLeft className="h-4 w-4" /> {tx("Back")}
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setQuizStep((current) =>
-                    Math.min(lesson.quiz.length - 1, current + 1)
-                  )
-                }
-                disabled={quizStep === lesson.quiz.length - 1}
-                className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-sm font-bold disabled:opacity-40 ${
-                  darkMode ? "border-slate-700 bg-slate-900 text-slate-200" : "border-slate-300 bg-white text-slate-700"
-                }`}
-              >
-                {tx("Next")} <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-            <button
-              type="submit"
-              className={`min-h-12 w-full rounded-xl px-4 py-3 text-sm font-bold text-white disabled:opacity-40 sm:min-h-0 sm:w-auto sm:py-2 ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-slate-900 hover:bg-slate-800"}`}
-              disabled={!answeredAll}
-            >
-              {tx("Submit Quiz")}
-            </button>
-            {typeof score === "number" && (
-              <p
-                className={`rounded-full px-3 py-1 text-xs font-bold ${
-                  score >= 70
-                    ? darkMode
-                      ? "border border-emerald-900/60 bg-emerald-950/30 text-emerald-200"
-                      : "border border-emerald-200 bg-emerald-50 text-emerald-700"
-                    : darkMode
-                      ? "border border-amber-900/60 bg-amber-950/30 text-amber-200"
-                      : "border border-amber-200 bg-amber-50 text-amber-700"
-                }`}
-              >
-                {tx("Score:")} {score}%
-              </p>
-            )}
-          </div>
-          <div className="sm:hidden">
-            {renderQuizReviewSummary()}
-          </div>
-        </form>
-          </>
+          renderPagedQuizPanel()
         )}
       </section>
 

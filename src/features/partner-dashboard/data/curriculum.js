@@ -1599,6 +1599,43 @@ const moduleSupplementalQuizBank = {
       ],
       answerIndex: 1,
       rationale: "Preterm labor patterns require urgent evaluation and potential intervention."
+    },
+    {
+      id: "q11",
+      type: "multi",
+      question: "Select all that apply: Which home setup steps lower prenatal strain?",
+      options: [
+        "Move frequently used items to waist height",
+        "Keep a water bottle and snacks near rest areas",
+        "Leave laundry baskets on the stairs",
+        "Clear walking paths before symptoms peak"
+      ],
+      answerIndexes: [0, 1, 3],
+      rationale: "Home setup should remove bending, lifting, and avoidable decision load."
+    },
+    {
+      id: "q12",
+      question: "Before baby arrives, the bedroom recovery setup should prioritize:",
+      options: [
+        "Decor first",
+        "Easy hydration, meds, pads, and phone charging within reach",
+        "Keeping supplies in several distant rooms",
+        "Saving all prep until labor starts"
+      ],
+      answerIndex: 1,
+      rationale: "Recovery supplies should be reachable before exhaustion and pain increase."
+    },
+    {
+      id: "q13",
+      question: "A practical partner birth-readiness task is to:",
+      options: [
+        "Pack only personal items",
+        "Confirm ride plan, provider numbers, bag basics, and childcare backup",
+        "Wait for contractions before discussing logistics",
+        "Let visitors coordinate the first week"
+      ],
+      answerIndex: 1,
+      rationale: "Clear logistics reduce stress and protect maternal focus when labor starts."
     }
   ],
   labor: [
@@ -1688,6 +1725,43 @@ const moduleSupplementalQuizBank = {
       ],
       answerIndex: 1,
       rationale: "This often signals transition; partner regulation and reassurance are high-value."
+    },
+    {
+      id: "q11",
+      type: "multi",
+      question: "Select all that apply: Strong fetal monitoring support includes:",
+      options: [
+        "Asking what the team is watching for",
+        "Helping mother change position when approved",
+        "Ignoring sudden team concern",
+        "Keeping communication calm and brief"
+      ],
+      answerIndexes: [0, 1, 3],
+      rationale: "Partners can support monitoring by asking clear questions and lowering stress."
+    },
+    {
+      id: "q12",
+      question: "Right after birth, a partner should first focus on:",
+      options: [
+        "Managing visitors",
+        "Mother's recovery cues, baby transition, and team instructions",
+        "Packing up immediately",
+        "Posting updates before checking on mother"
+      ],
+      answerIndex: 1,
+      rationale: "The first moments after birth still require recovery support and careful listening."
+    },
+    {
+      id: "q13",
+      question: "When labor pain spikes, the best partner adjustment is to:",
+      options: [
+        "Offer one clear support option and watch her response",
+        "Ask several questions at once",
+        "Stop all comfort measures",
+        "Tell her the plan cannot change"
+      ],
+      answerIndex: 0,
+      rationale: "One clear option helps her stay oriented without adding mental load."
     }
   ],
   postpartum: [
@@ -1743,15 +1817,15 @@ const moduleSupplementalQuizBank = {
     },
     {
       id: "q8",
-      question: "Fever above 100.4°F postpartum should prompt:",
+      question: "Severe headache with visual changes postpartum should prompt:",
       options: [
-        "No action unless after 72 hours",
-        "Call provider same day",
-        "Only hydration and rest",
-        "Routine monthly follow-up"
+        "Emergency or same-day clinical guidance",
+        "Waiting until the next routine visit",
+        "Only lowering screen brightness",
+        "Ignoring it if feeding is going well"
       ],
-      answerIndex: 1,
-      rationale: "Fever may indicate infection and should trigger same-day clinical guidance."
+      answerIndex: 0,
+      rationale: "Severe headache with visual changes can signal hypertensive complications after birth."
     },
     {
       id: "q9",
@@ -1777,6 +1851,43 @@ const moduleSupplementalQuizBank = {
       ],
       answerIndex: 1,
       rationale: "Threshold-based escalation reduces delays in time-sensitive complications."
+    },
+    {
+      id: "q11",
+      type: "multi",
+      question: "Select all that apply: Feeding support should protect mother by:",
+      options: [
+        "Keeping water and snacks within reach",
+        "Tracking pain, fever, or breast redness",
+        "Making her manage every feeding supply",
+        "Taking over household tasks during feeding windows"
+      ],
+      answerIndexes: [0, 1, 3],
+      rationale: "Feeding support includes nutrition, symptom watch, and lowering household load."
+    },
+    {
+      id: "q12",
+      question: "A return-home support rhythm should be built around:",
+      options: [
+        "Visitor preference",
+        "Sleep protection, meals, medication timing, and follow-up care",
+        "Social media updates",
+        "Saving chores until she asks"
+      ],
+      answerIndex: 1,
+      rationale: "A rhythm protects recovery by making essential support predictable."
+    },
+    {
+      id: "q13",
+      question: "The best reason to set visitor boundaries is to:",
+      options: [
+        "Punish family",
+        "Protect mother's healing, feeding, sleep, and household capacity",
+        "Avoid all support",
+        "Keep the house quiet for appearances"
+      ],
+      answerIndex: 1,
+      rationale: "Boundaries should reduce recovery load and protect maternal well-being."
     }
   ]
 };
@@ -1784,8 +1895,37 @@ const moduleSupplementalQuizBank = {
 const isMultiQuestion = (question) =>
   question?.type === "multi" || Array.isArray(question?.answerIndexes);
 
+const QUIZ_QUESTION_TARGET = 5;
+
+const normalizeQuestionText = (value) =>
+  String(value || "").trim().toLowerCase().replace(/\s+/g, " ");
+
+const buildLessonQuiz = (moduleId, lesson, lessonIndex) => {
+  const baseQuestions = lesson.quiz || [];
+  const supplementalQuestions = moduleSupplementalQuizBank[moduleId] || [];
+  const usedQuestionText = new Set(baseQuestions.map((question) => normalizeQuestionText(question.question)));
+  const selectedSupplemental = [];
+  const neededCount = Math.max(0, QUIZ_QUESTION_TARGET - baseQuestions.length);
+  const startIndex = lessonIndex * neededCount;
+
+  for (
+    let offset = 0;
+    offset < supplementalQuestions.length && selectedSupplemental.length < neededCount;
+    offset += 1
+  ) {
+    const question = supplementalQuestions[(startIndex + offset) % supplementalQuestions.length];
+    const questionText = normalizeQuestionText(question.question);
+    if (usedQuestionText.has(questionText)) continue;
+
+    selectedSupplemental.push(question);
+    usedQuestionText.add(questionText);
+  }
+
+  return [...baseQuestions, ...selectedSupplemental];
+};
+
 const normalizeQuizQuestions = (questions = []) =>
-  questions.slice(0, 10).map((question, index) => ({
+  questions.slice(0, QUIZ_QUESTION_TARGET).map((question, index) => ({
     ...question,
     id: `q${index + 1}`,
     ...(isMultiQuestion(question)
@@ -1795,11 +1935,10 @@ const normalizeQuizQuestions = (questions = []) =>
 
 partnerCurriculum.modules = partnerCurriculum.modules.map((module) => ({
   ...module,
-  lessons: module.lessons.map((lesson) => {
-    const supplemental = moduleSupplementalQuizBank[module.id] || [];
+  lessons: module.lessons.map((lesson, lessonIndex) => {
     return {
       ...lesson,
-      quiz: normalizeQuizQuestions([...(lesson.quiz || []), ...supplemental])
+      quiz: normalizeQuizQuestions(buildLessonQuiz(module.id, lesson, lessonIndex))
     };
   })
 }));
