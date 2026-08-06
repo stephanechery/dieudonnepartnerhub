@@ -647,7 +647,7 @@ export default function LessonPage({
 
         <div className={`mt-4 grid grid-cols-1 gap-4 ${compact ? "" : "lg:grid-cols-2"}`}>
           <div className={`rounded-2xl border p-4 ${darkMode ? "border-slate-800 bg-slate-800/60" : "border-slate-100 bg-slate-50"}`}>
-            <p className={`mb-3 text-xs font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+            <p className={`mb-3 text-xs font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
               {tx("Build Understanding")}
             </p>
             <div className="space-y-3">
@@ -694,7 +694,7 @@ export default function LessonPage({
               {tx(section.reflectionPrompt)}
             </p>
             <textarea
-              className={`mt-3 min-h-28 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-900 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900"}`}
+              className={`mt-3 min-h-28 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-900 text-slate-100 placeholder:text-slate-400" : "border-slate-300 bg-white text-slate-900"}`}
               placeholder={tx("Write your response plan...")}
               value={reflectionResponse}
               onChange={(event) =>
@@ -777,7 +777,7 @@ export default function LessonPage({
       )}
       <div className={`flex items-center justify-between rounded-2xl border px-3 py-2 ${darkMode ? "border-slate-800 bg-slate-900" : "border-slate-200 bg-slate-50"}`}>
         <div>
-          <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+          <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
             {tx("Quiz Progress")}
           </p>
           <p className={`text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -959,7 +959,7 @@ export default function LessonPage({
             </p>
           </div>
           <textarea
-            className={`mt-3 min-h-32 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900"}`}
+            className={`mt-3 min-h-32 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-400" : "border-slate-300 bg-white text-slate-900"}`}
             placeholder={tx("Write your response plan...")}
             value={scenarioResponse}
             onChange={(event) => setResponseValue(scenarioResponseKey, event.target.value)}
@@ -1069,7 +1069,7 @@ export default function LessonPage({
             : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"
         }`}
       >
-        <p className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+        <p className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
           {tx(module.title)}
         </p>
         <h2 className={`mt-1 text-xl font-black sm:text-2xl ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -1101,7 +1101,7 @@ export default function LessonPage({
         }`}
       >
         <div className="mb-4">
-          <div className={`flex items-center justify-between text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+          <div className={`flex items-center justify-between text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
             <span>
               {tx("Step")} {lessonStep + 1}/{lessonDeckSteps.length}
             </span>
@@ -1136,7 +1136,7 @@ export default function LessonPage({
             onClick={() => setLessonStep((current) => Math.min(lessonDeckSteps.length - 1, current + 1))}
             disabled={lessonStep === lessonDeckSteps.length - 1}
             className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-white disabled:opacity-40 ${
-              darkMode ? "bg-gradient-to-r from-cyan-600 to-teal-500" : "bg-gradient-to-r from-slate-900 to-slate-700"
+              darkMode ? "bg-gradient-to-r from-cyan-700 to-teal-700" : "bg-gradient-to-r from-slate-900 to-slate-700"
             }`}
           >
             {tx("Next")} <ChevronRight className="h-4 w-4" />
@@ -1195,7 +1195,7 @@ export default function LessonPage({
                 onClick={() => setCourseStep(index)}
                 className={`min-h-11 rounded-xl border px-4 py-2 text-sm font-bold transition ${
                   selected
-                    ? "border-transparent bg-gradient-to-r from-cyan-600 to-teal-500 text-white"
+                    ? "border-transparent bg-gradient-to-r from-cyan-700 to-teal-700 text-white"
                     : complete
                       ? darkMode
                         ? "border-emerald-900/60 bg-emerald-950/30 text-emerald-200"
@@ -1233,7 +1233,7 @@ export default function LessonPage({
             }
             disabled={courseStep === courseSections.length - 1}
             className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-white disabled:opacity-40 ${
-              darkMode ? "bg-gradient-to-r from-cyan-600 to-teal-500" : "bg-gradient-to-r from-slate-900 to-slate-700"
+              darkMode ? "bg-gradient-to-r from-cyan-700 to-teal-700" : "bg-gradient-to-r from-slate-900 to-slate-700"
             }`}
           >
             {tx("Next")} <ChevronRight className="h-4 w-4" />
@@ -1309,7 +1309,7 @@ export default function LessonPage({
         </div>
 
         <textarea
-          className={`mt-3 min-h-32 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900"}`}
+          className={`mt-3 min-h-32 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-400" : "border-slate-300 bg-white text-slate-900"}`}
           placeholder={tx("Write your response plan...")}
           value={scenarioResponse}
           onChange={(event) => setResponseValue(scenarioResponseKey, event.target.value)}
@@ -1386,7 +1386,7 @@ export default function LessonPage({
       >
         <div className="mx-auto flex max-w-md items-center gap-3">
           <div className="min-w-0 flex-1">
-            <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+            <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
               {isMobileLearningStep
                 ? tx("Continue Learning")
                 : completeStatus
@@ -1433,7 +1433,7 @@ export default function LessonPage({
               type="button"
               onClick={handleMobilePrimaryAction}
               className={`min-h-11 shrink-0 rounded-xl px-4 py-3 text-sm font-bold text-white ${
-                darkMode ? "bg-gradient-to-r from-cyan-600 to-teal-500" : "bg-gradient-to-r from-slate-900 to-slate-700"
+                darkMode ? "bg-gradient-to-r from-cyan-700 to-teal-700" : "bg-gradient-to-r from-slate-900 to-slate-700"
               }`}
             >
               {tx("Next")}

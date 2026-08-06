@@ -30,7 +30,7 @@ export default function ModuleCard({ module, onOpen, darkMode = false, translate
       </div>
 
       <div className="space-y-2">
-        <div className={`flex items-center justify-between text-xs font-bold uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+        <div className={`flex items-center justify-between text-xs font-bold uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
           <span>{tx("Completion")}</span>
           <span>{module.completion}%</span>
         </div>
@@ -47,7 +47,7 @@ export default function ModuleCard({ module, onOpen, darkMode = false, translate
         type="button"
         className={`mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-40 sm:min-h-0 sm:w-auto sm:justify-start sm:px-3 sm:py-2 ${
           darkMode
-            ? "bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400"
+            ? "bg-gradient-to-r from-cyan-700 to-teal-700 hover:from-cyan-800 hover:to-teal-800"
             : "bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-700"
         }`}
         disabled={!module.unlocked}

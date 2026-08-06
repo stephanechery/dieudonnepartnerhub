@@ -10,6 +10,13 @@ import VideoHubPage from "./pages/VideoHubPage";
 import { PartnerDashboardProvider, usePartnerDashboard } from "./state/PartnerDashboardContext";
 import { trackPartnerEvent } from "./services/analyticsService";
 import { getModuleState, isLessonUnlocked, isModuleUnlocked } from "./utils/progress";
+import {
+  applyPartnerDocumentTheme,
+  getInitialPartnerDarkMode,
+  getStoredTheme,
+  persistPartnerTheme,
+  subscribeToPartnerSystemTheme,
+} from "./utils/theme";
 
 const BASE_PATH = "/partner-dashboard";
 
@@ -22,7 +29,7 @@ const getSubPath = (pathname) => {
   return raw || "/";
 };
 
-const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMode = false, translateText = (value) => value }) => {
+const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMode = false, onToggleTheme, translateText = (value) => value }) => {
   const {
     authUser,
     authLoading,
@@ -93,7 +100,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   if (!authUser) {
     return (
       <div className={embedded ? "w-full" : `min-h-screen px-4 py-8 md:px-8 ${darkMode ? "bg-slate-950" : "bg-slate-50"}`}>
-        <AuthPanel darkMode={darkMode} translateText={translateText} />
+        <AuthPanel darkMode={darkMode} onToggleTheme={onToggleTheme} translateText={translateText} />
       </div>
     );
   }
@@ -264,6 +271,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
       showHomeButton={!embedded || Boolean(onExit)}
       homeLabel={embedded ? "Back to Main Guide" : "Site Home"}
       darkMode={darkMode}
+      onToggleTheme={onToggleTheme}
       translateText={translateText}
     >
       {page}
@@ -280,17 +288,27 @@ export default function PartnerDashboardApp({
   translateText = (value) => value,
 }) {
   const [embeddedPathname, setEmbeddedPathname] = useState(BASE_PATH);
-  const effectiveDarkMode = useMemo(() => {
-    if (typeof darkMode === "boolean") {
-      return darkMode;
-    }
+  const isControlledTheme = typeof darkMode === "boolean";
+  const [localDarkMode, setLocalDarkMode] = useState(() => getInitialPartnerDarkMode());
+  const effectiveDarkMode = isControlledTheme ? darkMode : localDarkMode;
 
-    if (typeof window === "undefined") {
-      return false;
-    }
+  useEffect(() => {
+    applyPartnerDocumentTheme(effectiveDarkMode);
+  }, [effectiveDarkMode]);
 
-    return window.localStorage.getItem("dieudonne-theme") === "dark";
-  }, [darkMode]);
+  useEffect(() => {
+    if (isControlledTheme || getStoredTheme()) return undefined;
+    return subscribeToPartnerSystemTheme(setLocalDarkMode);
+  }, [isControlledTheme]);
+
+  const toggleTheme = useCallback(() => {
+    if (isControlledTheme) return;
+    setLocalDarkMode((current) => {
+      const next = !current;
+      persistPartnerTheme(next);
+      return next;
+    });
+  }, [isControlledTheme]);
 
   const resolvedPathname = embedded ? embeddedPathname : pathname;
   const resolvedNavigate = useCallback(
@@ -320,6 +338,7 @@ export default function PartnerDashboardApp({
         embedded={embedded}
         onExit={onExit}
         darkMode={effectiveDarkMode}
+        onToggleTheme={isControlledTheme ? undefined : toggleTheme}
         translateText={translateText}
       />
     </PartnerDashboardProvider>

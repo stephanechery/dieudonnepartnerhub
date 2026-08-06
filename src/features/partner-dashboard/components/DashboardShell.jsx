@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowLeft, LogOut, ShieldCheck } from "lucide-react";
 import dieudonneDarkLogo from "../../../assets/Dieudonne_Dark_Logo.png";
+import ThemeToggle from "./ThemeToggle";
 
 export default function DashboardShell({
   authUser,
@@ -11,6 +12,7 @@ export default function DashboardShell({
   showHomeButton = true,
   homeLabel = "Site Home",
   darkMode = false,
+  onToggleTheme,
   translateText = (value) => value,
 }) {
   const tx = (value) => translateText(value);
@@ -38,7 +40,7 @@ export default function DashboardShell({
               className={`h-9 w-auto rounded-lg border p-1 sm:h-12 ${darkMode ? "border-slate-700 bg-slate-950" : "border-slate-200 bg-slate-50"}`}
             />
             <div className="min-w-0">
-              <p className={`text-[10px] font-bold uppercase tracking-[0.16em] sm:text-xs sm:tracking-[0.2em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-[10px] font-bold uppercase tracking-[0.16em] sm:text-xs sm:tracking-[0.2em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Partner Education Dashboard")}
               </p>
               <h1 className={`text-lg font-black tracking-tight sm:text-2xl md:text-3xl ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -52,8 +54,16 @@ export default function DashboardShell({
 
           <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end">
             <div className={`col-span-2 flex min-h-9 items-center justify-center gap-2 rounded-full border px-3 py-2 text-xs font-bold sm:col-span-1 sm:min-h-0 sm:justify-start sm:py-1.5 ${darkMode ? "border-emerald-900/50 bg-emerald-900/30 text-emerald-300" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
-              <ShieldCheck className="h-4 w-4" /> {tx("User Progress Tracking Active")}
+              <ShieldCheck className="h-4 w-4" aria-hidden="true" /> {tx("User Progress Tracking Active")}
             </div>
+            {onToggleTheme && (
+              <ThemeToggle
+                darkMode={darkMode}
+                onToggle={onToggleTheme}
+                translateText={translateText}
+                className="col-span-2 w-full sm:col-span-1 sm:w-auto"
+              />
+            )}
             {showHomeButton && (
               <button
                 type="button"

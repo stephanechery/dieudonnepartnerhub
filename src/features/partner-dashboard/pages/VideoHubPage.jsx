@@ -144,7 +144,7 @@ function SidebarNav({
         <nav className="space-y-6">
           {navGroups.map((group) => (
             <div key={group.label}>
-              <p className="mb-2 px-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
+              <p className="mb-2 px-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
                 {group.label}
               </p>
               <div className="space-y-1">
@@ -220,19 +220,19 @@ function TopSearchBar({ query, onQueryChange, onMenu }) {
           Search videos, topics, or experts
         </label>
         <div className="relative min-w-0 flex-1">
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
           <input
             id="video-search"
             value={query}
             onChange={(event) => onQueryChange(event.target.value)}
             placeholder="Search videos, topics, or experts..."
-            className="h-12 w-full rounded-2xl border border-white/10 bg-white/[0.04] pl-12 pr-4 text-sm font-semibold text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-cyan-300/40 focus:bg-white/[0.07]"
+            className="h-12 w-full rounded-2xl border border-white/10 bg-white/[0.04] pl-12 pr-4 text-sm font-semibold text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300/40 focus:bg-white/[0.07]"
           />
         </div>
         <button className="hidden h-12 items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 text-sm font-black text-slate-200 transition hover:bg-white/[0.07] md:flex">
           <Globe2 className="h-4 w-4" />
           EN
-          <ChevronDown className="h-4 w-4 text-slate-500" />
+          <ChevronDown className="h-4 w-4 text-slate-400" />
         </button>
         <a
           href="/owner-admin"
@@ -247,7 +247,7 @@ function TopSearchBar({ query, onQueryChange, onMenu }) {
             <UserRound className="h-4 w-4" />
           </span>
           Partner
-          <ChevronDown className="h-4 w-4 text-slate-500" />
+          <ChevronDown className="h-4 w-4 text-slate-400" />
         </button>
       </div>
     </div>
@@ -286,7 +286,7 @@ function HeroVideoSection({ onPrimary, onExplore }) {
           <button
             type="button"
             onClick={onPrimary}
-            className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 px-5 text-sm font-black text-white transition hover:from-cyan-400 hover:to-fuchsia-400 active:scale-[0.98]"
+            className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-700 to-fuchsia-700 px-5 text-sm font-black text-white transition hover:from-cyan-800 hover:to-fuchsia-800 active:scale-[0.98]"
           >
             <Play className="h-4 w-4" />
             Continue Learning
@@ -373,7 +373,7 @@ function VideoCard({ video, onSelect, selected }) {
         {video.title}
       </h3>
       <p className="mt-1 text-sm font-bold text-cyan-300">{video.category}</p>
-      <p className="mt-1 text-xs font-semibold text-slate-500">{video.progress}% complete</p>
+      <p className="mt-1 text-xs font-semibold text-slate-400">{video.progress}% complete</p>
     </button>
   );
 }
@@ -479,7 +479,7 @@ function TrustedResources({ onOpenResource }) {
               {resource.source}
             </p>
             <h3 className="mt-2 text-sm font-black leading-tight text-white">{resource.title}</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-500">{resource.description}</p>
+            <p className="mt-2 text-xs leading-relaxed text-slate-400">{resource.description}</p>
           </button>
         ))}
       </div>
@@ -627,7 +627,7 @@ function VideoPlayerModal({
                   <span className={`rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] ${categoryAccent[video.category] || "border-white/10 bg-white/[0.05] text-slate-300"}`}>
                     {video.category}
                   </span>
-                  <span className="text-xs font-bold text-slate-500">{video.duration}</span>
+                  <span className="text-xs font-bold text-slate-400">{video.duration}</span>
                 </div>
                 <h2 className="text-2xl font-black leading-tight tracking-tight text-white">
                   {video.title}
@@ -766,7 +766,7 @@ function ResourceModal({ resource, onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="mt-5 w-full rounded-2xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 px-4 py-3 text-sm font-black text-white transition hover:from-cyan-400 hover:to-fuchsia-400 active:scale-[0.98]"
+          className="mt-5 w-full rounded-2xl bg-gradient-to-r from-cyan-700 to-fuchsia-700 px-4 py-3 text-sm font-black text-white transition hover:from-cyan-800 hover:to-fuchsia-800 active:scale-[0.98]"
         >
           Back to Hub
         </button>

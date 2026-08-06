@@ -83,7 +83,7 @@ export default function ModulePage({
         <h3 className={`mb-4 text-xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Lessons")}</h3>
         {currentLesson && (
           <div className="space-y-4 sm:hidden">
-            <div className={`flex items-center justify-between text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+            <div className={`flex items-center justify-between text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
               <span>{tx("Lesson")} {lessonStep + 1}/{module.lessons.length}</span>
               <span>{lessonStepPercent}%</span>
             </div>
@@ -115,7 +115,7 @@ export default function ModulePage({
                         : "bg-slate-200"
                 }`}
               />
-              <p className={`text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Lesson")} {lessonStep + 1}
               </p>
               <h4 className={`mt-1 text-xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx(currentLesson.title)}</h4>
@@ -148,7 +148,7 @@ export default function ModulePage({
                 disabled={!currentLessonUnlocked}
                 className={`mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-40 ${
                   darkMode
-                    ? "bg-gradient-to-r from-cyan-600 to-teal-500"
+                    ? "bg-gradient-to-r from-cyan-700 to-teal-700"
                     : "bg-gradient-to-r from-slate-900 to-slate-700"
                 }`}
               >
@@ -171,7 +171,7 @@ export default function ModulePage({
                 onClick={() => setLessonStep((current) => Math.min(module.lessons.length - 1, current + 1))}
                 disabled={lessonStep === module.lessons.length - 1}
                 className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-white disabled:opacity-40 ${
-                  darkMode ? "bg-gradient-to-r from-cyan-600 to-teal-500" : "bg-gradient-to-r from-slate-900 to-slate-700"
+                  darkMode ? "bg-gradient-to-r from-cyan-700 to-teal-700" : "bg-gradient-to-r from-slate-900 to-slate-700"
                 }`}
               >
                 {tx("Next")} <ChevronRight className="h-4 w-4" />
@@ -213,7 +213,7 @@ export default function ModulePage({
                 />
                 <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                   <div className="min-w-0">
-                    <p className={`text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+                    <p className={`text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                       {tx("Lesson")} {index + 1}
                     </p>
                     <h4 className={`text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx(lesson.title)}</h4>
@@ -247,7 +247,7 @@ export default function ModulePage({
                       disabled={!unlocked}
                       className={`inline-flex min-h-11 w-full items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto sm:text-xs ${
                         darkMode
-                          ? "bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400"
+                          ? "bg-gradient-to-r from-cyan-700 to-teal-700 hover:from-cyan-800 hover:to-teal-800"
                           : "bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-700"
                       }`}
                     >
@@ -271,7 +271,7 @@ export default function ModulePage({
         >
           <div className="mx-auto flex max-w-md items-center gap-3">
             <div className="min-w-0 flex-1">
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Continue Module")}
               </p>
               <p className={`truncate text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -286,7 +286,7 @@ export default function ModulePage({
               onClick={() => onOpenLesson(nextAvailableLesson.id)}
               className={`min-h-11 shrink-0 rounded-xl px-4 py-3 text-sm font-bold text-white ${
                 darkMode
-                  ? "bg-gradient-to-r from-cyan-600 to-teal-500"
+                  ? "bg-gradient-to-r from-cyan-700 to-teal-700"
                   : "bg-gradient-to-r from-slate-900 to-slate-700"
               }`}
             >

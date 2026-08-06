@@ -8,6 +8,14 @@
   color-scheme: light;
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root[data-theme="dark"] body {
+  background: #020617;
+}
+
 body {
   margin: 0;
   min-width: 320px;

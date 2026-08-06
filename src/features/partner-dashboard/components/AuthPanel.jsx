@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { KeyRound, Mail, ShieldCheck } from "lucide-react";
 import { usePartnerDashboard } from "../state/PartnerDashboardContext";
 import { isGoogleLoginConfigured, isSupabaseAuthEnabled } from "../services/authService";
+import ThemeToggle from "./ThemeToggle";
 
 const initialLogin = { email: "", password: "" };
 const initialRegister = {
@@ -16,6 +17,7 @@ export default function AuthPanel({
   darkMode = false,
   translateText = (value) => value,
   authRedirectPath = "/partner-dashboard",
+  onToggleTheme,
 }) {
   const tx = (value) => translateText(value);
   const managedAuthMode = isSupabaseAuthEnabled();
@@ -33,10 +35,10 @@ export default function AuthPanel({
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const labelClass = `block text-sm font-semibold ${darkMode ? "text-slate-300" : "text-slate-700"}`;
-  const inputClass = `mt-1 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900"}`;
+  const inputClass = `mt-1 w-full rounded-xl border px-4 py-3 text-base ${darkMode ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-400" : "border-slate-300 bg-white text-slate-900"}`;
   const primaryBtnClass = `inline-flex min-h-12 items-center justify-center rounded-xl px-4 py-3 text-sm font-bold text-white transition ${
     darkMode
-      ? "bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400"
+      ? "bg-gradient-to-r from-cyan-700 to-teal-700 hover:from-cyan-800 hover:to-teal-800"
       : "bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-700"
   }`;
   const secondaryBtnClass = `inline-flex min-h-12 items-center justify-center rounded-xl border px-4 py-3 text-sm font-bold ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`;
@@ -104,8 +106,18 @@ export default function AuthPanel({
             {tx("Secure sign-in to track module progress, quiz scores, and lesson completion.")}
           </p>
         </div>
-        <div className={`flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold ${darkMode ? "border-emerald-900/50 bg-emerald-900/30 text-emerald-300" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
-          <ShieldCheck className="h-4 w-4" /> {tx("User Scoped")}
+        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
+          {onToggleTheme && (
+            <ThemeToggle
+              darkMode={darkMode}
+              onToggle={onToggleTheme}
+              translateText={translateText}
+              className="flex-1 sm:flex-none"
+            />
+          )}
+          <div className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full border px-4 py-2 text-xs font-bold sm:flex-none ${darkMode ? "border-emerald-900/50 bg-emerald-900/30 text-emerald-300" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
+            <ShieldCheck className="h-4 w-4" aria-hidden="true" /> {tx("User Scoped")}
+          </div>
         </div>
       </div>
 
@@ -222,7 +234,7 @@ export default function AuthPanel({
               }
               placeholder={tx("Optional")}
             />
-            <span className={`mt-1 block text-xs font-semibold ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+            <span className={`mt-1 block text-xs font-semibold ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
               {tx("Add the partner organization, program, or group you came through if one applies.")}
             </span>
           </label>
@@ -278,7 +290,7 @@ export default function AuthPanel({
                 required
               />
             </label>
-            <p className={`text-xs ${darkMode ? "text-slate-500" : "text-slate-600"}`}>
+            <p className={`text-xs ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
               {tx("A secure reset link will be sent to this email address.")}
             </p>
             <button

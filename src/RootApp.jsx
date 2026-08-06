@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import App, { LANGUAGE_SESSION_KEY, translateStaticText } from "./App";
+import { getInitialPartnerDarkMode } from "./features/partner-dashboard/utils/theme";
 const PartnerDashboardApp = React.lazy(() => import("./features/partner-dashboard"));
 const AdminDashboardApp = React.lazy(() => import("./features/admin-dashboard"));
 const OrganizationsPage = React.lazy(() => import("./features/public-pages/OrganizationsPage"));
@@ -29,6 +30,7 @@ function usePathRouter() {
 
 export default function RootApp() {
   const { pathname, navigate } = usePathRouter();
+  const [initialPartnerDarkMode] = useState(() => getInitialPartnerDarkMode());
   const language =
     typeof window === "undefined"
       ? "en"
@@ -40,7 +42,7 @@ export default function RootApp() {
       return (
         <React.Suspense
           fallback={
-            <div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">
+            <div className={`min-h-screen px-4 py-10 text-center ${initialPartnerDarkMode ? "bg-slate-950 text-slate-300" : "bg-slate-50 text-slate-600"}`}>
               Loading partner dashboard...
             </div>
           }
@@ -84,7 +86,7 @@ export default function RootApp() {
       );
     }
     return <App />;
-  }, [navigate, pathname, translateText]);
+  }, [initialPartnerDarkMode, navigate, pathname, translateText]);
 
   return page;
 }

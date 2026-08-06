@@ -49,7 +49,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
           <div className="min-w-0">
             <p
               className={`text-xs font-black uppercase tracking-[0.2em] ${
-                darkMode ? "text-slate-500" : "text-slate-500"
+                darkMode ? "text-slate-400" : "text-slate-500"
               }`}
             >
               {tx("Current Module")}
@@ -70,7 +70,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
                 type="button"
                 className={`mt-4 min-h-12 w-full rounded-xl px-4 py-3 text-sm font-bold text-white transition sm:min-h-0 sm:w-auto sm:py-2 ${
                   darkMode
-                    ? "bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400"
+                    ? "bg-gradient-to-r from-cyan-700 to-teal-700 hover:from-cyan-800 hover:to-teal-800"
                     : "bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-700"
                 }`}
                 onClick={() =>
@@ -90,7 +90,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
                   : "border-slate-200 bg-white/70"
               }`}
             >
-              <p className={`text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Overall Progress")}
               </p>
               <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -104,7 +104,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
                   : "border-slate-200 bg-white/70"
               }`}
             >
-              <p className={`text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Quiz Avg")}
               </p>
               <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -118,7 +118,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
                   : "border-slate-200 bg-white/70"
               }`}
             >
-              <p className={`text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Recently Completed")}
               </p>
               <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -147,13 +147,13 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
                 className={`mt-1 h-12 w-full rounded-xl border px-4 text-base font-semibold outline-none transition focus:border-cyan-400 ${darkMode ? "border-slate-700 bg-slate-950 text-slate-100 placeholder:text-slate-600" : "border-slate-300 bg-white text-slate-900 placeholder:text-slate-400"}`}
               />
             </label>
-            <p className={`mt-2 text-xs font-semibold leading-relaxed ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+            <p className={`mt-2 text-xs font-semibold leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
               {tx("If a partner organization referred you, add it here so program leaders can see learning participation by organization.")}
             </p>
           </div>
           <button
             type="submit"
-            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-black text-white transition ${darkMode ? "bg-cyan-600 hover:bg-cyan-500" : "bg-slate-900 hover:bg-slate-800"}`}
+            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-black text-white transition ${darkMode ? "bg-cyan-700 hover:bg-cyan-800" : "bg-slate-900 hover:bg-slate-800"}`}
           >
             <Save className="h-4 w-4" />
             {organizationSaved ? tx("Saved") : tx("Save")}
@@ -189,7 +189,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
               {recommendedLesson.lessonId && (
                 <button
                   type="button"
-                  className={`mt-auto flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black text-white transition ${darkMode ? "bg-cyan-600 hover:bg-cyan-500" : "bg-slate-900 hover:bg-slate-800"}`}
+                  className={`mt-auto flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black text-white transition ${darkMode ? "bg-cyan-700 hover:bg-cyan-800" : "bg-slate-900 hover:bg-slate-800"}`}
                   onClick={() => {
                     onRecommendationClick("lesson", recommendedLesson);
                     onOpenLesson(recommendedLesson.moduleId, recommendedLesson.lessonId);
@@ -253,7 +253,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <article className={`rounded-[1.6rem] border p-4 transition ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
-          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
             <Clock3 className="h-4 w-4 text-rose-400" /> {tx("Current Module")}
           </p>
           <h3 className={`mt-1 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx(metrics.currentModule.title)}</h3>
@@ -261,7 +261,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </article>
 
         <article className={`rounded-[1.6rem] border p-4 transition ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-cyan-950/40 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-cyan-50/50 shadow-sm"}`}>
-          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
             <BarChart3 className="h-4 w-4 text-cyan-400" /> {tx("Overall Progress")}
           </p>
           <h3 className={`mt-1 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{metrics.overallProgress}%</h3>
@@ -269,7 +269,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </article>
 
         <article className={`rounded-[1.6rem] border p-4 transition ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-indigo-950/30 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-indigo-50/40 shadow-sm"}`}>
-          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
             <GraduationCap className="h-4 w-4 text-indigo-400" /> {tx("Next Lesson")}
           </p>
           <h3 className={`mt-1 text-sm font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx(metrics.nextLesson.lessonTitle)}</h3>
@@ -288,7 +288,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </article>
 
         <article className={`rounded-[1.6rem] border p-4 transition ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-emerald-950/30 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-emerald-50/40 shadow-sm"}`}>
-          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
             <BookMarked className="h-4 w-4 text-emerald-400" /> {tx("Recently Completed")}
           </p>
           <h3 className={`mt-1 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{metrics.recentlyCompleted.length}</h3>
@@ -303,7 +303,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
           </p>
           <div className="mt-3 space-y-3">
             <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Up Next")}
               </p>
               <p className={`mt-1 text-base font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -315,7 +315,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
             </div>
             {latestCompleted && (
               <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
-                <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+                <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                   {tx("Last Completed")}
                 </p>
                 <p className={`mt-1 text-sm font-bold leading-relaxed ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -336,7 +336,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
           </p>
           <div className="mt-3 space-y-3">
             <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Modules Started")}
               </p>
               <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -344,7 +344,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
               </p>
             </div>
             <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Recent Activity")}
               </p>
               <p className={`mt-1 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-700"}`}>
@@ -423,7 +423,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
           <button
             type="button"
             onClick={onOpenGuides}
-            className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-400 hover:to-fuchsia-400"
+            className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-700 to-fuchsia-700 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-800 hover:to-fuchsia-800"
           >
             {tx("Open Guide Library")} <ArrowRight className="h-4 w-4" />
           </button>
@@ -443,7 +443,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
                   <span className="rounded-xl border border-cyan-300/20 bg-cyan-300/10 p-2 text-cyan-200">
                     <Icon className="h-4 w-4" />
                   </span>
-                  <span className="text-[10px] font-black uppercase tracking-[0.14em] text-slate-500">
+                  <span className="text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">
                     {tx(guide.phase)}
                   </span>
                 </div>
@@ -472,7 +472,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
           <button
             type="button"
             onClick={onOpenVideoHub}
-            className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-400 hover:to-fuchsia-400"
+            className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-700 to-fuchsia-700 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-800 hover:to-fuchsia-800"
           >
             {tx("Open Video Hub")} <ArrowRight className="h-4 w-4" />
           </button>
@@ -517,7 +517,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         >
           <div className="mx-auto flex max-w-md items-center gap-3">
             <div className="min-w-0 flex-1">
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-500" : "text-slate-500"}`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Resume Training")}
               </p>
               <p className={`truncate text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
@@ -531,7 +531,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
               type="button"
               className={`min-h-11 shrink-0 rounded-xl px-4 py-3 text-sm font-bold text-white ${
                 darkMode
-                  ? "bg-gradient-to-r from-cyan-600 to-teal-500"
+                  ? "bg-gradient-to-r from-cyan-700 to-teal-700"
                   : "bg-gradient-to-r from-slate-900 to-slate-700"
               }`}
               onClick={() =>
