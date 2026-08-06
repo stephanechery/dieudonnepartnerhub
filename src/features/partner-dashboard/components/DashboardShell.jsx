@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowLeft, LogOut, ShieldCheck } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
 import dieudonneDarkLogo from "../../../assets/Dieudonne_Dark_Logo.png";
 import ThemeToggle from "./ThemeToggle";
 
@@ -13,6 +13,7 @@ export default function DashboardShell({
   homeLabel = "Site Home",
   darkMode = false,
   onToggleTheme,
+  showAdminDashboard = false,
   translateText = (value) => value,
 }) {
   const tx = (value) => translateText(value);
@@ -63,6 +64,19 @@ export default function DashboardShell({
                 translateText={translateText}
                 className="col-span-2 w-full sm:col-span-1 sm:w-auto"
               />
+            )}
+            {showAdminDashboard && (
+              <a
+                href="/owner-admin"
+                aria-label={tx("Open Admin Dashboard")}
+                className={`col-span-2 flex min-h-10 w-full items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 sm:col-span-1 sm:min-h-0 sm:w-auto sm:justify-start ${
+                  darkMode
+                    ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-900"
+                    : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 focus-visible:ring-offset-white"
+                }`}
+              >
+                <LayoutDashboard className="h-4 w-4" /> {tx("Admin Dashboard")}
+              </a>
             )}
             {showHomeButton && (
               <button

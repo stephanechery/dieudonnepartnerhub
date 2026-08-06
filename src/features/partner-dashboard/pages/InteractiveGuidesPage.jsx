@@ -38,43 +38,76 @@ const guideComponents = {
   ),
 };
 
-const accentClasses = {
+const darkAccentClasses = {
   amber: {
     badge: "text-amber-300 border-amber-400/30 bg-amber-400/10",
     icon: "bg-amber-400/15 text-amber-300 border-amber-300/25",
-    button: "from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400",
+    button: "from-amber-700 to-orange-700 hover:from-amber-800 hover:to-orange-800",
   },
   cyan: {
     badge: "text-cyan-300 border-cyan-400/30 bg-cyan-400/10",
     icon: "bg-cyan-400/15 text-cyan-300 border-cyan-300/25",
-    button: "from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400",
+    button: "from-cyan-700 to-blue-700 hover:from-cyan-800 hover:to-blue-800",
   },
   emerald: {
     badge: "text-emerald-300 border-emerald-400/30 bg-emerald-400/10",
     icon: "bg-emerald-400/15 text-emerald-300 border-emerald-300/25",
     button:
-      "from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400",
+      "from-emerald-700 to-teal-700 hover:from-emerald-800 hover:to-teal-800",
   },
   rose: {
     badge: "text-rose-300 border-rose-400/30 bg-rose-400/10",
     icon: "bg-rose-400/15 text-rose-300 border-rose-300/25",
-    button: "from-rose-500 to-pink-500 hover:from-rose-400 hover:to-pink-400",
+    button: "from-rose-700 to-pink-700 hover:from-rose-800 hover:to-pink-800",
   },
   violet: {
     badge: "text-violet-300 border-violet-400/30 bg-violet-400/10",
     icon: "bg-violet-400/15 text-violet-300 border-violet-300/25",
     button:
-      "from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400",
+      "from-violet-700 to-fuchsia-700 hover:from-violet-800 hover:to-fuchsia-800",
   },
 };
 
-function GuideCard({ guide, onOpen, translateText }) {
+const lightAccentClasses = {
+  amber: {
+    badge: "text-amber-800 border-amber-200 bg-amber-50",
+    icon: "bg-amber-50 text-amber-700 border-amber-200",
+    button: "from-amber-700 to-orange-700 hover:from-amber-800 hover:to-orange-800",
+  },
+  cyan: {
+    badge: "text-cyan-800 border-cyan-200 bg-cyan-50",
+    icon: "bg-cyan-50 text-cyan-700 border-cyan-200",
+    button: "from-cyan-700 to-blue-700 hover:from-cyan-800 hover:to-blue-800",
+  },
+  emerald: {
+    badge: "text-emerald-800 border-emerald-200 bg-emerald-50",
+    icon: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    button: "from-emerald-700 to-teal-700 hover:from-emerald-800 hover:to-teal-800",
+  },
+  rose: {
+    badge: "text-rose-800 border-rose-200 bg-rose-50",
+    icon: "bg-rose-50 text-rose-700 border-rose-200",
+    button: "from-rose-700 to-pink-700 hover:from-rose-800 hover:to-pink-800",
+  },
+  violet: {
+    badge: "text-violet-800 border-violet-200 bg-violet-50",
+    icon: "bg-violet-50 text-violet-700 border-violet-200",
+    button: "from-violet-700 to-fuchsia-700 hover:from-violet-800 hover:to-fuchsia-800",
+  },
+};
+
+function GuideCard({ guide, onOpen, darkMode, translateText }) {
   const tx = translateText;
   const Icon = guide.Icon;
-  const accent = accentClasses[guide.accent] || accentClasses.cyan;
+  const accents = darkMode ? darkAccentClasses : lightAccentClasses;
+  const accent = accents[guide.accent] || accents.cyan;
 
   return (
-    <article className="group flex h-full flex-col rounded-[1.5rem] border border-slate-800 bg-slate-900/80 p-4 shadow-xl shadow-black/10 transition hover:-translate-y-0.5 hover:border-slate-700 hover:bg-slate-900">
+    <article className={`group flex h-full flex-col rounded-[1.5rem] border p-4 transition hover:-translate-y-0.5 ${
+      darkMode
+        ? "border-slate-800 bg-slate-900/80 shadow-xl shadow-black/10 hover:border-slate-700 hover:bg-slate-900"
+        : "border-slate-200 bg-white shadow-sm hover:border-slate-300 hover:bg-slate-50"
+    }`}>
       <div className="flex items-start justify-between gap-3">
         <div className={`rounded-2xl border p-3 ${accent.icon}`}>
           <Icon className="h-5 w-5" />
@@ -85,10 +118,10 @@ function GuideCard({ guide, onOpen, translateText }) {
           {tx(guide.phase)}
         </span>
       </div>
-      <h3 className="mt-5 text-xl font-black leading-tight text-slate-50">
+      <h3 className={`mt-5 text-xl font-black leading-tight ${darkMode ? "text-slate-50" : "text-slate-950"}`}>
         {tx(guide.title)}
       </h3>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-400">
+      <p className={`mt-2 flex-1 text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
         {tx(guide.summary)}
       </p>
       <button
@@ -108,6 +141,7 @@ export default function InteractiveGuidesPage({
   onBackToDashboard,
   onOpenGuide,
   darkMode = false,
+  onToggleTheme,
   translateText = (value) => value,
 }) {
   const tx = translateText;
@@ -128,7 +162,7 @@ export default function InteractiveGuidesPage({
         <p className="font-black">{tx("Guide not found.")}</p>
         <button
           type="button"
-          className="mt-4 rounded-xl bg-slate-900 px-4 py-2 text-sm font-black text-white"
+          className={`mt-4 rounded-xl px-4 py-2 text-sm font-black text-white ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-slate-900 hover:bg-slate-800"}`}
           onClick={onBack}
         >
           {tx("Back to Guide Library")}
@@ -140,38 +174,38 @@ export default function InteractiveGuidesPage({
   if (selectedGuide && SelectedGuideComponent) {
     return (
       <div className="space-y-4">
-        <section className="rounded-[1.5rem] border border-slate-800 bg-slate-950 p-4 shadow-xl shadow-black/20">
+        <section className={`rounded-[1.5rem] border p-4 ${darkMode ? "border-slate-800 bg-slate-950 shadow-xl shadow-black/20" : "border-slate-200 bg-white shadow-sm"}`}>
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">
+              <p className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
                 {tx(selectedGuide.phase)}
               </p>
-              <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-50">
+              <h2 className={`mt-1 text-2xl font-black tracking-tight ${darkMode ? "text-slate-50" : "text-slate-950"}`}>
                 {tx(selectedGuide.title)}
               </h2>
-              <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-400">
+              <p className={`mt-1 max-w-2xl text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
                 {tx(selectedGuide.summary)}
               </p>
             </div>
             <button
               type="button"
               onClick={onBack}
-              className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-black text-slate-200 transition hover:bg-slate-800"
+              className={`flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-black transition ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`}
             >
               <ArrowLeft className="h-4 w-4" /> {tx("Back to Guide Library")}
             </button>
           </div>
         </section>
 
-        <div className="overflow-hidden rounded-[1.5rem] border border-slate-800 bg-slate-950 shadow-2xl shadow-black/30">
+        <div className={`overflow-hidden rounded-[1.5rem] border ${darkMode ? "border-slate-800 bg-slate-950 shadow-2xl shadow-black/30" : "border-slate-200 bg-white shadow-sm"}`}>
           <Suspense
             fallback={
-              <div className="flex min-h-[420px] items-center justify-center bg-slate-950 text-sm font-bold text-slate-400">
+              <div className={`flex min-h-[420px] items-center justify-center text-sm font-bold ${darkMode ? "bg-slate-950 text-slate-400" : "bg-white text-slate-600"}`}>
                 {tx("Loading interactive guide...")}
               </div>
             }
           >
-            <SelectedGuideComponent />
+            <SelectedGuideComponent darkMode={darkMode} onToggleTheme={onToggleTheme} />
           </Suspense>
         </div>
       </div>
@@ -180,18 +214,18 @@ export default function InteractiveGuidesPage({
 
   return (
     <div className="space-y-5 pb-20 sm:pb-0">
-      <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/40 p-5 shadow-2xl shadow-black/20 sm:p-7">
+      <section className={`relative overflow-hidden rounded-[2rem] border p-5 sm:p-7 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/40 shadow-2xl shadow-black/20" : "border-slate-200 bg-gradient-to-br from-white via-slate-50 to-cyan-50 shadow-sm"}`}>
         <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 left-12 h-48 w-48 rounded-full bg-fuchsia-400/10 blur-3xl" />
         <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-300">
+            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
               <Library className="h-4 w-4" /> {tx("Interactive Guide Library")}
             </p>
-            <h2 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
+            <h2 className={`mt-3 text-3xl font-black tracking-tight sm:text-4xl ${darkMode ? "text-white" : "text-slate-950"}`}>
               {tx("Practice core support skills with focused visual guides.")}
             </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
+            <p className={`mt-3 max-w-2xl text-sm leading-relaxed sm:text-base ${darkMode ? "text-slate-300" : "text-slate-700"}`}>
               {tx(
                 "Use these companion guides alongside the course lessons for deeper practice in pregnancy, labor, postpartum recovery, communication, and mental health support."
               )}
@@ -200,7 +234,7 @@ export default function InteractiveGuidesPage({
           <button
             type="button"
             onClick={onBackToDashboard}
-            className="flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-2 text-sm font-black text-slate-100 transition hover:border-cyan-400/60 hover:bg-slate-800"
+            className={`flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-black transition ${darkMode ? "border-slate-700 bg-slate-900/80 text-slate-100 hover:border-cyan-400/60 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:border-cyan-400 hover:bg-slate-100"}`}
           >
             <ArrowLeft className="h-4 w-4" /> {tx("Back to Dashboard")}
           </button>
@@ -213,6 +247,7 @@ export default function InteractiveGuidesPage({
             key={guide.id}
             guide={guide}
             onOpen={onOpenGuide}
+            darkMode={darkMode}
             translateText={tx}
           />
         ))}
@@ -229,7 +264,7 @@ export default function InteractiveGuidesPage({
           <BookOpenCheck className="h-4 w-4 text-cyan-400" />
           {tx("How to use these guides")}
         </p>
-        <p className="mt-2 text-sm leading-relaxed text-slate-400">
+        <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
           {tx(
             "Open one guide before or after a related lesson. The guides are for practice and orientation, while lesson completion and quiz progress stay inside the course modules."
           )}

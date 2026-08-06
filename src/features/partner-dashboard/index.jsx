@@ -8,7 +8,7 @@ import LessonPage from "./pages/LessonPage";
 import InteractiveGuidesPage from "./pages/InteractiveGuidesPage";
 import VideoHubPage from "./pages/VideoHubPage";
 import { PartnerDashboardProvider, usePartnerDashboard } from "./state/PartnerDashboardContext";
-import { trackPartnerEvent } from "./services/analyticsService";
+import { isConfiguredOwnerUser, trackPartnerEvent } from "./services/analyticsService";
 import { getModuleState, isLessonUnlocked, isModuleUnlocked } from "./utils/progress";
 import {
   applyPartnerDocumentTheme,
@@ -45,6 +45,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
 
   const subPath = useMemo(() => getSubPath(pathname), [pathname]);
   const lastTrackedPath = useRef("");
+  const showAdminDashboard = isConfiguredOwnerUser(authUser, profile);
 
   useEffect(() => {
     if (!authUser || lastTrackedPath.current === subPath) return;
@@ -151,7 +152,13 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         />
     );
   } else if (subPath === "/video-hub") {
-    page = <VideoHubPage />;
+    page = (
+      <VideoHubPage
+        darkMode={darkMode}
+        onToggleTheme={onToggleTheme}
+        showAdminDashboard={showAdminDashboard}
+      />
+    );
   } else if (guidesMatch) {
     page = (
       <InteractiveGuidesPage
@@ -160,6 +167,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         onBackToDashboard={openOverview}
         onOpenGuide={openGuide}
         darkMode={darkMode}
+        onToggleTheme={onToggleTheme}
         translateText={translateText}
       />
     );
@@ -272,6 +280,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
       homeLabel={embedded ? "Back to Main Guide" : "Site Home"}
       darkMode={darkMode}
       onToggleTheme={onToggleTheme}
+      showAdminDashboard={showAdminDashboard}
       translateText={translateText}
     >
       {page}

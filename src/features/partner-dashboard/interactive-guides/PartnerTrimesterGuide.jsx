@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import usePartnerGuideTheme from "../hooks/usePartnerGuideTheme";
 
 const DARK = {
   bg:"#050914", card:"#0f172a", cardAlt:"#111c33",
@@ -918,19 +919,12 @@ function SectionWellness({ lang, C, ui }) {
   );
 }
 
-export default function PartnerTrimesterGuide() {
+export default function PartnerTrimesterGuide({ darkMode, onToggleTheme }) {
   const [lang, setLang] = useState("en");
   const [section, setSection] = useState(0);
-  const [dark, setDark] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return window.localStorage.getItem("dph-guide-theme") !== "light";
-  });
+  const [dark, setDark] = usePartnerGuideTheme(darkMode, onToggleTheme);
   const [ready, setReady] = useState(false);
   useEffect(() => { setTimeout(() => setReady(true), 80); }, []);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem("dph-guide-theme", dark ? "dark" : "light");
-  }, [dark]);
 
   const C = dark ? DARK : LIGHT;
   const ui = UI[lang];

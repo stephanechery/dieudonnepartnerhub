@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import usePartnerGuideTheme from "../hooks/usePartnerGuideTheme";
 const DARK={bg:"#050914",card:"#0f172a",cardAlt:"#111c33",border:"rgba(148,163,184,0.16)",text:"#f8fafc",muted:"#cbd5e1",faint:"rgba(203,213,225,0.62)",accent:"#22d3ee",teal:"#22d3ee",purple:"#d946ef",gold:"#a78bfa",green:"#34d399",red:"#fb7185",orange:"#60a5fa",blue:"#38bdf8",pink:"#f472b6",navBg:"rgba(5,9,20,0.96)",shadow:"0 24px 80px rgba(0,0,0,0.45)",inputBg:"rgba(255,255,255,0.06)",toggleBg:"rgba(255,255,255,0.08)"};
 const LIGHT={bg:"#f8fbff",card:"#ffffff",cardAlt:"#eef6ff",border:"rgba(15,23,42,0.12)",text:"#0f172a",muted:"#334155",faint:"rgba(51,65,85,0.58)",accent:"#0891b2",teal:"#0891b2",purple:"#7c3aed",gold:"#6d5dfc",green:"#059669",red:"#e11d48",orange:"#2563eb",blue:"#0284c7",pink:"#c026d3",navBg:"rgba(248,251,255,0.97)",shadow:"0 20px 55px rgba(15,23,42,0.12)",inputBg:"rgba(15,23,42,0.04)",toggleBg:"rgba(15,23,42,0.06)"};
 const LANGS=[{code:"en",label:"English",flag:"🇺🇸"},{code:"es",label:"Español",flag:"🇪🇸"},{code:"ht",label:"Kreyol",flag:"🇭🇹"},{code:"fr",label:"Français",flag:"🇫🇷"}];
@@ -265,13 +266,12 @@ const GENERIC_G9={
   },
 };
 
-export default function PartnerFeedingGuide(){
+export default function PartnerFeedingGuide({ darkMode, onToggleTheme }){
   const [lang,setLang]=useState("en");
   const [section,setSection]=useState(0);
-  const [dark,setDark]=useState(()=>{if(typeof window==="undefined")return true;return window.localStorage.getItem("dph-guide-theme")!=="light";});
+  const [dark,setDark]=usePartnerGuideTheme(darkMode,onToggleTheme);
   const [ready,setReady]=useState(false);
   useEffect(()=>{setTimeout(()=>setReady(true),80);},[]);
-  useEffect(()=>{if(typeof window!=="undefined")window.localStorage.setItem("dph-guide-theme",dark?"dark":"light");},[dark]);
   const C=dark?DARK:LIGHT;
   const navLabels=NAV[lang];
   const g=GENERIC_G9[lang]||GENERIC_G9.en;

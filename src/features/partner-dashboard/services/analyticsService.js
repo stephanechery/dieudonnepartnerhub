@@ -91,14 +91,16 @@ const configuredAdminEmails = () =>
     .map(normalizeEmail)
     .filter(Boolean);
 
+export const isConfiguredOwnerUser = (authUser, profile) => {
+  const email = normalizeEmail(authUser?.email || profile?.email);
+  return Boolean(email) && configuredAdminEmails().includes(email);
+};
+
 export const isAdminUser = (authUser, profile) => {
   const role = String(authUser?.role || profile?.role || "").trim().toLowerCase();
   if (role === "admin" || role === "owner") return true;
 
-  const email = normalizeEmail(authUser?.email || profile?.email);
-  if (!email) return false;
-
-  return configuredAdminEmails().includes(email);
+  return isConfiguredOwnerUser(authUser, profile);
 };
 
 export const trackPartnerEvent = (eventName, payload = {}) => {
