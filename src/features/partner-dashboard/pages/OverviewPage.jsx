@@ -407,16 +407,16 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </p>
       </section>
 
-      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/30 shadow-xl" : "border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 shadow-sm"}`}>
+      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/30 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/70 to-indigo-50 shadow-sm"}`}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
               <Library className="h-4 w-4" /> {tx("Interactive Guide Library")}
             </p>
-            <h2 className="mt-2 text-2xl font-black tracking-tight text-white sm:text-3xl">
+            <h2 className={`mt-2 text-2xl font-black tracking-tight sm:text-3xl ${darkMode ? "text-white" : "text-slate-950"}`}>
               {tx("Companion guides for deeper practice")}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-slate-300">
+            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
               {tx("Open focused visual guides for pregnancy, labor, postpartum recovery, communication, and mental health support.")}
             </p>
           </div>
@@ -437,17 +437,21 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
                 key={guide.id}
                 type="button"
                 onClick={onOpenGuides}
-                className="group rounded-2xl border border-slate-800 bg-slate-900/70 p-3 text-left transition hover:-translate-y-0.5 hover:border-cyan-400/50 hover:bg-slate-900"
+                className={`group rounded-2xl border p-3 text-left transition hover:-translate-y-0.5 ${
+                  darkMode
+                    ? "border-slate-800 bg-slate-900/70 hover:border-cyan-400/50 hover:bg-slate-900"
+                    : "border-slate-200 bg-white/80 hover:border-cyan-300 hover:bg-white"
+                }`}
               >
                 <div className="flex items-center gap-2">
-                  <span className="rounded-xl border border-cyan-300/20 bg-cyan-300/10 p-2 text-cyan-200">
+                  <span className={`rounded-xl border p-2 ${darkMode ? "border-cyan-300/20 bg-cyan-300/10 text-cyan-200" : "border-cyan-200 bg-cyan-50 text-cyan-700"}`}>
                     <Icon className="h-4 w-4" />
                   </span>
-                  <span className="text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">
+                  <span className={`text-[10px] font-black uppercase tracking-[0.14em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                     {tx(guide.phase)}
                   </span>
                 </div>
-                <p className="mt-3 text-sm font-black leading-tight text-slate-100">
+                <p className={`mt-3 text-sm font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
                   {tx(guide.title)}
                 </p>
               </button>
@@ -456,16 +460,16 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </div>
       </section>
 
-      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950/20 shadow-xl" : "border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950 shadow-sm"}`}>
+      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950/20 shadow-xl" : "border-fuchsia-200 bg-gradient-to-br from-white via-fuchsia-50/60 to-indigo-50 shadow-sm"}`}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
               <Video className="h-4 w-4" /> {tx("Partner Video Hub")}
             </p>
-            <h2 className="mt-2 text-2xl font-black tracking-tight text-white sm:text-3xl">
+            <h2 className={`mt-2 text-2xl font-black tracking-tight sm:text-3xl ${darkMode ? "text-white" : "text-slate-950"}`}>
               {tx("Watch partner-focused support videos inside the hub")}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-slate-300">
+            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
               {tx("Open embedded videos for prenatal education, labor support, postpartum recovery, newborn care, and mental health without leaving the platform.")}
             </p>
           </div>

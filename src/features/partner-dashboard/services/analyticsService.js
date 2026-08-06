@@ -3,9 +3,17 @@ import { partnerInteractiveGuides } from "../data/interactiveGuides";
 import { videoHubVideos } from "../data/videoHub";
 import { getCurrentAccessToken } from "./authService";
 import { getAllLocalProfiles, getAllRemoteProfilesForAdmin } from "./profileService";
+import {
+  buildAdminTrend,
+  filterEventsForAdminRange,
+  getAdminRangeCutoff,
+  getAdminRangeLabel,
+  getProfileProgressTotals,
+  mergeProfileCompletionEvents,
+  normalizeAdminRange,
+} from "../utils/adminAnalytics";
 
 const EVENTS_KEY = "dph_learning_events_v1";
-const ACTIVE_WINDOW_DAYS = 14;
 const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || "").trim();
 const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || "").trim();
 const SUPABASE_ANALYTICS_TABLE =
@@ -260,24 +268,6 @@ const makeMockEvents = () => {
 
 const getModuleState = (profile, moduleId) => profile.modules?.[moduleId] || {};
 
-const countCompletedLessons = (profile) =>
-  partnerCurriculum.modules.reduce((count, module) => {
-    const moduleState = getModuleState(profile, module.id);
-    return count + (moduleState.completedLessons || []).length;
-  }, 0);
-
-const countQuizScores = (profile) =>
-  partnerCurriculum.modules.reduce((count, module) => {
-    const moduleState = getModuleState(profile, module.id);
-    return count + Object.keys(moduleState.quizScores || {}).length;
-  }, 0);
-
-const activeSince = () => {
-  const date = new Date();
-  date.setDate(date.getDate() - ACTIVE_WINDOW_DAYS);
-  return date.getTime();
-};
-
 const increment = (map, key, amount = 1) => {
   if (!key) return;
   map.set(key, (map.get(key) || 0) + amount);
@@ -287,42 +277,6 @@ const sortMap = (map) =>
   Array.from(map.entries())
     .map(([id, value]) => ({ id, value }))
     .sort((a, b) => b.value - a.value);
-
-const buildTrend = (events) => {
-  const rows = Array.from({ length: 7 }).map((_, index) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (6 - index));
-    return {
-      key: date.toISOString().slice(0, 10),
-      label: date.toLocaleDateString(undefined, { weekday: "short" }),
-      lessons: 0,
-      videos: 0,
-      guides: 0,
-    };
-  });
-
-  const rowByKey = new Map(rows.map((row) => [row.key, row]));
-  events.forEach((event) => {
-    const row = rowByKey.get(String(event.occurredAt || "").slice(0, 10));
-    if (!row) return;
-    if (event.eventName === "lesson_start" || event.eventName === "lesson_completed") {
-      row.lessons += 1;
-    }
-    if (
-      event.eventName === "video_hub_open" ||
-      event.eventName === "video_view" ||
-      event.eventName === "video_save" ||
-      event.eventName === "video_watch_later"
-    ) {
-      row.videos += 1;
-    }
-    if (event.eventName === "guide_open") {
-      row.guides += 1;
-    }
-  });
-
-  return rows;
-};
 
 const getLessonTitle = (moduleId, lessonId) => {
   const module = partnerCurriculum.modules.find((item) => item.id === moduleId);
@@ -436,19 +390,21 @@ const buildOrganizationBreakdown = (profiles) => {
   }));
 };
 
-const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
-  const activeCutoff = activeSince();
+const buildAdminDashboardData = ({ profiles, events, usingMockData, range, eventTrackingScope }) => {
+  const normalizedRange = normalizeAdminRange(range);
+  const activeCutoff = getAdminRangeCutoff(normalizedRange);
+  const rangedEvents = filterEventsForAdminRange(events, normalizedRange);
+  const trendEvents = mergeProfileCompletionEvents(events, profiles);
   const profileIds = new Set(profiles.map((profile) => profile.uid));
 
   const uniqueActiveUsers = new Set(
-    events
-      .filter((event) => new Date(event.occurredAt).getTime() >= activeCutoff)
+    rangedEvents
       .map((event) => event.uid)
       .filter((uid) => uid && profileIds.has(uid))
   );
 
   profiles.forEach((profile) => {
-    if (new Date(profile.lastActiveAt).getTime() >= activeCutoff) {
+    if (activeCutoff === null || new Date(profile.lastActiveAt).getTime() >= activeCutoff) {
       uniqueActiveUsers.add(profile.uid);
     }
   });
@@ -479,7 +435,7 @@ const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
   const resumeMap = new Map();
   const dropOffMap = new Map();
 
-  events.forEach((event) => {
+  rangedEvents.forEach((event) => {
     if (event.eventName === "guide_open") increment(guideMap, event.guideId);
     if (
       event.eventName === "video_view" ||
@@ -516,22 +472,21 @@ const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
     });
   });
 
-  const lessonStarts = events.filter((event) => event.eventName === "lesson_start").length;
-  const lessonCompletions =
-    profiles.reduce((count, profile) => count + countCompletedLessons(profile), 0) +
-    events.filter((event) => event.eventName === "lesson_completed").length;
-  const quizCompletions =
-    profiles.reduce((count, profile) => count + countQuizScores(profile), 0) +
-    events.filter((event) => event.eventName === "quiz_completed").length;
-  const videoHubViews = events.filter((event) => event.eventName === "video_hub_open").length;
-  const videoViews = events.filter((event) => event.eventName === "video_view").length;
-  const savedVideoEvents = events.filter((event) => event.eventName === "video_save").length;
-  const watchLaterEvents = events.filter((event) => event.eventName === "video_watch_later").length;
-  const savedVideos = savedVideoEvents || profiles.reduce(
+  const lessonStarts = rangedEvents.filter((event) => event.eventName === "lesson_start").length;
+  const profileProgressTotals = getProfileProgressTotals(profiles);
+  const profileLessonCompletions = profileProgressTotals.lessonCompletions;
+  const profileQuizResults = profileProgressTotals.quizResults;
+  const lessonCompletions = profileLessonCompletions ||
+    rangedEvents.filter((event) => event.eventName === "lesson_completed").length;
+  const quizCompletions = profileQuizResults ||
+    rangedEvents.filter((event) => event.eventName === "quiz_completed").length;
+  const videoHubViews = rangedEvents.filter((event) => event.eventName === "video_hub_open").length;
+  const videoViews = rangedEvents.filter((event) => event.eventName === "video_view").length;
+  const savedVideos = profiles.reduce(
     (count, profile) => count + (profile.videoHub?.savedVideoIds || []).length,
     0
   );
-  const watchLaterAdds = watchLaterEvents || profiles.reduce(
+  const watchLaterAdds = profiles.reduce(
     (count, profile) => count + (profile.videoHub?.watchLaterIds || []).length,
     0
   );
@@ -540,10 +495,12 @@ const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
     (item) => item.id !== "No organization provided"
   ).length;
 
-  const guideUsage = sortMap(guideMap).map((item) => ({
-    ...item,
-    label: partnerInteractiveGuides.find((guide) => guide.id === item.id)?.title || item.id,
-  }));
+  const guideUsage = sortMap(guideMap)
+    .filter((item) => item.value > 0)
+    .map((item) => ({
+      ...item,
+      label: partnerInteractiveGuides.find((guide) => guide.id === item.id)?.title || item.id,
+    }));
 
   const topicInterest = sortMap(topicMap).map((item) => ({
     ...item,
@@ -551,6 +508,7 @@ const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
   }));
 
   const mostUsedVideos = sortMap(videoMap)
+    .filter((item) => item.value > 0)
     .slice(0, 6)
     .map((item) => ({
       ...item,
@@ -586,6 +544,9 @@ const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
 
   const data = {
     usingMockData,
+    range: normalizedRange,
+    rangeLabel: getAdminRangeLabel(normalizedRange),
+    eventTrackingScope,
     lastUpdatedAt: new Date().toISOString(),
     totals: {
       totalUsers: profiles.length,
@@ -594,7 +555,7 @@ const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
       lessonStarts,
       lessonCompletions,
       quizCompletions,
-      guideOpens: events.filter((event) => event.eventName === "guide_open").length,
+      guideOpens: rangedEvents.filter((event) => event.eventName === "guide_open").length,
       videoHubViews,
       videoViews,
       savedVideos,
@@ -608,7 +569,7 @@ const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
     resumePoints,
     dropOffs,
     organizationBreakdown,
-    trends: buildTrend(events),
+    trends: buildAdminTrend(trendEvents, normalizedRange),
   };
 
   return {
@@ -618,18 +579,20 @@ const buildAdminDashboardData = ({ profiles, events, usingMockData }) => {
   };
 };
 
-export const getAdminDashboardData = () => {
+export const getAdminDashboardData = (range = "7d") => {
   const localProfiles = getAllLocalProfiles();
   const localEvents = readEvents();
 
   return buildAdminDashboardData({
-    profiles: localProfiles.length ? localProfiles : makeMockProfiles(),
-    events: localEvents.length ? localEvents : makeMockEvents(),
-    usingMockData: !localProfiles.length || !localEvents.length,
+    profiles: localProfiles,
+    events: localEvents,
+    usingMockData: false,
+    range,
+    eventTrackingScope: isSupabaseAnalyticsEnabled() ? "remote" : "browser",
   });
 };
 
-export const getAdminDashboardDataAsync = async () => {
+export const getAdminDashboardDataAsync = async (range = "7d") => {
   const localProfiles = getAllLocalProfiles();
   const localEvents = readEvents();
   let remoteProfiles = [];
@@ -643,11 +606,10 @@ export const getAdminDashboardDataAsync = async () => {
   return buildAdminDashboardData({
     profiles: remoteProfiles.length
       ? remoteProfiles
-      : localProfiles.length
-        ? localProfiles
-        : makeMockProfiles(),
-    events: localEvents.length ? localEvents : makeMockEvents(),
-    usingMockData:
-      (!remoteProfiles.length && !localProfiles.length) || !localEvents.length,
+      : localProfiles,
+    events: localEvents,
+    usingMockData: false,
+    range,
+    eventTrackingScope: isSupabaseAnalyticsEnabled() ? "remote" : "browser",
   });
 };

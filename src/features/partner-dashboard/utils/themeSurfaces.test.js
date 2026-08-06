@@ -74,3 +74,32 @@ test("Video Hub receives the shared theme controls", async () => {
   assert.match(videoHub, /<ThemeToggle[\s\S]*?darkMode=\{darkMode\}/);
   assert.match(videoHub, /darkMode \? "bg-\[#050914\] text-slate-100" : "bg-slate-50 text-slate-900"/);
 });
+
+test("overview guide and video promotions switch away from dark surfaces in light mode", async () => {
+  const overview = await readDashboardFile("pages", "OverviewPage.jsx");
+
+  assert.match(
+    overview,
+    /darkMode \? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950\/30 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50\/70 to-indigo-50 shadow-sm"/
+  );
+  assert.match(
+    overview,
+    /darkMode \? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950\/20 shadow-xl" : "border-fuchsia-200 bg-gradient-to-br from-white via-fuchsia-50\/60 to-indigo-50 shadow-sm"/
+  );
+  assert.match(overview, /darkMode \? "text-white" : "text-slate-950"/);
+  assert.match(overview, /darkMode \? "text-slate-300" : "text-slate-600"/);
+});
+
+test("admin dashboard applies the selected range and reports persisted completions", async () => {
+  const [admin, analytics] = await Promise.all([
+    readFile(path.join(dashboardRoot, "..", "admin-dashboard", "index.jsx"), "utf8"),
+    readDashboardFile("services", "analyticsService.js"),
+  ]);
+
+  assert.match(admin, /\["7d", "14d", "30d", "all"\]/);
+  assert.match(admin, /getAdminDashboardDataAsync\(range\)/);
+  assert.match(admin, /label="Lesson completions"/);
+  assert.match(admin, /value=\{formatNumber\(data\.totals\.lessonCompletions\)\}/);
+  assert.match(analytics, /events: localEvents,/);
+  assert.doesNotMatch(analytics, /events: localEvents\.length \? localEvents : makeMockEvents\(\)/);
+});

@@ -109,17 +109,17 @@ function TrendChart({ rows, darkMode = true }) {
           <div className="flex flex-1 items-end justify-center gap-1">
             <span
               className="w-1.5 rounded-t-full bg-cyan-300 sm:w-2"
-              style={{ height: `${Math.max(7, (row.lessons / lessonsMax) * 100)}%` }}
+              style={{ height: row.lessons ? `${Math.max(7, (row.lessons / lessonsMax) * 100)}%` : "0%" }}
               title={`${row.lessons} lesson events`}
             />
             <span
               className="w-1.5 rounded-t-full bg-violet-300 sm:w-2"
-              style={{ height: `${Math.max(7, (row.videos / videosMax) * 100)}%` }}
+              style={{ height: row.videos ? `${Math.max(7, (row.videos / videosMax) * 100)}%` : "0%" }}
               title={`${row.videos} video views`}
             />
             <span
               className="w-1.5 rounded-t-full bg-emerald-300 sm:w-2"
-              style={{ height: `${Math.max(7, (row.guides / guidesMax) * 100)}%` }}
+              style={{ height: row.guides ? `${Math.max(7, (row.guides / guidesMax) * 100)}%` : "0%" }}
               title={`${row.guides} guide opens`}
             />
           </div>
@@ -199,10 +199,10 @@ function AccessDenied({ authUser, onBack }) {
 
 function AdminDashboardInner({ navigate }) {
   const { authUser, authLoading, profile, logout } = usePartnerDashboard();
-  const [range, setRange] = useState("14d");
+  const [range, setRange] = useState("7d");
   const [query, setQuery] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
-  const [data, setData] = useState(() => getAdminDashboardData());
+  const [data, setData] = useState(() => getAdminDashboardData("7d"));
   const [dataLoading, setDataLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window === "undefined") return true;
@@ -220,7 +220,7 @@ function AdminDashboardInner({ navigate }) {
 
     let active = true;
     setDataLoading(true);
-    getAdminDashboardDataAsync()
+    getAdminDashboardDataAsync(range)
       .then((nextData) => {
         if (active) setData(nextData);
       })
@@ -231,7 +231,7 @@ function AdminDashboardInner({ navigate }) {
     return () => {
       active = false;
     };
-  }, [authUser, allowed, refreshKey]);
+  }, [authUser, allowed, range, refreshKey]);
 
   const filteredVideos = data.mostUsedVideos.filter((video) =>
     `${video.label} ${video.category}`.toLowerCase().includes(query.trim().toLowerCase())
@@ -292,7 +292,7 @@ function AdminDashboardInner({ navigate }) {
 
             <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:items-center">
               <div className={`col-span-2 inline-flex w-full rounded-2xl border p-1 sm:col-span-1 sm:w-auto ${darkMode ? "border-white/10 bg-white/[0.04]" : "border-slate-200 bg-slate-100"}`}>
-                {["7d", "14d", "30d"].map((item) => (
+                {["7d", "14d", "30d", "all"].map((item) => (
                   <button
                     key={item}
                     type="button"
@@ -354,10 +354,14 @@ function AdminDashboardInner({ navigate }) {
           </div>
         </header>
 
-        {data.usingMockData && (
-          <div className="mb-5 rounded-2xl border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm font-semibold text-amber-100">
+        {data.eventTrackingScope === "browser" && (
+          <div className={`mb-5 rounded-2xl border px-4 py-3 text-sm font-semibold ${
+            darkMode
+              ? "border-amber-300/20 bg-amber-300/10 text-amber-100"
+              : "border-amber-200 bg-amber-50 text-amber-900"
+          }`}>
             <AlertTriangle className="mr-2 inline h-4 w-4" />
-            Some analytics are using local mock data until enough real product events exist.
+            Learning progress is synced from Partner Profiles. Guide, video, and lesson-start activity currently reflects this browser only.
           </div>
         )}
 
@@ -366,7 +370,7 @@ function AdminDashboardInner({ navigate }) {
             icon={Users}
             label="Total users"
             value={formatNumber(data.totals.totalUsers)}
-            detail={`${formatNumber(data.totals.activeUsers)} active in the current activity window.`}
+            detail={`${formatNumber(data.totals.activeUsers)} active during ${data.rangeLabel}.`}
             tone="cyan"
             darkMode={darkMode}
           />
@@ -380,9 +384,9 @@ function AdminDashboardInner({ navigate }) {
           />
           <KpiTile
             icon={BookOpenCheck}
-            label="Lesson activity"
-            value={formatNumber(data.totals.lessonStarts)}
-            detail={`${formatNumber(data.totals.lessonCompletions)} completions and ${formatNumber(data.totals.quizCompletions)} quiz submissions.`}
+            label="Lesson completions"
+            value={formatNumber(data.totals.lessonCompletions)}
+            detail={`${formatNumber(data.totals.quizCompletions)} lessons have saved quiz results. ${formatNumber(data.totals.lessonStarts)} starts tracked during ${data.rangeLabel}.`}
             tone="emerald"
             darkMode={darkMode}
           />
@@ -390,7 +394,7 @@ function AdminDashboardInner({ navigate }) {
             icon={ShieldCheck}
             label="Guide opens"
             value={formatNumber(data.totals.guideOpens)}
-            detail="Guide usage helps decide which companion tools should move into the main path."
+            detail={`Tracked during ${data.rangeLabel}. Guide usage helps decide which tools should move into the main path.`}
             tone="violet"
             darkMode={darkMode}
           />
@@ -398,7 +402,7 @@ function AdminDashboardInner({ navigate }) {
             icon={Video}
             label="Video hub opens"
             value={formatNumber(data.totals.videoHubViews)}
-            detail={`${formatNumber(data.totals.videoViews)} video plays, ${formatNumber(data.totals.savedVideos)} saves, and ${formatNumber(data.totals.watchLaterAdds)} watch-later adds.`}
+            detail={`${formatNumber(data.totals.videoViews)} plays during ${data.rangeLabel}; ${formatNumber(data.totals.savedVideos)} saved now and ${formatNumber(data.totals.watchLaterAdds)} on watch later.`}
             tone="rose"
             darkMode={darkMode}
           />
