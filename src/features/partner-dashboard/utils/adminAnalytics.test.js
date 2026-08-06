@@ -22,6 +22,10 @@ test("admin ranges normalize and filter real activity", () => {
   assert.equal(getAdminRangeCutoff("all", now), null);
   assert.deepEqual(filterEventsForAdminRange(events, "7d", now).map((event) => event.id), ["recent"]);
   assert.equal(filterEventsForAdminRange(events, "all", now).length, 2);
+  assert.deepEqual(
+    buildAdminTrend(events, "7d", now).map((row) => row.label),
+    ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"]
+  );
 });
 
 test("persisted profile completions fill the trend without double counting tracked events", () => {

@@ -93,12 +93,16 @@ const getTrendStart = (events, range, now) => {
     fallback.setDate(fallback.getDate() - 6);
     return fallback.getTime();
   }
-  return Math.min(...eventTimes);
+  const earliest = new Date(Math.min(...eventTimes));
+  earliest.setHours(0, 0, 0, 0);
+  return earliest.getTime();
 };
 
 export const buildAdminTrend = (events, range, now = new Date()) => {
   const normalized = normalizeAdminRange(range);
-  const end = new Date(now).getTime();
+  const endDate = new Date(now);
+  endDate.setHours(24, 0, 0, 0);
+  const end = endDate.getTime();
   const start = getTrendStart(events, normalized, now);
   const bucketCount = 7;
   const span = Math.max(DAY_MS, end - start + 1);
