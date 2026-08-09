@@ -358,6 +358,17 @@ export const PartnerDashboardProvider = ({ children }) => {
     persistProfile(nextProfile);
   };
 
+  const saveOnboarding = (onboarding) => {
+    if (!profile) return Promise.resolve(null);
+
+    const nextProfile = {
+      ...profile,
+      onboarding,
+    };
+
+    return persistProfile(nextProfile);
+  };
+
   const dashboardMetrics = useMemo(() => {
     if (!profile) {
       return null;
@@ -436,6 +447,7 @@ export const PartnerDashboardProvider = ({ children }) => {
     markLessonCompleted,
     saveVideoHubPreferences,
     saveProfileDetails,
+    saveOnboarding,
   };
 
   return <PartnerDashboardContext.Provider value={value}>{children}</PartnerDashboardContext.Provider>;

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { AlertTriangle } from "lucide-react";
 import AuthPanel from "./components/AuthPanel";
 import DashboardShell from "./components/DashboardShell";
+import OnboardingFlow from "./components/OnboardingFlow";
 import OverviewPage from "./pages/OverviewPage";
 import ModulePage from "./pages/ModulePage";
 import LessonPage from "./pages/LessonPage";
@@ -41,10 +42,12 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     submitQuiz,
     markLessonCompleted,
     saveProfileDetails,
+    saveOnboarding,
   } = usePartnerDashboard();
 
   const subPath = useMemo(() => getSubPath(pathname), [pathname]);
   const lastTrackedPath = useRef("");
+  const [editingOnboarding, setEditingOnboarding] = useState(false);
   const showAdminDashboard = isConfiguredOwnerUser(authUser, profile);
 
   useEffect(() => {
@@ -106,6 +109,22 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     );
   }
 
+  const onboardingStatus = profile?.onboarding?.status;
+  const needsOnboarding = onboardingStatus !== "completed" && onboardingStatus !== "skipped";
+
+  if (subPath === "/" && (needsOnboarding || editingOnboarding)) {
+    return (
+      <OnboardingFlow
+        profile={profile}
+        darkMode={darkMode}
+        onToggleTheme={onToggleTheme}
+        onSave={saveOnboarding}
+        onDone={() => setEditingOnboarding(false)}
+        translateText={translateText}
+      />
+    );
+  }
+
   const openOverview = () => navigate(BASE_PATH);
   const openModule = (moduleId) => navigate(`${BASE_PATH}/module/${moduleId}`);
   const openLesson = (moduleId, lessonId) =>
@@ -147,6 +166,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           onOpenVideoHub={openVideoHub}
           onRecommendationClick={trackRecommendationClick}
           onSaveProfileDetails={saveProfileDetails}
+          onEditPersonalization={() => setEditingOnboarding(true)}
           darkMode={darkMode}
           translateText={translateText}
         />

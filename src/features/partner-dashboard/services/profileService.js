@@ -1,4 +1,5 @@
 import { moduleOrder, partnerCurriculum } from "../data/curriculum";
+import { createEmptyOnboarding, normalizeOnboarding } from "../data/onboarding";
 import { getCurrentAccessToken, isSupabaseAuthEnabled } from "./authService";
 
 const PROFILES_KEY = "dph_profiles_v1";
@@ -58,6 +59,7 @@ const extendProfileModules = (profile) => {
   }
 
   profile.organizationName = normalizeOrganizationName(profile.organizationName);
+  profile.onboarding = normalizeOnboarding(profile.onboarding);
 
   for (const module of partnerCurriculum.modules) {
     const existingModule = profile.modules[module.id] || {};
@@ -95,6 +97,7 @@ const createBaseProfile = (sessionUser) => ({
     savedVideoIds: [],
     watchLaterIds: [],
   },
+  onboarding: createEmptyOnboarding(),
 });
 
 const cacheProfile = (profile) => {
