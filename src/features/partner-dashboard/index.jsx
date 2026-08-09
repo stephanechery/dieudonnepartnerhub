@@ -319,7 +319,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     );
   }
 
-  const activeMobileItem = subPath.startsWith("/video-hub")
+  const activePlatformItem = subPath.startsWith("/video-hub")
     ? "videos"
     : subPath.startsWith("/guides")
       ? "guides"
@@ -330,7 +330,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           : "today";
   const mobileNav = !embedded ? (
     <MobilePlatformNav
-      activeItem={activeMobileItem}
+      activeItem={activePlatformItem}
       onNavigate={(item) => {
         if (item === "today") openOverview();
         if (item === "training") openTraining();
@@ -355,9 +355,18 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   return (
     <>
     <DashboardShell
+      activeItem={activePlatformItem}
       authUser={authUser}
+      metrics={dashboardMetrics}
       onLogout={logout}
       onNavigateHome={navigateSiteHome}
+      onNavigatePlatform={(item) => {
+        if (item === "today") openOverview();
+        if (item === "training") openTraining();
+        if (item === "guides") openGuides();
+        if (item === "videos") openVideoHub();
+        if (item === "more") openMore();
+      }}
       embedded={embedded}
       showHomeButton={!embedded || Boolean(onExit)}
       homeLabel={embedded ? "Back to Main Guide" : "Site Home"}
