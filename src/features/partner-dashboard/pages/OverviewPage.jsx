@@ -11,7 +11,6 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
   const tx = (value) => translateText(value);
   const [organizationName, setOrganizationName] = useState(profile?.organizationName || "");
   const [organizationSaved, setOrganizationSaved] = useState(false);
-  const hasNextLesson = Boolean(metrics.nextLesson.lessonId);
   const nextActions = metrics.nextActions || {};
   const recommendedLesson = nextActions.lesson || metrics.nextLesson;
   const recommendedGuide = nextActions.guide;
@@ -39,7 +38,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
   };
 
   return (
-    <div className="space-y-5 pb-24 sm:space-y-6 sm:pb-0">
+    <div className="space-y-5 sm:space-y-6">
       <section
         className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 md:p-6 ${
           darkMode
@@ -72,7 +71,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
             </button>
           </div>
 
-          <div className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="hidden flex-1 grid-cols-1 gap-3 md:grid md:grid-cols-3">
             <article className={`rounded-2xl border p-4 ${darkMode ? "border-white/10 bg-white/[0.045]" : "border-slate-200 bg-white/85"}`}>
               <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
                 {tx("Say this")}
@@ -153,9 +152,9 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
             )}
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             <article
-              className={`rounded-2xl border p-4 ${
+              className={`rounded-2xl border p-3 sm:p-4 ${
                 darkMode
                   ? "border-slate-800 bg-slate-900/70"
                   : "border-slate-200 bg-white/70"
@@ -169,7 +168,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
               </p>
             </article>
             <article
-              className={`rounded-2xl border p-4 ${
+              className={`rounded-2xl border p-3 sm:p-4 ${
                 darkMode
                   ? "border-slate-800 bg-slate-900/70"
                   : "border-slate-200 bg-white/70"
@@ -183,7 +182,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
               </p>
             </article>
             <article
-              className={`rounded-2xl border p-4 ${
+              className={`rounded-2xl border p-3 sm:p-4 ${
                 darkMode
                   ? "border-slate-800 bg-slate-900/70"
                   : "border-slate-200 bg-white/70"
@@ -200,7 +199,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </div>
       </section>
 
-      <section className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
+      <section className={`hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
         <form className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between" onSubmit={saveOrganizationName}>
           <div className="min-w-0 flex-1">
             <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
@@ -322,7 +321,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <section className="hidden grid-cols-1 gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
         <article className={`rounded-[1.6rem] border p-4 transition ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
           <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
             <Clock3 className="h-4 w-4 text-rose-400" /> {tx("Current Module")}
@@ -367,7 +366,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </article>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+      <section className="hidden grid-cols-1 gap-4 md:grid lg:grid-cols-[1.2fr_0.8fr]">
         <article className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-cyan-950/20 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-cyan-50/40 shadow-sm"}`}>
           <p className={`text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
             {tx("Pick Up Where You Left Off")}
@@ -428,7 +427,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </article>
       </section>
 
-      <section className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
+      <section className={`hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
         <h2 className={`mb-4 text-xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Module Progress")}</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {metrics.modules.map((module) => (
@@ -443,7 +442,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </div>
       </section>
 
-      <section className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
+      <section className={`hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
         <h2 className={`mb-4 text-xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Recently Completed Lessons")}</h2>
         {!metrics.recentlyCompleted.length ? (
           <p className={`text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{tx("No lessons completed yet. Start with Prenatal Module 1.")}</p>
@@ -471,14 +470,14 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         )}
       </section>
 
-      <section className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
+      <section className={`hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
         <h2 className={`mb-2 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Training Approach")}</h2>
         <p className={`text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
           {tx("This dashboard is built as structured training: lesson content, scenario practice, immediate quiz feedback, and measurable progression through Prenatal, Labor and Delivery, and Postpartum Recovery modules.")}
         </p>
       </section>
 
-      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/30 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/70 to-indigo-50 shadow-sm"}`}>
+      <section className={`hidden overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/30 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/70 to-indigo-50 shadow-sm"}`}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
@@ -531,7 +530,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </div>
       </section>
 
-      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950/20 shadow-xl" : "border-fuchsia-200 bg-gradient-to-br from-white via-fuchsia-50/60 to-indigo-50 shadow-sm"}`}>
+      <section className={`hidden overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950/20 shadow-xl" : "border-fuchsia-200 bg-gradient-to-br from-white via-fuchsia-50/60 to-indigo-50 shadow-sm"}`}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
@@ -546,7 +545,7 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
           </div>
           <button
             type="button"
-            onClick={onOpenVideoHub}
+            onClick={() => onOpenVideoHub()}
             className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-700 to-fuchsia-700 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-800 hover:to-fuchsia-800"
           >
             {tx("Open Video Hub")} <ArrowRight className="h-4 w-4" />
@@ -582,42 +581,6 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         </div>
       </section>
 
-      {hasNextLesson && (
-        <div
-          className={`fixed inset-x-0 bottom-0 z-40 border-t px-3 py-3 shadow-[0_-12px_30px_rgba(15,23,42,0.08)] backdrop-blur sm:hidden ${
-            darkMode
-              ? "border-slate-800 bg-slate-950/95"
-              : "border-slate-200/80 bg-white/95"
-          }`}
-        >
-          <div className="mx-auto flex max-w-md items-center gap-3">
-            <div className="min-w-0 flex-1">
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                {tx("Resume Training")}
-              </p>
-              <p className={`truncate text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                {tx(metrics.nextLesson.lessonTitle)}
-              </p>
-              <p className={`truncate text-xs ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-                {tx(metrics.nextLesson.moduleTitle)}
-              </p>
-            </div>
-            <button
-              type="button"
-              className={`min-h-11 shrink-0 rounded-xl px-4 py-3 text-sm font-bold text-white ${
-                darkMode
-                  ? "bg-gradient-to-r from-cyan-700 to-teal-700"
-                  : "bg-gradient-to-r from-slate-900 to-slate-700"
-              }`}
-              onClick={() =>
-                onOpenLesson(metrics.nextLesson.moduleId, metrics.nextLesson.lessonId)
-              }
-            >
-              {tx("Resume")}
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

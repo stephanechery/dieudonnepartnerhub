@@ -284,7 +284,7 @@ function TopSearchBar({
             <a
               href="/owner-admin"
               aria-label="Open Admin Dashboard"
-              className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl border px-4 text-sm font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 sm:flex-none ${darkMode ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-950" : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 focus-visible:ring-offset-white"}`}
+              className={`hidden min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl border px-4 text-sm font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 sm:flex-none md:flex ${darkMode ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-950" : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 focus-visible:ring-offset-white"}`}
             >
               <LayoutDashboard className="h-4 w-4" /> Admin Dashboard
             </a>

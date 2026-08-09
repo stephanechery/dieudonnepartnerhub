@@ -13,10 +13,11 @@ const readDashboardFile = (...parts) =>
   readFile(path.join(dashboardRoot, ...parts), "utf8");
 
 test("owner admin navigation stays behind the existing admin check", async () => {
-  const [router, shell, videoHub] = await Promise.all([
+  const [router, shell, videoHub, morePage] = await Promise.all([
     readDashboardFile("index.jsx"),
     readDashboardFile("components", "DashboardShell.jsx"),
     readDashboardFile("pages", "VideoHubPage.jsx"),
+    readDashboardFile("pages", "MorePage.jsx"),
   ]);
 
   assert.match(
@@ -25,8 +26,10 @@ test("owner admin navigation stays behind the existing admin check", async () =>
   );
   assert.match(shell, /showAdminDashboard\s*&&/);
   assert.match(videoHub, /showAdminDashboard\s*&&/);
+  assert.match(morePage, /showAdminDashboard\s*&&/);
   assert.equal((shell.match(/href="\/owner-admin"/g) || []).length, 1);
   assert.equal((videoHub.match(/href="\/owner-admin"/g) || []).length, 1);
+  assert.equal((morePage.match(/href="\/owner-admin"/g) || []).length, 1);
   assert.doesNotMatch(videoHub, /<Settings\b/);
 });
 

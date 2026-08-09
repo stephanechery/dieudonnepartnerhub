@@ -2,11 +2,14 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { AlertTriangle } from "lucide-react";
 import AuthPanel from "./components/AuthPanel";
 import DashboardShell from "./components/DashboardShell";
+import MobilePlatformNav from "./components/MobilePlatformNav";
 import OnboardingFlow from "./components/OnboardingFlow";
 import OverviewPage from "./pages/OverviewPage";
 import ModulePage from "./pages/ModulePage";
 import LessonPage from "./pages/LessonPage";
 import InteractiveGuidesPage from "./pages/InteractiveGuidesPage";
+import MorePage from "./pages/MorePage";
+import TrainingPage from "./pages/TrainingPage";
 import VideoHubPage from "./pages/VideoHubPage";
 import { PartnerDashboardProvider, usePartnerDashboard } from "./state/PartnerDashboardContext";
 import { isConfiguredOwnerUser, trackPartnerEvent } from "./services/analyticsService";
@@ -126,10 +129,12 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   }
 
   const openOverview = () => navigate(BASE_PATH);
+  const openTraining = () => navigate(`${BASE_PATH}/training`);
   const openModule = (moduleId) => navigate(`${BASE_PATH}/module/${moduleId}`);
   const openLesson = (moduleId, lessonId) =>
     navigate(`${BASE_PATH}/module/${moduleId}/lesson/${lessonId}`);
   const openGuides = () => navigate(`${BASE_PATH}/guides`);
+  const openMore = () => navigate(`${BASE_PATH}/more`);
   const openGuide = (guideId) => navigate(`${BASE_PATH}/guides/${guideId}`);
   const openVideoHub = (videoId) => {
     const videoParam = videoId ? `?video=${encodeURIComponent(videoId)}` : "";
@@ -150,6 +155,13 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   const moduleMatch = subPath.match(/^\/module\/([a-z0-9-]+)$/i);
   const lessonMatch = subPath.match(/^\/module\/([a-z0-9-]+)\/lesson\/([a-z0-9-]+)$/i);
   const guidesMatch = subPath.match(/^\/guides(?:\/([a-z0-9-]+))?$/i);
+  const navigateSiteHome = () => {
+    if (embedded && onExit) {
+      onExit();
+      return;
+    }
+    navigate("/");
+  };
 
   let page = null;
 
@@ -171,12 +183,39 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           translateText={translateText}
         />
     );
+  } else if (subPath === "/training") {
+    page = (
+      <TrainingPage
+        metrics={dashboardMetrics}
+        onOpenModule={openModule}
+        onOpenLesson={openLesson}
+        darkMode={darkMode}
+        translateText={translateText}
+      />
+    );
   } else if (subPath === "/video-hub") {
     page = (
       <VideoHubPage
         darkMode={darkMode}
         onToggleTheme={onToggleTheme}
         showAdminDashboard={showAdminDashboard}
+      />
+    );
+  } else if (subPath === "/more") {
+    page = (
+      <MorePage
+        authUser={authUser}
+        profile={profile}
+        showAdminDashboard={showAdminDashboard}
+        onSaveProfileDetails={saveProfileDetails}
+        onEditPersonalization={() => {
+          setEditingOnboarding(true);
+          openOverview();
+        }}
+        onNavigateSiteHome={navigateSiteHome}
+        onLogout={logout}
+        darkMode={darkMode}
+        translateText={translateText}
       />
     );
   } else if (guidesMatch) {
@@ -280,21 +319,45 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     );
   }
 
+  const activeMobileItem = subPath.startsWith("/video-hub")
+    ? "videos"
+    : subPath.startsWith("/guides")
+      ? "guides"
+      : subPath === "/more"
+        ? "more"
+        : subPath === "/training" || subPath.startsWith("/module/")
+          ? "training"
+          : "today";
+  const mobileNav = !embedded ? (
+    <MobilePlatformNav
+      activeItem={activeMobileItem}
+      onNavigate={(item) => {
+        if (item === "today") openOverview();
+        if (item === "training") openTraining();
+        if (item === "guides") openGuides();
+        if (item === "videos") openVideoHub();
+        if (item === "more") openMore();
+      }}
+      darkMode={darkMode}
+      translateText={translateText}
+    />
+  ) : null;
+
   if (subPath === "/video-hub") {
-    return page;
+    return (
+      <>
+        <div className="pb-20 md:pb-0">{page}</div>
+        {mobileNav}
+      </>
+    );
   }
 
   return (
+    <>
     <DashboardShell
       authUser={authUser}
       onLogout={logout}
-      onNavigateHome={() => {
-        if (embedded && onExit) {
-          onExit();
-          return;
-        }
-        navigate("/");
-      }}
+      onNavigateHome={navigateSiteHome}
       embedded={embedded}
       showHomeButton={!embedded || Boolean(onExit)}
       homeLabel={embedded ? "Back to Main Guide" : "Site Home"}
@@ -303,8 +366,10 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
       showAdminDashboard={showAdminDashboard}
       translateText={translateText}
     >
-      {page}
+      <div className="pb-20 md:pb-0">{page}</div>
     </DashboardShell>
+    {mobileNav}
+    </>
   );
 };
 

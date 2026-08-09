@@ -41,11 +41,12 @@ export default function DashboardShell({
               className={`h-9 w-auto rounded-lg border p-1 sm:h-12 ${darkMode ? "border-slate-700 bg-slate-950" : "border-slate-200 bg-slate-50"}`}
             />
             <div className="min-w-0">
-              <p className={`text-[10px] font-bold uppercase tracking-[0.16em] sm:text-xs sm:tracking-[0.2em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
+              <p className={`hidden text-[10px] font-bold uppercase tracking-[0.16em] sm:text-xs sm:tracking-[0.2em] md:block ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
                 {tx("Partner Education Dashboard")}
               </p>
               <h1 className={`text-lg font-black tracking-tight sm:text-2xl md:text-3xl ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                {tx("Structured Training Environment")}
+                <span className="md:hidden">{tx("Partner Platform")}</span>
+                <span className="hidden md:inline">{tx("Structured Training Environment")}</span>
               </h1>
               <p className={`mt-1 hidden text-sm leading-relaxed break-words sm:block ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
                 {tx("Signed in as")} <span className="font-semibold">{authUser.displayName}</span> ({authUser.email})
@@ -54,7 +55,7 @@ export default function DashboardShell({
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end">
-            <div className={`col-span-2 flex min-h-9 items-center justify-center gap-2 rounded-full border px-3 py-2 text-xs font-bold sm:col-span-1 sm:min-h-0 sm:justify-start sm:py-1.5 ${darkMode ? "border-emerald-900/50 bg-emerald-900/30 text-emerald-300" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
+            <div className={`col-span-2 hidden min-h-9 items-center justify-center gap-2 rounded-full border px-3 py-2 text-xs font-bold sm:col-span-1 sm:min-h-0 sm:justify-start sm:py-1.5 md:flex ${darkMode ? "border-emerald-900/50 bg-emerald-900/30 text-emerald-300" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
               <ShieldCheck className="h-4 w-4" aria-hidden="true" /> {tx("User Progress Tracking Active")}
             </div>
             {onToggleTheme && (
@@ -69,7 +70,7 @@ export default function DashboardShell({
               <a
                 href="/owner-admin"
                 aria-label={tx("Open Admin Dashboard")}
-                className={`col-span-2 flex min-h-10 w-full items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 sm:col-span-1 sm:min-h-0 sm:w-auto sm:justify-start ${
+                className={`col-span-2 hidden min-h-10 w-full items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 sm:col-span-1 sm:min-h-0 sm:w-auto sm:justify-start md:flex ${
                   darkMode
                     ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-900"
                     : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 focus-visible:ring-offset-white"
@@ -82,7 +83,7 @@ export default function DashboardShell({
               <button
                 type="button"
                 onClick={onNavigateHome}
-                className={`flex min-h-10 w-full items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition sm:min-h-0 sm:w-auto sm:justify-start sm:px-3 ${
+                className={`hidden min-h-10 w-full items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition sm:min-h-0 sm:w-auto sm:justify-start sm:px-3 md:flex ${
                   darkMode
                     ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800"
                     : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
@@ -94,7 +95,7 @@ export default function DashboardShell({
             <button
               type="button"
               onClick={onLogout}
-              className={`flex min-h-10 w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-white transition sm:min-h-0 sm:w-auto sm:justify-start sm:px-3 ${
+              className={`hidden min-h-10 w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-white transition sm:min-h-0 sm:w-auto sm:justify-start sm:px-3 md:flex ${
                 darkMode
                   ? "bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500"
                   : "bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-700"
