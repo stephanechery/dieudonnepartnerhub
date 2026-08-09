@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import App, { LANGUAGE_SESSION_KEY, translateStaticText } from "./App";
 import { getInitialPartnerDarkMode } from "./features/partner-dashboard/utils/theme";
 const PartnerDashboardApp = React.lazy(() => import("./features/partner-dashboard"));
@@ -10,10 +10,20 @@ const PrivacyPage = React.lazy(() => import("./features/public-pages/PrivacyPage
 function usePathRouter() {
   const [pathname, setPathname] = useState(window.location.pathname);
 
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname]);
+
   useEffect(() => {
+    const previousScrollRestoration = window.history.scrollRestoration;
     const onPopState = () => setPathname(window.location.pathname);
+
+    window.history.scrollRestoration = "manual";
     window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
+    return () => {
+      window.history.scrollRestoration = previousScrollRestoration;
+      window.removeEventListener("popstate", onPopState);
+    };
   }, []);
 
   const navigate = (to, replace = false) => {
