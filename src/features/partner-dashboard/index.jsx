@@ -46,6 +46,9 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     markLessonCompleted,
     saveProfileDetails,
     saveOnboarding,
+    saveTodaySupportContext,
+    markTodaySupportDone,
+    trackTodaySupportResourceClick,
   } = usePartnerDashboard();
 
   const subPath = useMemo(() => getSubPath(pathname), [pathname]);
@@ -140,6 +143,24 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     const videoParam = videoId ? `?video=${encodeURIComponent(videoId)}` : "";
     navigate(`${BASE_PATH}/video-hub${videoParam}`);
   };
+  const openTodaySupportResource = (plan) => {
+    if (!plan?.resource) return;
+    trackTodaySupportResourceClick(plan);
+
+    if (plan.resource.type === "lesson") {
+      openLesson(plan.resource.moduleId, plan.resource.lessonId);
+      return;
+    }
+    if (plan.resource.type === "guide") {
+      openGuide(plan.resource.guideId);
+      return;
+    }
+    if (plan.resource.type === "video") {
+      openVideoHub(plan.resource.videoId);
+      return;
+    }
+    openGuides();
+  };
   const trackRecommendationClick = (kind, target = {}) => {
     trackPartnerEvent("recommendation_click", {
       uid: authUser.uid,
@@ -178,7 +199,9 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           onOpenVideoHub={openVideoHub}
           onRecommendationClick={trackRecommendationClick}
           onSaveProfileDetails={saveProfileDetails}
-          onEditPersonalization={() => setEditingOnboarding(true)}
+          onSelectTodayContext={saveTodaySupportContext}
+          onMarkTodayDone={markTodaySupportDone}
+          onOpenTodayResource={openTodaySupportResource}
           darkMode={darkMode}
           translateText={translateText}
         />

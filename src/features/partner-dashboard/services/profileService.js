@@ -1,5 +1,6 @@
 import { moduleOrder, partnerCurriculum } from "../data/curriculum";
 import { createEmptyOnboarding, normalizeOnboarding } from "../data/onboarding";
+import { normalizeTodaySupport } from "../data/todaySupport";
 import { getCurrentAccessToken, isSupabaseAuthEnabled } from "./authService";
 
 const PROFILES_KEY = "dph_profiles_v1";
@@ -51,6 +52,7 @@ const extendProfileVideoHub = (profile) => ({
     savedVideoIds: normalizeIdList(profile.videoHub?.savedVideoIds),
     watchLaterIds: normalizeIdList(profile.videoHub?.watchLaterIds),
   },
+  todaySupport: normalizeTodaySupport(profile.todaySupport),
 });
 
 const extendProfileModules = (profile) => {
@@ -98,6 +100,7 @@ const createBaseProfile = (sessionUser) => ({
     watchLaterIds: [],
   },
   onboarding: createEmptyOnboarding(),
+  todaySupport: normalizeTodaySupport(),
 });
 
 const cacheProfile = (profile) => {

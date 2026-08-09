@@ -1,6 +1,10 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { partnerCurriculum } from "../data/curriculum";
 import { partnerInteractiveGuides } from "../data/interactiveGuides";
+import {
+  buildTodaySupportCompletion,
+  buildTodaySupportSelection,
+} from "../data/todaySupport";
 import { videoHubVideos } from "../data/videoHub";
 import { trackPartnerEvent } from "../services/analyticsService";
 import {
@@ -369,6 +373,54 @@ export const PartnerDashboardProvider = ({ children }) => {
     return persistProfile(nextProfile);
   };
 
+  const saveTodaySupportContext = (contextId) => {
+    if (!profile) return Promise.resolve(null);
+
+    const todaySupport = buildTodaySupportSelection({ contextId, profile });
+    const nextProfile = {
+      ...profile,
+      todaySupport,
+    };
+
+    trackPartnerEvent("today_support_selected", {
+      uid: profile.uid,
+      email: profile.email,
+      category: todaySupport.selectedContext,
+    });
+    return persistProfile(nextProfile);
+  };
+
+  const markTodaySupportDone = () => {
+    if (!profile) return Promise.resolve(null);
+
+    const todaySupport = buildTodaySupportCompletion({ profile });
+    const nextProfile = {
+      ...profile,
+      todaySupport,
+    };
+
+    trackPartnerEvent("today_support_completed", {
+      uid: profile.uid,
+      email: profile.email,
+      category: todaySupport.selectedContext,
+    });
+    return persistProfile(nextProfile);
+  };
+
+  const trackTodaySupportResourceClick = (plan) => {
+    if (!profile || !plan?.resource) return;
+
+    trackPartnerEvent("today_support_resource_open", {
+      uid: profile.uid,
+      email: profile.email,
+      category: plan.context,
+      moduleId: plan.resource.moduleId,
+      lessonId: plan.resource.lessonId,
+      guideId: plan.resource.guideId,
+      videoId: plan.resource.videoId,
+    });
+  };
+
   const dashboardMetrics = useMemo(() => {
     if (!profile) {
       return null;
@@ -448,6 +500,9 @@ export const PartnerDashboardProvider = ({ children }) => {
     saveVideoHubPreferences,
     saveProfileDetails,
     saveOnboarding,
+    saveTodaySupportContext,
+    markTodaySupportDone,
+    trackTodaySupportResourceClick,
   };
 
   return <PartnerDashboardContext.Provider value={value}>{children}</PartnerDashboardContext.Provider>;
