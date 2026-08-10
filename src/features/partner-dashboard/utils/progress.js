@@ -9,6 +9,7 @@ export const getModuleState = (profile, moduleId) =>
     quizScores: {},
     quizResponses: {},
     scenarioResponses: {},
+    lessonMissions: {},
   };
 
 export const getModuleCompletion = (module, moduleState) => {

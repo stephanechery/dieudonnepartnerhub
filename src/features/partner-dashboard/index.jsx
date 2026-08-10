@@ -44,6 +44,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     saveScenarioReflection,
     submitQuiz,
     markLessonCompleted,
+    saveLessonMission,
     saveProfileDetails,
     saveOnboarding,
     saveTodaySupportContext,
@@ -319,6 +320,18 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
             }
             onSubmitQuiz={(answers) => submitQuiz(module.id, lesson.id, answers)}
             onCompleteLesson={() => markLessonCompleted(module.id, lesson.id)}
+            onSaveMission={(completedItems) =>
+              saveLessonMission(module.id, lesson.id, completedItems)
+            }
+            onOpenNextLesson={() => {
+              const lessonIndex = module.lessons.findIndex((item) => item.id === lesson.id);
+              const nextLesson = module.lessons[lessonIndex + 1];
+              if (nextLesson) {
+                openLesson(module.id, nextLesson.id);
+                return;
+              }
+              openModule(module.id);
+            }}
             darkMode={darkMode}
             translateText={translateText}
           />

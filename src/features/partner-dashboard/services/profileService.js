@@ -1,5 +1,6 @@
 import { moduleOrder, partnerCurriculum } from "../data/curriculum";
 import { createEmptyOnboarding, normalizeOnboarding } from "../data/onboarding";
+import { normalizeLessonMissions } from "../data/lessonMission";
 import { normalizeTodaySupport } from "../data/todaySupport";
 import { getCurrentAccessToken, isSupabaseAuthEnabled } from "./authService";
 
@@ -29,6 +30,7 @@ const createEmptyModules = () =>
       quizScores: {},
       quizResponses: {},
       scenarioResponses: {},
+      lessonMissions: {},
     };
     return acc;
   }, {});
@@ -79,6 +81,10 @@ const extendProfileModules = (profile) => {
       quizScores,
       quizResponses: existingModule.quizResponses || {},
       scenarioResponses: existingModule.scenarioResponses || {},
+      lessonMissions: normalizeLessonMissions(
+        existingModule.lessonMissions,
+        module.lessons
+      ),
     };
   }
   return extendProfileVideoHub(profile);

@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { partnerCurriculum } from "../data/curriculum";
 import { partnerInteractiveGuides } from "../data/interactiveGuides";
+import { buildLessonMissionRecord, getLessonMission } from "../data/lessonMission";
 import {
   buildTodaySupportCompletion,
   buildTodaySupportSelection,
@@ -333,6 +334,48 @@ export const PartnerDashboardProvider = ({ children }) => {
     return true;
   };
 
+  const saveLessonMission = (moduleId, lessonId, completedItems) => {
+    if (!profile) return null;
+
+    const module = partnerCurriculum.modules.find((item) => item.id === moduleId);
+    const lesson = module?.lessons.find((item) => item.id === lessonId);
+    if (!module || !lesson) return null;
+    if (!isModuleUnlocked(partnerCurriculum.modules, profile, moduleId)) return null;
+
+    const moduleState = getModuleState(profile, moduleId);
+    if (!isLessonUnlocked(module, moduleState, lessonId)) return null;
+
+    const mission = getLessonMission(lesson);
+    const missionRecord = buildLessonMissionRecord({
+      completedItems,
+      checklistLength: mission.checklist.length,
+    });
+    if (missionRecord.completedItems.length !== mission.checklist.length) return null;
+
+    const nextProfile = {
+      ...profile,
+      modules: {
+        ...profile.modules,
+        [moduleId]: {
+          ...moduleState,
+          lessonMissions: {
+            ...(moduleState.lessonMissions || {}),
+            [lessonId]: missionRecord,
+          },
+        },
+      },
+    };
+
+    persistProfile(nextProfile);
+    trackPartnerEvent("lesson_mission_saved", {
+      uid: profile.uid,
+      email: profile.email,
+      moduleId,
+      lessonId,
+    });
+    return missionRecord;
+  };
+
   const saveVideoHubPreferences = (updates = {}) => {
     if (!profile) return;
 
@@ -497,6 +540,7 @@ export const PartnerDashboardProvider = ({ children }) => {
     saveScenarioReflection,
     submitQuiz,
     markLessonCompleted,
+    saveLessonMission,
     saveVideoHubPreferences,
     saveProfileDetails,
     saveOnboarding,

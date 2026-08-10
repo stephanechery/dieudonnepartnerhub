@@ -12,6 +12,20 @@ export const partnerCurriculum = {
           title: "Prenatal Foundations",
           summary:
             "Build a strong baseline for prenatal support by learning what is changing anatomically and emotionally.",
+          durationMinutes: 8,
+          required: true,
+          learningOutcome:
+            "Respond with empathy, choose one useful action, and recognize when support needs to escalate.",
+          mission: {
+            action: "Create one comfort plan for tonight",
+            sayThis:
+              "What feels hardest right now, and what can I take care of for you?",
+            checklist: [
+              "Ask what feels hardest right now",
+              "Handle one physical task",
+              "Agree on when to call the care team"
+            ]
+          },
           course: {
             sections: [
               {

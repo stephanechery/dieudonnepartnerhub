@@ -6,6 +6,11 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import LessonMissionExperience from "../components/LessonMissionExperience";
+import {
+  getLessonMission,
+  normalizeLessonMissionRecord,
+} from "../data/lessonMission";
 import { getModuleState, isLessonComplete } from "../utils/progress";
 
 const isMultiQuestion = (question) =>
@@ -168,6 +173,8 @@ export default function LessonPage({
   onSaveScenario,
   onSubmitQuiz,
   onCompleteLesson,
+  onSaveMission,
+  onOpenNextLesson,
   darkMode = false,
   translateText = (value) => value,
 }) {
@@ -205,6 +212,15 @@ export default function LessonPage({
   const lessonNumber = lessonIndex + 1;
   const moduleProgressPercent = Math.round((lessonNumber / module.lessons.length) * 100);
   const courseSections = useMemo(() => getCourseSections(lesson), [lesson]);
+  const lessonMission = useMemo(() => getLessonMission(lesson), [lesson]);
+  const savedMissionRecord = useMemo(
+    () =>
+      normalizeLessonMissionRecord(
+        moduleState.lessonMissions?.[lesson.id],
+        lessonMission.checklist.length
+      ),
+    [lesson.id, lessonMission.checklist.length, moduleState.lessonMissions]
+  );
   const reflectionSections = useMemo(
     () => courseSections.filter((section) => section.reflectionPrompt),
     [courseSections]
@@ -218,14 +234,25 @@ export default function LessonPage({
   const [completeStatus, setCompleteStatus] = useState(
     isLessonComplete(moduleState, lesson.id)
   );
+  const [experienceView, setExperienceView] = useState(() =>
+    isLessonComplete(moduleState, lesson.id) ? "mission" : "learn"
+  );
+  const [missionChecks, setMissionChecks] = useState(
+    savedMissionRecord.completedItems
+  );
+  const [missionSaved, setMissionSaved] = useState(
+    Boolean(savedMissionRecord.completedAt)
+  );
   const [lessonStep, setLessonStep] = useState(0);
   const [quizStep, setQuizStep] = useState(0);
   const [courseStep, setCourseStep] = useState(0);
   const mobileQuestion = lesson.quiz[quizStep];
   const quizSectionRef = useRef(null);
   const quizStepHeaderRef = useRef(null);
+  const phaseHeadingRef = useRef(null);
   const lastQuizStepRef = useRef(quizStep);
   const lastLessonIdRef = useRef(lesson.id);
+  const experienceFocusReadyRef = useRef(false);
   const [courseChecks, setCourseChecks] = useState(() =>
     buildCourseCheckState(courseSections)
   );
@@ -277,6 +304,12 @@ export default function LessonPage({
     setSubmitted(Boolean(savedQuizResponses));
     setScore(moduleState.quizScores[lesson.id] ?? null);
     setCompleteStatus(isLessonComplete(moduleState, lesson.id));
+    const nextMissionRecord = normalizeLessonMissionRecord(
+      moduleState.lessonMissions?.[lesson.id],
+      getLessonMission(lesson).checklist.length
+    );
+    setMissionChecks(nextMissionRecord.completedItems);
+    setMissionSaved(Boolean(nextMissionRecord.completedAt));
 
     if (lessonChanged) {
       setReflectionResponses(buildReflectionResponses(lesson, getCourseSections(lesson), moduleState));
@@ -284,8 +317,27 @@ export default function LessonPage({
       setQuizStep(0);
       setCourseStep(0);
       setCourseChecks(buildCourseCheckState(getCourseSections(lesson)));
+      setExperienceView(
+        isLessonComplete(moduleState, lesson.id) ? "mission" : "learn"
+      );
+      experienceFocusReadyRef.current = false;
     }
   }, [lesson.id, moduleState, savedQuizResponses]);
+
+  useEffect(() => {
+    if (!experienceFocusReadyRef.current) {
+      experienceFocusReadyRef.current = true;
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      phaseHeadingRef.current?.focus({ preventScroll: true });
+      phaseHeadingRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  }, [courseStep, experienceView]);
 
   useEffect(() => {
     if (lastQuizStepRef.current === quizStep) return;
@@ -376,6 +428,7 @@ export default function LessonPage({
     setSubmitted(true);
     if (nextScore >= 70) {
       setCompleteStatus(true);
+      setExperienceView("mission");
     }
   };
 
@@ -388,6 +441,7 @@ export default function LessonPage({
     const success = onCompleteLesson();
     if (success) {
       setCompleteStatus(true);
+      setExperienceView("mission");
     }
   };
 
@@ -1017,6 +1071,100 @@ export default function LessonPage({
       </div>
     );
   };
+
+  const nextLesson = module.lessons[lessonIndex + 1] || null;
+  const handleExperiencePhaseChange = (phase) => {
+    if (phase === "learn") {
+      setCourseStep(0);
+      setExperienceView("learn");
+      return;
+    }
+    if (phase === "practice") {
+      setCourseStep(Math.min(Math.max(1, courseStep), courseSections.length - 1));
+      setExperienceView("practice");
+      return;
+    }
+    if (phase === "check" && quizUnlocked) {
+      setExperienceView("check");
+      return;
+    }
+    if (phase === "mission" && completeStatus) {
+      setExperienceView("mission");
+    }
+  };
+
+  const handleExperienceAdvance = () => {
+    if (experienceView === "learn") {
+      if (courseSections.length > 1) {
+        setCourseStep(1);
+        setExperienceView("practice");
+        return;
+      }
+      if (quizUnlocked) setExperienceView("check");
+      return;
+    }
+
+    if (courseStep < courseSections.length - 1) {
+      setCourseStep((current) => current + 1);
+      return;
+    }
+    if (quizUnlocked) setExperienceView("check");
+  };
+
+  const handleExperienceBack = () => {
+    if (experienceView === "practice" && courseStep > 1) {
+      setCourseStep((current) => current - 1);
+      return;
+    }
+    setCourseStep(0);
+    setExperienceView("learn");
+  };
+
+  const handleMissionItemToggle = (index) => {
+    if (missionSaved) return;
+    setMissionChecks((current) =>
+      current.includes(index)
+        ? current.filter((item) => item !== index)
+        : [...current, index].sort((left, right) => left - right)
+    );
+  };
+
+  const handleMissionSave = () => {
+    if (missionChecks.length !== lessonMission.checklist.length) return;
+    const record = onSaveMission?.(missionChecks);
+    if (!record) return;
+    setMissionChecks(record.completedItems);
+    setMissionSaved(Boolean(record.completedAt));
+  };
+
+  return (
+    <LessonMissionExperience
+      module={module}
+      lesson={lesson}
+      lessonMission={lessonMission}
+      lessonNumber={lessonNumber}
+      courseSections={courseSections}
+      courseStep={courseStep}
+      experienceView={experienceView}
+      quizUnlocked={quizUnlocked}
+      completeStatus={completeStatus}
+      missionChecks={missionChecks}
+      missionSaved={missionSaved}
+      nextLesson={nextLesson}
+      phaseHeadingRef={phaseHeadingRef}
+      renderCourseSection={renderCourseSection}
+      renderQuizPanel={renderPagedQuizPanel}
+      onBackToModule={onBackToModule}
+      onPhaseChange={handleExperiencePhaseChange}
+      onAdvance={handleExperienceAdvance}
+      onGoBack={handleExperienceBack}
+      onToggleMissionItem={handleMissionItemToggle}
+      onSaveMission={handleMissionSave}
+      onOpenNextLesson={onOpenNextLesson || onBackToModule}
+      darkMode={darkMode}
+      translateText={translateText}
+    />
+  );
 
   const isMobileLearningStep = lessonStep < courseSections.length;
   const isMobileFinishStep = lessonStep >= courseSections.length + 1;
