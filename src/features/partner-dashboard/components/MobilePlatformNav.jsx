@@ -18,10 +18,10 @@ export default function MobilePlatformNav({
   return (
     <nav
       aria-label={translateText("Partner Platform navigation")}
-      className={`fixed inset-x-4 z-40 mx-auto max-w-md rounded-[2.125rem] border px-2 py-[9px] shadow-[0_18px_45px_-18px_rgba(2,6,23,0.3)] backdrop-blur-xl md:hidden ${
+      className={`fixed inset-x-4 z-40 mx-auto max-w-md transform-gpu rounded-[2.125rem] border px-2 py-[9px] shadow-[0_18px_45px_-18px_rgba(2,6,23,0.3)] will-change-transform md:hidden ${
         darkMode
-          ? "border-slate-700/70 bg-slate-900/95"
-          : "border-slate-200 bg-white/95"
+          ? "border-slate-700/70 bg-slate-900"
+          : "border-slate-200 bg-white"
       }`}
       style={{ bottom: "max(env(safe-area-inset-bottom), 1rem)" }}
     >

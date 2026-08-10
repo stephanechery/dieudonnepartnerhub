@@ -11,7 +11,14 @@ function usePathRouter() {
   const [pathname, setPathname] = useState(window.location.pathname);
 
   useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    const resetScroll = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    };
+
+    resetScroll();
+    const frameId = window.requestAnimationFrame(resetScroll);
+
+    return () => window.cancelAnimationFrame(frameId);
   }, [pathname]);
 
   useEffect(() => {

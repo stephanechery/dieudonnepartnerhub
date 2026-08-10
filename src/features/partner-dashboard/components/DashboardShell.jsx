@@ -53,7 +53,7 @@ export default function DashboardShell({
       className={
         embedded
           ? "relative w-full"
-          : `relative min-h-screen px-3 py-4 sm:px-4 sm:py-6 md:px-0 md:py-0 ${darkMode ? "bg-slate-950" : "bg-slate-50"}`
+          : `relative min-h-[100dvh] px-3 py-4 sm:px-4 sm:py-6 md:min-h-screen md:px-0 md:py-0 ${darkMode ? "bg-slate-950" : "bg-slate-50"}`
       }
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-cyan-500/10 via-rose-500/5 to-transparent" />

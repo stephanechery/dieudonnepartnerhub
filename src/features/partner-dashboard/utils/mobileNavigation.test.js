@@ -24,11 +24,22 @@ test("mobile navigation exposes the five approved destinations", async () => {
   assert.match(nav, /min-h-16/);
   assert.match(nav, /h-\[25px\] w-\[25px\]/);
   assert.match(nav, /0\.3\)\]/);
+  assert.match(nav, /transform-gpu/);
+  assert.match(nav, /will-change-transform/);
+  assert.doesNotMatch(nav, /backdrop-blur/);
   assert.match(nav, /md:hidden/);
   assert.equal((router.match(/pb-28 md:pb-0/g) || []).length, 2);
   assert.match(router, /subPath === "\/training"/);
   assert.match(router, /subPath === "\/more"/);
   assert.match(router, /subPath\.startsWith\("\/module\/"\)[\s\S]*?"training"/);
+});
+
+test("mobile dashboard height follows the visible browser viewport", async () => {
+  const shell = await readDashboardFile("components", "DashboardShell.jsx");
+
+  assert.match(shell, /min-h-\[100dvh\]/);
+  assert.match(shell, /md:min-h-screen/);
+  assert.doesNotMatch(shell, /relative min-h-screen px-3 py-4/);
 });
 
 test("mobile More keeps owner admin navigation behind the existing owner result", async () => {
