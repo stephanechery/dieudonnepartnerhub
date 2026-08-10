@@ -382,7 +382,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   if (subPath === "/video-hub") {
     return (
       <>
-        <div className="pb-20 md:pb-0">{page}</div>
+        <div className="pb-28 md:pb-0">{page}</div>
         {mobileNav}
       </>
     );
@@ -411,7 +411,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
       showAdminDashboard={showAdminDashboard}
       translateText={translateText}
     >
-      <div className="pb-20 md:pb-0">{page}</div>
+      <div className="pb-28 md:pb-0">{page}</div>
     </DashboardShell>
     {mobileNav}
     </>

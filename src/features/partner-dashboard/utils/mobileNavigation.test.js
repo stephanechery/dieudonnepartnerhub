@@ -19,9 +19,13 @@ test("mobile navigation exposes the five approved destinations", async () => {
 
   assert.match(nav, /aria-current=\{active \? "page" : undefined\}/);
   assert.match(nav, /env\(safe-area-inset-bottom\)/);
-  assert.match(nav, /inset-x-3/);
-  assert.match(nav, /rounded-\[1\.4rem\]/);
+  assert.match(nav, /inset-x-4/);
+  assert.match(nav, /rounded-\[2\.125rem\]/);
+  assert.match(nav, /min-h-16/);
+  assert.match(nav, /h-\[25px\] w-\[25px\]/);
+  assert.match(nav, /0\.3\)\]/);
   assert.match(nav, /md:hidden/);
+  assert.equal((router.match(/pb-28 md:pb-0/g) || []).length, 2);
   assert.match(router, /subPath === "\/training"/);
   assert.match(router, /subPath === "\/more"/);
   assert.match(router, /subPath\.startsWith\("\/module\/"\)[\s\S]*?"training"/);
