@@ -130,7 +130,7 @@ const FrontState = ({
     <CareTeamWarning darkMode={darkMode} isEmergency={item.isEmergency} translateText={translateText} />
 
     <footer className="flex flex-wrap items-center justify-between gap-3 pt-1">
-      <button type="button" onClick={onFlip} className={`inline-flex min-h-11 items-center gap-2 rounded-xl px-2 text-xs font-bold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 ${darkMode ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-700'}`}>
+      <button type="button" onClick={onFlip} className={`hidden min-h-11 items-center gap-2 rounded-xl px-2 text-xs font-bold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 sm:inline-flex ${darkMode ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-700'}`}>
         <RotateCcw className="h-4 w-4" aria-hidden="true" /> {translateText('Open Partner Action, scenario, and myth vs fact')}
       </button>
       <CardNavigation canBack={canBack} canNext={canNext} darkMode={darkMode} onBack={onBack} onNext={onNext} translateText={translateText} />
