@@ -346,9 +346,10 @@ export const MainGuideMobileSupportTools = ({ open, onClose, onOpen, ...props })
 
   return (
     <>
-      <button ref={triggerRef} type="button" aria-haspopup="dialog" aria-expanded={open} onClick={onOpen} className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 z-[70] flex min-h-14 -translate-x-1/2 items-center gap-2 rounded-full border px-5 text-sm font-black shadow-2xl backdrop-blur-xl transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 lg:hidden ${props.darkMode ? 'border-slate-700 bg-slate-900/92 text-slate-50 shadow-black/40' : 'border-slate-200 bg-white/95 text-slate-950 shadow-slate-400/30'}`}>
+      <button ref={triggerRef} type="button" aria-label={props.translateText('Support Tools')} aria-haspopup="dialog" aria-expanded={open} onClick={onOpen} className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 z-[70] flex min-h-14 -translate-x-1/2 items-center gap-2 rounded-full border px-3 text-sm font-black shadow-2xl backdrop-blur-xl transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 sm:px-5 lg:hidden ${props.darkMode ? 'border-slate-700 bg-slate-900/92 text-slate-50 shadow-black/40' : 'border-slate-200 bg-white/95 text-slate-950 shadow-slate-400/30'}`}>
         <Zap className="h-5 w-5 text-cyan-500" aria-hidden="true" />
-        {props.translateText('Support Tools')}
+        <span className="sm:hidden">{props.translateText('Tools')}</span>
+        <span className="hidden sm:inline">{props.translateText('Support Tools')}</span>
       </button>
 
       {open && typeof document !== 'undefined' && createPortal(

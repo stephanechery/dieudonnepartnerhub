@@ -6,6 +6,10 @@ const componentSource = await readFile(
   new URL('./MainGuideSupportTools.jsx', import.meta.url),
   'utf8'
 );
+const learningCardSource = await readFile(
+  new URL('./MainGuideLearningCard.jsx', import.meta.url),
+  'utf8'
+);
 const appSource = await readFile(new URL('../../App.jsx', import.meta.url), 'utf8');
 
 test('desktop pane keeps guide and support tools as explicit modes', () => {
@@ -58,4 +62,25 @@ test('App wires the approved guide shell without changing data or access service
   assert.match(appSource, /onLaborAction=\{\(\) => handleAiAction\('coach'\)\}/);
   assert.match(appSource, /onMealAction=\{\(\) => handleAiAction\('meal'\)\}/);
   assert.match(appSource, /onPrenatalAction=\{openPrenatalSupportPack\}/);
+});
+
+test('learning cards use the approved surface while retaining detailed training', () => {
+  for (const label of [
+    'What is happening',
+    'Partner action',
+    'What to say',
+    'When to contact the care team',
+    'Partner Action',
+    'Real-World Scenario',
+    'Myth',
+    'Fact'
+  ]) {
+    assert.ok(learningCardSource.includes(label), `${label} should be present in the redesigned card`);
+  }
+
+  assert.match(learningCardSource, /item\.checklist\.map/);
+  assert.match(learningCardSource, /isFlipped \?/);
+  assert.match(appSource, /MainGuideLearningCard/);
+  assert.match(appSource, /lg:hidden/);
+  assert.doesNotMatch(appSource, /guideStepPercent/);
 });

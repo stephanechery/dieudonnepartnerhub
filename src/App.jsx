@@ -47,6 +47,7 @@ import {
   MainGuideDesktopPane,
   MainGuideMobileSupportTools
 } from './features/main-guide/MainGuideSupportTools';
+import { MainGuideLearningCard } from './features/main-guide/MainGuideLearningCard';
 const PartnerDashboardModule = React.lazy(() => import('./features/partner-dashboard'));
 import { partnerCurriculum } from './features/partner-dashboard/data/curriculum';
 
@@ -270,33 +271,31 @@ const primeTtsAudio = async (speechText) => {
   return nextPromise;
 };
 
-const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (value) => value }) => {
+const FlippableCard = ({
+  item,
+  darkMode,
+  translateText = (value) => value,
+  stageTitle,
+  cardNumber,
+  totalCards,
+  canBack,
+  canNext,
+  onBack,
+  onNext
+}) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [audioState, setAudioState] = useState('idle');
-  const isSmallScreen = useIsSmallScreen();
   const structured = getSupportCardStructuredContent(item);
   const tx = (value) => translateText(value);
   const speechText = useMemo(() => getCardSpeechText(tx, item), [item, tx]);
-  const clinicalTone = item.isEmergency
-    ? darkMode
-      ? 'border-rose-900/45 bg-rose-950/20'
-      : 'border-rose-200 bg-rose-50/80'
-    : darkMode
-      ? 'border-blue-900/45 bg-blue-950/20'
-      : 'border-blue-200 bg-blue-50/80';
 
   useEffect(() => {
     if (!isFlipped) return;
     primeTtsAudio(speechText);
   }, [isFlipped, speechText]);
 
-  const handleSpeak = async (e) => {
-    e.stopPropagation();
-    if (audioState !== 'idle') return;
-
-    if (!aiFeaturesEnabled) {
-      return;
-    }
+  const handleSpeak = async () => {
+    if (audioState !== 'idle' || !aiFeaturesEnabled) return;
 
     setAudioState('loading');
     const url = await primeTtsAudio(speechText);
@@ -310,227 +309,25 @@ const FlippableCard = ({ item, colorClass, icon, darkMode, translateText = (valu
     await playAudioUrl(url, () => setAudioState('idle'));
   };
 
-  if (isSmallScreen) {
-    return (
-      <div className={`overflow-hidden rounded-3xl border ${darkMode ? 'border-slate-700 bg-slate-900 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
-        <button
-          type="button"
-          className="w-full p-5 text-left"
-          onClick={() => setIsFlipped((prev) => !prev)}
-          onTouchStart={() => primeTtsAudio(speechText)}
-        >
-          <div className="mb-4 flex items-start gap-4">
-            <div className={`rounded-xl p-3 ${colorClass}`}>{icon}</div>
-            <div className="min-w-0">
-              <h3 className={`text-xl font-bold leading-tight ${darkMode ? 'text-slate-100' : 'text-slate-800'}`}>
-                {tx(item.title)}
-              </h3>
-              <p className={`mt-2 text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                {tx(structured.definition)}
-              </p>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div className={`rounded-xl border p-3 ${darkMode ? 'border-slate-800 bg-slate-800/70' : 'border-slate-100 bg-slate-50'}`}>
-              <p className="text-[10px] font-black uppercase tracking-widest text-rose-500">{tx('What Is Happening In The Body')}</p>
-              <p className={`mt-1 text-sm leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{tx(structured.bodyChanges)}</p>
-            </div>
-            <span className={`inline-flex items-center gap-2 text-xs font-bold uppercase ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-              <RotateCcw className="h-4 w-4" /> {tx(isFlipped ? 'Tap to close training' : 'Tap to open training')}
-            </span>
-          </div>
-        </button>
-
-        {isFlipped && (
-          <div className={`border-t p-5 ${darkMode ? 'border-slate-800 bg-slate-900' : 'border-slate-100 bg-white'}`}>
-            <div className="mb-4 flex items-start justify-between gap-3">
-              <h4 className={`flex items-center gap-2 text-lg font-bold ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>
-                <Zap className="h-5 w-5 text-amber-500" /> {tx('Partner Action Guide')}
-              </h4>
-              <button
-                type="button"
-                onClick={handleSpeak}
-                onTouchStart={() => primeTtsAudio(speechText)}
-                className={`rounded-full border p-2.5 shadow-md transition-colors ${
-                  darkMode ? 'border-slate-700 bg-slate-800 hover:bg-slate-700' : 'border-slate-100 bg-white hover:bg-slate-50'
-                }`}
-                disabled={audioState !== 'idle' || !aiFeaturesEnabled}
-                title={tx('Play checklist audio')}
-              >
-                <Volume2 className={`h-5 w-5 ${audioState === 'playing' ? 'text-rose-500' : audioState === 'loading' ? 'animate-pulse text-cyan-500' : darkMode ? 'text-slate-300' : 'text-slate-500'}`} />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <div className="space-y-3">
-                {item.checklist.map((task, idx) => (
-                  <div key={idx} className="flex items-center gap-3">
-                    <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md ${darkMode ? 'bg-emerald-900/30 text-emerald-400' : 'bg-emerald-50 text-emerald-600'}`}>
-                      <CheckSquare className="h-3.5 w-3.5" />
-                    </div>
-                    <span className={`text-sm font-semibold leading-snug ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(task)}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className={`rounded-2xl p-4 ${darkMode ? 'border border-blue-800/30 bg-blue-900/10' : 'border border-blue-100 bg-blue-50'}`}>
-                <span className="mb-2 block text-[10px] font-black uppercase tracking-widest text-blue-500">{tx('Real-World Scenario')}</span>
-                <p className={`text-xs italic leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>"{tx(item.scenario)}"</p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase text-rose-400">{tx('Myth')}</span>
-                  <p className={`text-[11px] leading-tight ${darkMode ? 'text-slate-500' : 'text-slate-500'}`}>{tx(item.myth)}</p>
-                </div>
-                <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase text-emerald-500">{tx('Fact')}</span>
-                  <p className={`text-[11px] leading-tight ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{tx(item.fact)}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
   return (
-    <div
-      className="group h-[470px] cursor-pointer [perspective:1000px]"
-      onClick={() => setIsFlipped(!isFlipped)}
-      onMouseEnter={() => primeTtsAudio(speechText)}
-    >
-      <div
-        className={`relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] ${
-          isFlipped ? '[transform:rotateY(180deg)]' : ''
-        }`}
-      >
-        <div
-          className={`absolute inset-0 z-10 flex h-full w-full flex-col overflow-hidden rounded-3xl border p-8 transition-colors duration-300 [backface-visibility:hidden] ${
-            darkMode ? 'border-slate-700 bg-slate-900 shadow-xl' : 'border-slate-200 bg-white shadow-sm'
-          }`}
-        >
-          <div className="min-h-0 flex flex-1 flex-col">
-            <div className="mb-5 flex shrink-0 items-center gap-4">
-              <div className={`rounded-xl p-3 ${colorClass}`}>{icon}</div>
-              <h3 className={`text-2xl font-bold leading-[1.1] tracking-tight md:text-[1.7rem] ${darkMode ? 'text-slate-100' : 'text-slate-800'}`}>
-                {tx(item.title)}
-              </h3>
-            </div>
-            <div
-              className="custom-scrollbar min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1 touch-pan-y [-webkit-overflow-scrolling:touch]"
-              onClick={stopCardFlip}
-              onPointerDown={stopCardFlip}
-              onTouchStart={stopCardFlip}
-            >
-              <div className={`rounded-xl border p-2.5 ${darkMode ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white/70'}`}>
-                <p className="text-[10px] font-black uppercase tracking-widest text-cyan-500">{tx('Definition')}</p>
-                <p className={`mt-1 text-[13px] leading-snug ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(structured.definition)}</p>
-              </div>
-              <div className={`rounded-xl border p-2.5 ${darkMode ? 'border-slate-700 bg-slate-800/50' : 'border-slate-100 bg-slate-50'}`}>
-                <p className="text-[10px] font-black uppercase tracking-widest text-rose-500">{tx('What Is Happening In The Body')}</p>
-                <p className={`mt-1 text-[13px] leading-snug ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{tx(structured.bodyChanges)}</p>
-              </div>
-              <div className={`rounded-xl border p-2.5 ${clinicalTone}`}>
-                <p className={`text-[10px] font-black uppercase tracking-widest ${item.isEmergency ? 'text-rose-500' : 'text-blue-500'}`}>
-                  {tx('Why It Matters Clinically')}
-                </p>
-                <p className={`mt-1 text-[13px] leading-snug ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(structured.clinicalSignificance)}</p>
-              </div>
-              <div className={`rounded-xl border p-2.5 ${darkMode ? 'border-emerald-900/45 bg-emerald-950/20' : 'border-emerald-200 bg-emerald-50/80'}`}>
-                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500">{tx('Mother Impact')}</p>
-                <p className={`mt-1 text-[13px] leading-snug ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(structured.motherImpact)}</p>
-              </div>
-            </div>
-          </div>
-          <div className={`mt-4 flex shrink-0 items-center justify-between border-t pt-6 ${darkMode ? 'border-slate-800' : 'border-slate-50'}`}>
-            <span className={`flex items-center gap-2 text-xs font-bold uppercase ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-              <RotateCcw className="h-4 w-4" /> {tx('Tap to flip for training')}
-            </span>
-            <div className="flex gap-2">
-              {item.isEmergency && <ShieldAlert className="h-5 w-5 animate-pulse text-rose-500" />}
-              <Info className={`h-5 w-5 ${darkMode ? 'text-slate-700' : 'text-slate-300'}`} />
-            </div>
-          </div>
-        </div>
-
-        <div
-          className={`absolute inset-0 flex h-full w-full flex-col overflow-hidden rounded-3xl border-2 p-8 transition-colors duration-300 [backface-visibility:hidden] [transform:rotateY(180deg)] ${
-            darkMode ? 'border-slate-800 bg-slate-900 shadow-2xl' : 'bg-white'
-          } ${colorClass.replace('bg-', 'bg-opacity-5 border-')}`}
-        >
-          <div className="mb-6 flex items-start justify-between">
-            <h4 className={`flex items-center gap-2 text-lg font-bold ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>
-              <Zap className="h-5 w-5 text-amber-500" /> {tx('Partner Action Guide')}
-            </h4>
-            <button
-              onClick={handleSpeak}
-              onPointerDown={stopCardFlip}
-              onMouseEnter={() => primeTtsAudio(speechText)}
-              className={`rounded-full border p-2.5 shadow-md transition-colors ${
-                darkMode ? 'border-slate-700 bg-slate-800 hover:bg-slate-700' : 'border-slate-100 bg-white hover:bg-slate-50'
-              }`}
-              disabled={audioState !== 'idle' || !aiFeaturesEnabled}
-              title={aiFeaturesEnabled ? tx('Play checklist audio') : tx('AI support is disabled')}
-            >
-              <Volume2 className={`h-5 w-5 ${audioState === 'playing' ? 'text-rose-500' : audioState === 'loading' ? 'animate-pulse text-cyan-500' : darkMode ? 'text-slate-300' : 'text-slate-500'}`} />
-            </button>
-          </div>
-
-          <div
-            className="custom-scrollbar min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain pr-2 touch-pan-y [-webkit-overflow-scrolling:touch]"
-            onClick={stopCardFlip}
-            onPointerDown={stopCardFlip}
-            onTouchStart={stopCardFlip}
-          >
-            <div className="space-y-3">
-              {item.checklist.map((task, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <div
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md ${
-                      darkMode ? 'bg-emerald-900/30 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
-                    }`}
-                  >
-                    <CheckSquare className="h-3.5 w-3.5" />
-                  </div>
-                  <span className={`text-sm font-semibold leading-snug ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>{tx(task)}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className={`rounded-2xl p-4 ${darkMode ? 'border border-blue-800/30 bg-blue-900/10' : 'border border-blue-100 bg-blue-50'}`}>
-              <span className="mb-2 block text-[10px] font-black uppercase tracking-widest text-blue-500">{tx('Real-World Scenario')}</span>
-              <p className={`text-xs italic leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>"{tx(item.scenario)}"</p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase text-rose-400">{tx('Myth')}</span>
-                <p className={`text-[11px] leading-tight ${darkMode ? 'text-slate-500' : 'text-slate-500'}`}>{tx(item.myth)}</p>
-              </div>
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase text-emerald-500">{tx('Fact')}</span>
-                <p className={`text-[11px] leading-tight ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{tx(item.fact)}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6 flex items-center justify-between border-t border-slate-100/10 pt-4">
-            <span className={`flex items-center gap-1 text-xs font-bold ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-              <RotateCcw className="h-3 w-3" /> {tx('Back')}
-            </span>
-            <span
-              className={`text-[10px] font-black uppercase tracking-widest ${
-                item.isEmergency ? 'text-rose-500' : 'text-slate-400'
-              }`}
-            >
-              {item.isEmergency ? tx('Emergency Protocol') : tx('Support Protocol')}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <MainGuideLearningCard
+      aiEnabled={aiFeaturesEnabled}
+      audioState={audioState}
+      canBack={canBack}
+      canNext={canNext}
+      cardNumber={cardNumber}
+      darkMode={darkMode}
+      isFlipped={isFlipped}
+      item={item}
+      onBack={onBack}
+      onFlip={() => setIsFlipped((current) => !current)}
+      onNext={onNext}
+      onSpeak={handleSpeak}
+      stageTitle={stageTitle}
+      structured={structured}
+      totalCards={totalCards}
+      translateText={translateText}
+    />
   );
 };
 
@@ -5734,9 +5531,6 @@ ${cleanedResult}`,
     }))
   );
   const currentGuideCard = mobileGuideCards[guideStep] || mobileGuideCards[0];
-  const guideStepPercent = mobileGuideCards.length
-    ? Math.round(((guideStep + 1) / mobileGuideCards.length) * 100)
-    : 0;
   const openCurrentPartnerTips = () => {
     if (!mobileGuideCards.length) return;
 
@@ -6192,7 +5986,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
         />
 
         <div className="min-w-0 space-y-6 md:space-y-8">
-          <div className={`premium-tab-rail flex gap-2 overflow-x-auto rounded-[1.55rem] border p-1.5 transition-colors [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-6 md:overflow-visible ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
+          <div className={`premium-tab-rail flex gap-2 overflow-x-auto rounded-[1.55rem] border p-1.5 transition-colors [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-6 md:overflow-visible lg:hidden ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
             {Object.entries(guideData).map(([key, data]) => (
               <button
                 key={key}
@@ -6252,78 +6046,20 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
               </div>
 
               {currentGuideCard && (
-                <div className={`space-y-4 rounded-[1.75rem] border p-4 shadow-xl md:p-6 ${darkMode ? 'border-slate-800 bg-slate-900/92' : 'border-slate-200 bg-white'}`}>
-                  <div>
-                    <div className={`flex items-center justify-between text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-slate-500' : 'text-slate-500'}`}>
-                      <span>{translateText('Card')} {guideStep + 1}/{mobileGuideCards.length}</span>
-                      <span>{guideStepPercent}%</span>
-                    </div>
-                    <div className={`mt-2 h-2 overflow-hidden rounded-full ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}>
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500"
-                        style={{ width: `${guideStepPercent}%` }}
-                      />
-                    </div>
-                    <div className="mt-3 flex items-center gap-3">
-                      <div className={`rounded-xl p-2 shadow-sm ${currentGuideCard.color}`}>{currentGuideCard.icon}</div>
-                      <h3 className={`text-lg font-black tracking-tight ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>
-                        {translateText(currentGuideCard.heading)}
-                      </h3>
-                    </div>
-                  </div>
-
-                  <FlippableCard
-                    key={currentGuideCard.id}
-                    item={currentGuideCard.card}
-                    icon={currentGuideCard.icon}
-                    colorClass={currentGuideCard.color}
-                    darkMode={darkMode}
-                    translateText={translateText}
-                  />
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setGuideStep((current) => Math.max(0, current - 1))}
-                      disabled={guideStep === 0}
-                      className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-sm font-bold disabled:opacity-40 ${
-                        darkMode ? 'border-slate-700 bg-slate-950 text-slate-200' : 'border-slate-300 bg-white text-slate-700'
-                      }`}
-                    >
-                      <ChevronLeft className="h-4 w-4" /> {translateText('Back')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setGuideStep((current) => Math.min(mobileGuideCards.length - 1, current + 1))}
-                      disabled={guideStep === mobileGuideCards.length - 1}
-                      className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-white disabled:opacity-40 ${
-                        darkMode ? 'bg-gradient-to-r from-cyan-600 to-teal-500' : 'bg-gradient-to-r from-slate-900 to-slate-700'
-                      }`}
-                    >
-                      {translateText('Next')} <ChevronRight className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
+                <FlippableCard
+                  key={currentGuideCard.id}
+                  item={currentGuideCard.card}
+                  darkMode={darkMode}
+                  translateText={translateText}
+                  stageTitle={guideData[activeStage].title}
+                  cardNumber={guideStep + 1}
+                  totalCards={mobileGuideCards.length}
+                  canBack={guideStep > 0}
+                  canNext={guideStep < mobileGuideCards.length - 1}
+                  onBack={() => setGuideStep((current) => Math.max(0, current - 1))}
+                  onNext={() => setGuideStep((current) => Math.min(mobileGuideCards.length - 1, current + 1))}
+                />
               )}
-
-              <div className="hidden space-y-12">
-                {guideData[activeStage].subsections.map((sub, sIndex) => (
-                  <div key={sIndex} className="space-y-8">
-                    <div className="flex items-center gap-4 px-2">
-                      <div className={`rounded-xl p-2 shadow-sm ${sub.color}`}>{sub.icon}</div>
-                      <h3 className={`text-xl font-black tracking-tight transition-colors ${darkMode ? 'text-slate-200' : 'text-slate-800'}`}>
-                        {translateText(sub.heading)}
-                      </h3>
-                      <div className={`ml-4 h-px flex-1 transition-colors ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`} />
-                    </div>
-                    <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                      {sub.cards.map((card, cIndex) => (
-                        <FlippableCard key={cIndex} item={card} icon={sub.icon} colorClass={sub.color} darkMode={darkMode} translateText={translateText} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
 
               <div className={`premium-surface group relative overflow-hidden rounded-[1.75rem] border p-6 transition-colors sm:p-7 ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
                 <div className="absolute -right-32 -top-32 h-64 w-64 rounded-full bg-rose-500/5 blur-[100px]" />
