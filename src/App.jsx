@@ -43,6 +43,10 @@ import {
 } from 'lucide-react';
 import dieudonneDarkLogo from './assets/Dieudonne_Dark_Logo.png';
 import heroPartnerJourney from './assets/hero-partner-tablet.svg';
+import {
+  MainGuideDesktopPane,
+  MainGuideMobileSupportTools
+} from './features/main-guide/MainGuideSupportTools';
 const PartnerDashboardModule = React.lazy(() => import('./features/partner-dashboard'));
 import { partnerCurriculum } from './features/partner-dashboard/data/curriculum';
 
@@ -3677,6 +3681,8 @@ const App = () => {
     return true;
   });
   const [guideStep, setGuideStep] = useState(0);
+  const [guidePaneMode, setGuidePaneMode] = useState('guide');
+  const [mobileSupportToolsOpen, setMobileSupportToolsOpen] = useState(false);
   const [partnerTipStep, setPartnerTipStep] = useState(0);
   const [winCelebration, setWinCelebration] = useState(null);
   const [prenatalSupportHistory, setPrenatalSupportHistory] = useState([]);
@@ -3686,7 +3692,6 @@ const App = () => {
   const insightScrollRef = useRef(null);
   const appRootRef = useRef(null);
   const mainContentRef = useRef(null);
-  const supportFocusRef = useRef(null);
   const languageMenuRef = useRef(null);
   const textNodeSourceRef = useRef(new WeakMap());
   const attrSourceRef = useRef(new WeakMap());
@@ -5732,9 +5737,6 @@ ${cleanedResult}`,
   const guideStepPercent = mobileGuideCards.length
     ? Math.round(((guideStep + 1) / mobileGuideCards.length) * 100)
     : 0;
-  const completedSupportTaskCount = supportTasks.filter((task) => checklist[task.id]).length;
-  const supportTaskProgress = Math.round((completedSupportTaskCount / supportTasks.length) * 100);
-
   const openCurrentPartnerTips = () => {
     if (!mobileGuideCards.length) return;
 
@@ -5762,19 +5764,14 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
     setPartnerTipStep((current) => (current + 1) % mobileGuideCards.length);
   };
 
-  const focusDailyReminders = () => {
-    supportFocusRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    supportFocusRef.current?.focus({ preventScroll: true });
-  };
-
   const quickToolCards = [
     { label: 'Partner Tips', icon: <Heart className="h-5 w-5" />, detail: 'Open tips for the current card', action: openCurrentPartnerTips },
-    { label: 'Reminders', icon: <Calendar className="h-5 w-5" />, detail: 'Jump to daily support wins', action: focusDailyReminders },
+    { label: 'Reminders', icon: <Calendar className="h-5 w-5" />, detail: 'Jump to daily support wins' },
     { label: 'My Notes', icon: <ClipboardList className="h-5 w-5" />, detail: 'Open your saved dashboard', action: () => navigateWithinApp('/partner-dashboard') }
   ];
 
   return (
-    <div ref={appRootRef} className={`min-h-screen p-4 font-sans transition-colors duration-500 md:p-8 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
+    <div ref={appRootRef} data-main-guide-app className={`min-h-screen p-4 font-sans transition-colors duration-500 md:p-8 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
       {aiResult && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-md">
           <div className={`flex min-h-0 max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl shadow-2xl ${darkMode ? 'border border-slate-800 bg-slate-900' : 'border border-slate-200 bg-white'}`}>
@@ -6139,137 +6136,62 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
       </section>
 
       {experienceEntry && (
-      <main ref={mainContentRef} className="premium-guide-layout mx-auto grid max-w-7xl grid-cols-1 gap-5 md:gap-7 lg:grid-cols-4">
-        <div className="order-2 space-y-4 lg:sticky lg:top-6 lg:order-1 lg:col-span-1 lg:self-start">
-          <div className="relative">
-            {winCelebration && (
-              <div key={winCelebration.token} className="pointer-events-none z-20 mb-3 md:mb-0 md:absolute md:right-full md:top-4 md:mr-4 md:w-64">
-                <div className={`animate-win-toast rounded-2xl border px-4 py-3 shadow-lg ${
-                  darkMode
-                    ? 'border-emerald-700/60 bg-emerald-900/40 text-emerald-100'
-                    : 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                }`}>
-                  <p className="flex items-center gap-2 text-sm font-bold">
-                    <Sparkles className="h-4 w-4" /> {translateText('Core Partner Win Logged')}
-                  </p>
-                  <p className={`mt-1 text-xs ${darkMode ? 'text-emerald-200' : 'text-emerald-600'}`}>
-                    {translateText(winCelebration.label)}. {translateText(winCelebration.message)}
-                  </p>
-                </div>
-                <div className="pointer-events-none relative mx-auto -mt-2 h-10 w-44">
-                  <span className="win-particle" style={{ '--x': '-68px', '--y': '-18px' }} />
-                  <span className="win-particle" style={{ '--x': '-42px', '--y': '-26px' }} />
-                  <span className="win-particle" style={{ '--x': '-18px', '--y': '-30px' }} />
-                  <span className="win-particle" style={{ '--x': '18px', '--y': '-30px' }} />
-                  <span className="win-particle" style={{ '--x': '42px', '--y': '-26px' }} />
-                  <span className="win-particle" style={{ '--x': '68px', '--y': '-18px' }} />
-                </div>
-              </div>
-            )}
-
-            <section ref={supportFocusRef} tabIndex={-1} className={`premium-surface overflow-hidden rounded-[1.6rem] border p-4 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-fuchsia-300/60 ${
-              darkMode
-                ? 'border-fuchsia-400/35 bg-gradient-to-br from-fuchsia-950/35 via-slate-950/94 to-slate-950/90 shadow-2xl shadow-fuchsia-950/20'
-                : 'border-fuchsia-200 bg-gradient-to-br from-white via-fuchsia-50/55 to-slate-50 shadow-sm'
-            }`}>
-              <div className="mb-3 flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-3">
-                  <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${
-                    darkMode ? 'border-fuchsia-300/30 bg-fuchsia-400/10 text-fuchsia-200' : 'border-fuchsia-200 bg-fuchsia-100 text-fuchsia-700'
-                  }`}>
-                    <Clock className="h-4 w-4" />
-                  </span>
-                  <h2 className={`text-base font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-900'}`}>
-                    {translateText("Today's Partner Focus")}
-                  </h2>
-                </div>
-                <ChevronRight className={`h-5 w-5 shrink-0 ${darkMode ? 'text-fuchsia-300' : 'text-fuchsia-600'}`} />
-              </div>
-
-              <div className="mb-3 flex items-center gap-3">
-                <div className={`h-2 flex-1 overflow-hidden rounded-full ${darkMode ? 'bg-slate-800' : 'bg-fuchsia-100'}`}>
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-violet-400 to-fuchsia-400"
-                    style={{ width: `${supportTaskProgress}%` }}
-                  />
-                </div>
-                <span className={`shrink-0 text-xs font-bold ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                  {completedSupportTaskCount} {translateText('of')} {supportTasks.length} {translateText('completed')}
-                </span>
-              </div>
-
-              <div className="space-y-1.5">
-                {supportTasks.map((task) => (
-                  <button
-                    key={task.id}
-                    onClick={() => toggleTask(task.id)}
-                    className={`group flex min-h-10 w-full items-center gap-3 rounded-2xl border px-3 py-1.5 text-left transition-all ${
-                      checklist[task.id]
-                        ? darkMode
-                          ? 'border-fuchsia-300/30 bg-white/[0.055] text-slate-100'
-                          : 'border-fuchsia-200 bg-white text-slate-800 shadow-sm'
-                        : darkMode
-                          ? 'border-white/10 bg-slate-950/38 text-slate-400 hover:bg-white/[0.045]'
-                          : 'border-slate-100 bg-slate-50 text-slate-600 hover:border-slate-200 hover:bg-white hover:shadow-md'
-                    } ${winCelebration?.taskId === task.id ? 'animate-win-pop ring-2 ring-emerald-300/60 shadow-lg shadow-emerald-400/15' : ''}`}
-                  >
-                    <div
-                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all ${
-                        checklist[task.id]
-                          ? 'border-fuchsia-400 bg-gradient-to-br from-violet-500 to-fuchsia-500'
-                          : darkMode
-                            ? 'border-slate-500 bg-slate-950 group-hover:border-fuchsia-300'
-                            : 'border-slate-300 bg-white group-hover:border-fuchsia-400'
-                      }`}
-                    >
-                      {checklist[task.id] && <Check className="h-3.5 w-3.5 text-white" />}
-                    </div>
-                    <span className={`text-sm font-bold transition-colors ${checklist[task.id] ? (darkMode ? 'text-slate-100' : 'text-slate-900') : ''}`}>{translateText(task.label)}</span>
-                  </button>
-                ))}
-              </div>
-              <p className={`mt-3 flex items-center gap-2 text-xs font-semibold ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                <Sparkles className={`h-3.5 w-3.5 ${darkMode ? 'text-fuchsia-300' : 'text-fuchsia-600'}`} />
-                {translateText('Small actions today, lasting impact tomorrow.')}
-              </p>
-            </section>
-          </div>
-
-          <div key={`stage-ai-tool-${activeStage}`}>
-            {guideData[activeStage].aiTool}
-          </div>
-
-          <div className={`premium-surface rounded-[1.6rem] border p-4 transition-colors ${
-            darkMode ? 'border-white/10 bg-slate-900/72 shadow-xl shadow-black/20' : 'border-slate-200 bg-white shadow-sm'
-          }`}>
-            <div className="mb-4 flex items-center gap-2">
-              <Zap className={`h-4 w-4 ${darkMode ? 'text-cyan-300' : 'text-cyan-700'}`} />
-              <h3 className={`text-sm font-black tracking-tight ${darkMode ? 'text-slate-50' : 'text-slate-900'}`}>
-                {translateText('Quick Tools')}
-              </h3>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {quickToolCards.map((tool) => (
-                <button
-                  key={tool.label}
-                  type="button"
-                  onClick={tool.action}
-                  className={`flex min-h-[4.7rem] flex-col items-center justify-center rounded-2xl border px-2 py-2.5 text-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60 ${
-                    darkMode
-                      ? 'border-white/10 bg-slate-950/45 text-slate-300 hover:border-fuchsia-300/40 hover:bg-slate-950/70'
-                      : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-fuchsia-200 hover:bg-white'
-                  }`}
-                  title={translateText(tool.detail)}
-                >
-                  <span className={darkMode ? 'text-fuchsia-300' : 'text-fuchsia-600'}>{tool.icon}</span>
-                  <span className="mt-2 text-[11px] font-black leading-tight">{translateText(tool.label)}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+      <main ref={mainContentRef} className="premium-guide-layout mx-auto grid max-w-7xl grid-cols-1 gap-5 md:gap-7 lg:grid-cols-[minmax(22rem,26.25rem)_minmax(0,1fr)]">
+        <div className="hidden lg:sticky lg:top-6 lg:block lg:self-start">
+          <MainGuideDesktopPane
+            activeStage={activeStage}
+            cards={mobileGuideCards}
+            checklist={checklist}
+            darkMode={darkMode}
+            guideData={guideData}
+            guideStep={guideStep}
+            mode={guidePaneMode}
+            onLaborAction={() => handleAiAction('coach')}
+            onMealAction={() => handleAiAction('meal')}
+            onModeChange={setGuidePaneMode}
+            onOpenRecoveryPlanner={() => setActiveStage('homeSetup')}
+            onPrenatalAction={openPrenatalSupportPack}
+            onSelectCard={setGuideStep}
+            onSelectStage={setActiveStage}
+            onToggleTask={toggleTask}
+            quickTools={quickToolCards}
+            supportTasks={supportTasks}
+            translateText={translateText}
+            winCelebration={winCelebration}
+          />
         </div>
 
-        <div className="order-1 space-y-6 md:space-y-8 lg:order-2 lg:col-span-3">
+        <MainGuideMobileSupportTools
+          activeStage={activeStage}
+          checklist={checklist}
+          darkMode={darkMode}
+          onClose={() => setMobileSupportToolsOpen(false)}
+          onLaborAction={() => {
+            setMobileSupportToolsOpen(false);
+            handleAiAction('coach');
+          }}
+          onMealAction={() => {
+            setMobileSupportToolsOpen(false);
+            handleAiAction('meal');
+          }}
+          onOpen={() => setMobileSupportToolsOpen(true)}
+          onOpenRecoveryPlanner={() => {
+            setMobileSupportToolsOpen(false);
+            setActiveStage('homeSetup');
+          }}
+          onPrenatalAction={(term) => {
+            setMobileSupportToolsOpen(false);
+            openPrenatalSupportPack(term);
+          }}
+          onToggleTask={toggleTask}
+          open={mobileSupportToolsOpen}
+          quickTools={quickToolCards}
+          supportTasks={supportTasks}
+          translateText={translateText}
+          winCelebration={winCelebration}
+        />
+
+        <div className="min-w-0 space-y-6 md:space-y-8">
           <div className={`premium-tab-rail flex gap-2 overflow-x-auto rounded-[1.55rem] border p-1.5 transition-colors [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-6 md:overflow-visible ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
             {Object.entries(guideData).map(([key, data]) => (
               <button
