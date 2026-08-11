@@ -289,11 +289,6 @@ const FlippableCard = ({
   const tx = (value) => translateText(value);
   const speechText = useMemo(() => getCardSpeechText(tx, item), [item, tx]);
 
-  useEffect(() => {
-    if (!isFlipped) return;
-    primeTtsAudio(speechText);
-  }, [isFlipped, speechText]);
-
   const handleSpeak = async () => {
     if (audioState !== 'idle' || !aiFeaturesEnabled) return;
 

@@ -83,4 +83,5 @@ test('learning cards use the approved surface while retaining detailed training'
   assert.match(appSource, /MainGuideLearningCard/);
   assert.match(appSource, /lg:hidden/);
   assert.doesNotMatch(appSource, /guideStepPercent/);
+  assert.doesNotMatch(appSource, /if \(!isFlipped\) return;\s*primeTtsAudio/);
 });
