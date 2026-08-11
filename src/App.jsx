@@ -47,7 +47,7 @@ import {
   MainGuideDesktopPane,
   MainGuideMobileSupportTools
 } from './features/main-guide/MainGuideSupportTools';
-import { MainGuideLearningCard } from './features/main-guide/MainGuideLearningCard';
+import { MainGuideLearningCard, MainGuideTermCard } from './features/main-guide/MainGuideLearningCard';
 const PartnerDashboardModule = React.lazy(() => import('./features/partner-dashboard'));
 import { partnerCurriculum } from './features/partner-dashboard/data/curriculum';
 
@@ -1388,98 +1388,41 @@ const KeyTermFlippableCard = ({ item, sectionTone, darkMode, translateText = (va
 };
 
 const KeyTermsPanel = ({ darkMode, translateText = (value) => value }) => {
-  const tx = (value) => translateText(value);
   const [termStep, setTermStep] = useState(0);
-  const mobileTerms = keyTermSections.flatMap((section) => {
-    const sectionTone = keyTermTone[section.tone];
-    return section.terms.map((item) => ({
+  const [termTrainingOpen, setTermTrainingOpen] = useState(false);
+  const terms = keyTermSections.flatMap((section) =>
+    section.terms.map((item) => ({
       item,
-      sectionTitle: section.title,
-      sectionTone,
-    }));
-  });
-  const currentTerm = mobileTerms[termStep] || mobileTerms[0];
-  const termStepPercent = mobileTerms.length
-    ? Math.round(((termStep + 1) / mobileTerms.length) * 100)
-    : 0;
+      sectionTitle: section.title
+    }))
+  );
+  const currentTerm = terms[termStep] || terms[0];
+
+  const moveToTerm = (nextStep) => {
+    setTermTrainingOpen(false);
+    setTermStep(nextStep);
+  };
 
   return (
     <div className="space-y-8">
       {currentTerm && (
-        <section className={`space-y-4 rounded-[1.75rem] border p-4 shadow-xl md:p-6 ${darkMode ? 'border-slate-800 bg-slate-900/92' : 'border-slate-200 bg-white'}`}>
-          <div>
-            <div className={`flex items-center justify-between text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? 'text-slate-500' : 'text-slate-500'}`}>
-              <span>{tx('Term')} {termStep + 1}/{mobileTerms.length}</span>
-              <span>{termStepPercent}%</span>
-            </div>
-            <div className={`mt-2 h-2 overflow-hidden rounded-full ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}>
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500"
-                style={{ width: `${termStepPercent}%` }}
-              />
-            </div>
-            <p className={`mt-3 text-xs font-black uppercase tracking-[0.16em] ${darkMode ? 'text-slate-500' : 'text-slate-500'}`}>
-              {tx(currentTerm.sectionTitle)}
-            </p>
-          </div>
-
-          <KeyTermFlippableCard
-            key={`${currentTerm.sectionTitle}-${currentTerm.item.term}`}
-            item={currentTerm.item}
-            sectionTone={currentTerm.sectionTone}
-            darkMode={darkMode}
-            translateText={translateText}
-          />
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setTermStep((current) => Math.max(0, current - 1))}
-              disabled={termStep === 0}
-              className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-sm font-bold disabled:opacity-40 ${
-                darkMode ? 'border-slate-700 bg-slate-950 text-slate-200' : 'border-slate-300 bg-white text-slate-700'
-              }`}
-            >
-              <ChevronLeft className="h-4 w-4" /> {tx('Back')}
-            </button>
-            <button
-              type="button"
-              onClick={() => setTermStep((current) => Math.min(mobileTerms.length - 1, current + 1))}
-              disabled={termStep === mobileTerms.length - 1}
-              className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-white disabled:opacity-40 ${
-                darkMode ? 'bg-gradient-to-r from-cyan-600 to-teal-500' : 'bg-gradient-to-r from-slate-900 to-slate-700'
-              }`}
-            >
-              {tx('Next')} <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-        </section>
+        <MainGuideTermCard
+          key={`${currentTerm.sectionTitle}-${currentTerm.item.term}`}
+          canBack={termStep > 0}
+          canNext={termStep < terms.length - 1}
+          cardNumber={termStep + 1}
+          darkMode={darkMode}
+          isFlipped={termTrainingOpen}
+          item={currentTerm.item}
+          onBack={() => moveToTerm(Math.max(0, termStep - 1))}
+          onFlip={() => setTermTrainingOpen((current) => !current)}
+          onNext={() => moveToTerm(Math.min(terms.length - 1, termStep + 1))}
+          sectionTitle={currentTerm.sectionTitle}
+          structured={getKeyTermStructuredContent(currentTerm.item)}
+          totalCards={terms.length}
+          translateText={translateText}
+        />
       )}
-
-      <div className="hidden space-y-8">
-        {keyTermSections.map((section) => {
-          const Icon = section.icon;
-          const sectionTone = keyTermTone[section.tone];
-
-          return (
-            <section key={section.id} className={`space-y-4 rounded-2xl border p-4 ${darkMode ? sectionTone.sectionDark : sectionTone.sectionLight}`}>
-              <div className="flex items-center gap-3">
-                <Icon className={`h-5 w-5 ${sectionTone.heading}`} />
-                <h3 className={`text-lg font-black tracking-tight ${darkMode ? 'text-slate-100' : 'text-slate-900'}`}>
-                  {tx(section.title)}
-                </h3>
-                <div className={`ml-3 h-px flex-1 ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`} />
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {section.terms.map((item) => (
-                  <KeyTermFlippableCard key={item.term} item={item} sectionTone={sectionTone} darkMode={darkMode} translateText={translateText} />
-                ))}
-              </div>
-            </section>
-          );
-        })}
-      </div>
     </div>
   );
 };

@@ -85,3 +85,20 @@ test('learning cards use the approved surface while retaining detailed training'
   assert.doesNotMatch(appSource, /guideStepPercent/);
   assert.doesNotMatch(appSource, /if \(!isFlipped\) return;\s*primeTtsAudio/);
 });
+
+test('key terms use the approved learning-card surface and keep term training', () => {
+  for (const label of [
+    'Term training',
+    'Clinical Meaning',
+    'Mother Impact',
+    'Partner Actions',
+    'Next term'
+  ]) {
+    assert.ok(learningCardSource.includes(label), `${label} should remain in term training`);
+  }
+
+  assert.match(learningCardSource, /export const MainGuideTermCard/);
+  assert.match(learningCardSource, /item\.partnerTips\.map/);
+  assert.match(appSource, /<MainGuideTermCard/);
+  assert.doesNotMatch(appSource, /termStepPercent/);
+});
