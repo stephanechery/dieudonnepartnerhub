@@ -8,13 +8,7 @@ import {
   Volume2,
   Zap
 } from 'lucide-react';
-
-const promptForStage = (stageTitle) => {
-  if (stageTitle === 'Labor & Delivery') return 'I am right here. Breathe with me, one wave at a time.';
-  if (stageTitle === 'Postpartum Recovery') return 'What can I take off your plate right now?';
-  if (stageTitle === 'Home Setup & Recovery Support') return 'I will handle the next task. You rest.';
-  return 'What would make the next hour easier?';
-};
+import { promptForGuideCard } from './mainGuidePrompts';
 
 const DetailBlock = ({ accent = false, children, darkMode, label, onClick }) => {
   const classes = accent
@@ -123,7 +117,7 @@ const FrontState = ({
         </span>
       </DetailBlock>
       <DetailBlock darkMode={darkMode} label={translateText('What to say')}>
-        “{translateText(promptForStage(stageTitle))}”
+        “{translateText(promptForGuideCard(item, stageTitle))}”
       </DetailBlock>
     </div>
 
