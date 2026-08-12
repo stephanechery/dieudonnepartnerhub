@@ -168,7 +168,7 @@ const SLEEP = {
   },
 };
 
-function LangBtn({code,label,flag,active,C,onClick}){return <button onClick={()=>onClick(code)} style={{background:active?C.accent+"25":C.inputBg,border:"1px solid "+(active?C.accent:C.border),borderRadius:20,padding:"5px 13px",cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"'DM Mono',monospace",fontSize:12,color:active?C.accent:C.muted,transition:"all 0.2s"}}><span>{flag}</span><span>{label}</span></button>;}
+function LangBtn({code,label,flag,active,C,onClick}){return <button data-no-translate="true" onClick={()=>onClick(code)} style={{background:active?C.accent+"25":C.inputBg,border:"1px solid "+(active?C.accent:C.border),borderRadius:20,padding:"5px 13px",cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"'DM Mono',monospace",fontSize:12,color:active?C.accent:C.muted,transition:"all 0.2s"}}><span>{flag}</span><span>{label}</span></button>;}
 function DiscBox({text,C}){return <div style={{background:C.purple+"12",border:"1px solid "+C.purple+"28",borderRadius:12,padding:16,marginTop:18}}><div style={{fontSize:10,color:C.purple,fontFamily:"'DM Mono',monospace",marginBottom:8,letterSpacing:"0.12em"}}>💬 REFLECT TOGETHER</div><p style={{fontSize:13.5,color:C.muted,lineHeight:1.7,margin:0,fontStyle:"italic"}}>{text}</p></div>;}
 
 function SecHealing({lang,C}){
@@ -281,8 +281,13 @@ const GENERIC = {
   },
 };
 
-export default function PartnerPostpartumGuide({ darkMode, onToggleTheme }){
-  const [lang,setLang]=useState("en");
+export default function PartnerPostpartumGuide({ darkMode, onToggleTheme, language = "en", onLanguageChange = () => {} }){
+  const [lang,setLang]=useState(language);
+  useEffect(() => setLang(language), [language]);
+  const changeLanguage = (nextLanguage) => {
+    setLang(nextLanguage);
+    onLanguageChange(nextLanguage);
+  };
   const [section,setSection]=useState(0);
   const [dark,setDark]=usePartnerGuideTheme(darkMode,onToggleTheme);
   const [ready,setReady]=useState(false);
@@ -332,7 +337,7 @@ export default function PartnerPostpartumGuide({ darkMode, onToggleTheme }){
                 </div>
                 <div style={{background:C.inputBg,border:"1px solid "+C.border,borderRadius:10,padding:"9px 12px"}}>
                   <div style={{fontSize:9,color:C.faint,fontFamily:"'DM Mono',monospace",marginBottom:7,letterSpacing:"0.15em"}}>SELECT LANGUAGE / CHWAZI LANG</div>
-                  <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{LANGS.map(l=><LangBtn key={l.code} {...l} active={lang===l.code} C={C} onClick={setLang}/>)}</div>
+                  <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{LANGS.map(l=><LangBtn key={l.code} {...l} active={lang===l.code} C={C} onClick={changeLanguage}/>)}</div>
                 </div>
               </div>
             </div>

@@ -58,9 +58,9 @@ const stepSurface = (darkMode) =>
     ? "border-0 bg-transparent text-slate-100 shadow-none sm:border sm:border-slate-800 sm:bg-slate-900 sm:shadow-2xl sm:shadow-black/25"
     : "border-0 bg-transparent text-slate-950 shadow-none sm:border sm:border-slate-200 sm:bg-white sm:shadow-xl sm:shadow-slate-300/35";
 
-function Progress({ currentStep, darkMode }) {
+function Progress({ currentStep, darkMode, translateText }) {
   return (
-    <div className="grid grid-cols-5 gap-2" aria-label={`Step ${currentStep + 1} of 5`}>
+    <div className="grid grid-cols-5 gap-2" aria-label={`${translateText("Step")} ${currentStep + 1} ${translateText("of")} 5`}>
       {steps.map((label, index) => (
         <span
           key={label}
@@ -80,7 +80,7 @@ function Progress({ currentStep, darkMode }) {
   );
 }
 
-function ChoiceCard({ option, name, selected, onChange, darkMode, type = "radio" }) {
+function ChoiceCard({ option, name, selected, onChange, darkMode, translateText, type = "radio" }) {
   return (
     <label
       className={`relative flex min-h-[80px] cursor-pointer items-start gap-3 rounded-2xl border p-4 transition focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 ${
@@ -113,10 +113,10 @@ function ChoiceCard({ option, name, selected, onChange, darkMode, type = "radio"
                 : "text-slate-950"
           }`}
         >
-          {option.label}
+          {translateText(option.label)}
         </span>
         <span className={`mt-2 block text-xs leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-          {option.description}
+          {translateText(option.description)}
         </span>
       </span>
       <span
@@ -322,7 +322,7 @@ export default function OnboardingFlow({
           </section>
         ) : (
           <div>
-            <Progress currentStep={step} darkMode={darkMode} />
+            <Progress currentStep={step} darkMode={darkMode} translateText={tx} />
             {step < 4 ? (
               <form
                 className={`mx-auto mt-8 max-w-[960px] rounded-[1.75rem] p-0 sm:border sm:p-8 md:p-12 ${stepSurface(darkMode)}`}
@@ -330,7 +330,7 @@ export default function OnboardingFlow({
                 noValidate
               >
                 <p className={`text-xs font-extrabold uppercase tracking-[0.16em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-                  {tx(`Step ${step + 1} of 5 · ${stepMeta[step].eyebrow}`)}
+                  {tx("Step")} {step + 1} {tx("of")} 5 · {tx(stepMeta[step].eyebrow)}
                 </p>
                 <h1
                   ref={headingRef}
@@ -355,6 +355,7 @@ export default function OnboardingFlow({
                           selected={answers.stage === option.id}
                           onChange={() => updateAnswer("stage", option.id)}
                           darkMode={darkMode}
+                          translateText={tx}
                         />
                       ))}
                     </div>
@@ -408,6 +409,7 @@ export default function OnboardingFlow({
                           selected={answers.supportRole === option.id}
                           onChange={() => updateAnswer("supportRole", option.id)}
                           darkMode={darkMode}
+                          translateText={tx}
                         />
                       ))}
                     </div>
@@ -429,6 +431,7 @@ export default function OnboardingFlow({
                           selected={answers.deliverySetting === option.id}
                           onChange={() => updateAnswer("deliverySetting", option.id)}
                           darkMode={darkMode}
+                          translateText={tx}
                         />
                       ))}
                     </div>
@@ -478,6 +481,7 @@ export default function OnboardingFlow({
                           selected={answers.priorities.includes(option.id)}
                           onChange={() => togglePriority(option.id)}
                           darkMode={darkMode}
+                          translateText={tx}
                         />
                       ))}
                     </div>

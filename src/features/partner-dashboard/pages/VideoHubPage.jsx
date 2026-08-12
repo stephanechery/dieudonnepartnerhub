@@ -398,7 +398,7 @@ function CategoryFilters({ selectedCategory, onSelect, darkMode }) {
   );
 }
 
-function VideoCard({ video, onSelect, selected, darkMode }) {
+function VideoCard({ video, onSelect, selected, darkMode, translateText }) {
   return (
     <button
       type="button"
@@ -428,12 +428,12 @@ function VideoCard({ video, onSelect, selected, darkMode }) {
         {video.title}
       </h3>
       <p className={`mt-1 text-sm font-bold ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>{video.category}</p>
-      <p className={`mt-1 text-xs font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{video.progress}% complete</p>
+      <p className={`mt-1 text-xs font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{video.progress}% {translateText("complete")}</p>
     </button>
   );
 }
 
-function VideoCarousel({ title, videos, onSelect, selectedVideo, onViewAll, darkMode }) {
+function VideoCarousel({ title, videos, onSelect, selectedVideo, onViewAll, darkMode, translateText }) {
   if (!videos.length) {
     const emptyCopy =
       title === "Saved Videos"
@@ -454,13 +454,13 @@ function VideoCarousel({ title, videos, onSelect, selectedVideo, onViewAll, dark
   return (
     <section id="video-section-continue" className="px-4 py-7 lg:px-7">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className={`text-xl font-black ${darkMode ? "text-white" : "text-slate-950"}`}>{title}</h2>
+        <h2 className={`text-xl font-black ${darkMode ? "text-white" : "text-slate-950"}`}>{translateText(title)}</h2>
         <button
           type="button"
           onClick={onViewAll}
           className={`text-sm font-black transition ${darkMode ? "text-slate-400 hover:text-cyan-200" : "text-slate-600 hover:text-cyan-700"}`}
         >
-          View all
+          {translateText("View all")}
         </button>
       </div>
       <div className="flex gap-5 overflow-x-auto pb-3">
@@ -471,6 +471,7 @@ function VideoCarousel({ title, videos, onSelect, selectedVideo, onViewAll, dark
             onSelect={onSelect}
             selected={video.id === selectedVideo.id}
             darkMode={darkMode}
+            translateText={translateText}
           />
         ))}
       </div>
@@ -635,6 +636,7 @@ function VideoPlayerModal({
   watchLater,
   onSave,
   onWatchLater,
+  translateText,
 }) {
   const [shareStatus, setShareStatus] = useState("");
 
@@ -708,7 +710,7 @@ function VideoPlayerModal({
             <div className={`mt-5 rounded-2xl border p-4 ${darkMode ? "border-cyan-300/20 bg-cyan-300/10" : "border-cyan-200 bg-cyan-50"}`}>
               <div className={`mb-2 flex items-center justify-between text-xs font-bold ${darkMode ? "text-cyan-100/80" : "text-cyan-800"}`}>
                 <span>Progress</span>
-                <span>{video.progress}% complete</span>
+                <span>{video.progress}% {translateText("complete")}</span>
               </div>
               <div className={`h-2 overflow-hidden rounded-full ${darkMode ? "bg-white/[0.1]" : "bg-cyan-100"}`}>
                 <div
@@ -844,6 +846,7 @@ export default function VideoHubPage({
   darkMode = false,
   onToggleTheme,
   showAdminDashboard = false,
+  translateText = (value) => value,
 }) {
   const { profile, saveVideoHubPreferences } = usePartnerDashboard();
   const openedDeepLinkVideoRef = useRef("");
@@ -1089,6 +1092,7 @@ export default function VideoHubPage({
               setSelectedCategory("All");
               setLibraryView("all");
             }}
+            translateText={translateText}
           />
           <RecommendedResources onOpenResource={openResource} darkMode={darkMode} />
           <TrustedResources onOpenResource={openResource} darkMode={darkMode} />
@@ -1104,6 +1108,7 @@ export default function VideoHubPage({
           watchLater={watchLaterIds.includes(selectedVideo.id)}
           onSave={toggleSaved}
           onWatchLater={toggleWatchLater}
+          translateText={translateText}
         />
       )}
       <ResourceModal resource={resourceModal} onClose={() => setResourceModal(null)} darkMode={darkMode} />

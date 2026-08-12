@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import App, { LANGUAGE_SESSION_KEY, translateStaticText } from "./App";
+import App, {
+  LANGUAGE_CHANGE_EVENT,
+  getStoredLanguage,
+  persistLanguage,
+  translateStaticText,
+} from "./App";
 import { getInitialPartnerDarkMode } from "./features/partner-dashboard/utils/theme";
 const PartnerDashboardApp = React.lazy(() => import("./features/partner-dashboard"));
 const AdminDashboardApp = React.lazy(() => import("./features/admin-dashboard"));
@@ -48,11 +53,24 @@ function usePathRouter() {
 export default function RootApp() {
   const { pathname, navigate } = usePathRouter();
   const [initialPartnerDarkMode] = useState(() => getInitialPartnerDarkMode());
-  const language =
-    typeof window === "undefined"
-      ? "en"
-      : window.sessionStorage.getItem(LANGUAGE_SESSION_KEY) || "en";
+  const [language, setLanguage] = useState(getStoredLanguage);
   const translateText = useCallback((value) => translateStaticText(value, language), [language]);
+  const changeLanguage = useCallback((nextLanguage) => {
+    persistLanguage(nextLanguage);
+    setLanguage(getStoredLanguage());
+  }, []);
+
+  useLayoutEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
+  useEffect(() => {
+    const handleLanguageChange = (event) => {
+      setLanguage(event.detail || getStoredLanguage());
+    };
+    window.addEventListener(LANGUAGE_CHANGE_EVENT, handleLanguageChange);
+    return () => window.removeEventListener(LANGUAGE_CHANGE_EVENT, handleLanguageChange);
+  }, []);
 
   const page = useMemo(() => {
     if (pathname.startsWith("/partner-dashboard")) {
@@ -64,7 +82,13 @@ export default function RootApp() {
             </div>
           }
         >
-          <PartnerDashboardApp pathname={pathname} navigate={navigate} translateText={translateText} />
+          <PartnerDashboardApp
+            pathname={pathname}
+            navigate={navigate}
+            language={language}
+            onLanguageChange={changeLanguage}
+            translateText={translateText}
+          />
         </React.Suspense>
       );
     }
@@ -84,26 +108,26 @@ export default function RootApp() {
     if (pathname.startsWith("/partner-orgs") || pathname.startsWith("/organizations")) {
       return (
         <React.Suspense fallback={<div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">Loading organizations page...</div>}>
-          <OrganizationsPage />
+          <OrganizationsPage language={language} onLanguageChange={changeLanguage} translateText={translateText} />
         </React.Suspense>
       );
     }
     if (pathname.startsWith("/partner-demo") || pathname.startsWith("/demo")) {
       return (
         <React.Suspense fallback={<div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">Loading guided demo...</div>}>
-          <DemoPage />
+          <DemoPage language={language} onLanguageChange={changeLanguage} translateText={translateText} />
         </React.Suspense>
       );
     }
     if (pathname.startsWith("/privacy")) {
       return (
         <React.Suspense fallback={<div className="min-h-screen bg-slate-950 px-4 py-10 text-center text-slate-300">Loading privacy page...</div>}>
-          <PrivacyPage />
+          <PrivacyPage language={language} onLanguageChange={changeLanguage} translateText={translateText} />
         </React.Suspense>
       );
     }
     return <App />;
-  }, [initialPartnerDarkMode, navigate, pathname, translateText]);
+  }, [changeLanguage, initialPartnerDarkMode, language, navigate, pathname, translateText]);
 
   return page;
 }

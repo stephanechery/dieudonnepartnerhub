@@ -3,7 +3,7 @@ import usePartnerGuideTheme from "../hooks/usePartnerGuideTheme";
 const DARK={bg:"#050914",card:"#0f172a",cardAlt:"#111c33",border:"rgba(148,163,184,0.16)",text:"#f8fafc",muted:"#cbd5e1",faint:"rgba(203,213,225,0.62)",accent:"#22d3ee",teal:"#22d3ee",purple:"#d946ef",gold:"#a78bfa",green:"#34d399",red:"#fb7185",orange:"#60a5fa",blue:"#38bdf8",pink:"#f472b6",navBg:"rgba(5,9,20,0.96)",shadow:"0 24px 80px rgba(0,0,0,0.45)",inputBg:"rgba(255,255,255,0.06)",toggleBg:"rgba(255,255,255,0.08)"};
 const LIGHT={bg:"#f8fbff",card:"#ffffff",cardAlt:"#eef6ff",border:"rgba(15,23,42,0.12)",text:"#0f172a",muted:"#334155",faint:"rgba(51,65,85,0.58)",accent:"#0891b2",teal:"#0891b2",purple:"#7c3aed",gold:"#6d5dfc",green:"#059669",red:"#e11d48",orange:"#2563eb",blue:"#0284c7",pink:"#c026d3",navBg:"rgba(248,251,255,0.97)",shadow:"0 20px 55px rgba(15,23,42,0.12)",inputBg:"rgba(15,23,42,0.04)",toggleBg:"rgba(15,23,42,0.06)"};
 const LANGS=[{code:"en",label:"English",flag:"\u{1F1FA}\u{1F1F8}"},{code:"es",label:"Espanol",flag:"\u{1F1EA}\u{1F1F8}"},{code:"ht",label:"Kreyol",flag:"\u{1F1ED}\u{1F1F9}"},{code:"fr",label:"Francais",flag:"\u{1F1EB}\u{1F1F7}"}];
-function LangBtn({code,label,flag,active,C,onClick}){return <button onClick={()=>onClick(code)} style={{background:active?C.accent+"25":C.inputBg,border:"1px solid "+(active?C.accent:C.border),borderRadius:20,padding:"5px 13px",cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"'DM Mono',monospace",fontSize:12,color:active?C.accent:C.muted,transition:"all 0.2s"}}><span>{flag}</span><span>{label}</span></button>;}
+function LangBtn({code,label,flag,active,C,onClick}){return <button data-no-translate="true" onClick={()=>onClick(code)} style={{background:active?C.accent+"25":C.inputBg,border:"1px solid "+(active?C.accent:C.border),borderRadius:20,padding:"5px 13px",cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"'DM Mono',monospace",fontSize:12,color:active?C.accent:C.muted,transition:"all 0.2s"}}><span>{flag}</span><span>{label}</span></button>;}
 function DiscBox({text,C}){return <div style={{background:C.purple+"12",border:"1px solid "+C.purple+"28",borderRadius:12,padding:16,marginTop:18}}><div style={{fontSize:10,color:C.purple,fontFamily:"'DM Mono',monospace",marginBottom:8,letterSpacing:"0.12em"}}>REFLECT TOGETHER</div><p style={{fontSize:13.5,color:C.muted,lineHeight:1.7,margin:0,fontStyle:"italic"}}>{text}</p></div>;}
 
 const CONTENT = {
@@ -215,8 +215,13 @@ const NAV={
 };
 const ICONS=["\u2693","\u{1F441}","\u{1F932}","\u{1F49B}","\u{1F4AC}","\u{1F6E1}","\u{1F504}","\u{1F305}"];
 
-export default function PartnerLaborGuide({ darkMode, onToggleTheme }){
-  const [lang,setLang]=useState("en");
+export default function PartnerLaborGuide({ darkMode, onToggleTheme, language = "en", onLanguageChange = () => {} }){
+  const [lang,setLang]=useState(language);
+  useEffect(() => setLang(language), [language]);
+  const changeLanguage = (nextLanguage) => {
+    setLang(nextLanguage);
+    onLanguageChange(nextLanguage);
+  };
   const [section,setSection]=useState(0);
   const [dark,setDark]=usePartnerGuideTheme(darkMode,onToggleTheme);
   const [ready,setReady]=useState(false);
@@ -260,7 +265,7 @@ export default function PartnerLaborGuide({ darkMode, onToggleTheme }){
                 </div>
                 <div style={{background:C.inputBg,border:"1px solid "+C.border,borderRadius:10,padding:"9px 12px"}}>
                   <div style={{fontSize:9,color:C.faint,fontFamily:"'DM Mono',monospace",marginBottom:7,letterSpacing:"0.15em"}}>SELECT LANGUAGE / CHWAZI LANG</div>
-                  <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{LANGS.map(l=><LangBtn key={l.code} {...l} active={lang===l.code} C={C} onClick={setLang}/>)}</div>
+                  <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{LANGS.map(l=><LangBtn key={l.code} {...l} active={lang===l.code} C={C} onClick={changeLanguage}/>)}</div>
                 </div>
               </div>
             </div>

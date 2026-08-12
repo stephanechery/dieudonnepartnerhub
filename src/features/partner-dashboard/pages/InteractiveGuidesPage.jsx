@@ -142,6 +142,8 @@ export default function InteractiveGuidesPage({
   onOpenGuide,
   darkMode = false,
   onToggleTheme,
+  language = "en",
+  onLanguageChange = () => {},
   translateText = (value) => value,
 }) {
   const tx = translateText;
@@ -205,7 +207,10 @@ export default function InteractiveGuidesPage({
               </div>
             }
           >
-            <SelectedGuideComponent darkMode={darkMode} onToggleTheme={onToggleTheme} />
+            <SelectedGuideComponent darkMode={darkMode} onToggleTheme={onToggleTheme}
+              language={language}
+              onLanguageChange={onLanguageChange}
+            />
           </Suspense>
         </div>
       </div>

@@ -1,5 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo } from 'react';
 import mainGuideTranslationPack from './features/language/main-guide-translations.json';
+import mainGuideSpanishTranslationPack from './features/language/main-guide-spanish-translations.json';
+import learningCardTranslationPack from './features/language/learning-card-translations.json';
+import guideChromeTranslationPack from './features/language/guide-chrome-translations.json';
+import partnerPlatformTranslationPack from './features/language/partner-platform-translations.json';
+import partnerContentTranslationPack from './features/language/partner-content-translations.json';
+import supplementalTranslationPack from './features/language/supplemental-translations.json';
 import {
   Heart,
   Brain,
@@ -48,6 +54,7 @@ import {
   MainGuideMobileSupportTools
 } from './features/main-guide/MainGuideSupportTools';
 import { MainGuideLearningCard, MainGuideTermCard } from './features/main-guide/MainGuideLearningCard';
+import MainGuideMobilePathNav from './features/main-guide/MainGuideMobilePathNav';
 const PartnerDashboardModule = React.lazy(() => import('./features/partner-dashboard'));
 import { partnerCurriculum } from './features/partner-dashboard/data/curriculum';
 
@@ -1717,7 +1724,7 @@ const buildShareHref = ({ type, subject, body }) => {
 };
 
 
-const LANGUAGE_OPTIONS = [
+export const LANGUAGE_OPTIONS = [
   { code: 'en', short: 'EN', flag: '🇺🇸', label: 'English', modelLabel: 'English' },
   { code: 'es', short: 'ES', flag: '🇪🇸', label: 'Español', modelLabel: 'Spanish' },
   { code: 'ht', short: 'HT', flag: '🇭🇹', label: 'Kreyòl Ayisyen', modelLabel: 'Haitian Creole' },
@@ -1725,6 +1732,8 @@ const LANGUAGE_OPTIONS = [
 ];
 
 export const LANGUAGE_SESSION_KEY = 'dieudonne-language';
+export const LANGUAGE_STORAGE_KEY = 'dieudonne-language';
+export const LANGUAGE_CHANGE_EVENT = 'dieudonne:language-change';
 const LANGUAGE_TRANSLATION_PREFIX = 'dieudonne-language-map-';
 const LANGUAGE_CACHE_VERSION_KEY = 'dieudonne-language-cache-version';
 const LANGUAGE_CACHE_VERSION = 'v17';
@@ -1768,7 +1777,32 @@ const LOCALE_TRANSLATION_HINT_WORDS = {
 };
 const EXTERNAL_LANGUAGE_PACKS = {};
 const LOCAL_LANGUAGE_PACKS = {
-  mainGuide: mainGuideTranslationPack
+  mainGuide: mainGuideTranslationPack,
+  mainGuideSpanish: mainGuideSpanishTranslationPack,
+  learningCards: learningCardTranslationPack,
+  guideChrome: guideChromeTranslationPack,
+  partnerPlatform: partnerPlatformTranslationPack,
+  partnerContent: partnerContentTranslationPack,
+  supplemental: supplementalTranslationPack
+};
+
+const VALID_LANGUAGE_CODES = new Set(LANGUAGE_OPTIONS.map((option) => option.code));
+
+export const getStoredLanguage = () => {
+  if (typeof window === 'undefined') return 'en';
+  const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  const legacy = window.sessionStorage.getItem(LANGUAGE_SESSION_KEY);
+  const candidate = stored || legacy || 'en';
+  return VALID_LANGUAGE_CODES.has(candidate) ? candidate : 'en';
+};
+
+export const persistLanguage = (language) => {
+  if (typeof window === 'undefined') return;
+  const nextLanguage = VALID_LANGUAGE_CODES.has(language) ? language : 'en';
+  window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+  window.sessionStorage.setItem(LANGUAGE_SESSION_KEY, nextLanguage);
+  document.documentElement.lang = nextLanguage;
+  window.dispatchEvent(new CustomEvent(LANGUAGE_CHANGE_EVENT, { detail: nextLanguage }));
 };
 
 const STATIC_UI_TRANSLATIONS = {
@@ -3295,47 +3329,26 @@ const matchCase = (source, translated) => {
 const offlineTranslateText = (text, locale) => {
   if (!text || locale === 'en') return text;
   const phraseMap = OFFLINE_PHRASE_TRANSLATIONS[locale] || {};
-  const wordMap = OFFLINE_WORD_TRANSLATIONS[locale] || {};
+  const normalized = text.trim();
+  const exact = phraseMap[normalized];
+  if (exact) return exact;
 
-  let output = text;
-
-  Object.entries(phraseMap)
-    .sort((a, b) => b[0].length - a[0].length)
-    .forEach(([source, target]) => {
-      const escaped = source.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      output = output.replace(new RegExp(escaped, 'gi'), (match) => matchCase(match, target));
-    });
-
-  if (output !== text) {
-    return output;
-  }
-
-  // Prevent mixed-language long sentences: only allow word-level fallback
-  // on very short labels where phrase-level mapping is unavailable.
-  const compact = output.trim();
-  const compactWords = compact ? compact.split(/\s+/).length : 0;
-  const shortLabelFallback =
-    compactWords > 0 &&
-    compactWords <= 3 &&
-    !/[.!?;:,]/.test(compact) &&
-    !/\d/.test(compact);
-
-  if (shortLabelFallback) {
-    output = output.replace(/\b([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ'-]*)\b/g, (word) => {
-      const key = word.toLowerCase();
-      const translated = wordMap[key];
-      if (!translated) return word;
-      return matchCase(word, translated);
-    });
-  }
-
-  return output;
+  const caseInsensitiveEntry = Object.entries(phraseMap).find(
+    ([source]) => source.toLocaleLowerCase('en') === normalized.toLocaleLowerCase('en')
+  );
+  return caseInsensitiveEntry ? matchCase(normalized, caseInsensitiveEntry[1]) : text;
 };
 
 const getStaticTranslationMap = (locale) => ({
   ...(STATIC_UI_TRANSLATIONS[locale] || {}),
   ...(OFFLINE_PHRASE_TRANSLATIONS[locale] || {}),
-  ...(LOCAL_LANGUAGE_PACKS.mainGuide?.[locale] || {})
+  ...(LOCAL_LANGUAGE_PACKS.mainGuide?.[locale] || {}),
+  ...(LOCAL_LANGUAGE_PACKS.mainGuideSpanish?.[locale] || {}),
+  ...(LOCAL_LANGUAGE_PACKS.learningCards?.[locale] || {}),
+  ...(LOCAL_LANGUAGE_PACKS.guideChrome?.[locale] || {}),
+  ...(LOCAL_LANGUAGE_PACKS.supplemental?.[locale] || {}),
+  ...(LOCAL_LANGUAGE_PACKS.partnerPlatform?.[locale] || {}),
+  ...(LOCAL_LANGUAGE_PACKS.partnerContent?.[locale] || {})
 });
 
 const localizeUiString = (value, locale, translationMap) => {
@@ -3390,13 +3403,10 @@ const App = () => {
   const [activeStage, setActiveStage] = useState('prenatal');
   const [experienceEntry, setExperienceEntry] = useState(null);
   const [heroImageSrc, setHeroImageSrc] = useState('/home-hero-pregnant.png');
-  const [language, setLanguage] = useState(() => {
-    if (typeof window === 'undefined') return 'en';
-    return window.sessionStorage.getItem(LANGUAGE_SESSION_KEY) || 'en';
-  });
+  const [language, setLanguage] = useState(getStoredLanguage);
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
-  const [translationMap, setTranslationMap] = useState({});
-  const [translationLoading, setTranslationLoading] = useState(false);
+  const [translationMap, setTranslationMap] = useState(() => getStaticTranslationMap(getStoredLanguage()));
+  const translationLoading = false;
   const [checklist, setChecklist] = useState({
     water: false,
     meal: false,
@@ -3464,7 +3474,7 @@ const App = () => {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    window.sessionStorage.setItem(LANGUAGE_SESSION_KEY, language);
+    persistLanguage(language);
     if (translationRetryTimerRef.current) {
       clearTimeout(translationRetryTimerRef.current);
       translationRetryTimerRef.current = null;
@@ -3481,35 +3491,7 @@ const App = () => {
       return;
     }
 
-    const cached = window.sessionStorage.getItem(`${LANGUAGE_TRANSLATION_PREFIX}${language}`);
-    if (!cached) {
-      setTranslationMap(staticBase);
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(cached);
-      if (!parsed || typeof parsed !== 'object') {
-        setTranslationMap(staticBase);
-        return;
-      }
-
-      const sanitized = { ...staticBase };
-      Object.entries(parsed).forEach(([source, translated]) => {
-        const sourceText = `${source || ''}`.trim();
-        const translatedText = `${translated || ''}`.trim();
-        if (!sourceText || !translatedText) return;
-        if (staticBase[sourceText]) return;
-        if (sourceText === translatedText) return;
-        if (!isUsableTranslation(sourceText, translatedText, language)) return;
-        sanitized[sourceText] = translatedText;
-      });
-
-      setTranslationMap(sanitized);
-    } catch (error) {
-      console.warn('Invalid cached translation map. Resetting.', error);
-      setTranslationMap(staticBase);
-    }
+    setTranslationMap(staticBase);
   }, [language]);
 
   useEffect(() => {
@@ -3597,156 +3579,16 @@ ${JSON.stringify(keyedSource)}`,
     }
   }, []);
 
-  const flushPendingTranslations = useCallback(async () => {
-    if (language === 'en' || translationFlushRef.current) return;
-    if (!pendingTranslationsRef.current.size) return;
-    if (!aiFeaturesEnabled) return;
+  const flushPendingTranslations = useCallback(async () => {}, []);
 
-    translationFlushRef.current = true;
-    setTranslationLoading(true);
-
-    try {
-      const languageMeta = LANGUAGE_OPTIONS.find((item) => item.code === language) || LANGUAGE_OPTIONS[0];
-
-      while (pendingTranslationsRef.current.size) {
-        const missing = Array.from(pendingTranslationsRef.current).filter((value) => {
-          const attempts = translationAttemptsRef.current.get(value) || 0;
-          return !translationMapRef.current[value] && attempts < TRANSLATION_RETRY_LIMIT;
-        });
-
-        if (!missing.length) {
-          pendingTranslationsRef.current.clear();
-          break;
-        }
-
-        const burst = missing.slice(0, TRANSLATION_BATCH_SIZE * TRANSLATION_PARALLEL_BATCHES);
-        burst.forEach((value) => pendingTranslationsRef.current.delete(value));
-        const grouped = chunkList(burst, TRANSLATION_BATCH_SIZE);
-
-        const results = await Promise.all(
-          grouped.map(async (group) => {
-            try {
-              const translated = await translateBatch(group, languageMeta.modelLabel);
-              return { group, translated, error: null };
-            } catch (error) {
-              return { group, translated: null, error };
-            }
-          })
-        );
-
-        const updates = {};
-        let hitRateLimit = false;
-        results.forEach(({ group, translated, error }) => {
-          if (error && isRateLimitError(error)) {
-            hitRateLimit = true;
-            group.forEach((source) => pendingTranslationsRef.current.add(source));
-            return;
-          }
-
-          if (!translated || translated.length !== group.length) {
-            group.forEach((source) => {
-              const attempts = (translationAttemptsRef.current.get(source) || 0) + 1;
-              translationAttemptsRef.current.set(source, attempts);
-              if (attempts < TRANSLATION_RETRY_LIMIT) {
-                pendingTranslationsRef.current.add(source);
-              }
-            });
-            return;
-          }
-
-          group.forEach((source, index) => {
-            const candidate = `${translated[index] || ''}`.trim();
-            if (candidate && candidate !== source && isUsableTranslation(source, candidate, language)) {
-              updates[source] = candidate;
-              translationAttemptsRef.current.delete(source);
-            } else {
-              const attempts = (translationAttemptsRef.current.get(source) || 0) + 1;
-              translationAttemptsRef.current.set(source, attempts);
-              if (attempts < TRANSLATION_RETRY_LIMIT) {
-                pendingTranslationsRef.current.add(source);
-              }
-            }
-          });
-        });
-
-        if (hitRateLimit) {
-          if (translationRetryTimerRef.current) {
-            clearTimeout(translationRetryTimerRef.current);
-          }
-          const waitMs = translationBackoffRef.current;
-          translationBackoffRef.current = Math.min(waitMs * 2, 30000);
-          translationRetryTimerRef.current = setTimeout(() => {
-            translationRetryTimerRef.current = null;
-            flushPendingTranslations();
-          }, waitMs);
-          break;
-        }
-
-        if (!Object.keys(updates).length) {
-          continue;
-        }
-
-        setTranslationMap((prev) => {
-          const next = { ...prev };
-          const staticBase = getStaticTranslationMap(language);
-          Object.entries(updates).forEach(([source, value]) => {
-            if (staticBase[source]) {
-              next[source] = staticBase[source];
-              return;
-            }
-            next[source] = value;
-          });
-
-          if (typeof window !== 'undefined') {
-            window.sessionStorage.setItem(`${LANGUAGE_TRANSLATION_PREFIX}${language}`, JSON.stringify(next));
-          }
-          return next;
-        });
-
-        translationBackoffRef.current = 1500;
-        if (pendingTranslationsRef.current.size) {
-          await new Promise((resolve) => setTimeout(resolve, 180));
-        }
-      }
-    } finally {
-      translationFlushRef.current = false;
-      setTranslationLoading(false);
-    }
-  }, [language, translateBatch]);
-
-  const queueTranslations = useCallback((strings, options = {}) => {
-    if (language === 'en') return;
-    const nextStrings = [];
-
-    strings.forEach((value) => {
-      const normalized = (value || '').trim();
-      if (!normalized) return;
-      if (translationMapRef.current[normalized]) return;
-      if ((translationAttemptsRef.current.get(normalized) || 0) >= TRANSLATION_RETRY_LIMIT) return;
-      if (!shouldQueueTranslationCandidate(normalized)) return;
-      if (options.priority) {
-        nextStrings.push(normalized);
-        return;
-      }
-      pendingTranslationsRef.current.add(normalized);
-    });
-
-    if (nextStrings.length) {
-      const pending = pendingTranslationsRef.current;
-      nextStrings.forEach((value) => pending.delete(value));
-      pendingTranslationsRef.current = new Set([...nextStrings, ...pending]);
-    }
-
-    if (options.flush !== false) {
-      flushPendingTranslations();
-    }
-  }, [language, flushPendingTranslations]);
+  const queueTranslations = useCallback(() => {}, []);
 
   const applyLanguageToDom = useCallback(() => {
     const root = appRootRef.current;
     if (!root) return;
 
     const fallbackUpdates = {};
+    const missingTranslations = new Set();
     let queuedMissingTranslations = false;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     const ignoredTags = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA']);
@@ -3757,6 +3599,7 @@ ${JSON.stringify(keyedSource)}`,
         pending.delete(normalized);
       }
       pendingTranslationsRef.current = new Set([normalized, ...pending]);
+      missingTranslations.add(normalized);
       queuedMissingTranslations = true;
     };
 
@@ -3910,9 +3753,11 @@ ${JSON.stringify(keyedSource)}`,
     if (queuedMissingTranslations) {
       flushPendingTranslations();
     }
+    root.dataset.languageMissingCount = `${missingTranslations.size}`;
+    root.dataset.languageMissing = Array.from(missingTranslations).slice(0, 20).join(' | ');
   }, [language, flushPendingTranslations]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     applyLanguageToDom();
   }, [language, translationMap, activeStage, aiResult, darkMode]);
 
@@ -4013,9 +3858,14 @@ ${JSON.stringify(keyedSource)}`,
   }, []);
 
   const translateText = useCallback(
-    (value) => localizeUiString(value, language, translationMapRef.current),
+    (value) => localizeUiString(value, language, translationMap),
     [language, translationMap]
   );
+  const selectLanguage = useCallback((nextLanguage) => {
+    setTranslationMap(getStaticTranslationMap(nextLanguage));
+    setLanguage(nextLanguage);
+    setLanguageMenuOpen(false);
+  }, []);
 
   const triggerWinCelebration = (taskId) => {
     const task = supportTasks.find((item) => item.id === taskId);
@@ -5619,8 +5469,8 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
                   ? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-slate-600'
                   : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
               }`}
-              aria-label="Select language"
-              title="Select language"
+              aria-label={translateText('Select language')}
+              title={translateText('Select language')}
             >
               <Globe className="h-4 w-4" />
               <span className="font-bold">{currentLanguageMeta.short}</span>
@@ -5642,8 +5492,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
                     key={option.code}
                     type="button"
                     onClick={() => {
-                      setLanguage(option.code);
-                      setLanguageMenuOpen(false);
+                      selectLanguage(option.code);
                     }}
                     className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold transition-colors ${
                       language === option.code
@@ -5924,7 +5773,23 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
         />
 
         <div className="min-w-0 space-y-6 md:space-y-8">
-          <div className={`premium-tab-rail flex gap-2 overflow-x-auto rounded-[1.55rem] border p-1.5 transition-colors [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-6 md:overflow-visible lg:hidden ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
+          <MainGuideMobilePathNav
+            activeStage={activeStage}
+            currentCard={mobileGuideCards.length ? guideStep + 1 : 0}
+            darkMode={darkMode}
+            onSelectStage={(key) => {
+              if (key === 'dashboard') {
+                navigateWithinApp('/partner-dashboard');
+                return;
+              }
+              setActiveStage(key);
+            }}
+            stages={Object.entries(guideData).map(([id, data]) => ({ id, icon: data.icon, title: data.title }))}
+            totalCards={mobileGuideCards.length}
+            translateText={translateText}
+          />
+
+          <div className={`premium-tab-rail hidden grid-cols-6 gap-2 rounded-[1.55rem] border p-1.5 transition-colors md:grid lg:hidden ${darkMode ? 'border-slate-800 bg-slate-900/92 shadow-xl' : 'border-slate-200 bg-white shadow-sm'}`}>
             {Object.entries(guideData).map(([key, data]) => (
               <button
                 key={key}
@@ -5935,7 +5800,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
                   }
                   setActiveStage(key);
                 }}
-                className={`flex min-w-[154px] flex-none flex-col items-center justify-center gap-2 rounded-[1.15rem] px-4 py-3 text-sm font-extrabold transition-all md:min-w-0 md:flex-1 md:py-4 ${
+                className={`flex min-w-0 flex-col items-center justify-center gap-2 rounded-[1.15rem] px-3 py-4 text-sm font-extrabold transition-all ${
                   activeStage === key
                     ? 'scale-[1.01] bg-gradient-to-r from-blue-600 to-fuchsia-600 text-white shadow-xl shadow-indigo-950/15'
                     : darkMode
@@ -5970,6 +5835,8 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
                 embedded
                 darkMode={darkMode}
                 onExit={() => setActiveStage('prenatal')}
+                language={language}
+                onLanguageChange={selectLanguage}
                 translateText={translateText}
               />
             </React.Suspense>

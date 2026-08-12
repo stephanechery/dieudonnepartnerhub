@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowRight, BarChart3, BookOpenCheck, Compass, Moon, PlayCircle, ShieldCheck, Sun, Video } from "lucide-react";
 import dieudonneDarkLogo from "../../assets/Dieudonne_Dark_Logo.png";
+import PublicLanguageSelector from "../language/PublicLanguageSelector";
 import { ORGANIZATION_DEMO_CREDENTIALS } from "../partner-dashboard/services/authService";
 
 const demoSteps = [
@@ -56,59 +57,65 @@ const toggleStoredTheme = (darkMode) => {
   window.location.reload();
 };
 
-export default function DemoPage() {
+export default function DemoPage({
+  language = "en",
+  onLanguageChange = () => {},
+  translateText = (value) => value,
+}) {
   const darkMode = getInitialDarkMode();
+  const tx = translateText;
 
   return (
     <main className={`min-h-screen px-4 py-5 sm:px-6 lg:px-8 ${darkMode ? "public-page-dark" : "public-page-light"}`}>
       <div className="mx-auto max-w-6xl">
         <nav className="public-nav mb-6 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border px-4 py-3">
           <a href="/" className="flex items-center gap-3">
-            <img src={dieudonneDarkLogo} alt="Dieudonne logo" className="public-logo h-10 w-auto rounded-xl border p-1" />
-            <span className="public-brand text-sm font-black uppercase tracking-[0.16em]">Partner Hub</span>
+            <img src={dieudonneDarkLogo} alt={tx("Dieudonne logo")} className="public-logo h-10 w-auto rounded-xl border p-1" />
+            <span className="public-brand text-sm font-black uppercase tracking-[0.16em]">{tx("Partner Hub")}</span>
           </a>
           <div className="flex flex-wrap items-center gap-2">
+            <PublicLanguageSelector language={language} onLanguageChange={onLanguageChange} translateText={translateText} />
             <button
               type="button"
               onClick={() => toggleStoredTheme(darkMode)}
               aria-pressed={darkMode}
-              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={tx(darkMode ? "Switch to light mode" : "Switch to dark mode")}
               className="public-theme-toggle inline-flex min-h-10 items-center gap-2 rounded-full border px-3.5 text-sm font-bold"
             >
               {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              {darkMode ? "Light Mode" : "Dark Mode"}
+              {tx(darkMode ? "Light Mode" : "Dark Mode")}
             </button>
-            <a href="/partner-orgs" className="public-nav-link rounded-full border px-4 py-2 text-sm font-bold">For Organizations</a>
-            <a href="/privacy" className="public-nav-link rounded-full border px-4 py-2 text-sm font-bold">Privacy</a>
+            <a href="/partner-orgs" className="public-nav-link rounded-full border px-4 py-2 text-sm font-bold">{tx("For Organizations")}</a>
+            <a href="/privacy" className="public-nav-link rounded-full border px-4 py-2 text-sm font-bold">{tx("Privacy")}</a>
           </div>
         </nav>
 
         <section className="public-hero public-hero-violet rounded-[2rem] border p-5 sm:p-8">
           <p className="public-eyebrow flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em]">
-            <BarChart3 className="h-4 w-4" /> 5-minute guided demo
+            <BarChart3 className="h-4 w-4" /> {tx("5-minute guided demo")}
           </p>
           <h1 className="public-heading mt-4 max-w-3xl text-4xl font-black leading-tight tracking-tight sm:text-5xl">
-            A simple path for partner conversations.
+            {tx("A simple path for partner conversations.")}
           </h1>
           <p className="public-body mt-4 max-w-3xl text-base leading-relaxed sm:text-lg">
-            Use this route to show the product without wandering. It moves from mission, to learner experience, to guided practice, to privacy.
+            {tx("Use this route to show the product without wandering. It moves from mission, to learner experience, to guided practice, to privacy.")}
           </p>
           <div className="public-demo-access mt-6 grid gap-3 rounded-2xl border p-4 text-sm font-bold sm:grid-cols-[1fr_auto] sm:items-center">
             <div>
-              <p className="public-eyebrow text-xs font-black uppercase tracking-[0.16em]">Organization demo access</p>
+              <p className="public-eyebrow text-xs font-black uppercase tracking-[0.16em]">{tx("Organization demo access")}</p>
               <dl className="mt-2 grid gap-1">
                 <div className="grid gap-0.5 sm:grid-cols-[4.5rem_1fr] sm:gap-2">
-                  <dt className="public-demo-label">Email</dt>
+                  <dt className="public-demo-label">{tx("Email")}</dt>
                   <dd className="break-all">{ORGANIZATION_DEMO_CREDENTIALS.email}</dd>
                 </div>
                 <div className="grid gap-0.5 sm:grid-cols-[4.5rem_1fr] sm:gap-2">
-                  <dt className="public-demo-label">Password</dt>
+                  <dt className="public-demo-label">{tx("Password")}</dt>
                   <dd>{ORGANIZATION_DEMO_CREDENTIALS.password}</dd>
                 </div>
               </dl>
             </div>
             <a href="/partner-dashboard?org_demo=1" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-cyan-200">
-              Open demo access
+              {tx("Open demo access")}
             </a>
           </div>
         </section>
@@ -123,13 +130,13 @@ export default function DemoPage() {
                     <Icon className="h-5 w-5" />
                   </span>
                   <div className="min-w-0">
-                    <p className="public-muted text-[11px] font-black uppercase tracking-[0.16em]">Minute {index + 1}</p>
-                    <h2 className="public-card-title mt-1 text-lg font-black leading-tight">{step.title}</h2>
-                    <p className="public-card-text mt-2 text-sm font-semibold leading-relaxed">{step.detail}</p>
+                    <p className="public-muted text-[11px] font-black uppercase tracking-[0.16em]">{tx("Minute")} {index + 1}</p>
+                    <h2 className="public-card-title mt-1 text-lg font-black leading-tight">{tx(step.title)}</h2>
+                    <p className="public-card-text mt-2 text-sm font-semibold leading-relaxed">{tx(step.detail)}</p>
                   </div>
                 </div>
                 <a href={addOrganizationDemoAccess(step.href)} className="public-nav-link mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-black">
-                  Open step <ArrowRight className="h-4 w-4" />
+                  {tx("Open step")} <ArrowRight className="h-4 w-4" />
                 </a>
               </article>
             );

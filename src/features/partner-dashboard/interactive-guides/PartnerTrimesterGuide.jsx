@@ -54,7 +54,7 @@ const UI = {
 
 const NAV = {
   en:["Why You Matter","First Trimester","Second Trimester","Third Trimester","Labor Prep","At the Hospital","Common Mistakes","Partner Wellness"],
-  es:["Por Qué Importas","Primer Trimestre","Segundo Trimestre","Tercer Trimestre","Preparación para el Parto","En el Hospital","Errores Comunes","Bienestar del Pareja"],
+  es:["Por Qué Importas","Primer Trimestre","Segundo Trimestre","Tercer Trimestre","Preparación para el Parto","En el Hospital","Errores Comunes","Bienestar de la Pareja"],
   ht:["Poukisa Ou Enpòtan","Premye Trimès","Dezyèm Trimès","Twazyèm Trimès","Prepare pou Travay","Nan Lopital","Erè Kouran","Byennèt Patnè"],
   fr:["Pourquoi Vous Comptez","Premier Trimestre","Deuxième Trimestre","Troisième Trimestre","Préparation à l'Accouchement","À l'Hôpital","Erreurs Courantes","Bien-être du Partenaire"],
 };
@@ -602,7 +602,7 @@ const DATA = {
 // ─── COMPONENTS ───────────────────────────────────────────────────────────────
 function LangBtn({ code, label, flag, active, C, onClick }) {
   return (
-    <button onClick={() => onClick(code)} style={{
+    <button data-no-translate="true" onClick={() => onClick(code)} style={{
       background:active?`${C.accent}25`:C.inputBg,
       border:`1px solid ${active?C.accent:C.border}`,
       borderRadius:20, padding:"5px 13px", cursor:"pointer",
@@ -919,8 +919,13 @@ function SectionWellness({ lang, C, ui }) {
   );
 }
 
-export default function PartnerTrimesterGuide({ darkMode, onToggleTheme }) {
-  const [lang, setLang] = useState("en");
+export default function PartnerTrimesterGuide({ darkMode, onToggleTheme, language = "en", onLanguageChange = () => {} }) {
+  const [lang, setLang] = useState(language);
+  useEffect(() => setLang(language), [language]);
+  const changeLanguage = (nextLanguage) => {
+    setLang(nextLanguage);
+    onLanguageChange(nextLanguage);
+  };
   const [section, setSection] = useState(0);
   const [dark, setDark] = usePartnerGuideTheme(darkMode, onToggleTheme);
   const [ready, setReady] = useState(false);
@@ -931,10 +936,10 @@ export default function PartnerTrimesterGuide({ darkMode, onToggleTheme }) {
   const navLabels = NAV[lang];
 
   const kpis = [
-    { icon:"🤰", value:"9mo", label:lang==="en"?"JOURNEY YOU'RE SHARING":lang==="es"?"VIAJE QUE COMPARTES":lang==="ht"?"VWAYAJ OU PATAJE":lang==="fr"?"":"", color:C.accent },
-    { icon:"📋", value:"8", label:lang==="en"?"TRIMESTER GUIDES":lang==="es"?"GUÍAS DE TRIMESTRE":lang==="ht"?"GID TRIMÈS":lang==="fr"?"":"", color:C.teal },
-    { icon:"✅", value:"10+", label:lang==="en"?"ACTIONS PER TRIMESTER":lang==="es"?"ACCIONES POR TRIMESTRE":lang==="ht"?"AKSYON PAR TRIMÈS":lang==="fr"?"":"", color:C.green },
-    { icon:"🗣️", value:"4", label:lang==="en"?"LANGUAGES":lang==="es"?"IDIOMAS":lang==="ht"?"LANG":lang==="fr"?"":"", color:C.blue },
+    { icon:"🤰", value:"9mo", label:lang==="en"?"JOURNEY YOU'RE SHARING":lang==="es"?"VIAJE QUE COMPARTES":lang==="ht"?"VWAYAJ OU PATAJE":lang==="fr"?"PARCOURS QUE VOUS PARTAGEZ":"", color:C.accent },
+    { icon:"📋", value:"8", label:lang==="en"?"TRIMESTER GUIDES":lang==="es"?"GUÍAS DE TRIMESTRE":lang==="ht"?"GID TRIMÈS":lang==="fr"?"GUIDES PAR TRIMESTRE":"", color:C.teal },
+    { icon:"✅", value:"10+", label:lang==="en"?"ACTIONS PER TRIMESTER":lang==="es"?"ACCIONES POR TRIMESTRE":lang==="ht"?"AKSYON PAR TRIMÈS":lang==="fr"?"ACTIONS PAR TRIMESTRE":"", color:C.green },
+    { icon:"🗣️", value:"4", label:lang==="en"?"LANGUAGES":lang==="es"?"IDIOMAS":lang==="ht"?"LANG":lang==="fr"?"LANGUES":"", color:C.blue },
   ];
 
   const renderSection = () => {
@@ -1001,7 +1006,7 @@ export default function PartnerTrimesterGuide({ darkMode, onToggleTheme }) {
                   <div style={{ fontSize:9, color:C.faint, fontFamily:"'DM Mono',monospace",
                     marginBottom:7, letterSpacing:"0.15em" }}>SELECT LANGUAGE / CHWAZI LANG</div>
                   <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-                    {LANGS.map(l => <LangBtn key={l.code} {...l} active={lang===l.code} C={C} onClick={setLang}/>)}
+                    {LANGS.map(l => <LangBtn key={l.code} {...l} active={lang===l.code} C={C} onClick={changeLanguage}/>)}
                   </div>
                 </div>
               </div>

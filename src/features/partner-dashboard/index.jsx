@@ -11,6 +11,7 @@ import InteractiveGuidesPage from "./pages/InteractiveGuidesPage";
 import MorePage from "./pages/MorePage";
 import TrainingPage from "./pages/TrainingPage";
 import VideoHubPage from "./pages/VideoHubPage";
+import LocalizedDomBoundary from "../language/LocalizedDomBoundary";
 import { PartnerDashboardProvider, usePartnerDashboard } from "./state/PartnerDashboardContext";
 import { isConfiguredOwnerUser, trackPartnerEvent } from "./services/analyticsService";
 import { getModuleState, isLessonUnlocked, isModuleUnlocked } from "./utils/progress";
@@ -33,7 +34,7 @@ const getSubPath = (pathname) => {
   return raw || "/";
 };
 
-const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMode = false, onToggleTheme, translateText = (value) => value }) => {
+const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMode = false, onToggleTheme, language = "en", onLanguageChange = () => {}, translateText = (value) => value }) => {
   const {
     authUser,
     authLoading,
@@ -223,6 +224,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         darkMode={darkMode}
         onToggleTheme={onToggleTheme}
         showAdminDashboard={showAdminDashboard}
+        translateText={translateText}
       />
     );
   } else if (subPath === "/more") {
@@ -251,6 +253,8 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         onOpenGuide={openGuide}
         darkMode={darkMode}
         onToggleTheme={onToggleTheme}
+        language={language}
+        onLanguageChange={onLanguageChange}
         translateText={translateText}
       />
     );
@@ -424,6 +428,8 @@ export default function PartnerDashboardApp({
   embedded = false,
   onExit,
   darkMode,
+  language = "en",
+  onLanguageChange = () => {},
   translateText = (value) => value,
 }) {
   const [embeddedPathname, setEmbeddedPathname] = useState(BASE_PATH);
@@ -471,15 +477,19 @@ export default function PartnerDashboardApp({
 
   return (
     <PartnerDashboardProvider>
-      <DashboardRouter
-        pathname={resolvedPathname}
-        navigate={resolvedNavigate}
-        embedded={embedded}
-        onExit={onExit}
-        darkMode={effectiveDarkMode}
-        onToggleTheme={isControlledTheme ? undefined : toggleTheme}
-        translateText={translateText}
-      />
+      <LocalizedDomBoundary key={language} language={language} translateText={translateText}>
+        <DashboardRouter
+          pathname={resolvedPathname}
+          navigate={resolvedNavigate}
+          embedded={embedded}
+          onExit={onExit}
+          darkMode={effectiveDarkMode}
+          onToggleTheme={isControlledTheme ? undefined : toggleTheme}
+          language={language}
+          onLanguageChange={onLanguageChange}
+          translateText={translateText}
+        />
+      </LocalizedDomBoundary>
     </PartnerDashboardProvider>
   );
 }
