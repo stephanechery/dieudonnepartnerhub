@@ -61,14 +61,14 @@ const toneClasses = {
   },
 };
 
-function MaternalHealthCard({ highlight, translateText }) {
+function MaternalHealthCard({ highlight, translateText, idPrefix = "" }) {
   const tx = (value) => translateText(value);
   const tone = toneClasses[highlight.tone] || toneClasses.cyan;
 
   return (
     <article
-      id={`maternal-highlight-${highlight.id}`}
-      className={`flex min-w-[84vw] snap-start flex-col rounded-[1.5rem] border bg-white p-5 shadow-sm sm:min-w-[22rem] lg:min-w-0 dark:bg-slate-900 ${tone.border}`}
+      id={`${idPrefix}maternal-highlight-${highlight.id}`}
+      className={`flex min-w-[84vw] snap-start scroll-mb-28 flex-col rounded-[1.25rem] border bg-white p-4 shadow-sm sm:min-w-[22rem] sm:rounded-[1.5rem] sm:p-5 md:min-w-0 dark:bg-slate-900 ${tone.border}`}
     >
       <div className="flex items-start justify-between gap-3">
         <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${tone.accent}`}>
@@ -80,23 +80,23 @@ function MaternalHealthCard({ highlight, translateText }) {
           </span>
         )}
       </div>
-      <h3 className="mt-3 text-lg font-black leading-tight text-slate-950 dark:text-white">
+      <h3 className="mt-2.5 text-base font-black leading-tight text-slate-950 sm:mt-3 sm:text-lg dark:text-white">
         {tx(highlight.title)}
       </h3>
-      <p className="mt-4 text-4xl font-black tracking-tight text-slate-950 dark:text-white">
+      <p className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:mt-4 sm:text-4xl dark:text-white">
         {highlight.value}
       </p>
-      <p className="mt-1 text-sm font-bold leading-relaxed text-slate-700 dark:text-slate-200">
+      <p className="mt-1 text-[13px] font-bold leading-relaxed text-slate-700 sm:text-sm dark:text-slate-200">
         {tx(highlight.unit)}
       </p>
-      <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+      <p className="mt-2.5 text-[13px] leading-relaxed text-slate-600 sm:mt-3 sm:text-sm dark:text-slate-300">
         {tx(highlight.detail)}
       </p>
-      <div className={`mt-4 rounded-2xl border p-4 ${tone.action}`}>
+      <div className={`mt-3 border-t pt-3 sm:mt-4 sm:rounded-2xl sm:border sm:p-4 ${tone.action}`}>
         <p className="text-[10px] font-black uppercase tracking-[0.15em]">
           {tx("What this means for support")}
         </p>
-        <p className="mt-2 text-sm font-semibold leading-relaxed">
+        <p className="mt-1.5 text-[13px] font-semibold leading-relaxed sm:mt-2 sm:text-sm">
           {tx(highlight.supportAction)}
         </p>
       </div>
@@ -104,7 +104,7 @@ function MaternalHealthCard({ highlight, translateText }) {
         href={highlight.source.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-auto inline-flex min-h-11 items-center gap-2 pt-4 text-xs font-bold text-slate-600 underline decoration-slate-300 underline-offset-4 hover:text-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-slate-300 dark:hover:text-cyan-200"
+        className="mt-auto inline-flex min-h-11 items-center gap-2 pt-3 text-[11px] font-bold text-slate-600 underline decoration-slate-300 underline-offset-4 hover:text-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:pt-4 sm:text-xs dark:text-slate-300 dark:hover:text-cyan-200"
       >
         {tx(highlight.source.label)}
         <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -113,7 +113,7 @@ function MaternalHealthCard({ highlight, translateText }) {
   );
 }
 
-function SearchResult({ result, onSelect, translateText }) {
+function SearchResult({ result, onSelect, translateText, mobileHidden = false }) {
   const tx = (value) => translateText(value);
   const meta = kindMeta[result.kind] || kindMeta.lesson;
   const Icon = result.safety ? ShieldAlert : meta.Icon;
@@ -122,7 +122,7 @@ function SearchResult({ result, onSelect, translateText }) {
     <button
       type="button"
       onClick={() => onSelect(result)}
-      className={`group flex min-h-24 w-full items-start gap-3 rounded-2xl border p-4 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
+      className={`group min-h-[5.5rem] w-full scroll-mb-28 items-start gap-3 rounded-2xl border p-3 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:min-h-24 sm:p-4 ${mobileHidden ? "hidden md:flex" : "flex"} ${
         result.safety
           ? "border-rose-200 bg-rose-50 hover:border-rose-300 dark:border-rose-400/25 dark:bg-rose-400/10 dark:hover:border-rose-300/40"
           : "border-slate-200 bg-white hover:border-cyan-300 hover:bg-cyan-50/40 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-cyan-400/40 dark:hover:bg-cyan-400/5"
@@ -146,16 +146,16 @@ function SearchResult({ result, onSelect, translateText }) {
             {tx(result.category)}
           </span>
         </span>
-        <span className="mt-1 block text-sm font-black leading-snug text-slate-950 dark:text-white">
+        <span className="mt-1 line-clamp-2 block text-sm font-black leading-snug text-slate-950 dark:text-white">
           {tx(result.title)}
         </span>
-        <span className="mt-1 line-clamp-2 block text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+        <span className="mt-1 line-clamp-1 block text-xs leading-relaxed text-slate-600 sm:line-clamp-2 dark:text-slate-300">
           {result.kind === "data"
             ? `${result.value} ${tx(result.unit)}. ${tx(result.detail)}`
             : tx(result.description)}
         </span>
       </span>
-      <ArrowRight className="mt-2 h-4 w-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-cyan-600" aria-hidden="true" />
+      <ArrowRight className="mt-2 h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-cyan-600" aria-hidden="true" />
     </button>
   );
 }
@@ -170,6 +170,8 @@ export default function PartnerPlatformDiscovery({
   const tx = (value) => translateText(value);
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const [showAllMobileResults, setShowAllMobileResults] = useState(false);
+  const [activeMobileScope, setActiveMobileScope] = useState("national");
   const dataSectionRef = useRef(null);
   const baseIndex = useMemo(() => buildPartnerPlatformSearchIndex(curriculum), [curriculum]);
   const localizedIndex = useMemo(
@@ -195,23 +197,30 @@ export default function PartnerPlatformDiscovery({
     if (result.kind === "guide") onOpenGuide(result.guideId);
     if (result.kind === "video") onOpenVideoHub(result.videoId);
     if (result.kind === "data") {
-      document.getElementById(`maternal-highlight-${result.highlightId}`)?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center",
+      const isMobile = window.matchMedia("(max-width: 767px)").matches;
+      if (isMobile) {
+        setActiveMobileScope(result.highlightId.startsWith("indiana-") ? "indiana" : "national");
+      }
+      window.requestAnimationFrame(() => {
+        document.getElementById(`${isMobile ? "mobile-" : ""}maternal-highlight-${result.highlightId}`)?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
       });
     }
   };
 
   const nationalHighlights = maternalHealthHighlights.filter((item) => item.id.startsWith("national-"));
   const indianaHighlights = maternalHealthHighlights.filter((item) => item.id.startsWith("indiana-"));
+  const mobileHighlights = activeMobileScope === "national" ? nationalHighlights : indianaHighlights;
   const hasQuery = query.trim().length >= 2;
 
   return (
     <section className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:shadow-xl">
       <div className="border-b border-slate-200 bg-gradient-to-br from-white via-cyan-50/45 to-indigo-50/50 p-4 sm:p-6 dark:border-slate-800 dark:from-slate-950 dark:via-slate-950 dark:to-cyan-950/30">
         <div className="max-w-3xl">
-          <h2 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
+          <h2 className="text-xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
             {tx("What do you need right now?")}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
@@ -231,6 +240,7 @@ export default function PartnerPlatformDiscovery({
             onChange={(event) => {
               setQuery(event.target.value);
               setActiveFilter("all");
+              setShowAllMobileResults(false);
             }}
             onKeyDown={(event) => {
               if (event.key === "Escape") {
@@ -240,7 +250,7 @@ export default function PartnerPlatformDiscovery({
             }}
             placeholder={tx("Search lessons, guides, videos, and safety topics")}
             autoComplete="off"
-            className="h-14 w-full rounded-2xl border border-slate-300 bg-white pl-12 pr-12 text-base font-semibold text-slate-950 shadow-sm outline-none transition placeholder:font-medium placeholder:text-slate-500 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-400"
+            className="h-14 w-full rounded-2xl border border-slate-300 bg-white pl-12 pr-12 text-base font-semibold text-slate-950 shadow-sm outline-none transition-colors placeholder:font-medium placeholder:text-slate-500 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15 [&::-webkit-search-cancel-button]:appearance-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-400"
             aria-describedby="partner-search-help partner-search-status"
           />
           {query && (
@@ -264,7 +274,7 @@ export default function PartnerPlatformDiscovery({
 
         {hasQuery && (
           <div className="mt-5" aria-label={tx("Search results")}>
-            <div className="flex gap-2 overflow-x-auto pb-2" role="group" aria-label={tx("Filter search results")}>
+            <div className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label={tx("Filter search results")}>
               {filters.map((filter) => {
                 const count = filter.id === "all"
                   ? allResults.length
@@ -273,9 +283,12 @@ export default function PartnerPlatformDiscovery({
                   <button
                     key={filter.id}
                     type="button"
-                    onClick={() => setActiveFilter(filter.id)}
+                    onClick={() => {
+                      setActiveFilter(filter.id);
+                      setShowAllMobileResults(false);
+                    }}
                     aria-pressed={activeFilter === filter.id}
-                    className={`min-h-11 shrink-0 rounded-full border px-4 py-2 text-xs font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
+                    className={`min-h-11 shrink-0 rounded-full border px-4 py-2 text-xs font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
                       activeFilter === filter.id
                         ? "border-slate-950 bg-slate-950 text-white dark:border-cyan-400 dark:bg-cyan-400 dark:text-slate-950"
                         : "border-slate-300 bg-white text-slate-700 hover:border-cyan-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -288,9 +301,24 @@ export default function PartnerPlatformDiscovery({
             </div>
             {results.length ? (
               <div className="mt-3 grid gap-3 lg:grid-cols-2">
-                {results.map((result) => (
-                  <SearchResult key={result.id} result={result} onSelect={openResult} translateText={translateText} />
+                {results.map((result, index) => (
+                  <SearchResult
+                    key={result.id}
+                    result={result}
+                    onSelect={openResult}
+                    translateText={translateText}
+                    mobileHidden={!showAllMobileResults && index >= 4}
+                  />
                 ))}
+                {results.length > 4 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllMobileResults((current) => !current)}
+                    className="flex min-h-11 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-black text-slate-700 transition-colors hover:border-cyan-300 hover:text-cyan-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 md:hidden dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-400/50 dark:hover:text-cyan-200"
+                  >
+                    {tx(showAllMobileResults ? "Show fewer results" : "Show more results")}
+                  </button>
+                )}
               </div>
             ) : (
               <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
@@ -310,7 +338,7 @@ export default function PartnerPlatformDiscovery({
             <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-300">
               <BarChart3 className="h-4 w-4" aria-hidden="true" /> {tx("Recent maternal health data")}
             </p>
-            <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
+            <h2 className="mt-2 text-xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
               {tx("Understand who is affected most, then know how to help")}
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
@@ -319,31 +347,81 @@ export default function PartnerPlatformDiscovery({
           </div>
           <a
             href="#indiana-maternal-data"
-            className="inline-flex min-h-11 items-center gap-2 self-start rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-black text-slate-700 hover:border-cyan-300 hover:text-cyan-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-400/50 dark:hover:text-cyan-200"
+            className="hidden min-h-11 items-center gap-2 self-start rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-black text-slate-700 hover:border-cyan-300 hover:text-cyan-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 md:inline-flex dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-400/50 dark:hover:text-cyan-200"
           >
             {tx("Jump to Indiana data")} <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </a>
         </div>
 
-        <h3 className="mt-6 text-sm font-black uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300">
-          {tx("National overview and disparities")}
-        </h3>
-        <div className="-mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0">
-          {nationalHighlights.map((highlight) => (
-            <MaternalHealthCard key={highlight.id} highlight={highlight} translateText={translateText} />
-          ))}
+        <div className="mt-5 md:hidden">
+          <div className="grid grid-cols-2 gap-2" role="group" aria-label={tx("Choose maternal data view")}>
+            {[{ id: "national", label: "National" }, { id: "indiana", label: "Indiana" }].map((scope) => (
+              <button
+                key={scope.id}
+                type="button"
+                onClick={() => setActiveMobileScope(scope.id)}
+                aria-pressed={activeMobileScope === scope.id}
+                className={`min-h-11 rounded-xl border px-3 text-sm font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
+                  activeMobileScope === scope.id
+                    ? "border-cyan-500 bg-cyan-500 text-slate-950"
+                    : "border-slate-300 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                }`}
+              >
+                {tx(scope.label)}
+              </button>
+            ))}
+          </div>
+          <div className="mt-4 flex items-end justify-between gap-3">
+            <h3 className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
+              {tx(activeMobileScope === "national" ? "National overview and disparities" : "Indiana overview and disparities")}
+            </h3>
+            <p className="shrink-0 text-[10px] font-bold text-cyan-700 dark:text-cyan-300">
+              {tx("Swipe for more")} <span aria-hidden="true">→</span>
+            </p>
+          </div>
+          <div className="-mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {mobileHighlights.map((highlight) => (
+              <MaternalHealthCard key={highlight.id} highlight={highlight} translateText={translateText} idPrefix="mobile-" />
+            ))}
+          </div>
         </div>
 
-        <h3 id="indiana-maternal-data" className="mt-7 scroll-mt-24 text-sm font-black uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300">
-          {tx("Indiana overview and disparities")}
-        </h3>
-        <div className="-mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0">
-          {indianaHighlights.map((highlight) => (
-            <MaternalHealthCard key={highlight.id} highlight={highlight} translateText={translateText} />
-          ))}
+        <div className="hidden md:block">
+          <h3 className="mt-6 text-sm font-black uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300">
+            {tx("National overview and disparities")}
+          </h3>
+          <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {nationalHighlights.map((highlight) => (
+              <MaternalHealthCard key={highlight.id} highlight={highlight} translateText={translateText} />
+            ))}
+          </div>
+
+          <h3 id="indiana-maternal-data" className="mt-7 scroll-mt-24 text-sm font-black uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300">
+            {tx("Indiana overview and disparities")}
+          </h3>
+          <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {indianaHighlights.map((highlight) => (
+              <MaternalHealthCard key={highlight.id} highlight={highlight} translateText={translateText} />
+            ))}
+          </div>
         </div>
 
-        <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+        <details className="group mt-4 rounded-2xl border border-slate-200 bg-slate-50 text-xs leading-relaxed text-slate-600 md:hidden dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-2 font-black text-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-slate-100">
+            {tx("How to read these numbers")}
+            <span className="text-cyan-700 transition-transform group-open:rotate-90 dark:text-cyan-300" aria-hidden="true">→</span>
+          </summary>
+          <div className="border-t border-slate-200 px-4 pb-4 pt-3 dark:border-slate-700">
+            <p>
+              {tx("National maternal mortality counts deaths during pregnancy or within 42 days from causes related to or aggravated by pregnancy. Indiana pregnancy-associated data include deaths from any cause during pregnancy or within one year. The measures use different definitions and should not be compared directly.")}
+            </p>
+            <p className="mt-2 font-semibold">
+              {tx("Data describes populations, not an individual's risk. This platform does not diagnose. Contact the care team for concerning symptoms and call emergency services for immediate danger.")}
+            </p>
+          </div>
+        </details>
+
+        <div className="mt-5 hidden rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-600 md:block dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
           <p className="font-black text-slate-800 dark:text-slate-100">{tx("How to read these numbers")}</p>
           <p className="mt-1">
             {tx("National maternal mortality counts deaths during pregnancy or within 42 days from causes related to or aggravated by pregnancy. Indiana pregnancy-associated data include deaths from any cause during pregnancy or within one year. The measures use different definitions and should not be compared directly.")}

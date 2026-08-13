@@ -19,6 +19,10 @@ test("discovery search is local, keyboard accessible, and does not persist queri
   assert.match(source, /role="status"/);
   assert.match(source, /aria-live="polite"/);
   assert.match(source, /aria-pressed=\{activeFilter === filter\.id\}/);
+  assert.match(source, /\[&::-webkit-search-cancel-button\]:appearance-none/);
+  assert.match(source, /setShowAllMobileResults\(false\)/);
+  assert.match(source, /mobileHidden=\{!showAllMobileResults && index >= 4\}/);
+  assert.match(source, /Show more results/);
   assert.match(source, /result\.kind === "data"/);
   assert.match(source, /tx\(result\.unit\)/);
   assert.match(source, /tx\(result\.detail\)/);
@@ -36,6 +40,18 @@ test("maternal data distinguishes national and Indiana definitions and sources",
   assert.match(source, /in\.gov\/health\/mch\/files\/MMRC/);
   assert.match(component, /should not be compared directly/);
   assert.match(component, /This platform does not diagnose/);
+});
+
+test("maternal data uses a compact mobile scope switch without changing the desktop grids", () => {
+  const component = read("../components/PartnerPlatformDiscovery.jsx");
+  assert.match(component, /activeMobileScope/);
+  assert.match(component, /aria-pressed=\{activeMobileScope === scope\.id\}/);
+  assert.match(component, /idPrefix="mobile-"/);
+  assert.match(component, /snap-x snap-mandatory/);
+  assert.match(component, /Choose maternal data view/);
+  assert.match(component, /Swipe for more/);
+  assert.match(component, /className="hidden md:block"/);
+  assert.match(component, /<details className="group .*md:hidden/);
 });
 
 test("discovery appearance follows the persisted Partner Platform theme selector", () => {
