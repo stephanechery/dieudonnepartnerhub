@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowRight, BarChart3, BookMarked, Building2, Clock3, ExternalLink, GraduationCap, HeartHandshake, Library, Save, Sparkles, Video } from "lucide-react";
 import ModuleCard from "../components/ModuleCard";
+import PartnerPlatformDiscovery from "../components/PartnerPlatformDiscovery";
 import ProgressBar from "../components/ProgressBar";
 import TodaySupportCard from "../components/TodaySupportCard";
 import { partnerInteractiveGuides } from "../data/interactiveGuides";
@@ -42,6 +43,14 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         onMarkDone={onMarkTodayDone}
         onOpenResource={onOpenTodayResource}
         darkMode={darkMode}
+        translateText={translateText}
+      />
+
+      <PartnerPlatformDiscovery
+        curriculum={curriculum}
+        onOpenLesson={onOpenLesson}
+        onOpenGuide={onOpenGuide}
+        onOpenVideoHub={onOpenVideoHub}
         translateText={translateText}
       />
 

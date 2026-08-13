@@ -1,0 +1,46 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import fs from "node:fs";
+import { partnerCurriculum } from "./curriculum.js";
+import {
+  buildPartnerPlatformSearchIndex,
+  localizePartnerPlatformSearchIndex,
+  searchPartnerPlatform,
+} from "./partnerPlatformSearch.js";
+
+const index = buildPartnerPlatformSearchIndex(partnerCurriculum);
+
+test("search index covers each Partner Platform content type", () => {
+  const kinds = new Set(index.map((entry) => entry.kind));
+  assert.deepEqual(kinds, new Set(["lesson", "guide", "video", "data"]));
+});
+
+test("safety intent ranks urgent content before general matches", () => {
+  const results = searchPartnerPlatform(index, "urgent warning signs");
+  assert.ok(results.length > 0);
+  assert.equal(results[0].safety, true);
+});
+
+test("racial disparity and Indiana searches find maternal data", () => {
+  const disparity = searchPartnerPlatform(index, "racial disparity");
+  assert.ok(disparity.some((entry) => entry.id === "data:national-racial-disparity"));
+
+  const indiana = searchPartnerPlatform(index, "Indiana data");
+  assert.ok(indiana.some((entry) => entry.id === "data:indiana-overview"));
+  assert.ok(indiana.some((entry) => entry.id === "data:indiana-racial-disparity"));
+});
+
+test("maternal disparity data is searchable in the selected language", () => {
+  const catalogs = JSON.parse(
+    fs.readFileSync(new URL("../../language/discovery-translations.json", import.meta.url), "utf8")
+  );
+  const tx = (value) => catalogs.ht[value] || value;
+  const localizedIndex = localizePartnerPlatformSearchIndex(index, tx);
+  const results = searchPartnerPlatform(localizedIndex, "disparite rasyal");
+  assert.ok(results.some((entry) => entry.id === "data:national-racial-disparity"));
+});
+
+test("short or empty queries do not produce noisy results", () => {
+  assert.deepEqual(searchPartnerPlatform(index, ""), []);
+  assert.deepEqual(searchPartnerPlatform(index, "a"), []);
+});

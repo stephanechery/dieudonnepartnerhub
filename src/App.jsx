@@ -6,6 +6,7 @@ import guideChromeTranslationPack from './features/language/guide-chrome-transla
 import partnerPlatformTranslationPack from './features/language/partner-platform-translations.json';
 import partnerContentTranslationPack from './features/language/partner-content-translations.json';
 import supplementalTranslationPack from './features/language/supplemental-translations.json';
+import discoveryTranslationPack from './features/language/discovery-translations.json';
 import {
   Heart,
   Brain,
@@ -1783,7 +1784,8 @@ const LOCAL_LANGUAGE_PACKS = {
   guideChrome: guideChromeTranslationPack,
   partnerPlatform: partnerPlatformTranslationPack,
   partnerContent: partnerContentTranslationPack,
-  supplemental: supplementalTranslationPack
+  supplemental: supplementalTranslationPack,
+  discovery: discoveryTranslationPack
 };
 
 const VALID_LANGUAGE_CODES = new Set(LANGUAGE_OPTIONS.map((option) => option.code));
@@ -3348,7 +3350,8 @@ const getStaticTranslationMap = (locale) => ({
   ...(LOCAL_LANGUAGE_PACKS.guideChrome?.[locale] || {}),
   ...(LOCAL_LANGUAGE_PACKS.supplemental?.[locale] || {}),
   ...(LOCAL_LANGUAGE_PACKS.partnerPlatform?.[locale] || {}),
-  ...(LOCAL_LANGUAGE_PACKS.partnerContent?.[locale] || {})
+  ...(LOCAL_LANGUAGE_PACKS.partnerContent?.[locale] || {}),
+  ...(LOCAL_LANGUAGE_PACKS.discovery?.[locale] || {})
 });
 
 const localizeUiString = (value, locale, translationMap) => {

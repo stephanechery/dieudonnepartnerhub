@@ -13,6 +13,7 @@ const catalogs = [
   parse("./partner-platform-translations.json"),
   parse("./partner-content-translations.json"),
   parse("./supplemental-translations.json"),
+  parse("./discovery-translations.json"),
 ];
 
 const mergedCatalog = (locale) =>
@@ -30,6 +31,11 @@ test("committed catalogs cover critical navigation and safety text", () => {
       "Guides",
       "Videos",
       "More",
+      "Search Partner Platform",
+      "Recent maternal health data",
+      "National overview and disparities",
+      "Indiana overview and disparities",
+      "How to read these numbers",
       "Urgent warning signs",
       "This platform does not diagnose. Contact the care team for concerning symptoms. Call emergency services for immediate danger.",
       "Do not wait with chest pain, trouble breathing, seizure, severe headache, vision changes, heavy bleeding, fainting, or thoughts of self-harm.",
@@ -37,6 +43,26 @@ test("committed catalogs cover critical navigation and safety text", () => {
       assert.ok(catalog[source], `${locale} is missing: ${source}`);
       assert.equal(typeof catalog[source], "string");
       assert.ok(catalog[source].trim().length > 0);
+    }
+  }
+});
+
+test("maternal data and discovery interface are translated in every supported language", () => {
+  const discoveryCatalog = parse("./discovery-translations.json");
+  const discoverySource = read("../partner-dashboard/components/PartnerPlatformDiscovery.jsx");
+  const dataSource = read("../partner-dashboard/data/maternalHealthData.js");
+  const interfaceStrings = Array.from(
+    discoverySource.matchAll(/tx\("([^"]+)"\)/g),
+    (match) => match[1]
+  );
+  const dataStrings = Array.from(
+    dataSource.matchAll(/(?:scope|title|unit|detail|supportAction|label):\s*"([^"]+)"/g),
+    (match) => match[1]
+  );
+
+  for (const locale of ["es", "fr", "ht"]) {
+    for (const source of new Set([...interfaceStrings, ...dataStrings])) {
+      assert.ok(discoveryCatalog[locale]?.[source], `${locale} is missing discovery text: ${source}`);
     }
   }
 });
