@@ -30,6 +30,15 @@ test("racial disparity and Indiana searches find maternal data", () => {
   assert.ok(indiana.some((entry) => entry.id === "data:indiana-racial-disparity"));
 });
 
+test("father impact searches find equipped-partner evidence", () => {
+  const results = searchPartnerPlatform(index, "father impact");
+  assert.ok(results.some((entry) => entry.id === "data:partner-breastfeeding"));
+  assert.ok(results.some((entry) => entry.id === "data:partner-practical-help"));
+
+  const labor = searchPartnerPlatform(index, "equipped labor support");
+  assert.ok(labor.some((entry) => entry.id === "data:partner-labor-support"));
+});
+
 test("maternal disparity data is searchable in the selected language", () => {
   const catalogs = JSON.parse(
     fs.readFileSync(new URL("../../language/discovery-translations.json", import.meta.url), "utf8")

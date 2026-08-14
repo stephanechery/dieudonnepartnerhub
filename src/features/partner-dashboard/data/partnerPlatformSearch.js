@@ -92,7 +92,11 @@ export const buildPartnerPlatformSearchIndex = (curriculum) => {
       title: highlight.title,
       description: `${highlight.value} ${highlight.unit}. ${highlight.detail}`,
       category: "Maternal health data",
-      keywords: [highlight.scope, highlight.supportAction, "statistics disparities equity Indiana national"],
+      keywords: [
+        highlight.scope,
+        highlight.supportAction,
+        "statistics disparities equity Indiana national father partner impact equipped support involvement breastfeeding labor",
+      ],
       localizableSearchValues: [
         highlight.scope,
         highlight.unit,

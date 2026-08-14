@@ -1,4 +1,12 @@
 export const maternalHealthSources = {
+  fatherTraining: {
+    label: "PubMed · Controlled father-training trial",
+    href: "https://pubmed.ncbi.nlm.nih.gov/16199676/",
+  },
+  laborCompanion: {
+    label: "WHO · Intrapartum care guideline",
+    href: "https://www.who.int/publications/i/item/9789241550215",
+  },
   national: {
     label: "CDC NCHS · Final 2024 data",
     href: "https://www.cdc.gov/nchs/data/hestat/hestat113.htm",
@@ -14,6 +22,48 @@ export const maternalHealthSources = {
 };
 
 export const maternalHealthHighlights = [
+  {
+    id: "partner-breastfeeding",
+    scope: "Equipped fathers · Feeding support",
+    title: "Father training helped sustain full breastfeeding",
+    value: "25% vs 15%",
+    unit: "full breastfeeding at 6 months",
+    detail:
+      "In a controlled trial of 280 couples, full breastfeeding at 6 months was higher when fathers received a breastfeeding-management session.",
+    supportAction:
+      "Learn the feeding plan, watch for common challenges, and help connect mom with skilled lactation support early.",
+    source: maternalHealthSources.fatherTraining,
+    tone: "emerald",
+    impact: true,
+  },
+  {
+    id: "partner-practical-help",
+    scope: "Equipped fathers · Practical help",
+    title: "More mothers reported useful partner help",
+    value: "91% vs 34%",
+    unit: "mothers reporting help with infant feeding",
+    detail:
+      "In the same controlled trial, mothers whose partners received training reported much more relevant help with feeding management.",
+    supportAction:
+      "Ask what would make feeding easier, handle setup and cleanup, and reinforce the care plan without taking control away from mom.",
+    source: maternalHealthSources.fatherTraining,
+    tone: "cyan",
+    impact: true,
+  },
+  {
+    id: "partner-labor-support",
+    scope: "Equipped companions · Labor support",
+    title: "Continuous support was linked to shorter labor",
+    value: "≈41 min",
+    unit: "shorter labor on average",
+    detail:
+      "WHO found an average 0.69-hour reduction across 13 trials involving 5,429 women. Companions varied and could include a partner, relative, friend, doula, or professional.",
+    supportAction:
+      "Prepare comfort measures, stay calm and present, help communicate preferences, and follow the clinical team's safety guidance.",
+    source: maternalHealthSources.laborCompanion,
+    tone: "indigo",
+    impact: true,
+  },
   {
     id: "national-overview",
     scope: "United States · 2024",

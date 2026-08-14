@@ -3,6 +3,7 @@ import {
   ArrowRight,
   BarChart3,
   BookOpen,
+  ChevronDown,
   ExternalLink,
   FileText,
   Search,
@@ -113,6 +114,70 @@ function MaternalHealthCard({ highlight, translateText, idPrefix = "" }) {
   );
 }
 
+function MobileDataCard({ highlight, expanded, onToggle, translateText }) {
+  const tx = (value) => translateText(value);
+  const tone = toneClasses[highlight.tone] || toneClasses.cyan;
+  const panelId = `mobile-maternal-panel-${highlight.id}`;
+
+  return (
+    <article
+      id={`mobile-maternal-highlight-${highlight.id}`}
+      className={`scroll-mb-28 overflow-hidden rounded-2xl border bg-white shadow-sm dark:bg-slate-900 ${tone.border}`}
+    >
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={expanded}
+        aria-controls={panelId}
+        className="block min-h-[5.75rem] w-full p-4 text-left transition-colors active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:hover:bg-white/[0.03]"
+      >
+        <span className="flex items-start justify-between gap-3">
+          <span className={`min-w-0 text-[10px] font-black uppercase leading-relaxed tracking-[0.14em] ${tone.accent}`}>
+            {tx(highlight.scope)}
+          </span>
+          <span className="shrink-0 text-lg font-black tabular-nums text-slate-950 dark:text-white">{highlight.value}</span>
+        </span>
+        <span className="mt-2 flex items-start justify-between gap-3">
+          <span className="line-clamp-2 min-w-0 text-sm font-black leading-snug text-slate-950 dark:text-white">
+            {tx(highlight.title)}
+          </span>
+          <ChevronDown
+            className={`mt-0.5 h-4 w-4 shrink-0 text-slate-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+            aria-hidden="true"
+          />
+        </span>
+      </button>
+      {expanded && (
+        <div id={panelId} className="border-t border-slate-200 px-4 pb-4 pt-3 dark:border-slate-700">
+          <p className="text-xs font-bold leading-relaxed text-slate-700 dark:text-slate-200">
+            {tx(highlight.unit)}
+          </p>
+          <p className="mt-2 text-[13px] leading-relaxed text-slate-600 dark:text-slate-300">
+            {tx(highlight.detail)}
+          </p>
+          <div className={`mt-3 rounded-xl border p-3 ${tone.action}`}>
+            <p className="text-[10px] font-black uppercase tracking-[0.14em]">
+              {tx("What this means for your role")}
+            </p>
+            <p className="mt-1.5 text-[13px] font-semibold leading-relaxed">
+              {tx(highlight.supportAction)}
+            </p>
+          </div>
+          <a
+            href={highlight.source.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex min-h-11 items-center gap-2 text-[11px] font-bold text-slate-600 underline decoration-slate-300 underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-slate-300"
+          >
+            {tx(highlight.source.label)}
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+          </a>
+        </div>
+      )}
+    </article>
+  );
+}
+
 function SearchResult({ result, onSelect, translateText, mobileHidden = false }) {
   const tx = (value) => translateText(value);
   const meta = kindMeta[result.kind] || kindMeta.lesson;
@@ -171,7 +236,8 @@ export default function PartnerPlatformDiscovery({
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [showAllMobileResults, setShowAllMobileResults] = useState(false);
-  const [activeMobileScope, setActiveMobileScope] = useState("national");
+  const [activeMobileScope, setActiveMobileScope] = useState("partner");
+  const [expandedMobileHighlights, setExpandedMobileHighlights] = useState(["partner-breastfeeding"]);
   const dataSectionRef = useRef(null);
   const baseIndex = useMemo(() => buildPartnerPlatformSearchIndex(curriculum), [curriculum]);
   const localizedIndex = useMemo(
@@ -199,21 +265,35 @@ export default function PartnerPlatformDiscovery({
     if (result.kind === "data") {
       const isMobile = window.matchMedia("(max-width: 767px)").matches;
       if (isMobile) {
-        setActiveMobileScope(result.highlightId.startsWith("indiana-") ? "indiana" : "national");
+        const nextScope = result.highlightId.startsWith("partner-")
+          ? "partner"
+          : result.highlightId.startsWith("indiana-")
+            ? "indiana"
+            : "national";
+        setActiveMobileScope(nextScope);
+        setExpandedMobileHighlights([result.highlightId]);
       }
       window.requestAnimationFrame(() => {
-        document.getElementById(`${isMobile ? "mobile-" : ""}maternal-highlight-${result.highlightId}`)?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "center",
+        window.requestAnimationFrame(() => {
+          document.getElementById(`${isMobile ? "mobile-" : ""}maternal-highlight-${result.highlightId}`)?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
         });
       });
     }
   };
 
+  const partnerHighlights = maternalHealthHighlights.filter((item) => item.id.startsWith("partner-"));
   const nationalHighlights = maternalHealthHighlights.filter((item) => item.id.startsWith("national-"));
   const indianaHighlights = maternalHealthHighlights.filter((item) => item.id.startsWith("indiana-"));
-  const mobileHighlights = activeMobileScope === "national" ? nationalHighlights : indianaHighlights;
+  const mobileHighlights = activeMobileScope === "partner"
+    ? partnerHighlights
+    : activeMobileScope === "national"
+      ? nationalHighlights
+      : indianaHighlights;
+  const allMobileHighlightsExpanded = mobileHighlights.length > 0
+    && mobileHighlights.every((highlight) => expandedMobileHighlights.includes(highlight.id));
   const hasQuery = query.trim().length >= 2;
 
   return (
@@ -332,7 +412,7 @@ export default function PartnerPlatformDiscovery({
         )}
       </div>
 
-      <div ref={dataSectionRef} id="maternal-health-data" className="scroll-mt-24 p-4 sm:p-6">
+      <div ref={dataSectionRef} id="maternal-health-data" className="scroll-mt-24 px-4 pb-28 pt-4 sm:p-6">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-300">
@@ -354,39 +434,88 @@ export default function PartnerPlatformDiscovery({
         </div>
 
         <div className="mt-5 md:hidden">
-          <div className="grid grid-cols-2 gap-2" role="group" aria-label={tx("Choose maternal data view")}>
-            {[{ id: "national", label: "National" }, { id: "indiana", label: "Indiana" }].map((scope) => (
+          <div className="grid grid-cols-3 gap-1.5 rounded-2xl bg-slate-100 p-1 dark:bg-slate-900" role="group" aria-label={tx("Choose maternal data view")}>
+            {[
+              { id: "partner", label: "Your impact" },
+              { id: "national", label: "U.S." },
+              { id: "indiana", label: "Indiana" },
+            ].map((scope) => (
               <button
                 key={scope.id}
                 type="button"
-                onClick={() => setActiveMobileScope(scope.id)}
+                onClick={() => {
+                  const nextHighlights = scope.id === "partner"
+                    ? partnerHighlights
+                    : scope.id === "national"
+                      ? nationalHighlights
+                      : indianaHighlights;
+                  setActiveMobileScope(scope.id);
+                  setExpandedMobileHighlights(nextHighlights.length ? [nextHighlights[0].id] : []);
+                }}
                 aria-pressed={activeMobileScope === scope.id}
-                className={`min-h-11 rounded-xl border px-3 text-sm font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
+                className={`min-h-11 rounded-xl px-2 text-xs font-black transition-colors active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
                   activeMobileScope === scope.id
-                    ? "border-cyan-500 bg-cyan-500 text-slate-950"
-                    : "border-slate-300 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                    ? "bg-white text-cyan-800 shadow-sm dark:bg-cyan-400 dark:text-slate-950"
+                    : "text-slate-600 dark:text-slate-300"
                 }`}
               >
                 {tx(scope.label)}
               </button>
             ))}
           </div>
-          <div className="mt-4 flex items-end justify-between gap-3">
-            <h3 className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
-              {tx(activeMobileScope === "national" ? "National overview and disparities" : "Indiana overview and disparities")}
-            </h3>
-            <p className="shrink-0 text-[10px] font-bold text-cyan-700 dark:text-cyan-300">
-              {tx("Swipe for more")} <span aria-hidden="true">→</span>
-            </p>
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <div>
+              <h3 className="text-xs font-black uppercase tracking-[0.14em] text-slate-700 dark:text-slate-200">
+                {tx(activeMobileScope === "partner"
+                  ? "Your support matters"
+                  : activeMobileScope === "national"
+                    ? "National data"
+                    : "Indiana data")}
+              </h3>
+              <p className="mt-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                {tx("Open only what you need.")}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setExpandedMobileHighlights(
+                allMobileHighlightsExpanded ? [] : mobileHighlights.map((highlight) => highlight.id)
+              )}
+              className="min-h-10 shrink-0 rounded-full border border-cyan-300 bg-cyan-50 px-3 text-[11px] font-black text-cyan-900 transition-colors active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-100"
+            >
+              {tx(allMobileHighlightsExpanded ? "Collapse all" : "Expand all")}
+            </button>
           </div>
-          <div className="-mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mt-3 space-y-2.5">
             {mobileHighlights.map((highlight) => (
-              <MaternalHealthCard key={highlight.id} highlight={highlight} translateText={translateText} idPrefix="mobile-" />
+              <MobileDataCard
+                key={highlight.id}
+                highlight={highlight}
+                expanded={expandedMobileHighlights.includes(highlight.id)}
+                onToggle={() => setExpandedMobileHighlights((current) =>
+                  current.includes(highlight.id)
+                    ? current.filter((id) => id !== highlight.id)
+                    : [...current, highlight.id]
+                )}
+                translateText={translateText}
+              />
             ))}
           </div>
         </div>
 
         <div className="hidden md:block">
+          <h3 className="mt-6 text-sm font-black uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300">
+            {tx("What equipped partners can change")}
+          </h3>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+            {tx("These findings show what structured partner education and continuous support can influence. Results vary by family and care setting.")}
+          </p>
+          <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {partnerHighlights.map((highlight) => (
+              <MaternalHealthCard key={highlight.id} highlight={highlight} translateText={translateText} />
+            ))}
+          </div>
+
           <h3 className="mt-6 text-sm font-black uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300">
             {tx("National overview and disparities")}
           </h3>
@@ -412,6 +541,9 @@ export default function PartnerPlatformDiscovery({
             <span className="text-cyan-700 transition-transform group-open:rotate-90 dark:text-cyan-300" aria-hidden="true">→</span>
           </summary>
           <div className="border-t border-slate-200 px-4 pb-4 pt-3 dark:border-slate-700">
+            <p className="font-semibold">
+              {tx("Partner-impact findings include one controlled father-training trial. Labor-support findings include different companion types and are not father-only.")}
+            </p>
             <p>
               {tx("National maternal mortality counts deaths during pregnancy or within 42 days from causes related to or aggravated by pregnancy. Indiana pregnancy-associated data include deaths from any cause during pregnancy or within one year. The measures use different definitions and should not be compared directly.")}
             </p>
@@ -423,6 +555,9 @@ export default function PartnerPlatformDiscovery({
 
         <div className="mt-5 hidden rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-600 md:block dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
           <p className="font-black text-slate-800 dark:text-slate-100">{tx("How to read these numbers")}</p>
+          <p className="mt-1 font-semibold">
+            {tx("Partner-impact findings include one controlled father-training trial. Labor-support findings include different companion types and are not father-only.")}
+          </p>
           <p className="mt-1">
             {tx("National maternal mortality counts deaths during pregnancy or within 42 days from causes related to or aggravated by pregnancy. Indiana pregnancy-associated data include deaths from any cause during pregnancy or within one year. The measures use different definitions and should not be compared directly.")}
           </p>
