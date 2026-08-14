@@ -15,6 +15,8 @@ test("overview includes the approved search and maternal data discovery surface"
 test("discovery search is local, keyboard accessible, and does not persist queries", () => {
   const source = read("../components/PartnerPlatformDiscovery.jsx");
   assert.match(source, /type="search"/);
+  assert.match(source, /<div className="relative">\s*<Search/);
+  assert.match(source, /className="absolute right-2 top-1\/2 flex h-10 w-10 -translate-y-1\/2/);
   assert.match(source, /event\.key === "Escape"/);
   assert.match(source, /role="status"/);
   assert.match(source, /aria-live="polite"/);

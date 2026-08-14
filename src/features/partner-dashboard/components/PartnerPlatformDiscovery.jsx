@@ -308,41 +308,43 @@ export default function PartnerPlatformDiscovery({
           </p>
         </div>
 
-        <div className="relative mt-5 max-w-3xl">
+        <div className="mt-5 max-w-3xl">
           <label htmlFor="partner-platform-search" className="sr-only">
             {tx("Search Partner Platform")}
           </label>
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-cyan-700 dark:text-cyan-300" aria-hidden="true" />
-          <input
-            id="partner-platform-search"
-            type="search"
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setActiveFilter("all");
-              setShowAllMobileResults(false);
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Escape") {
-                setQuery("");
-                event.currentTarget.blur();
-              }
-            }}
-            placeholder={tx("Search lessons, guides, videos, and safety topics")}
-            autoComplete="off"
-            className="h-14 w-full rounded-2xl border border-slate-300 bg-white pl-12 pr-12 text-base font-semibold text-slate-950 shadow-sm outline-none transition-colors placeholder:font-medium placeholder:text-slate-500 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15 [&::-webkit-search-cancel-button]:appearance-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-400"
-            aria-describedby="partner-search-help partner-search-status"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              className="absolute right-1.5 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:hover:bg-slate-800 dark:hover:text-white"
-              aria-label={tx("Clear search")}
-            >
-              <X className="h-5 w-5" aria-hidden="true" />
-            </button>
-          )}
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-cyan-700 dark:text-cyan-300" strokeWidth={2} aria-hidden="true" />
+            <input
+              id="partner-platform-search"
+              type="search"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setActiveFilter("all");
+                setShowAllMobileResults(false);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") {
+                  setQuery("");
+                  event.currentTarget.blur();
+                }
+              }}
+              placeholder={tx("Search lessons, guides, videos, and safety topics")}
+              autoComplete="off"
+              className="h-14 w-full rounded-2xl border border-slate-300 bg-white pl-12 pr-14 text-base font-semibold text-slate-950 shadow-sm outline-none transition-colors placeholder:font-medium placeholder:text-slate-500 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15 [&::-webkit-search-cancel-button]:appearance-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-400"
+              aria-describedby="partner-search-help partner-search-status"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+                aria-label={tx("Clear search")}
+              >
+                <X className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+              </button>
+            )}
+          </div>
           <p id="partner-search-help" className="mt-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
             {tx("Search runs on this device. It does not use ChatGPT or send your query to an AI model.")}
           </p>
