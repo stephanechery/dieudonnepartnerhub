@@ -163,18 +163,6 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     }
     openGuides();
   };
-  const trackRecommendationClick = (kind, target = {}) => {
-    trackPartnerEvent("recommendation_click", {
-      uid: authUser.uid,
-      email: authUser.email,
-      category: kind,
-      moduleId: target.moduleId,
-      lessonId: target.lessonId,
-      guideId: target.guideId,
-      videoId: target.videoId,
-    });
-  };
-
   const moduleMatch = subPath.match(/^\/module\/([a-z0-9-]+)$/i);
   const lessonMatch = subPath.match(/^\/module\/([a-z0-9-]+)\/lesson\/([a-z0-9-]+)$/i);
   const guidesMatch = subPath.match(/^\/guides(?:\/([a-z0-9-]+))?$/i);
@@ -194,13 +182,10 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           metrics={dashboardMetrics}
           profile={profile}
           curriculum={curriculum}
-          onOpenModule={openModule}
+          onOpenTraining={openTraining}
           onOpenLesson={openLesson}
-          onOpenGuides={openGuides}
           onOpenGuide={openGuide}
           onOpenVideoHub={openVideoHub}
-          onRecommendationClick={trackRecommendationClick}
-          onSaveProfileDetails={saveProfileDetails}
           onSelectTodayContext={saveTodaySupportContext}
           onMarkTodayDone={markTodaySupportDone}
           onOpenTodayResource={openTodaySupportResource}

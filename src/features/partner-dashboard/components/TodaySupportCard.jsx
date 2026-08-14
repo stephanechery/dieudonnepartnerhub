@@ -135,7 +135,7 @@ export default function TodaySupportCard({
 
       {showPicker || !plan ? (
         <div className="mt-5">
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3 xl:grid-cols-4">
             {todaySupportContexts.map((context) => {
               const Icon = contextIcons[context.icon] || Heart;
               const isPending = pendingAction === context.id;
@@ -145,21 +145,21 @@ export default function TodaySupportCard({
                   type="button"
                   disabled={Boolean(pendingAction)}
                   onClick={() => chooseContext(context.id)}
-                  className={`group min-h-[8.25rem] rounded-2xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-70 ${
+                  className={`group min-h-[6.75rem] rounded-2xl border p-3 text-left transition sm:min-h-[8.25rem] sm:p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-70 ${
                     darkMode
                       ? "border-white/10 bg-white/[0.045] text-white hover:border-cyan-300/40 hover:bg-cyan-300/10 focus-visible:ring-offset-slate-900"
                       : "border-slate-200 bg-white/90 text-slate-950 hover:border-cyan-300 hover:bg-cyan-50 focus-visible:ring-offset-white"
                   } ${context.id === "urgent" ? darkMode ? "border-rose-400/30" : "border-rose-200" : ""}`}
                 >
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${
+                  <span className={`flex h-9 w-9 items-center justify-center rounded-xl sm:h-10 sm:w-10 ${
                     context.id === "urgent"
                       ? darkMode ? "bg-rose-400/15 text-rose-200" : "bg-rose-50 text-rose-700"
                       : darkMode ? "bg-cyan-300/10 text-cyan-200" : "bg-cyan-50 text-cyan-700"
                   }`}>
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </span>
-                  <span className="mt-3 block text-sm font-black">{tx(context.label)}</span>
-                  <span className={`mt-1 block text-xs leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+                  <span className="mt-2.5 block text-sm font-black leading-tight sm:mt-3">{tx(context.label)}</span>
+                  <span className={`sr-only text-[11px] leading-relaxed min-[360px]:not-sr-only min-[360px]:mt-1 min-[360px]:line-clamp-2 sm:text-xs ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
                     {isPending ? tx("Building your plan...") : tx(context.helper)}
                   </span>
                 </button>

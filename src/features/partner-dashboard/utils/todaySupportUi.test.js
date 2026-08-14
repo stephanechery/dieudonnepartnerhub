@@ -23,6 +23,40 @@ test("Today replaces the overview hero with the approved Situation Helper", asyn
   assert.match(card, /This guide does not replace emergency or medical care\./);
 });
 
+test("Today is a compact action dashboard without duplicate tab content", async () => {
+  const overview = await readDashboardFile("pages", "OverviewPage.jsx");
+
+  assert.match(overview, /tx\("Continue learning"\)/);
+  assert.match(overview, /onClick=\{onOpenTraining\}/);
+  assert.match(overview, /onOpenLesson\(nextLesson\.moduleId, nextLesson\.lessonId\)/);
+  assert.match(overview, /<PartnerPlatformDiscovery/);
+  assert.match(overview, /tx\("Match mom with a doula"\)/);
+  for (const duplicate of [
+    "Organization or program",
+    "Next Best Action",
+    "Overall Progress",
+    "Quiz Avg",
+    "Recently Completed Lessons",
+    "Module Progress",
+    "Training Approach",
+    "Interactive Guide Library",
+    "Partner Video Hub",
+  ]) {
+    assert.doesNotMatch(overview, new RegExp(duplicate));
+  }
+  assert.doesNotMatch(overview, /<ModuleCard|partnerInteractiveGuides|onSaveProfileDetails/);
+});
+
+test("Today deep links use the existing Training, lesson, guide, and video routes", async () => {
+  const router = await readDashboardFile("index.jsx");
+
+  assert.match(router, /onOpenTraining=\{openTraining\}/);
+  assert.match(router, /onOpenLesson=\{openLesson\}/);
+  assert.match(router, /onOpenGuide=\{openGuide\}/);
+  assert.match(router, /onOpenVideoHub=\{openVideoHub\}/);
+  assert.match(router, /const openTraining = \(\) => navigate\(`\$\{BASE_PATH\}\/training`\)/);
+});
+
 test("Today persistence and analytics stay allowlisted and coarse", async () => {
   const [context, profileService, router] = await Promise.all([
     readDashboardFile("state", "PartnerDashboardContext.jsx"),

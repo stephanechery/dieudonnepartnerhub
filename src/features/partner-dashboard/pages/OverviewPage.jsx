@@ -1,42 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { ArrowRight, BarChart3, BookMarked, Building2, Clock3, ExternalLink, GraduationCap, HeartHandshake, Library, Save, Sparkles, Video } from "lucide-react";
-import ModuleCard from "../components/ModuleCard";
+import React from "react";
+import { ArrowRight, ExternalLink, GraduationCap, HeartHandshake } from "lucide-react";
 import PartnerPlatformDiscovery from "../components/PartnerPlatformDiscovery";
 import ProgressBar from "../components/ProgressBar";
 import TodaySupportCard from "../components/TodaySupportCard";
-import { partnerInteractiveGuides } from "../data/interactiveGuides";
 
 const DOULA_MATCH_URL = "https://dieudonnematch.org";
 
-export default function OverviewPage({ metrics, profile, curriculum, onOpenModule, onOpenLesson, onOpenGuides, onOpenGuide = onOpenGuides, onOpenVideoHub, onRecommendationClick = () => {}, onSaveProfileDetails = () => {}, onSelectTodayContext = () => Promise.resolve(), onMarkTodayDone = () => Promise.resolve(), onOpenTodayResource = () => {}, darkMode = false, translateText = (value) => value }) {
+export default function OverviewPage({
+  metrics,
+  profile,
+  curriculum,
+  onOpenTraining = () => {},
+  onOpenLesson,
+  onOpenGuide,
+  onOpenVideoHub,
+  onSelectTodayContext = () => Promise.resolve(),
+  onMarkTodayDone = () => Promise.resolve(),
+  onOpenTodayResource = () => {},
+  darkMode = false,
+  translateText = (value) => value,
+}) {
   const tx = (value) => translateText(value);
-  const [organizationName, setOrganizationName] = useState(profile?.organizationName || "");
-  const [organizationSaved, setOrganizationSaved] = useState(false);
-  const nextActions = metrics.nextActions || {};
-  const recommendedLesson = nextActions.lesson || metrics.nextLesson;
-  const recommendedGuide = nextActions.guide;
-  const recommendedVideo = nextActions.video;
-  const latestCompleted = metrics.recentlyCompleted[0] || null;
-  const latestCompletedTime = latestCompleted?.completedAt
-    ? new Date(latestCompleted.completedAt).toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-      })
-    : null;
-
-  useEffect(() => {
-    setOrganizationName(profile?.organizationName || "");
-  }, [profile?.organizationName]);
-
-  const saveOrganizationName = (event) => {
-    event.preventDefault();
-    onSaveProfileDetails({ organizationName });
-    setOrganizationSaved(true);
-    window.setTimeout(() => setOrganizationSaved(false), 1800);
-  };
+  const nextLesson = metrics.nextLesson;
 
   return (
-    <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <TodaySupportCard
         profile={profile}
         onSelectContext={onSelectTodayContext}
@@ -45,6 +33,61 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
         darkMode={darkMode}
         translateText={translateText}
       />
+
+      <section
+        className={`rounded-[1.6rem] border p-4 shadow-sm sm:p-5 ${
+          darkMode
+            ? "border-slate-800 bg-gradient-to-br from-slate-900 to-cyan-950/25 shadow-xl"
+            : "border-slate-200 bg-gradient-to-br from-white to-cyan-50/60"
+        }`}
+      >
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0 flex-1">
+            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+              <GraduationCap className="h-4 w-4" aria-hidden="true" /> {tx("Continue learning")}
+            </p>
+            <h2 className={`mt-2 text-lg font-black leading-tight sm:text-xl ${darkMode ? "text-white" : "text-slate-950"}`}>
+              {tx(nextLesson.lessonTitle)}
+            </h2>
+            <p className={`mt-1 text-sm font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+              {tx(nextLesson.moduleTitle)}
+            </p>
+            <div className="mt-3 flex items-center gap-3">
+              <ProgressBar
+                className="min-w-0 flex-1"
+                value={metrics.currentModule.completion}
+                trackClassName={darkMode ? "bg-slate-800" : ""}
+              />
+              <span className={`shrink-0 text-xs font-black tabular-nums ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
+                {metrics.currentModule.completion}%
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:w-auto">
+            {nextLesson.lessonId && (
+              <button
+                type="button"
+                onClick={() => onOpenLesson(nextLesson.moduleId, nextLesson.lessonId)}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-700 to-teal-700 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-800 hover:to-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+              >
+                {tx("Resume")} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onOpenTraining}
+              className={`inline-flex min-h-11 items-center justify-center rounded-xl border px-4 py-2 text-sm font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
+                darkMode
+                  ? "border-slate-700 bg-slate-900 text-slate-100 hover:border-cyan-400/50 hover:text-cyan-200"
+                  : "border-slate-300 bg-white text-slate-800 hover:border-cyan-300 hover:text-cyan-800"
+              }`}
+            >
+              {tx("View Training")}
+            </button>
+          </div>
+        </div>
+      </section>
 
       <PartnerPlatformDiscovery
         curriculum={curriculum}
@@ -55,480 +98,38 @@ export default function OverviewPage({ metrics, profile, curriculum, onOpenModul
       />
 
       <section
-        className={`relative overflow-hidden rounded-[1.75rem] border p-4 sm:p-5 md:rounded-[2rem] md:p-6 ${
+        className={`rounded-[1.4rem] border p-4 ${
           darkMode
-            ? "border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/30 shadow-xl"
-            : "border-slate-200 bg-gradient-to-br from-white via-white to-cyan-50/50 shadow-sm"
+            ? "border-cyan-400/20 bg-cyan-400/[0.06]"
+            : "border-cyan-200 bg-cyan-50/70"
         }`}
       >
-        <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-cyan-500/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-12 left-16 h-40 w-40 rounded-full bg-rose-500/10 blur-3xl" />
-        <div className="relative z-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <p
-              className={`text-xs font-black uppercase tracking-[0.2em] ${
-                darkMode ? "text-slate-400" : "text-slate-500"
-              }`}
-            >
-              {tx("Current Module")}
+            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+              <HeartHandshake className="h-4 w-4" aria-hidden="true" /> {tx("Care-Team Support")}
             </p>
-            <h2
-              className={`mt-1 text-xl font-black tracking-tight sm:text-2xl md:text-3xl ${
-                darkMode ? "text-slate-100" : "text-slate-900"
-              }`}
-            >
-              {tx(metrics.currentModule.title)}
-            </h2>
-            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-              {tx("Completion")}: {metrics.currentModule.completion}%
-            </p>
-            <ProgressBar className="mt-3 max-w-md" value={metrics.currentModule.completion} trackClassName={darkMode ? "bg-slate-800" : ""} />
-            {metrics.nextLesson.lessonId && (
-              <button
-                type="button"
-                className={`mt-4 min-h-12 w-full rounded-xl px-4 py-3 text-sm font-bold text-white transition sm:min-h-0 sm:w-auto sm:py-2 ${
-                  darkMode
-                    ? "bg-gradient-to-r from-cyan-700 to-teal-700 hover:from-cyan-800 hover:to-teal-800"
-                    : "bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-700"
-                }`}
-                onClick={() =>
-                  onOpenLesson(metrics.nextLesson.moduleId, metrics.nextLesson.lessonId)
-                }
-              >
-                {tx("Resume")}
-              </button>
-            )}
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 sm:gap-3">
-            <article
-              className={`rounded-2xl border p-3 sm:p-4 ${
-                darkMode
-                  ? "border-slate-800 bg-slate-900/70"
-                  : "border-slate-200 bg-white/70"
-              }`}
-            >
-              <p className={`text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                {tx("Overall Progress")}
-              </p>
-              <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                {metrics.overallProgress}%
-              </p>
-            </article>
-            <article
-              className={`rounded-2xl border p-3 sm:p-4 ${
-                darkMode
-                  ? "border-slate-800 bg-slate-900/70"
-                  : "border-slate-200 bg-white/70"
-              }`}
-            >
-              <p className={`text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                {tx("Quiz Avg")}
-              </p>
-              <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                {metrics.overallQuizAverage}%
-              </p>
-            </article>
-            <article
-              className={`rounded-2xl border p-3 sm:p-4 ${
-                darkMode
-                  ? "border-slate-800 bg-slate-900/70"
-                  : "border-slate-200 bg-white/70"
-              }`}
-            >
-              <p className={`text-[11px] font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                {tx("Recently Completed")}
-              </p>
-              <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                {metrics.recentlyCompleted.length}
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className={`hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
-        <form className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between" onSubmit={saveOrganizationName}>
-          <div className="min-w-0 flex-1">
-            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-              <Building2 className="h-4 w-4" /> {tx("Organization")}
-            </p>
-            <label className={`mt-3 block text-sm font-bold ${darkMode ? "text-slate-300" : "text-slate-700"}`}>
-              {tx("Organization or program")}
-              <input
-                value={organizationName}
-                onChange={(event) => {
-                  setOrganizationName(event.target.value);
-                  setOrganizationSaved(false);
-                }}
-                placeholder={tx("Optional")}
-                className={`mt-1 h-12 w-full rounded-xl border px-4 text-base font-semibold outline-none transition focus:border-cyan-400 ${darkMode ? "border-slate-700 bg-slate-950 text-slate-100 placeholder:text-slate-600" : "border-slate-300 bg-white text-slate-900 placeholder:text-slate-400"}`}
-              />
-            </label>
-            <p className={`mt-2 text-xs font-semibold leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-              {tx("If a partner organization referred you, add it here so program leaders can see learning participation by organization.")}
-            </p>
-          </div>
-          <button
-            type="submit"
-            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-black text-white transition ${darkMode ? "bg-cyan-700 hover:bg-cyan-800" : "bg-slate-900 hover:bg-slate-800"}`}
-          >
-            <Save className="h-4 w-4" />
-            {organizationSaved ? tx("Saved") : tx("Save")}
-          </button>
-        </form>
-      </section>
-
-      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-cyan-400/20 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/35 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/70 to-indigo-50 shadow-sm"}`}>
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-stretch">
-          <div className="min-w-0 lg:w-[34%]">
-            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-              <Sparkles className="h-4 w-4" /> {tx("Next Best Action")}
-            </p>
-            <h2 className={`mt-2 text-2xl font-black tracking-tight ${darkMode ? "text-white" : "text-slate-950"}`}>
-              {tx("Pick up with one clear path")}
-            </h2>
-            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
-              {tx("Start with the next lesson, then use the matching guide or video if you need a faster refresher.")}
-            </p>
-          </div>
-
-          <div className="grid flex-1 grid-cols-1 gap-3 md:grid-cols-3">
-            <article className={`flex min-h-[178px] flex-col rounded-2xl border p-4 ${darkMode ? "border-white/10 bg-white/[0.045]" : "border-slate-200 bg-white/82"}`}>
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-                {tx("Lesson")}
-              </p>
-              <h3 className={`mt-2 text-base font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                {tx(recommendedLesson.lessonTitle)}
-              </h3>
-              <p className={`mt-1 text-xs font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-                {tx(recommendedLesson.moduleTitle)}
-              </p>
-              {recommendedLesson.lessonId && (
-                <button
-                  type="button"
-                  className={`mt-auto flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black text-white transition ${darkMode ? "bg-cyan-700 hover:bg-cyan-800" : "bg-slate-900 hover:bg-slate-800"}`}
-                  onClick={() => {
-                    onRecommendationClick("lesson", recommendedLesson);
-                    onOpenLesson(recommendedLesson.moduleId, recommendedLesson.lessonId);
-                  }}
-                >
-                  {tx("Continue")} <ArrowRight className="h-4 w-4" />
-                </button>
-              )}
-            </article>
-
-            {recommendedGuide && (
-              <article className={`flex min-h-[178px] flex-col rounded-2xl border p-4 ${darkMode ? "border-white/10 bg-white/[0.045]" : "border-slate-200 bg-white/82"}`}>
-                <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-emerald-300" : "text-emerald-700"}`}>
-                  {tx("Guide")}
-                </p>
-                <h3 className={`mt-2 text-base font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                  {tx(recommendedGuide.title)}
-                </h3>
-                <p className={`mt-1 text-xs font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-                  {tx(recommendedGuide.phase)}
-                </p>
-                <button
-                  type="button"
-                  className={`mt-auto flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black transition ${darkMode ? "border border-emerald-300/20 bg-emerald-300/10 text-emerald-100 hover:bg-emerald-300/15" : "border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"}`}
-                  onClick={() => {
-                    onRecommendationClick("guide", { guideId: recommendedGuide.id, moduleId: recommendedLesson.moduleId });
-                    onOpenGuide(recommendedGuide.id);
-                  }}
-                >
-                  {tx("Open Guide")} <ArrowRight className="h-4 w-4" />
-                </button>
-              </article>
-            )}
-
-            {recommendedVideo && (
-              <article className={`flex min-h-[178px] flex-col rounded-2xl border p-4 ${darkMode ? "border-white/10 bg-white/[0.045]" : "border-slate-200 bg-white/82"}`}>
-                <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-violet-300" : "text-violet-700"}`}>
-                  {tx("Video")}
-                </p>
-                <h3 className={`mt-2 text-base font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                  {tx(recommendedVideo.title)}
-                </h3>
-                <p className={`mt-1 text-xs font-semibold ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-                  {tx(recommendedVideo.category)}
-                </p>
-                <button
-                  type="button"
-                  className={`mt-auto flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black transition ${darkMode ? "border border-violet-300/20 bg-violet-300/10 text-violet-100 hover:bg-violet-300/15" : "border border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100"}`}
-                  onClick={() => {
-                    onRecommendationClick("video", { videoId: recommendedVideo.id, moduleId: recommendedLesson.moduleId });
-                    onOpenVideoHub(recommendedVideo.id);
-                  }}
-                >
-                  {tx("Watch")} <ArrowRight className="h-4 w-4" />
-                </button>
-              </article>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <section className="hidden grid-cols-1 gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
-        <article className={`rounded-[1.6rem] border p-4 transition ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
-          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-            <Clock3 className="h-4 w-4 text-rose-400" /> {tx("Current Module")}
-          </p>
-          <h3 className={`mt-1 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx(metrics.currentModule.title)}</h3>
-          <p className={`text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{metrics.currentModule.completion}% {tx("complete")}</p>
-        </article>
-
-        <article className={`rounded-[1.6rem] border p-4 transition ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-cyan-950/40 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-cyan-50/50 shadow-sm"}`}>
-          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-            <BarChart3 className="h-4 w-4 text-cyan-400" /> {tx("Overall Progress")}
-          </p>
-          <h3 className={`mt-1 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{metrics.overallProgress}%</h3>
-          <ProgressBar className="mt-2" value={metrics.overallProgress} trackClassName={darkMode ? "bg-slate-800" : ""} />
-        </article>
-
-        <article className={`rounded-[1.6rem] border p-4 transition ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-indigo-950/30 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-indigo-50/40 shadow-sm"}`}>
-          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-            <GraduationCap className="h-4 w-4 text-indigo-400" /> {tx("Next Lesson")}
-          </p>
-          <h3 className={`mt-1 text-sm font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx(metrics.nextLesson.lessonTitle)}</h3>
-          <p className={`text-xs ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{tx(metrics.nextLesson.moduleTitle)}</p>
-          {metrics.nextLesson.lessonId && (
-            <button
-              type="button"
-              className={`mt-3 min-h-11 w-full rounded-lg px-3 py-2 text-sm font-bold text-white transition sm:min-h-0 sm:w-auto sm:py-1.5 sm:text-xs ${darkMode ? "bg-indigo-600 hover:bg-indigo-500" : "bg-indigo-700 hover:bg-indigo-600"}`}
-              onClick={() =>
-                onOpenLesson(metrics.nextLesson.moduleId, metrics.nextLesson.lessonId)
-              }
-            >
-              {tx("Resume")}
-            </button>
-          )}
-        </article>
-
-        <article className={`rounded-[1.6rem] border p-4 transition ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-emerald-950/30 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-emerald-50/40 shadow-sm"}`}>
-          <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-wide ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-            <BookMarked className="h-4 w-4 text-emerald-400" /> {tx("Recently Completed")}
-          </p>
-          <h3 className={`mt-1 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{metrics.recentlyCompleted.length}</h3>
-          <p className={`text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{tx("Lessons tracked in profile")}</p>
-        </article>
-      </section>
-
-      <section className="hidden grid-cols-1 gap-4 md:grid lg:grid-cols-[1.2fr_0.8fr]">
-        <article className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-cyan-950/20 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-cyan-50/40 shadow-sm"}`}>
-          <p className={`text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-            {tx("Pick Up Where You Left Off")}
-          </p>
-          <div className="mt-3 space-y-3">
-            <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                {tx("Up Next")}
-              </p>
-              <p className={`mt-1 text-base font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                {tx(metrics.nextLesson.lessonTitle)}
-              </p>
-              <p className={`mt-1 text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-                {tx(metrics.nextLesson.moduleTitle)}
-              </p>
-            </div>
-            {latestCompleted && (
-              <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
-                <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                  {tx("Last Completed")}
-                </p>
-                <p className={`mt-1 text-sm font-bold leading-relaxed ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                  {tx(latestCompleted.lessonTitle)}
-                </p>
-                <p className={`mt-1 text-xs ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-                  {tx(latestCompleted.moduleTitle)}
-                  {latestCompletedTime ? ` • ${latestCompletedTime}` : ""}
-                </p>
-              </div>
-            )}
-          </div>
-        </article>
-
-        <article className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-emerald-950/20 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-emerald-50/40 shadow-sm"}`}>
-          <p className={`text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-emerald-300" : "text-emerald-700"}`}>
-            {tx("Return Session Snapshot")}
-          </p>
-          <div className="mt-3 space-y-3">
-            <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                {tx("Modules Started")}
-              </p>
-              <p className={`mt-1 text-2xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                {metrics.modules.filter((module) => module.completedLessons > 0 || module.completion > 0).length}
-              </p>
-            </div>
-            <div className={`rounded-2xl border p-3 ${darkMode ? "border-slate-800 bg-slate-900/70" : "border-slate-100 bg-white/80"}`}>
-              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                {tx("Recent Activity")}
-              </p>
-              <p className={`mt-1 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-700"}`}>
-                {latestCompleted
-                  ? tx("You already closed one lesson loop. Jump back in while the details are still fresh.")
-                  : tx("Start the next lesson to build momentum and unlock the rest of the training path.")}
-              </p>
-            </div>
-          </div>
-        </article>
-      </section>
-
-      <section className={`hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
-        <h2 className={`mb-4 text-xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Module Progress")}</h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {metrics.modules.map((module) => (
-            <ModuleCard
-              key={module.id}
-              module={module}
-              onOpen={() => onOpenModule(module.id)}
-              darkMode={darkMode}
-              translateText={translateText}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className={`hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
-        <h2 className={`mb-4 text-xl font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Recently Completed Lessons")}</h2>
-        {!metrics.recentlyCompleted.length ? (
-          <p className={`text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>{tx("No lessons completed yet. Start with Prenatal Module 1.")}</p>
-        ) : (
-          <ul className="space-y-3">
-            {metrics.recentlyCompleted.slice(0, 6).map((item) => (
-              <li
-                key={`${item.moduleId}-${item.lessonId}-${item.completedAt}`}
-                className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border px-3 py-2 ${darkMode ? "border-slate-800 bg-slate-800/70" : "border-slate-100 bg-slate-50"}`}
-              >
-                <div className="min-w-0">
-                  <p className={`text-sm font-bold ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx(item.lessonTitle)}</p>
-                  <p className={`text-xs ${darkMode ? "text-slate-400" : "text-slate-500"}`}>{tx(item.moduleTitle)}</p>
-                </div>
-                <button
-                  type="button"
-                  className={`min-h-11 w-full rounded-lg border px-3 py-2 text-sm font-bold sm:min-h-0 sm:w-auto sm:py-1.5 sm:text-xs ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`}
-                  onClick={() => onOpenLesson(item.moduleId, item.lessonId)}
-                >
-                  {tx("Review")}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <section className={`hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm"}`}>
-        <h2 className={`mb-2 text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Training Approach")}</h2>
-        <p className={`text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-          {tx("This dashboard is built as structured training: lesson content, scenario practice, immediate quiz feedback, and measurable progression through Prenatal, Labor and Delivery, and Postpartum Recovery modules.")}
-        </p>
-      </section>
-
-      <section className={`hidden overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/30 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/70 to-indigo-50 shadow-sm"}`}>
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-3xl">
-            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-              <Library className="h-4 w-4" /> {tx("Interactive Guide Library")}
-            </p>
-            <h2 className={`mt-2 text-2xl font-black tracking-tight sm:text-3xl ${darkMode ? "text-white" : "text-slate-950"}`}>
-              {tx("Companion guides for deeper practice")}
-            </h2>
-            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
-              {tx("Open focused visual guides for pregnancy, labor, postpartum recovery, communication, and mental health support.")}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onOpenGuides}
-            className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-700 to-fuchsia-700 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-800 hover:to-fuchsia-800"
-          >
-            {tx("Open Guide Library")} <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
-          {partnerInteractiveGuides.map((guide) => {
-            const Icon = guide.Icon;
-            return (
-              <button
-                key={guide.id}
-                type="button"
-                onClick={onOpenGuides}
-                className={`group rounded-2xl border p-3 text-left transition hover:-translate-y-0.5 ${
-                  darkMode
-                    ? "border-slate-800 bg-slate-900/70 hover:border-cyan-400/50 hover:bg-slate-900"
-                    : "border-slate-200 bg-white/80 hover:border-cyan-300 hover:bg-white"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <span className={`rounded-xl border p-2 ${darkMode ? "border-cyan-300/20 bg-cyan-300/10 text-cyan-200" : "border-cyan-200 bg-cyan-50 text-cyan-700"}`}>
-                    <Icon className="h-4 w-4" />
-                  </span>
-                  <span className={`text-[10px] font-black uppercase tracking-[0.14em] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                    {tx(guide.phase)}
-                  </span>
-                </div>
-                <p className={`mt-3 text-sm font-black leading-tight ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                  {tx(guide.title)}
-                </p>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className={`hidden overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 md:block ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950/20 shadow-xl" : "border-fuchsia-200 bg-gradient-to-br from-white via-fuchsia-50/60 to-indigo-50 shadow-sm"}`}>
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-3xl">
-            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-              <Video className="h-4 w-4" /> {tx("Partner Video Hub")}
-            </p>
-            <h2 className={`mt-2 text-2xl font-black tracking-tight sm:text-3xl ${darkMode ? "text-white" : "text-slate-950"}`}>
-              {tx("Watch partner-focused support videos inside the hub")}
-            </h2>
-            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
-              {tx("Open embedded videos for prenatal education, labor support, postpartum recovery, newborn care, and mental health without leaving the platform.")}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => onOpenVideoHub()}
-            className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-700 to-fuchsia-700 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-800 hover:to-fuchsia-800"
-          >
-            {tx("Open Video Hub")} <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-      </section>
-
-      <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-cyan-400/20 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/35 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/60 to-indigo-50 shadow-sm"}`}>
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="max-w-3xl">
-            <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-              <HeartHandshake className="h-4 w-4" /> {tx("Care-Team Support")}
-            </p>
-            <h2 className={`mt-2 text-2xl font-black tracking-tight sm:text-3xl ${darkMode ? "text-white" : "text-slate-950"}`}>
+            <h2 className={`mt-1 text-base font-black ${darkMode ? "text-white" : "text-slate-950"}`}>
               {tx("Match mom with a doula")}
             </h2>
-            <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
-              {tx("When mom wants more hands-on birth or recovery support, submit an intake through Dieudonne Match while you keep building your partner support skills here.")}
+            <p className={`mt-1 text-xs leading-relaxed sm:text-sm ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+              {tx("Connect with hands-on birth or recovery support when your family needs more help.")}
             </p>
           </div>
           <a
             href={DOULA_MATCH_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-black transition ${
+            className={`inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
               darkMode
-                ? "border border-cyan-300/30 bg-cyan-400/10 text-cyan-100 hover:border-cyan-200/60 hover:bg-cyan-400/15"
-                : "border border-cyan-200 bg-cyan-700 text-white hover:bg-cyan-800"
+                ? "border-cyan-300/30 bg-cyan-400/10 text-cyan-100 hover:bg-cyan-400/15"
+                : "border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-100"
             }`}
           >
-            {tx("Match Mom with a Doula")} <ExternalLink className="h-4 w-4" />
+            {tx("Match Mom with a Doula")} <ExternalLink className="h-4 w-4" aria-hidden="true" />
           </a>
         </div>
       </section>
-
     </div>
   );
 }

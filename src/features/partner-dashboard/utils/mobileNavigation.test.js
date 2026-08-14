@@ -54,10 +54,12 @@ test("mobile More keeps owner admin navigation behind the existing owner result"
   assert.equal((morePage.match(/href="\/owner-admin"/g) || []).length, 1);
 });
 
-test("mobile Today removes the old resume overlay and routes detailed content to tabs", async () => {
+test("mobile Today keeps one compact learning route and removes hidden duplicate panels", async () => {
   const overview = await readDashboardFile("pages", "OverviewPage.jsx");
 
   assert.doesNotMatch(overview, /Resume Training/);
-  assert.match(overview, /hidden rounded-\[1\.8rem\][\s\S]*?md:block/);
-  assert.match(overview, /hidden grid-cols-1 gap-4 md:grid/);
+  assert.match(overview, /tx\("Continue learning"\)/);
+  assert.match(overview, /onClick=\{onOpenTraining\}/);
+  assert.doesNotMatch(overview, /hidden rounded-\[1\.8rem\][\s\S]*?md:block/);
+  assert.doesNotMatch(overview, /hidden grid-cols-1 gap-4 md:grid/);
 });

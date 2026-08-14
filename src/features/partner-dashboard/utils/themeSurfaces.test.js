@@ -78,19 +78,18 @@ test("Video Hub receives the shared theme controls", async () => {
   assert.match(videoHub, /darkMode \? "bg-\[#050914\] text-slate-100" : "bg-slate-50 text-slate-900"/);
 });
 
-test("overview guide and video promotions switch away from dark surfaces in light mode", async () => {
-  const overview = await readDashboardFile("pages", "OverviewPage.jsx");
+test("compact Today surfaces preserve explicit light and dark theme pairs", async () => {
+  const [overview, discovery] = await Promise.all([
+    readDashboardFile("pages", "OverviewPage.jsx"),
+    readDashboardFile("components", "PartnerPlatformDiscovery.jsx"),
+  ]);
 
-  assert.match(
-    overview,
-    /darkMode \? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950\/30 shadow-xl" : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50\/70 to-indigo-50 shadow-sm"/
-  );
-  assert.match(
-    overview,
-    /darkMode \? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-fuchsia-950\/20 shadow-xl" : "border-fuchsia-200 bg-gradient-to-br from-white via-fuchsia-50\/60 to-indigo-50 shadow-sm"/
-  );
+  assert.match(overview, /darkMode[\s\S]*?border-slate-800 bg-gradient-to-br from-slate-900 to-cyan-950\/25 shadow-xl/);
+  assert.match(overview, /border-slate-200 bg-gradient-to-br from-white to-cyan-50\/60/);
   assert.match(overview, /darkMode \? "text-white" : "text-slate-950"/);
-  assert.match(overview, /darkMode \? "text-slate-300" : "text-slate-600"/);
+  assert.match(overview, /darkMode \? "text-slate-400" : "text-slate-600"/);
+  assert.match(discovery, /dark:border-slate-800 dark:bg-slate-950/);
+  assert.match(discovery, /dark:from-slate-950 dark:via-slate-950 dark:to-cyan-950\/30/);
 });
 
 test("admin dashboard applies the selected range and reports persisted completions", async () => {

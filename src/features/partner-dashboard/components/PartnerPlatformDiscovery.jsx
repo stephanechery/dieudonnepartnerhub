@@ -236,8 +236,9 @@ export default function PartnerPlatformDiscovery({
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [showAllMobileResults, setShowAllMobileResults] = useState(false);
+  const [insightsExpanded, setInsightsExpanded] = useState(false);
   const [activeMobileScope, setActiveMobileScope] = useState("partner");
-  const [expandedMobileHighlights, setExpandedMobileHighlights] = useState(["partner-breastfeeding"]);
+  const [expandedMobileHighlights, setExpandedMobileHighlights] = useState([]);
   const dataSectionRef = useRef(null);
   const baseIndex = useMemo(() => buildPartnerPlatformSearchIndex(curriculum), [curriculum]);
   const localizedIndex = useMemo(
@@ -264,6 +265,7 @@ export default function PartnerPlatformDiscovery({
     if (result.kind === "video") onOpenVideoHub(result.videoId);
     if (result.kind === "data") {
       const isMobile = window.matchMedia("(max-width: 767px)").matches;
+      setInsightsExpanded(true);
       if (isMobile) {
         const nextScope = result.highlightId.startsWith("partner-")
           ? "partner"
@@ -298,7 +300,7 @@ export default function PartnerPlatformDiscovery({
 
   return (
     <section className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:shadow-xl">
-      <div className="border-b border-slate-200 bg-gradient-to-br from-white via-cyan-50/45 to-indigo-50/50 p-4 sm:p-6 dark:border-slate-800 dark:from-slate-950 dark:via-slate-950 dark:to-cyan-950/30">
+      <div className="bg-gradient-to-br from-white via-cyan-50/45 to-indigo-50/50 p-4 sm:p-6 dark:from-slate-950 dark:via-slate-950 dark:to-cyan-950/30">
         <div className="max-w-3xl">
           <h2 className="text-xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
             {tx("What do you need right now?")}
@@ -356,7 +358,7 @@ export default function PartnerPlatformDiscovery({
 
         {hasQuery && (
           <div className="mt-5" aria-label={tx("Search results")}>
-            <div className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label={tx("Filter search results")}>
+            <div className="flex flex-wrap gap-2" role="group" aria-label={tx("Filter search results")}>
               {filters.map((filter) => {
                 const count = filter.id === "all"
                   ? allResults.length
@@ -412,9 +414,34 @@ export default function PartnerPlatformDiscovery({
             )}
           </div>
         )}
+
+        <button
+          type="button"
+          onClick={() => setInsightsExpanded((current) => !current)}
+          aria-expanded={insightsExpanded}
+          aria-controls="maternal-health-data"
+          className="mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-left transition-colors hover:border-cyan-300 hover:bg-cyan-50/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-cyan-400/40 dark:hover:bg-cyan-400/5"
+        >
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-200">
+            <BarChart3 className="h-5 w-5" aria-hidden="true" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-black text-slate-950 dark:text-white">
+              {tx(insightsExpanded ? "Hide insights" : "Explore insights")}
+            </span>
+            <span className="mt-0.5 block text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+              {tx("Recent maternal health data")}
+            </span>
+          </span>
+          <ChevronDown
+            className={`h-5 w-5 shrink-0 text-slate-500 transition-transform ${insightsExpanded ? "rotate-180" : ""}`}
+            aria-hidden="true"
+          />
+        </button>
       </div>
 
-      <div ref={dataSectionRef} id="maternal-health-data" className="scroll-mt-24 px-4 pb-28 pt-4 sm:p-6">
+      {insightsExpanded && (
+      <div ref={dataSectionRef} id="maternal-health-data" className="scroll-mt-24 border-t border-slate-200 px-4 pb-5 pt-4 sm:p-6 dark:border-slate-800">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-300">
@@ -568,6 +595,7 @@ export default function PartnerPlatformDiscovery({
           </p>
         </div>
       </div>
+      )}
     </section>
   );
 }

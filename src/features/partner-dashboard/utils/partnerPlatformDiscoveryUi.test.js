@@ -26,10 +26,24 @@ test("discovery search is local, keyboard accessible, and does not persist queri
   assert.match(source, /mobileHidden=\{!showAllMobileResults && index >= 4\}/);
   assert.match(source, /Show more results/);
   assert.match(source, /result\.kind === "data"/);
+  assert.match(source, /setInsightsExpanded\(true\)/);
   assert.match(source, /tx\(result\.unit\)/);
   assert.match(source, /tx\(result\.detail\)/);
   assert.match(source, /rel="noopener noreferrer"/);
   assert.doesNotMatch(source, /fetch\(|localStorage|sessionStorage|trackEvent|openai|gemini/i);
+});
+
+test("evidence stays behind an accessible disclosure and filters do not create a nested scroller", () => {
+  const source = read("../components/PartnerPlatformDiscovery.jsx");
+
+  assert.match(source, /const \[insightsExpanded, setInsightsExpanded\] = useState\(false\)/);
+  assert.match(source, /aria-expanded=\{insightsExpanded\}/);
+  assert.match(source, /aria-controls="maternal-health-data"/);
+  assert.match(source, /insightsExpanded && \(/);
+  assert.match(source, /Explore insights/);
+  assert.match(source, /Hide insights/);
+  assert.match(source, /className="flex flex-wrap gap-2"/);
+  assert.doesNotMatch(source, /overflow-x-auto pb-2/);
 });
 
 test("maternal data distinguishes partner impact, national, and Indiana evidence", () => {
