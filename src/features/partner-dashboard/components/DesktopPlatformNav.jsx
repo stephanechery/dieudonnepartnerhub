@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  BarChart3,
   GraduationCap,
   House,
   Library,
@@ -14,6 +15,7 @@ const navItems = [
   { id: "today", label: "Today", Icon: House },
   { id: "training", label: "Training", Icon: GraduationCap },
   { id: "guides", label: "Guides", Icon: Library },
+  { id: "data", label: "Maternal Data", Icon: BarChart3 },
   { id: "videos", label: "Videos", Icon: Video },
   { id: "more", label: "More", Icon: Menu },
 ];

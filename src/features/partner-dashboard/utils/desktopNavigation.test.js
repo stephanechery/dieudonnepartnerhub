@@ -31,7 +31,7 @@ test("desktop navigation exposes the approved workspace destinations", async () 
     readDashboardFile("index.jsx"),
   ]);
 
-  for (const label of ["Today", "Training", "Guides", "Videos", "More"]) {
+  for (const label of ["Today", "Training", "Guides", "Maternal Data", "Videos", "More"]) {
     assert.match(nav, new RegExp(`label: "${label}"`));
   }
 
@@ -40,6 +40,8 @@ test("desktop navigation exposes the approved workspace destinations", async () 
   assert.match(nav, /aria-current=\{active \? "page" : undefined\}/);
   assert.match(router, /<DashboardShell[\s\S]*?activeItem=\{activePlatformItem\}/);
   assert.match(router, /onNavigatePlatform=\{\(item\) =>/);
+  assert.match(router, /item === "data"\) openMaternalData\(\)/);
+  assert.match(router, /subPath === "\/maternal-data"[\s\S]*?<MaternalDataPage/);
 });
 
 test("desktop sidebar visibility defaults on and persists both choices", () => {

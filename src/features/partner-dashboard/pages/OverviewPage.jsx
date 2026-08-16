@@ -14,6 +14,7 @@ export default function OverviewPage({
   onOpenLesson,
   onOpenGuide,
   onOpenVideoHub,
+  onOpenMaternalData = () => {},
   onSelectTodayContext = () => Promise.resolve(),
   onMarkTodayDone = () => Promise.resolve(),
   onOpenTodayResource = () => {},
@@ -94,6 +95,7 @@ export default function OverviewPage({
         onOpenLesson={onOpenLesson}
         onOpenGuide={onOpenGuide}
         onOpenVideoHub={onOpenVideoHub}
+        onOpenMaternalData={onOpenMaternalData}
         translateText={translateText}
       />
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ArrowLeft, Building2, LayoutDashboard, LogOut, Save, SlidersHorizontal, UserRound } from "lucide-react";
+import { ArrowLeft, BarChart3, Building2, LayoutDashboard, LogOut, Save, SlidersHorizontal, UserRound } from "lucide-react";
 
 export default function MorePage({
   authUser,
@@ -7,6 +7,7 @@ export default function MorePage({
   showAdminDashboard = false,
   onSaveProfileDetails,
   onEditPersonalization,
+  onOpenMaternalData,
   onNavigateSiteHome,
   onLogout,
   darkMode = false,
@@ -83,6 +84,9 @@ export default function MorePage({
       <section className={`rounded-[1.8rem] border p-4 sm:p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
         <h2 className={`text-lg font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx("Platform")}</h2>
         <div className="mt-3 space-y-2">
+          <button type="button" onClick={() => onOpenMaternalData()} className={actionClass}>
+            <span className="flex items-center gap-3"><BarChart3 className="h-5 w-5 text-cyan-500" aria-hidden="true" /> {tx("Maternal Data")}</span>
+          </button>
           {showAdminDashboard && (
             <a href="/owner-admin" aria-label={tx("Open Admin Dashboard")} className={actionClass}>
               <span className="flex items-center gap-3"><LayoutDashboard className="h-5 w-5 text-cyan-500" aria-hidden="true" /> {tx("Admin Dashboard")}</span>

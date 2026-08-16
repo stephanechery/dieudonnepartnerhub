@@ -31,6 +31,7 @@ test("mobile navigation exposes the five approved destinations", async () => {
   assert.equal((router.match(/pb-28 md:pb-0/g) || []).length, 2);
   assert.match(router, /subPath === "\/training"/);
   assert.match(router, /subPath === "\/more"/);
+  assert.match(router, /activePlatformItem === "data" \? "more"/);
   assert.match(router, /subPath\.startsWith\("\/module\/"\)[\s\S]*?"training"/);
 });
 
@@ -51,6 +52,8 @@ test("mobile More keeps owner admin navigation behind the existing owner result"
   assert.match(router, /showAdminDashboard\s*=\s*isConfiguredOwnerUser\(authUser, profile\)/);
   assert.match(router, /<MorePage[\s\S]*?showAdminDashboard=\{showAdminDashboard\}/);
   assert.match(morePage, /showAdminDashboard\s*&&\s*\(/);
+  assert.match(morePage, /onOpenMaternalData/);
+  assert.match(morePage, /tx\("Maternal Data"\)/);
   assert.equal((morePage.match(/href="\/owner-admin"/g) || []).length, 1);
 });
 

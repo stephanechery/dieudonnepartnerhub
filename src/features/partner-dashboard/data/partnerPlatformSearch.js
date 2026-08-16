@@ -95,7 +95,11 @@ export const buildPartnerPlatformSearchIndex = (curriculum) => {
       keywords: [
         highlight.scope,
         highlight.supportAction,
-        "statistics disparities equity Indiana national father partner impact equipped support involvement breastfeeding labor",
+        highlight.group === "partner"
+          ? "father partner impact equipped support involvement breastfeeding labor"
+          : highlight.group === "indiana"
+            ? "maternal health statistics disparities equity Indiana data"
+            : "maternal health statistics disparities equity national data",
       ],
       localizableSearchValues: [
         highlight.scope,

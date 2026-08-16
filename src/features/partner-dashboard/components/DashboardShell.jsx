@@ -18,6 +18,7 @@ const pageLabels = {
   today: "Today",
   training: "Training",
   guides: "Guides",
+  data: "Maternal Data",
   videos: "Videos",
   more: "More",
 };

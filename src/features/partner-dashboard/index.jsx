@@ -8,6 +8,7 @@ import OverviewPage from "./pages/OverviewPage";
 import ModulePage from "./pages/ModulePage";
 import LessonPage from "./pages/LessonPage";
 import InteractiveGuidesPage from "./pages/InteractiveGuidesPage";
+import MaternalDataPage from "./pages/MaternalDataPage";
 import MorePage from "./pages/MorePage";
 import TrainingPage from "./pages/TrainingPage";
 import VideoHubPage from "./pages/VideoHubPage";
@@ -139,6 +140,10 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   const openLesson = (moduleId, lessonId) =>
     navigate(`${BASE_PATH}/module/${moduleId}/lesson/${lessonId}`);
   const openGuides = () => navigate(`${BASE_PATH}/guides`);
+  const openMaternalData = (highlightId = "") => {
+    const highlightParam = highlightId ? `?highlight=${encodeURIComponent(highlightId)}` : "";
+    navigate(`${BASE_PATH}/maternal-data${highlightParam}`);
+  };
   const openMore = () => navigate(`${BASE_PATH}/more`);
   const openGuide = (guideId) => navigate(`${BASE_PATH}/guides/${guideId}`);
   const openVideoHub = (videoId) => {
@@ -186,6 +191,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           onOpenLesson={openLesson}
           onOpenGuide={openGuide}
           onOpenVideoHub={openVideoHub}
+          onOpenMaternalData={openMaternalData}
           onSelectTodayContext={saveTodaySupportContext}
           onMarkTodayDone={markTodaySupportDone}
           onOpenTodayResource={openTodaySupportResource}
@@ -212,6 +218,13 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         translateText={translateText}
       />
     );
+  } else if (subPath === "/maternal-data") {
+    page = (
+      <MaternalDataPage
+        initialHighlightId={new URLSearchParams(window.location.search).get("highlight") || ""}
+        translateText={translateText}
+      />
+    );
   } else if (subPath === "/more") {
     page = (
       <MorePage
@@ -223,6 +236,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           setEditingOnboarding(true);
           openOverview();
         }}
+        onOpenMaternalData={openMaternalData}
         onNavigateSiteHome={navigateSiteHome}
         onLogout={logout}
         darkMode={darkMode}
@@ -348,18 +362,22 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     ? "videos"
     : subPath.startsWith("/guides")
       ? "guides"
-      : subPath === "/more"
-        ? "more"
-        : subPath === "/training" || subPath.startsWith("/module/")
-          ? "training"
-          : "today";
+      : subPath === "/maternal-data"
+        ? "data"
+        : subPath === "/more"
+          ? "more"
+          : subPath === "/training" || subPath.startsWith("/module/")
+            ? "training"
+            : "today";
+  const mobileActiveItem = activePlatformItem === "data" ? "more" : activePlatformItem;
   const mobileNav = !embedded ? (
     <MobilePlatformNav
-      activeItem={activePlatformItem}
+      activeItem={mobileActiveItem}
       onNavigate={(item) => {
         if (item === "today") openOverview();
         if (item === "training") openTraining();
         if (item === "guides") openGuides();
+        if (item === "data") openMaternalData();
         if (item === "videos") openVideoHub();
         if (item === "more") openMore();
       }}
@@ -389,6 +407,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         if (item === "today") openOverview();
         if (item === "training") openTraining();
         if (item === "guides") openGuides();
+        if (item === "data") openMaternalData();
         if (item === "videos") openVideoHub();
         if (item === "more") openMore();
       }}
