@@ -33,6 +33,25 @@ test("discovery search is local, keyboard accessible, and does not persist queri
   assert.doesNotMatch(source, /fetch\(|localStorage|sessionStorage|trackEvent|openai|gemini/i);
 });
 
+test("Ask Partner Hub is explicit, bounded, and leaves local search as the default", () => {
+  const source = read("../components/PartnerPlatformDiscovery.jsx");
+  const service = read("../services/askPartnerHubService.js");
+  const route = read("../../../../api/ask-partner-hub.js");
+  const server = read("../../../server/partnerHubAsk.js");
+
+  assert.match(source, /onClick=\{handleAsk\}/);
+  assert.match(source, /Ask Partner Hub/);
+  assert.match(source, /getPartnerPlatformAskCandidateIds/);
+  assert.doesNotMatch(source, /useEffect\([^)]*askPartnerHub/);
+  assert.match(service, /candidateIds: candidateIds\.slice\(0, 8\)/);
+  assert.match(service, /Authorization: `Bearer \$\{accessToken\}`/);
+  assert.match(route, /partnerHubAskHandler/);
+  assert.match(server, /PARTNER_HUB_OPENAI_API_KEY/);
+  assert.doesNotMatch(server, /process\.env\.OPENAI_API_KEY/);
+  assert.match(server, /store: false/);
+  assert.match(server, /MAX_OUTPUT_TOKENS = 450/);
+});
+
 test("maternal data uses the latest verified national, access, and Indiana evidence", () => {
   const source = read("../data/maternalHealthData.js");
   const page = read("../pages/MaternalDataPage.jsx");

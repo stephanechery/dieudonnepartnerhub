@@ -4,6 +4,7 @@ import fs from "node:fs";
 import { partnerCurriculum } from "./curriculum.js";
 import {
   buildPartnerPlatformSearchIndex,
+  getPartnerPlatformAskCandidateIds,
   localizePartnerPlatformSearchIndex,
   searchPartnerPlatform,
 } from "./partnerPlatformSearch.js";
@@ -52,4 +53,24 @@ test("maternal disparity data is searchable in the selected language", () => {
 test("short or empty queries do not produce noisy results", () => {
   assert.deepEqual(searchPartnerPlatform(index, ""), []);
   assert.deepEqual(searchPartnerPlatform(index, "a"), []);
+});
+
+test("natural-language Ask hints are relaxed, bounded, and multilingual", () => {
+  const english = getPartnerPlatformAskCandidateIds(
+    index,
+    "What can a father do to help during labor?"
+  );
+  assert.ok(english.some((id) => id.includes("labor")));
+  assert.ok(english.length <= 6);
+
+  const catalogs = JSON.parse(
+    fs.readFileSync(new URL("../../language/discovery-translations.json", import.meta.url), "utf8")
+  );
+  const tx = (value) => catalogs.ht[value] || value;
+  const localizedIndex = localizePartnerPlatformSearchIndex(index, tx);
+  const haitianCreole = getPartnerPlatformAskCandidateIds(
+    localizedIndex,
+    "Kisa done yo di sou disparite rasyal?"
+  );
+  assert.ok(haitianCreole.some((id) => id === "data:national-racial-disparity"));
 });

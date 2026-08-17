@@ -17,6 +17,13 @@ const SAFETY_TERMS = new Set([
   "warning",
 ]);
 
+const ASK_STOP_WORDS = new Set([
+  "about", "and", "are", "can", "could", "does", "for", "from", "has", "have", "how", "if", "into", "should", "that", "the", "their", "this", "what", "when", "where", "which", "with", "would", "your",
+  "como", "con", "cuando", "donde", "ella", "para", "por", "que", "una", "uno",
+  "avec", "comment", "dans", "elle", "pour", "que", "quel", "quelle", "une",
+  "ak", "gen", "kijan", "kilè", "kisa", "nan", "pou", "sa", "yon",
+]);
+
 export const normalizePartnerPlatformSearchText = (value) =>
   `${value || ""}`
     .toLocaleLowerCase("en")
@@ -159,4 +166,27 @@ export const searchPartnerPlatform = (index, rawQuery, limit = 8) => {
     .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
     .slice(0, limit)
     .map(({ entry }) => entry);
+};
+
+export const getPartnerPlatformAskCandidateIds = (index, rawQuery, limit = 6) => {
+  const query = normalizePartnerPlatformSearchText(rawQuery);
+  const terms = query
+    .split(" ")
+    .filter((term) => term.length >= 3 && !ASK_STOP_WORDS.has(term));
+  if (!terms.length) return [];
+
+  return index
+    .map((entry) => {
+      const title = normalizePartnerPlatformSearchText(entry.title);
+      const score = terms.reduce((total, term) => {
+        if (title.includes(term)) return total + 6;
+        if (entry.searchText.includes(term)) return total + 2;
+        return total;
+      }, entry.safety && terms.some((term) => SAFETY_TERMS.has(term)) ? 10 : 0);
+      return { id: entry.id, score };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((left, right) => right.score - left.score || left.id.localeCompare(right.id))
+    .slice(0, Math.max(1, Math.min(limit, 8)))
+    .map((entry) => entry.id);
 };

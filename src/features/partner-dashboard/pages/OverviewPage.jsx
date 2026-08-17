@@ -19,6 +19,7 @@ export default function OverviewPage({
   onMarkTodayDone = () => Promise.resolve(),
   onOpenTodayResource = () => {},
   darkMode = false,
+  language = "en",
   translateText = (value) => value,
 }) {
   const tx = (value) => translateText(value);
@@ -96,6 +97,7 @@ export default function OverviewPage({
         onOpenGuide={onOpenGuide}
         onOpenVideoHub={onOpenVideoHub}
         onOpenMaternalData={onOpenMaternalData}
+        language={language}
         translateText={translateText}
       />
 

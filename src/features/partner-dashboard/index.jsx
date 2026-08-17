@@ -196,6 +196,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           onMarkTodayDone={markTodaySupportDone}
           onOpenTodayResource={openTodaySupportResource}
           darkMode={darkMode}
+          language={language}
           translateText={translateText}
         />
     );

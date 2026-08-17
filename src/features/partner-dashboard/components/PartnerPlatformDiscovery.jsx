@@ -1,19 +1,25 @@
 import React, { useMemo, useState } from "react";
 import {
+  AlertTriangle,
   ArrowRight,
   BarChart3,
   BookOpen,
   FileText,
+  LoaderCircle,
   Search,
   ShieldAlert,
+  Sparkles,
   Video,
   X,
 } from "lucide-react";
 import {
   buildPartnerPlatformSearchIndex,
+  getPartnerPlatformAskCandidateIds,
   localizePartnerPlatformSearchIndex,
   searchPartnerPlatform,
 } from "../data/partnerPlatformSearch";
+import { getCurrentAccessToken } from "../services/authService";
+import { askPartnerHub } from "../services/askPartnerHubService";
 
 const filters = [
   { id: "all", label: "All" },
@@ -84,12 +90,14 @@ export default function PartnerPlatformDiscovery({
   onOpenGuide,
   onOpenVideoHub,
   onOpenMaternalData,
+  language = "en",
   translateText = (value) => value,
 }) {
   const tx = (value) => translateText(value);
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [showAllMobileResults, setShowAllMobileResults] = useState(false);
+  const [askState, setAskState] = useState({ status: "idle", answer: null, errorCode: "" });
   const baseIndex = useMemo(() => buildPartnerPlatformSearchIndex(curriculum), [curriculum]);
   const localizedIndex = useMemo(
     () => localizePartnerPlatformSearchIndex(baseIndex, tx),
@@ -109,6 +117,50 @@ export default function PartnerPlatformDiscovery({
     [activeFilter, allResults]
   );
   const hasQuery = query.trim().length >= 2;
+  const canAsk = query.trim().length >= 4 && askState.status !== "loading";
+  const askCandidateIds = useMemo(
+    () => getPartnerPlatformAskCandidateIds(localizedIndex, query, 6),
+    [localizedIndex, query]
+  );
+
+  const resetAskState = () => {
+    setAskState({ status: "idle", answer: null, errorCode: "" });
+  };
+
+  const handleAsk = async () => {
+    if (query.trim().length < 4) {
+      setAskState({ status: "error", answer: null, errorCode: "INVALID_QUESTION" });
+      return;
+    }
+
+    setAskState({ status: "loading", answer: null, errorCode: "" });
+    try {
+      const answer = await askPartnerHub({
+        question: query,
+        language,
+        candidateIds: askCandidateIds,
+        accessToken: getCurrentAccessToken(),
+      });
+      setAskState({ status: "success", answer, errorCode: "" });
+    } catch (error) {
+      setAskState({
+        status: "error",
+        answer: null,
+        errorCode: error?.code || "ASK_UNAVAILABLE",
+      });
+    }
+  };
+
+  const askErrorMessage = {
+    AUTH_REQUIRED: "Ask Partner Hub is available after secure sign-in. Local search still works.",
+    AUTH_UNAVAILABLE: "Ask Partner Hub is unavailable right now. Local search still works.",
+    INVALID_QUESTION: "Please enter at least four characters.",
+    PRIVATE_INPUT: "Remove names or contact details, then ask again.",
+    PRIVATE_DATA_BLOCKED: "Remove account or profile information, then ask again.",
+    RATE_LIMITED: "Too many questions right now. Please wait and try again.",
+    UNSUPPORTED_REQUEST: "Ask a question about approved Partner Hub learning or maternal health data.",
+    ASK_UNAVAILABLE: "Ask unavailable right now. Keep using local search or open a matching resource.",
+  }[askState.errorCode] || "Ask unavailable right now. Keep using local search or open a matching resource.";
 
   const openResult = (result) => {
     if (result.kind === "lesson") onOpenLesson(result.moduleId, result.lessonId);
@@ -143,10 +195,12 @@ export default function PartnerPlatformDiscovery({
                 setQuery(event.target.value);
                 setActiveFilter("all");
                 setShowAllMobileResults(false);
+                resetAskState();
               }}
               onKeyDown={(event) => {
                 if (event.key === "Escape") {
                   setQuery("");
+                  resetAskState();
                   event.currentTarget.blur();
                 }
               }}
@@ -158,7 +212,10 @@ export default function PartnerPlatformDiscovery({
             {query && (
               <button
                 type="button"
-                onClick={() => setQuery("")}
+                onClick={() => {
+                  setQuery("");
+                  resetAskState();
+                }}
                 className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
                 aria-label={tx("Clear search")}
               >
@@ -166,9 +223,82 @@ export default function PartnerPlatformDiscovery({
               </button>
             )}
           </div>
-          <p id="partner-search-help" className="mt-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-            {tx("Search runs on this device. It does not use ChatGPT or send your query to an AI model.")}
-          </p>
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0 flex-1">
+              <p id="partner-search-help" className="text-xs font-semibold leading-relaxed text-slate-500 dark:text-slate-400">
+                {tx("Typing searches on this device. Ask Partner Hub sends only approved topic labels and complete public learning statements to the secure model, not your raw question.")}
+              </p>
+              <p className="mt-1 text-[11px] font-semibold leading-relaxed text-slate-500 dark:text-slate-500">
+                {tx("Do not include names, email addresses, phone numbers, or account details.")}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleAsk}
+              disabled={!canAsk}
+              className="inline-flex min-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-700 to-teal-700 px-4 py-2 text-sm font-black text-white transition hover:from-cyan-800 hover:to-teal-800 disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+            >
+              {askState.status === "loading" ? (
+                <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" />
+              ) : (
+                <Sparkles className="h-4 w-4" aria-hidden="true" />
+              )}
+              {tx(askState.status === "loading" ? "Thinking..." : "Ask Partner Hub")}
+            </button>
+          </div>
+        </div>
+
+        <div aria-live="polite" aria-busy={askState.status === "loading"}>
+          {askState.status === "error" && (
+            <div role="alert" className="mt-4 flex max-w-3xl items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-950 dark:border-amber-400/25 dark:bg-amber-400/10 dark:text-amber-100">
+              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+              <p className="text-sm font-bold leading-relaxed">{tx(askErrorMessage)}</p>
+            </div>
+          )}
+
+          {askState.status === "success" && askState.answer && (
+            <article className={`mt-4 max-w-3xl rounded-2xl border p-4 sm:p-5 ${
+              askState.answer.urgent
+                ? "border-rose-300 bg-rose-50 dark:border-rose-400/30 dark:bg-rose-400/10"
+                : "border-cyan-200 bg-white dark:border-cyan-400/25 dark:bg-slate-900"
+            }`}>
+              <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] ${
+                askState.answer.urgent ? "text-rose-700 dark:text-rose-200" : "text-cyan-700 dark:text-cyan-300"
+              }`}>
+                {askState.answer.urgent ? (
+                  <ShieldAlert className="h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <Sparkles className="h-4 w-4" aria-hidden="true" />
+                )}
+                {tx("Answer from Partner Hub")}
+              </p>
+              <p data-no-translate="true" className="mt-3 text-sm font-semibold leading-7 text-slate-800 dark:text-slate-100">
+                {askState.answer.answer}
+              </p>
+              {askState.answer.citations.length > 0 && (
+                <div className="mt-4 border-t border-slate-200 pt-4 dark:border-slate-700">
+                  <p className="text-[11px] font-black uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                    {tx("Sources")}
+                  </p>
+                  <div className="mt-2 grid gap-2">
+                    {askState.answer.citations.map((citation) => (
+                      <a
+                        key={citation.id}
+                        href={citation.href}
+                        className="flex min-h-11 items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-black text-slate-800 transition hover:border-cyan-300 hover:text-cyan-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:hover:border-cyan-400/50 dark:hover:text-cyan-200"
+                      >
+                        <span>{tx(citation.title)}</span>
+                        <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <p className="mt-4 text-xs font-bold leading-relaxed text-slate-500 dark:text-slate-400">
+                {tx("Educational guidance only. Partner Hub does not diagnose.")}
+              </p>
+            </article>
+          )}
         </div>
 
         <p id="partner-search-status" role="status" aria-live="polite" className="sr-only">
@@ -177,7 +307,7 @@ export default function PartnerPlatformDiscovery({
 
         {hasQuery && (
           <div className="mt-5" aria-label={tx("Search results")}>
-            <div className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label={tx("Filter search results")}>
+            <div className="flex flex-wrap gap-2 pb-2" role="group" aria-label={tx("Filter search results")}>
               {filters.map((filter) => {
                 const count = filter.id === "all"
                   ? allResults.length
