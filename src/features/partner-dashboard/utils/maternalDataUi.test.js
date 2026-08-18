@@ -44,13 +44,13 @@ test("expanded evidence spans the desktop grid while collapsed cards stay compac
   assert.match(page, /rel="noopener noreferrer"/);
 });
 
-test("Maternal Data utility controls use the existing owner gate in top-first order", async () => {
+test("Partner Platform tabs use the compact utility header and retain the existing owner gate", async () => {
   const shell = await readDashboardFile("components", "DashboardShell.jsx");
 
-  assert.match(shell, /const isMaternalDataHeader = activeItem === "data" && !embedded/);
+  assert.match(shell, /const useMaternalDataHeaderTreatment = !embedded/);
   assert.match(
     shell,
-    /isMaternalDataHeader \? \([\s\S]*?\{showMenuControl\}[\s\S]*?\{homeControl\}[\s\S]*?\{adminControl\}[\s\S]*?\{themeControl\}[\s\S]*?\{logoutControl\}[\s\S]*?\{identityBlock\}[\s\S]*?\{progressStatus\}/
+    /useMaternalDataHeaderTreatment \? \([\s\S]*?\{showMenuControl\}[\s\S]*?\{homeControl\}[\s\S]*?\{adminControl\}[\s\S]*?\{themeControl\}[\s\S]*?\{logoutControl\}[\s\S]*?\{identityBlock\}[\s\S]*?\{progressStatus\}/
   );
   assert.match(shell, /const adminControl = showAdminDashboard &&/);
   assert.equal((shell.match(/href="\/owner-admin"/g) || []).length, 1);
