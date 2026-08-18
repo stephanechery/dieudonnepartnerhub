@@ -99,7 +99,7 @@ export default function TodaySupportCard({
     : "border-slate-200 bg-white/90";
 
   return (
-    <section className={`overflow-hidden rounded-[1.8rem] border p-4 sm:p-5 md:p-6 ${cardTone}`}>
+    <section className={`overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:p-5 ${cardTone}`}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>

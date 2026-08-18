@@ -36,7 +36,7 @@ export default function MorePage({
 
   return (
     <div className="space-y-5">
-      <section className={`rounded-[1.8rem] border p-5 ${darkMode ? "border-slate-800 bg-slate-900 shadow-xl" : "border-slate-200 bg-white shadow-sm"}`}>
+      <section className={`overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-950 to-cyan-950/35" : "border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55"}`}>
         <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
           <UserRound className="h-4 w-4" aria-hidden="true" /> {tx("More")}
         </p>

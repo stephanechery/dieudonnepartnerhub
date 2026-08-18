@@ -322,7 +322,7 @@ function HeroVisualCard({ darkMode }) {
 
 function HeroVideoSection({ onPrimary, onExplore, darkMode }) {
   return (
-    <section className={`grid gap-7 border-b px-4 py-8 lg:grid-cols-[0.92fr_1.08fr] lg:px-7 lg:py-10 ${darkMode ? "border-white/10" : "border-slate-200"}`}>
+    <section className={`m-4 grid gap-5 overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:m-5 sm:p-5 lg:mx-7 lg:mb-6 lg:mt-7 lg:grid-cols-[0.92fr_1.08fr] ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-950 to-cyan-950/35" : "border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55"}`}>
       <div className="flex min-w-0 flex-col justify-center">
         <p className={`mb-3 w-fit rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] ${darkMode ? "border-cyan-300/20 bg-cyan-300/10 text-cyan-200" : "border-cyan-200 bg-cyan-50 text-cyan-800"}`}>
           Dieudonne Partner Video Hub

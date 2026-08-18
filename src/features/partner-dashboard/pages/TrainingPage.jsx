@@ -15,7 +15,7 @@ export default function TrainingPage({
   return (
     <div className="space-y-5">
       <section
-        className={`overflow-hidden rounded-[1.8rem] border p-5 sm:p-6 ${
+        className={`overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:p-5 ${
           darkMode
             ? "border-cyan-400/25 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/50 shadow-xl"
             : "border-cyan-200 bg-gradient-to-br from-white via-cyan-50/70 to-indigo-50 shadow-sm"
