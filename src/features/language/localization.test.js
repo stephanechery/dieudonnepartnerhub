@@ -42,7 +42,6 @@ test("committed catalogs cover critical navigation and safety text", () => {
       "Thinking...",
       "Answer from Partner Hub",
       "Sources",
-  "Typing searches on this device. Ask Partner Hub sends only approved topic labels and complete public learning statements to the secure model, not your raw question.",
       "Do not include names, email addresses, phone numbers, or account details.",
       "Educational guidance only. Partner Hub does not diagnose.",
       "Ask Partner Hub is available after secure sign-in. Local search still works.",

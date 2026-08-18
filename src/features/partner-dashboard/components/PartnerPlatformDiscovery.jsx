@@ -207,7 +207,7 @@ export default function PartnerPlatformDiscovery({
               placeholder={tx("Search lessons, guides, videos, and safety topics")}
               autoComplete="off"
               className="h-14 w-full rounded-2xl border border-slate-300 bg-white pl-12 pr-14 text-base font-semibold text-slate-950 shadow-sm outline-none transition-colors placeholder:font-medium placeholder:text-slate-500 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15 [&::-webkit-search-cancel-button]:appearance-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-400"
-              aria-describedby="partner-search-help partner-search-status"
+              aria-describedby="partner-search-status"
             />
             {query && (
               <button
@@ -225,10 +225,7 @@ export default function PartnerPlatformDiscovery({
           </div>
           <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0 flex-1">
-              <p id="partner-search-help" className="text-xs font-semibold leading-relaxed text-slate-500 dark:text-slate-400">
-                {tx("Typing searches on this device. Ask Partner Hub sends only approved topic labels and complete public learning statements to the secure model, not your raw question.")}
-              </p>
-              <p className="mt-1 text-[11px] font-semibold leading-relaxed text-slate-500 dark:text-slate-500">
+              <p className="text-[11px] font-semibold leading-relaxed text-slate-500 dark:text-slate-500">
                 {tx("Do not include names, email addresses, phone numbers, or account details.")}
               </p>
             </div>
