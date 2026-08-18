@@ -80,14 +80,14 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
   return (
     <article
       id={`maternal-highlight-${highlight.id}`}
-      className={`scroll-mt-28 overflow-hidden rounded-[1.35rem] border bg-white shadow-sm dark:bg-slate-900 ${tone.border}`}
+      className={`scroll-mt-28 self-start overflow-hidden rounded-[1.35rem] border bg-white shadow-sm dark:bg-slate-900 ${expanded ? "lg:col-span-2" : ""} ${tone.border}`}
     >
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
         aria-controls={panelId}
-        className="block min-h-32 w-full p-4 text-left transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:p-5 dark:hover:bg-white/[0.03]"
+        className="block min-h-28 w-full p-4 text-left transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:p-5 dark:hover:bg-white/[0.03]"
       >
         <span className="flex items-start justify-between gap-3">
           <span className={`text-[10px] font-black uppercase leading-relaxed tracking-[0.15em] sm:text-[11px] ${tone.accent}`}>
@@ -153,7 +153,7 @@ export default function MaternalDataPage({
   const tx = (value) => translateText(value);
   const [activeGroup, setActiveGroup] = useState(() => groupForHighlight(initialHighlightId));
   const [expandedIds, setExpandedIds] = useState(() =>
-    initialHighlightId ? [initialHighlightId] : ["national-preventability", "national-care-deserts"]
+    initialHighlightId ? [initialHighlightId] : ["national-preventability"]
   );
   const currentOption = groupOptions.find((option) => option.id === activeGroup) || groupOptions[1];
   const highlights = useMemo(() => maternalHealthGroups[activeGroup] || [], [activeGroup]);
@@ -172,18 +172,17 @@ export default function MaternalDataPage({
 
   return (
     <div className="space-y-4 sm:space-y-5">
-      <section className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55 p-4 shadow-sm sm:p-6 dark:border-slate-800 dark:from-slate-950 dark:via-slate-950 dark:to-cyan-950/35">
-        <div className="max-w-3xl">
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-300">
-            <BarChart3 className="h-4 w-4" aria-hidden="true" /> {tx("Maternal Data")}
-          </p>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-4xl dark:text-white">
-            {tx("Understand the data. Know how to help.")}
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base dark:text-slate-300">
-            {tx("Plain-language national and Indiana maternal health evidence, with a practical role for fathers and support people beside every finding.")}
-          </p>
-          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold text-slate-600 dark:text-slate-300">
+      <section className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55 p-4 shadow-sm sm:p-5 dark:border-slate-800 dark:from-slate-950 dark:via-slate-950 dark:to-cyan-950/35">
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+          <div className="min-w-0">
+            <h2 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
+              {tx("Understand the data. Know how to help.")}
+            </h2>
+            <p className="mt-1.5 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base dark:text-slate-300">
+              {tx("Plain-language national and Indiana maternal health evidence, with a practical role for fathers and support people beside every finding.")}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs font-bold text-slate-600 lg:max-w-xs lg:justify-end lg:text-right dark:text-slate-300">
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />
               {tx("Official sources only")}
@@ -191,55 +190,55 @@ export default function MaternalDataPage({
             <span>{tx("Sources checked August 16, 2026")}</span>
           </div>
         </div>
-      </section>
 
-      <section className="rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-sm sm:p-5 dark:border-slate-800 dark:bg-slate-950">
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3" role="group" aria-label={tx("Choose maternal data view")}>
-          {groupOptions.map(({ id, label, Icon }) => {
-            const active = activeGroup === id;
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={() => {
-                  setActiveGroup(id);
-                  const firstPriority = maternalHealthGroups[id]?.find((highlight) => highlight.priority)
-                    || maternalHealthGroups[id]?.[0];
-                  setExpandedIds(firstPriority ? [firstPriority.id] : []);
-                }}
-                aria-pressed={active}
-                className={`flex min-h-12 items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
-                  active
-                    ? "border-slate-950 bg-slate-950 text-white dark:border-cyan-300 dark:bg-cyan-300 dark:text-slate-950"
-                    : "border-slate-200 bg-slate-50 text-slate-700 hover:border-cyan-300 hover:text-cyan-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-400/40 dark:hover:text-cyan-200"
-                }`}
-              >
-                <Icon className="h-4 w-4" aria-hidden="true" /> {tx(label)}
-              </button>
-            );
-          })}
+        <div className="mt-4 border-t border-slate-200/80 pt-4 dark:border-slate-800">
+          <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3" role="group" aria-label={tx("Choose maternal data view")}>
+            {groupOptions.map(({ id, label, Icon }) => {
+              const active = activeGroup === id;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => {
+                    setActiveGroup(id);
+                    const firstPriority = maternalHealthGroups[id]?.find((highlight) => highlight.priority)
+                      || maternalHealthGroups[id]?.[0];
+                    setExpandedIds(firstPriority ? [firstPriority.id] : []);
+                  }}
+                  aria-pressed={active}
+                  className={`flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-xl border px-2 py-2 text-xs font-black leading-tight transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:min-h-12 sm:gap-2 sm:rounded-2xl sm:px-3 sm:text-sm ${
+                    active
+                      ? "border-slate-950 bg-slate-950 text-white dark:border-cyan-300 dark:bg-cyan-300 dark:text-slate-950"
+                      : "border-slate-200 bg-slate-50 text-slate-700 hover:border-cyan-300 hover:text-cyan-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-400/40 dark:hover:text-cyan-200"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" aria-hidden="true" /> {tx(label)}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h3 id="maternal-data-group-heading" className="text-lg font-black tracking-tight text-slate-950 sm:text-2xl dark:text-white">
+                {tx(currentOption.title)}
+              </h3>
+              <p className="mt-1 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                {tx(currentOption.description)}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setExpandedIds(allExpanded ? [] : highlights.map((highlight) => highlight.id))}
+              className="min-h-11 shrink-0 self-start rounded-xl border border-cyan-300 bg-cyan-50 px-4 text-xs font-black text-cyan-900 transition-colors hover:bg-cyan-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-100 dark:hover:bg-cyan-400/15"
+            >
+              {tx(allExpanded ? "Collapse all" : "Expand all")}
+            </button>
+          </div>
         </div>
       </section>
 
       <section aria-labelledby="maternal-data-group-heading">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 id="maternal-data-group-heading" className="text-xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
-              {tx(currentOption.title)}
-            </h2>
-            <p className="mt-1.5 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-              {tx(currentOption.description)}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => setExpandedIds(allExpanded ? [] : highlights.map((highlight) => highlight.id))}
-            className="min-h-11 shrink-0 self-start rounded-xl border border-cyan-300 bg-cyan-50 px-4 text-xs font-black text-cyan-900 transition-colors hover:bg-cyan-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-100 dark:hover:bg-cyan-400/15"
-          >
-            {tx(allExpanded ? "Collapse all" : "Expand all")}
-          </button>
-        </div>
-
         <div className="mt-4 grid gap-3 lg:grid-cols-2">
           {highlights.map((highlight) => (
             <DataHighlight

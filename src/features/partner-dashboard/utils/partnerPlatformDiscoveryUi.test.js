@@ -87,7 +87,7 @@ test("maternal data page uses accessible disclosure and compact responsive contr
   assert.match(page, /aria-expanded=\{expanded\}/);
   assert.match(page, /aria-controls=\{panelId\}/);
   assert.match(page, /aria-pressed=\{active\}/);
-  assert.match(page, /grid grid-cols-1 gap-2 sm:grid-cols-3/);
+  assert.match(page, /grid grid-cols-1 gap-2 min-\[360px\]:grid-cols-3/);
   assert.match(page, /grid gap-3 lg:grid-cols-2/);
   assert.match(page, /focus-visible:outline/);
   assert.match(page, /rel="noopener noreferrer"/);

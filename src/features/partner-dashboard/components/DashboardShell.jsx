@@ -48,6 +48,115 @@ export default function DashboardShell({
     persistDesktopSidebarVisibility(visible);
   };
   const currentPageLabel = tx(pageLabels[activeItem] || "Partner Platform");
+  const isMaternalDataHeader = activeItem === "data" && !embedded;
+
+  const identityBlock = (
+    <div className="flex min-w-0 items-center gap-3 sm:items-start sm:gap-4">
+      <img
+        src={dieudonneDarkLogo}
+        alt="Dieudonne logo"
+        className={`h-9 w-auto rounded-lg border p-1 sm:h-12 md:hidden ${darkMode ? "border-slate-700 bg-slate-950" : "border-slate-200 bg-slate-50"}`}
+      />
+      <div className="min-w-0">
+        <p className={`hidden text-[10px] font-black uppercase tracking-[0.18em] md:block ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
+          {isMaternalDataHeader ? tx("Partner Platform") : currentPageLabel}
+        </p>
+        <h1 className={`text-lg font-black leading-tight tracking-tight sm:text-2xl md:text-2xl xl:text-[1.75rem] ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
+          <span className="md:hidden">{tx("Partner Platform")}</span>
+          <span className="hidden md:inline">
+            {isMaternalDataHeader
+              ? currentPageLabel
+              : <>{tx("Welcome back")}, {authUser.displayName || tx("Partner")}</>}
+          </span>
+        </h1>
+        <p className={`mt-1 hidden text-sm leading-relaxed sm:block ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+          <span className="md:hidden">{tx("Signed in as")} {authUser.displayName}</span>
+          <span className="hidden md:inline">
+            {isMaternalDataHeader
+              ? <>{tx("Welcome back")}, {authUser.displayName || tx("Partner")}</>
+              : tx("Your focused support plan and training progress.")}
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+
+  const showMenuControl = !embedded && !desktopSidebarVisible ? (
+    <button
+      type="button"
+      onClick={() => setSidebarVisible(true)}
+      aria-controls="partner-platform-sidebar"
+      aria-expanded="false"
+      className={`${isMaternalDataHeader ? "hidden min-h-10" : "hidden min-h-11"} items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 md:inline-flex ${
+        darkMode
+          ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-900"
+          : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 focus-visible:ring-offset-white"
+      }`}
+    >
+      <PanelLeftOpen className="h-4 w-4" aria-hidden="true" /> {tx("Show menu")}
+    </button>
+  ) : null;
+
+  const progressStatus = (
+    <div className={`${isMaternalDataHeader ? "flex min-h-9 items-center justify-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold" : "col-span-2 hidden min-h-9 items-center justify-center gap-2 rounded-full border px-3 py-2 text-xs font-bold sm:col-span-1 sm:min-h-0 sm:justify-start sm:py-1.5 2xl:flex"} ${darkMode ? "border-emerald-900/50 bg-emerald-900/30 text-emerald-300" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
+      <ShieldCheck className="h-4 w-4" aria-hidden="true" /> {tx("Progress Tracking Active")}
+    </div>
+  );
+
+  const themeControl = onToggleTheme ? (
+    <ThemeToggle
+      darkMode={darkMode}
+      onToggle={onToggleTheme}
+      translateText={translateText}
+      className={isMaternalDataHeader ? "w-full sm:w-auto" : "col-span-2 w-full sm:col-span-1 sm:w-auto"}
+    />
+  ) : null;
+
+  const adminControl = showAdminDashboard && (
+    <a
+      href="/owner-admin"
+      aria-label={tx("Open Admin Dashboard")}
+      className={`${isMaternalDataHeader ? "hidden min-h-10 items-center justify-center" : "col-span-2 hidden min-h-10 w-full items-center justify-center sm:col-span-1 sm:min-h-0 sm:w-auto sm:justify-start"} gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 md:flex ${
+        darkMode
+          ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-900"
+          : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 focus-visible:ring-offset-white"
+      }`}
+    >
+      <LayoutDashboard className="h-4 w-4" /> {tx("Admin Dashboard")}
+    </a>
+  );
+
+  const homeControl = showHomeButton ? (
+    <button
+      type="button"
+      onClick={onNavigateHome}
+      className={`${isMaternalDataHeader ? "hidden min-h-10 items-center justify-center md:inline-flex" : "hidden min-h-10 w-full items-center justify-center sm:min-h-0 sm:w-auto sm:justify-start sm:px-3 md:flex"} gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition ${
+        darkMode
+          ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800"
+          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
+      }`}
+    >
+      <ArrowLeft className="h-4 w-4" /> {tx(homeLabel)}
+    </button>
+  ) : null;
+
+  const logoutControl = (
+    <button
+      type="button"
+      onClick={onLogout}
+      className={`${isMaternalDataHeader ? "hidden min-h-10 items-center justify-center border md:inline-flex" : "hidden min-h-10 w-full items-center justify-center sm:min-h-0 sm:w-auto sm:justify-start sm:px-3 md:flex"} gap-2 rounded-xl px-3 py-2 text-sm font-bold transition ${
+        isMaternalDataHeader
+          ? darkMode
+            ? "border-rose-400/20 bg-transparent text-rose-200 hover:bg-rose-400/10"
+            : "border-rose-200 bg-transparent text-rose-700 hover:bg-rose-50"
+          : darkMode
+            ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white hover:from-rose-500 hover:to-pink-500"
+            : "bg-gradient-to-r from-slate-900 to-slate-700 text-white hover:from-slate-800 hover:to-slate-700"
+      }`}
+    >
+      <LogOut className="h-4 w-4" /> {tx("Log Out")}
+    </button>
+  );
 
   return (
     <div
@@ -79,98 +188,43 @@ export default function DashboardShell({
 
         <div className={embedded ? "w-full" : "min-w-0 flex-1 md:px-8 md:py-7 lg:px-10"}>
           <header
-            className={`mb-4 flex flex-col justify-between gap-3 rounded-[1.5rem] border px-3 py-3 sm:mb-6 sm:gap-4 sm:rounded-[1.75rem] sm:px-5 sm:py-5 md:flex-row md:items-center ${
+            className={`${isMaternalDataHeader ? "mb-4 block px-3 py-3 sm:px-4 sm:py-4" : "mb-4 flex flex-col justify-between gap-3 px-3 py-3 sm:mb-6 sm:gap-4 sm:px-5 sm:py-5 md:flex-row md:items-center"} rounded-[1.5rem] border sm:rounded-[1.75rem] ${
               darkMode
                 ? "border-slate-800 bg-slate-900/95 shadow-xl shadow-black/20"
                 : "border-slate-200 bg-white/95 shadow-sm"
             }`}
           >
-            <div className="flex min-w-0 items-center gap-3 sm:items-start sm:gap-4">
-              <img
-                src={dieudonneDarkLogo}
-                alt="Dieudonne logo"
-                className={`h-9 w-auto rounded-lg border p-1 sm:h-12 md:hidden ${darkMode ? "border-slate-700 bg-slate-950" : "border-slate-200 bg-slate-50"}`}
-              />
-              <div className="min-w-0">
-                <p className={`hidden text-[10px] font-black uppercase tracking-[0.18em] md:block ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-                  {currentPageLabel}
-                </p>
-                <h1 className={`text-lg font-black leading-tight tracking-tight sm:text-2xl md:text-2xl xl:text-[1.75rem] ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-                  <span className="md:hidden">{tx("Partner Platform")}</span>
-                  <span className="hidden md:inline">{tx("Welcome back")}, {authUser.displayName || tx("Partner")}</span>
-                </h1>
-                <p className={`mt-1 hidden text-sm leading-relaxed sm:block ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-                  <span className="md:hidden">{tx("Signed in as")} {authUser.displayName}</span>
-                  <span className="hidden md:inline">{tx("Your focused support plan and training progress.")}</span>
-                </p>
+            {isMaternalDataHeader ? (
+              <div className="space-y-3">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <nav aria-label={tx("Partner Platform navigation")} className="hidden min-w-0 flex-wrap items-center gap-2 md:flex">
+                    {showMenuControl}
+                    {homeControl}
+                    {adminControl}
+                  </nav>
+                  <div className="flex items-center justify-end gap-2 sm:ml-auto">
+                    {themeControl}
+                    {logoutControl}
+                  </div>
+                </div>
+                <div className={`flex flex-col gap-3 border-t pt-3 sm:flex-row sm:items-center sm:justify-between ${darkMode ? "border-slate-800" : "border-slate-200"}`}>
+                  {identityBlock}
+                  {progressStatus}
+                </div>
               </div>
-            </div>
-
-            <div className="grid shrink-0 grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end">
-              {!embedded && !desktopSidebarVisible && (
-                <button
-                  type="button"
-                  onClick={() => setSidebarVisible(true)}
-                  aria-controls="partner-platform-sidebar"
-                  aria-expanded="false"
-                  className={`hidden min-h-11 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 md:inline-flex ${
-                    darkMode
-                      ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-900"
-                      : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 focus-visible:ring-offset-white"
-                  }`}
-                >
-                  <PanelLeftOpen className="h-4 w-4" aria-hidden="true" /> {tx("Show menu")}
-                </button>
-              )}
-              <div className={`col-span-2 hidden min-h-9 items-center justify-center gap-2 rounded-full border px-3 py-2 text-xs font-bold sm:col-span-1 sm:min-h-0 sm:justify-start sm:py-1.5 2xl:flex ${darkMode ? "border-emerald-900/50 bg-emerald-900/30 text-emerald-300" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
-                <ShieldCheck className="h-4 w-4" aria-hidden="true" /> {tx("Progress Tracking Active")}
-              </div>
-              {onToggleTheme && (
-                <ThemeToggle
-                  darkMode={darkMode}
-                  onToggle={onToggleTheme}
-                  translateText={translateText}
-                  className="col-span-2 w-full sm:col-span-1 sm:w-auto"
-                />
-              )}
-              {showAdminDashboard && (
-                <a
-                  href="/owner-admin"
-                  aria-label={tx("Open Admin Dashboard")}
-                  className={`col-span-2 hidden min-h-10 w-full items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 sm:col-span-1 sm:min-h-0 sm:w-auto sm:justify-start md:flex ${
-                    darkMode
-                      ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-900"
-                      : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 focus-visible:ring-offset-white"
-                  }`}
-                >
-                  <LayoutDashboard className="h-4 w-4" /> {tx("Admin Dashboard")}
-                </a>
-              )}
-              {showHomeButton && (
-                <button
-                  type="button"
-                  onClick={onNavigateHome}
-                  className={`hidden min-h-10 w-full items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition sm:min-h-0 sm:w-auto sm:justify-start sm:px-3 md:flex ${
-                    darkMode
-                      ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800"
-                      : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
-                  }`}
-                >
-                  <ArrowLeft className="h-4 w-4" /> {tx(homeLabel)}
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={onLogout}
-                className={`hidden min-h-10 w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-white transition sm:min-h-0 sm:w-auto sm:justify-start sm:px-3 md:flex ${
-                  darkMode
-                    ? "bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500"
-                    : "bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-700"
-                }`}
-              >
-                <LogOut className="h-4 w-4" /> {tx("Log Out")}
-              </button>
-            </div>
+            ) : (
+              <>
+                {identityBlock}
+                <div className="grid shrink-0 grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end">
+                  {showMenuControl}
+                  {progressStatus}
+                  {themeControl}
+                  {adminControl}
+                  {homeControl}
+                  {logoutControl}
+                </div>
+              </>
+            )}
           </header>
 
           {children}
