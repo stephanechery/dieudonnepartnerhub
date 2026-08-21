@@ -254,15 +254,11 @@ body {
 }
 
 .public-logo {
-  background: #000;
+  object-fit: contain;
 }
 
 .public-page-dark .public-logo {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.public-page-light .public-logo {
-  border-color: #e2e8f0;
+  filter: brightness(1.08) saturate(0.92);
 }
 
 .public-page-dark .public-brand {

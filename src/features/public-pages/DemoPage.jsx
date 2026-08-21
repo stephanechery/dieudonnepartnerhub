@@ -1,6 +1,5 @@
 import React from "react";
 import { ArrowRight, BarChart3, BookOpenCheck, Compass, Moon, PlayCircle, ShieldCheck, Sun, Video } from "lucide-react";
-import dieudonneDarkLogo from "../../assets/Dieudonne_Dark_Logo.png";
 import PublicLanguageSelector from "../language/PublicLanguageSelector";
 import { ORGANIZATION_DEMO_CREDENTIALS } from "../partner-dashboard/services/authService";
 
@@ -70,7 +69,13 @@ export default function DemoPage({
       <div className="mx-auto max-w-6xl">
         <nav className="public-nav mb-6 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border px-4 py-3">
           <a href="/" className="flex items-center gap-3">
-            <img src={dieudonneDarkLogo} alt={tx("Dieudonne logo")} className="public-logo h-10 w-auto rounded-xl border p-1" />
+            <img
+              src="/assets/dieudonne-foundation-logo-transparent-300dpi.png"
+              alt={tx("Dieudonne logo")}
+              width="2801"
+              height="677"
+              className="public-logo h-9 w-auto sm:h-11"
+            />
             <span className="public-brand text-sm font-black uppercase tracking-[0.16em]">{tx("Partner Hub")}</span>
           </a>
           <div className="flex flex-wrap items-center gap-2">
