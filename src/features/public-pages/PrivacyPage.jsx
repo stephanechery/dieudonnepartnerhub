@@ -1,99 +1,67 @@
 import React from "react";
-import { ArrowRight, Database, EyeOff, FileText, Moon, ShieldCheck, Sun } from "lucide-react";
-import PublicLanguageSelector from "../language/PublicLanguageSelector";
+import { Activity, ArrowRight, EyeOff, GraduationCap, ShieldCheck, UserRoundCheck } from "lucide-react";
+import PublicPageHeader, { getPublicPageDarkMode } from "./PublicPageHeader";
 
 const privacyItems = [
   {
-    icon: Database,
-    title: "What the product tracks",
-    detail: "Coarse learning activity such as lesson starts, lesson completions, quiz completion, guide opens, video views, saves, and recommendation clicks.",
+    icon: Activity,
+    title: "Learning activity",
+    detail: "The platform may record lesson starts and completions, quiz completion, guide opens, video views, saves, and recommendation clicks.",
   },
   {
     icon: EyeOff,
-    title: "What the admin hub avoids",
-    detail: "No client case notes, doula logs, private medical details, or sensitive health narratives are needed for product decisions.",
+    title: "Information to leave out",
+    detail: "Do not enter diagnoses, medical records, case notes, or other sensitive personal details into reflections or search.",
   },
   {
-    icon: FileText,
-    title: "Free-text caution",
-    detail: "Reflection prompts should be treated carefully. Users should avoid entering private medical or family details unless a clear retention policy is in place.",
+    icon: GraduationCap,
+    title: "Demo access",
+    detail: "The guided demo uses a learner-only experience and does not include owner or administrative tools.",
   },
   {
-    icon: ShieldCheck,
-    title: "Admin access",
-    detail: "Admin access is restricted and should move to server-enforced Supabase roles before broad partner rollout.",
+    icon: UserRoundCheck,
+    title: "Owner access",
+    detail: "Administrative tools are limited to the verified owner account. Organization demo users cannot access them.",
   },
 ];
-
-const getInitialDarkMode = () => {
-  if (typeof window === "undefined") return true;
-  return window.localStorage.getItem("dieudonne-theme") !== "light";
-};
-
-const toggleStoredTheme = (darkMode) => {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem("dieudonne-theme", darkMode ? "light" : "dark");
-  window.location.reload();
-};
 
 export default function PrivacyPage({
   language = "en",
   onLanguageChange = () => {},
   translateText = (value) => value,
 }) {
-  const darkMode = getInitialDarkMode();
+  const darkMode = getPublicPageDarkMode();
   const tx = translateText;
 
   return (
     <main className={`min-h-screen px-4 py-5 sm:px-6 lg:px-8 ${darkMode ? "public-page-dark" : "public-page-light"}`}>
       <div className="mx-auto max-w-5xl">
-        <nav className="public-nav mb-6 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border px-4 py-3">
-          <a href="/" className="flex items-center gap-3">
-            <img
-              src="/assets/dieudonne-foundation-logo-transparent-300dpi.png"
-              alt={tx("Dieudonne logo")}
-              width="2801"
-              height="677"
-              className="public-logo h-9 w-auto sm:h-12"
-            />
-            <span className="public-brand text-sm font-black uppercase tracking-[0.16em]">{tx("Partner Hub")}</span>
-          </a>
-          <div className="flex flex-wrap items-center gap-2">
-            <PublicLanguageSelector language={language} onLanguageChange={onLanguageChange} translateText={translateText} />
-            <button
-              type="button"
-              onClick={() => toggleStoredTheme(darkMode)}
-              aria-pressed={darkMode}
-              aria-label={tx(darkMode ? "Switch to light mode" : "Switch to dark mode")}
-              className="public-theme-toggle inline-flex min-h-10 items-center gap-2 rounded-full border px-3.5 text-sm font-bold"
-            >
-              {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              {tx(darkMode ? "Light Mode" : "Dark Mode")}
-            </button>
-            <a href="/partner-orgs" className="public-nav-link rounded-full border px-4 py-2 text-sm font-bold">{tx("For Organizations")}</a>
-            <a href="/partner-demo" className="public-nav-link rounded-full border px-4 py-2 text-sm font-bold">{tx("Guided Demo")}</a>
-          </div>
-        </nav>
+        <PublicPageHeader
+          activePage="privacy"
+          language={language}
+          onLanguageChange={onLanguageChange}
+          translateText={translateText}
+        />
 
-        <section className="public-hero rounded-[2rem] border p-5 sm:p-8">
+        <section className="public-hero rounded-[2rem] border p-5 sm:p-8 lg:p-10">
           <p className="public-eyebrow flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em]">
-            <ShieldCheck className="h-4 w-4" /> {tx("Privacy and analytics")}
+            <ShieldCheck className="h-4 w-4" aria-hidden="true" /> {tx("Privacy and learning activity")}
           </p>
-          <h1 className="public-heading mt-4 text-4xl font-black leading-tight tracking-tight sm:text-5xl">
-            {tx("Product signals, not private care records.")}
+          <h1 className="public-heading mt-4 max-w-3xl text-4xl font-black leading-[1.05] tracking-tight text-balance sm:text-5xl">
+            {tx("Clear limits for a learning platform.")}
           </h1>
-          <p className="public-body mt-4 max-w-3xl text-base leading-relaxed sm:text-lg">
-            {tx("Dieudonne Partner Hub uses activity signals to improve the learning product. The admin dashboard is designed for product decisions, not care-team case management.")}
+          <p className="public-body mt-4 max-w-3xl text-base leading-relaxed text-pretty sm:text-lg">
+            {tx("Partner Hub uses limited learning activity to help people resume content and improve the experience. It is not a clinical record or case-management system.")}
           </p>
         </section>
 
-        <section className="mt-6 grid gap-4 md:grid-cols-2">
+        <section className="mt-6 grid items-start gap-4 md:grid-cols-2">
           {privacyItems.map((item) => {
             const Icon = item.icon;
             return (
               <article key={item.title} className="public-panel rounded-[1.6rem] border p-5">
                 <span className="public-icon-wrap inline-flex rounded-2xl border p-3">
-                  <Icon className="h-5 w-5" />
+                  <Icon className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <h2 className="public-card-title mt-4 text-lg font-black">{tx(item.title)}</h2>
                 <p className="public-card-text mt-2 text-sm font-semibold leading-relaxed">{tx(item.detail)}</p>
@@ -102,13 +70,15 @@ export default function PrivacyPage({
           })}
         </section>
 
-        <section className="public-amber-panel mt-6 rounded-[1.6rem] border p-5">
-          <h2 className="public-amber-heading text-lg font-black">{tx("Before a broad rollout")}</h2>
-          <p className="public-amber-text mt-2 text-sm font-semibold leading-relaxed">
-            {tx("Finalize Supabase RLS policies, server-enforced admin roles, a retention policy, and a public privacy policy reviewed by counsel.")}
-          </p>
-          <a href="/partner-demo" className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-amber-200 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-amber-100">
-            {tx("Open guided demo")} <ArrowRight className="h-4 w-4" />
+        <section className="public-cta-panel mt-6 flex flex-col gap-5 rounded-[1.6rem] border p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div>
+            <h2 className="public-card-title text-lg font-black">{tx("Keep care information with the care team")}</h2>
+            <p className="public-card-text mt-2 max-w-3xl text-sm font-semibold leading-relaxed">
+              {tx("Use Partner Hub for education and practice. Share personal medical details only through approved healthcare channels.")}
+            </p>
+          </div>
+          <a href="/partner-demo" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-2xl bg-cyan-300 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2">
+            {tx("Open guided demo")} <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </a>
         </section>
       </div>
