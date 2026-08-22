@@ -54,7 +54,7 @@ export default function PrivacyPage({
               alt={tx("Dieudonne logo")}
               width="2801"
               height="677"
-              className="public-logo h-9 w-auto sm:h-11"
+              className="public-logo h-9 w-auto sm:h-12"
             />
             <span className="public-brand text-sm font-black uppercase tracking-[0.16em]">{tx("Partner Hub")}</span>
           </a>

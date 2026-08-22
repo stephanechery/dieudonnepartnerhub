@@ -5440,7 +5440,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
             alt="Dieudonne logo"
             width="2801"
             height="677"
-            className={`h-11 w-auto object-contain sm:h-14 ${darkMode ? 'brightness-110' : ''}`}
+            className={`h-11 w-auto object-contain sm:h-12 ${darkMode ? 'brightness-110' : ''}`}
           />
           <div className={`hidden items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.18em] lg:flex ${
             darkMode ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-600'
