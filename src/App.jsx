@@ -5449,25 +5449,27 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
             {translateText('Pregnancy Support Partner Training Hub')}
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className={`hero-utility-group flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-0 ${
+          darkMode ? 'hero-utility-group-dark' : 'hero-utility-group-light'
+        }`}>
           <button
             onClick={() => setDarkMode((current) => !current)}
             aria-pressed={darkMode}
             aria-label={translateText(darkMode ? 'Switch to light mode' : 'Switch to dark mode')}
-            className={`group flex min-h-11 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-all sm:px-4 sm:text-sm ${
+            className={`hero-utility-control group flex min-h-11 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-all sm:text-sm ${
               darkMode
-                ? 'border-slate-700 bg-slate-900 text-amber-300 hover:border-slate-600'
-                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-800'
+                ? 'border-slate-700 bg-slate-900 text-slate-100 hover:border-slate-600'
+                : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-900'
             }`}
           >
-            {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {darkMode ? <Sun className="h-4 w-4 text-amber-300" /> : <Moon className="h-4 w-4 text-slate-500" />}
             <span>{translateText(darkMode ? 'Light Mode' : 'Dark Mode')}</span>
           </button>
 
-          <div ref={languageMenuRef} className="relative" data-no-translate="true">
+          <div ref={languageMenuRef} className="hero-utility-divider relative" data-no-translate="true">
             <button
               onClick={() => setLanguageMenuOpen((prev) => !prev)}
-              className={`flex min-h-11 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-all sm:min-w-[112px] sm:px-4 sm:text-sm ${
+              className={`hero-utility-control flex min-h-11 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-all sm:text-sm ${
                 darkMode
                   ? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-slate-600'
                   : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
@@ -5520,7 +5522,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
 
           <a
             href="/partner-orgs"
-            className={`inline-flex min-h-11 items-center justify-center rounded-full border px-3.5 text-xs font-semibold transition-all sm:px-4 sm:text-sm ${
+            className={`hero-utility-control hero-utility-divider inline-flex min-h-11 items-center justify-center rounded-full border px-3.5 text-xs font-semibold transition-all sm:text-sm ${
               darkMode
                 ? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-slate-600'
                 : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
@@ -5531,7 +5533,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
 
           <a
             href="/partner-demo"
-            className={`hidden min-h-11 items-center justify-center rounded-full border px-4 text-sm font-semibold transition-all md:inline-flex ${
+            className={`hero-utility-control hero-utility-divider hidden min-h-11 items-center justify-center rounded-full border px-4 text-sm font-semibold transition-all md:inline-flex ${
               darkMode
                 ? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-slate-600'
                 : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
@@ -5613,41 +5615,49 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
                 </a>
               </div>
 
-              <div className="hidden flex-wrap gap-3 sm:flex">
-                <button
-                  onClick={handleHeroEnterPlatform}
-                  className={`hero-cta-button hero-cta-primary inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl px-6 py-3 text-base font-extrabold text-white shadow-lg transition-all active:scale-95 ${
-                    darkMode ? 'bg-gradient-to-r from-blue-600 to-fuchsia-600 shadow-indigo-950/30' : 'bg-gradient-to-r from-blue-600 to-rose-500 shadow-indigo-200'
-                  }`}
-                >
-                  {translateText('Enter Partner Platform')}
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={handleHeroExploreGuide}
-                  className={`hero-cta-button inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-base font-extrabold transition-colors ${
-                    darkMode
-                      ? 'border-slate-700 bg-slate-950/50 text-slate-100 hover:border-slate-500'
-                      : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
-                  }`}
-                >
-                  <BookOpen className="h-5 w-5" />
-                  {translateText('Explore Main Guide')}
-                </button>
-                <a
-                  href={DOULA_MATCH_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`hero-cta-button inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-base font-extrabold transition-colors ${
-                    darkMode
-                      ? 'border-cyan-400/35 bg-cyan-400/10 text-cyan-100 hover:border-cyan-300/70 hover:bg-cyan-400/15'
-                      : 'border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100'
-                  }`}
-                >
-                  <HeartHandshake className="h-5 w-5" />
-                  {translateText('Match Mom with a Doula')}
-                  <ExternalLink className="h-4 w-4" />
-                </a>
+              <div className={`hero-action-dock hidden w-full max-w-xl rounded-[1.35rem] border p-2 sm:block ${
+                darkMode
+                  ? 'border-slate-600/80 bg-slate-950/55 shadow-black/20'
+                  : 'border-slate-200 bg-white/75 shadow-slate-200/70'
+              }`}>
+                <div className="grid gap-2 md:grid-cols-[1.08fr_0.92fr]">
+                  <button
+                    onClick={handleHeroEnterPlatform}
+                    className={`hero-cta-button hero-cta-primary inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl px-4 py-3 text-base font-extrabold text-white shadow-lg transition-all active:scale-[0.98] ${
+                      darkMode ? 'bg-gradient-to-r from-blue-600 to-fuchsia-600 shadow-indigo-950/30' : 'bg-gradient-to-r from-blue-600 to-rose-500 shadow-indigo-200'
+                    }`}
+                  >
+                    {translateText('Enter Partner Platform')}
+                    <ArrowRight className="h-4 w-4 shrink-0" />
+                  </button>
+                  <button
+                    onClick={handleHeroExploreGuide}
+                    className={`hero-cta-button inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-base font-extrabold transition-colors ${
+                      darkMode
+                        ? 'border-slate-700 bg-slate-950/50 text-slate-100 hover:border-slate-500'
+                        : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
+                    }`}
+                  >
+                    <BookOpen className="h-5 w-5 shrink-0" />
+                    {translateText('Explore Main Guide')}
+                  </button>
+                </div>
+                <div className={`mt-2 border-t pt-2 ${darkMode ? 'border-slate-700/90' : 'border-slate-200'}`}>
+                  <a
+                    href={DOULA_MATCH_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`hero-cta-button inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-base font-extrabold transition-colors ${
+                      darkMode
+                        ? 'border-cyan-400/35 bg-cyan-400/10 text-cyan-100 hover:border-cyan-300/70 hover:bg-cyan-400/15'
+                        : 'border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100'
+                    }`}
+                  >
+                    <HeartHandshake className="h-5 w-5 shrink-0" />
+                    {translateText('Match Mom with a Doula')}
+                    <ExternalLink className="h-4 w-4 shrink-0" />
+                  </a>
+                </div>
               </div>
 
               <p className={`max-w-lg text-[13px] font-medium sm:text-sm ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
