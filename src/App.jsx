@@ -5436,10 +5436,10 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
       }`}>
         <div className="flex items-center gap-4">
           <img
-            src="/assets/dieudonne-foundation-logo-transparent-300dpi.png"
+            src={dieudonneDarkLogo}
             alt="Dieudonne logo"
-            width="2801"
-            height="677"
+            width="3172"
+            height="1041"
             className={`h-11 w-auto object-contain sm:h-12 ${darkMode ? 'brightness-110' : ''}`}
           />
           <div className={`hidden items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.18em] lg:flex ${

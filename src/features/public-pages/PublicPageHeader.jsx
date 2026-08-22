@@ -1,5 +1,6 @@
 import React from "react";
 import { Moon, Sun } from "lucide-react";
+import dieudonneDarkLogo from "../../assets/Dieudonne_Dark_Logo.png";
 import PublicLanguageSelector from "../language/PublicLanguageSelector";
 
 const publicLinks = [
@@ -38,10 +39,10 @@ export default function PublicPageHeader({
     >
       <a href="/" className="flex min-w-0 items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
         <img
-          src="/assets/dieudonne-foundation-logo-transparent-300dpi.png"
+          src={dieudonneDarkLogo}
           alt={tx("Dieudonne logo")}
-          width="2801"
-          height="677"
+          width="3172"
+          height="1041"
           className="public-logo h-9 w-auto sm:h-12"
         />
         <span className="public-brand hidden text-sm font-black uppercase tracking-[0.16em] sm:inline">{tx("Partner Hub")}</span>

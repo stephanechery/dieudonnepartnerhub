@@ -7,6 +7,7 @@ const organizationsSource = read("./OrganizationsPage.jsx");
 const demoSource = read("./DemoPage.jsx");
 const privacySource = read("./PrivacyPage.jsx");
 const headerSource = read("./PublicPageHeader.jsx");
+const appSource = read("../../App.jsx");
 const translations = JSON.parse(read("../language/supplemental-translations.json"));
 
 test("public pages contain audience-facing copy instead of internal rollout notes", () => {
@@ -43,6 +44,13 @@ test("public navigation marks the active destination and preserves core routes",
   assert.match(headerSource, /href: "\/partner-demo"/);
   assert.match(headerSource, /href: "\/privacy"/);
   assert.match(headerSource, /href="\/partner-dashboard"/);
+});
+
+test("public and homepage headers reuse the transparent footer logo", () => {
+  assert.match(headerSource, /import dieudonneDarkLogo from "\.\.\/\.\.\/assets\/Dieudonne_Dark_Logo\.png"/);
+  assert.match(headerSource, /src=\{dieudonneDarkLogo\}/);
+  assert.match(appSource, /src=\{dieudonneDarkLogo\}/);
+  assert.doesNotMatch(headerSource, /dieudonne-foundation-logo-transparent-300dpi/);
 });
 
 test("new public-page copy is translated in every supported language", () => {
