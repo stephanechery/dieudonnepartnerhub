@@ -54,7 +54,7 @@ test("public and homepage headers reuse the transparent footer logo", () => {
 });
 
 test("footer renders the transparent logo without a background panel", () => {
-  assert.match(appSource, /className=\{`h-16 w-auto object-contain/);
+  assert.match(appSource, /className=\{`h-11 w-auto object-contain sm:h-12/);
   assert.doesNotMatch(appSource, /src=\{dieudonneDarkLogo\}[\s\S]{0,220}(?:bg-black|rounded-md border p-1)/);
 });
 
