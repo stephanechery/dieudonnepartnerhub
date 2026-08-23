@@ -5912,7 +5912,9 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
           <img
             src={dieudonneDarkLogo}
             alt="Dieudonne logo"
-            className={`h-16 w-auto rounded-md border p-1 ${darkMode ? 'border-slate-700 bg-black' : 'border-slate-200 bg-black'}`}
+            width="3172"
+            height="1041"
+            className={`h-16 w-auto object-contain ${darkMode ? 'brightness-110' : ''}`}
           />
           <p className={`text-lg font-bold tracking-tight ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
             © 2026 Dieudonne Foundation

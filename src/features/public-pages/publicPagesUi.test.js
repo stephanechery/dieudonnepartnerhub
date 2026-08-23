@@ -53,6 +53,11 @@ test("public and homepage headers reuse the transparent footer logo", () => {
   assert.doesNotMatch(headerSource, /dieudonne-foundation-logo-transparent-300dpi/);
 });
 
+test("footer renders the transparent logo without a background panel", () => {
+  assert.match(appSource, /className=\{`h-16 w-auto object-contain/);
+  assert.doesNotMatch(appSource, /src=\{dieudonneDarkLogo\}[\s\S]{0,220}(?:bg-black|rounded-md border p-1)/);
+});
+
 test("new public-page copy is translated in every supported language", () => {
   const publicSource = `${organizationsSource}\n${demoSource}\n${privacySource}\n${headerSource}`;
   const directStrings = Array.from(publicSource.matchAll(/tx\("([^"]+)"\)/g), (match) => match[1]);
