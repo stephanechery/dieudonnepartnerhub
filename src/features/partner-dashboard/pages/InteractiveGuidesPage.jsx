@@ -1,9 +1,11 @@
-import React, { Suspense, lazy, useMemo } from "react";
+import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, BookOpenCheck, Library } from "lucide-react";
 import {
   getPartnerInteractiveGuide,
   partnerInteractiveGuides,
 } from "../data/interactiveGuides";
+import useDeviceGuideProgress from "../hooks/useDeviceGuideProgress";
+import GuideShell from "../components/GuideShell";
 
 const guideComponents = {
   "partner-trimester-guide": lazy(() =>
@@ -96,6 +98,74 @@ const lightAccentClasses = {
   },
 };
 
+function GuideExperience({
+  guide,
+  GuideComponent,
+  routeSectionId,
+  onNavigateSection,
+  onBack,
+  darkMode,
+  onToggleTheme,
+  language,
+  onLanguageChange,
+  translateText,
+  progressScope,
+}) {
+  const fallbackLabels = useMemo(
+    () => guide.sectionIds.map((sectionId) => sectionId.split("-").map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`).join(" ")),
+    [guide.sectionIds]
+  );
+  const [sectionLabels, setSectionLabels] = useState(fallbackLabels);
+  useEffect(() => setSectionLabels(fallbackLabels), [fallbackLabels]);
+  const navigateSection = useCallback(
+    (sectionId, options = {}) => onNavigateSection(guide.id, sectionId, options),
+    [guide.id, onNavigateSection]
+  );
+  const progress = useDeviceGuideProgress({
+    guideId: guide.id,
+    sectionIds: guide.sectionIds,
+    routeSectionId,
+    scope: progressScope,
+    onNavigateSection: navigateSection,
+  });
+
+  return (
+    <Suspense
+      fallback={
+        <div className={`flex min-h-[420px] items-center justify-center rounded-[1.5rem] border text-sm font-bold ${darkMode ? "border-slate-700 bg-slate-800 text-slate-300" : "border-slate-200 bg-white text-slate-600"}`}>
+          {translateText("Loading interactive guide...")}
+        </div>
+      }
+    >
+      <GuideShell
+        guide={guide}
+        activeSection={progress.activeSection}
+        sectionIds={guide.sectionIds}
+        sectionLabels={sectionLabels}
+        completedSections={progress.completedSections}
+        completionPercent={progress.completionPercent}
+        onSelectSection={progress.selectSection}
+        onToggleComplete={progress.toggleActiveSectionComplete}
+        onReturnToGuides={onBack}
+        darkMode={darkMode}
+        language={language}
+        onLanguageChange={onLanguageChange}
+        translateText={translateText}
+      >
+        <GuideComponent
+          activeSection={progress.activeSection}
+          embedded
+          onSectionLabelsChange={setSectionLabels}
+          darkMode={darkMode}
+          onToggleTheme={onToggleTheme}
+          language={language}
+          onLanguageChange={onLanguageChange}
+        />
+      </GuideShell>
+    </Suspense>
+  );
+}
+
 function GuideCard({ guide, onOpen, darkMode, translateText }) {
   const tx = translateText;
   const Icon = guide.Icon;
@@ -137,14 +207,17 @@ function GuideCard({ guide, onOpen, darkMode, translateText }) {
 
 export default function InteractiveGuidesPage({
   guideId,
+  sectionId,
   onBack,
   onBackToDashboard,
   onOpenGuide,
+  onNavigateSection = () => {},
   darkMode = false,
   onToggleTheme,
   language = "en",
   onLanguageChange = () => {},
   translateText = (value) => value,
+  progressScope = "learner",
 }) {
   const tx = translateText;
   const selectedGuide = useMemo(() => getPartnerInteractiveGuide(guideId), [guideId]);
@@ -175,45 +248,19 @@ export default function InteractiveGuidesPage({
 
   if (selectedGuide && SelectedGuideComponent) {
     return (
-      <div className="space-y-4">
-        <section className={`rounded-[1.5rem] border p-4 ${darkMode ? "border-slate-700 bg-slate-800/90 shadow-xl shadow-slate-950/20" : "border-slate-200 bg-white shadow-sm"}`}>
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
-                {tx(selectedGuide.phase)}
-              </p>
-              <h2 className={`mt-1 text-2xl font-black tracking-tight ${darkMode ? "text-slate-50" : "text-slate-950"}`}>
-                {tx(selectedGuide.title)}
-              </h2>
-              <p className={`mt-1 max-w-2xl text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-                {tx(selectedGuide.summary)}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={onBack}
-              className={`flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-black transition ${darkMode ? "border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"}`}
-            >
-              <ArrowLeft className="h-4 w-4" /> {tx("Back to Guide Library")}
-            </button>
-          </div>
-        </section>
-
-        <div className={`overflow-hidden rounded-[1.5rem] border ${darkMode ? "border-slate-700 bg-slate-800/90 shadow-2xl shadow-slate-950/25" : "border-slate-200 bg-white shadow-sm"}`}>
-          <Suspense
-            fallback={
-              <div className={`flex min-h-[420px] items-center justify-center text-sm font-bold ${darkMode ? "bg-slate-800 text-slate-300" : "bg-white text-slate-600"}`}>
-                {tx("Loading interactive guide...")}
-              </div>
-            }
-          >
-            <SelectedGuideComponent darkMode={darkMode} onToggleTheme={onToggleTheme}
-              language={language}
-              onLanguageChange={onLanguageChange}
-            />
-          </Suspense>
-        </div>
-      </div>
+      <GuideExperience
+        guide={selectedGuide}
+        GuideComponent={SelectedGuideComponent}
+        routeSectionId={sectionId}
+        onNavigateSection={onNavigateSection}
+        onBack={onBack}
+        darkMode={darkMode}
+        onToggleTheme={onToggleTheme}
+        language={language}
+        onLanguageChange={onLanguageChange}
+        translateText={translateText}
+        progressScope={progressScope}
+      />
     );
   }
 

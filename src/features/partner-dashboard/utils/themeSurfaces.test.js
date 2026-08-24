@@ -51,7 +51,11 @@ test("guide library and every interactive guide follow the Partner Platform them
   assert.match(library, /<GuideCard[\s\S]*?darkMode=\{darkMode\}/);
   assert.match(
     library,
-    /<SelectedGuideComponent darkMode=\{darkMode\} onToggleTheme=\{onToggleTheme\}/
+    /<GuideShell[\s\S]*?darkMode=\{darkMode\}/
+  );
+  assert.match(
+    library,
+    /<GuideComponent[\s\S]*?darkMode=\{darkMode\}[\s\S]*?onToggleTheme=\{onToggleTheme\}/
   );
 
   for (const guideName of guideNames) {

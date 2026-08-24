@@ -266,19 +266,21 @@ const GENERIC_G9={
   },
 };
 
-export default function PartnerFeedingGuide({ darkMode, onToggleTheme, language = "en", onLanguageChange = () => {} }){
+export default function PartnerFeedingGuide({ darkMode, onToggleTheme, language = "en", onLanguageChange = () => {}, activeSection = 0, embedded = false, onSectionLabelsChange }){
   const [lang,setLang]=useState(language);
   useEffect(() => setLang(language), [language]);
   const changeLanguage = (nextLanguage) => {
     setLang(nextLanguage);
     onLanguageChange(nextLanguage);
   };
-  const [section,setSection]=useState(0);
+  const [section,setSection]=useState(activeSection);
+  useEffect(()=>setSection(activeSection),[activeSection]);
   const [dark,setDark]=usePartnerGuideTheme(darkMode,onToggleTheme);
   const [ready,setReady]=useState(false);
   useEffect(()=>{setTimeout(()=>setReady(true),80);},[]);
   const C=dark?DARK:LIGHT;
   const navLabels=NAV[lang];
+  useEffect(()=>onSectionLabelsChange?.(navLabels),[navLabels,onSectionLabelsChange]);
   const g=GENERIC_G9[lang]||GENERIC_G9.en;
   const kpis=[
     {icon:"🤱",value:"#1",label:lang==="en"?"PARTNER SUPPORT PREDICTS BF SUCCESS":lang==="es"?"APOYO PAREJA PREDICE ÉXITO LM":lang==="ht"?"SIPÒ PATNÈ PREDI SIKSÈ ALÈTMAN":"SOUTIEN PARTENAIRE PRÉDIT SUCCÈS AL",color:C.pink},
@@ -301,9 +303,9 @@ export default function PartnerFeedingGuide({ darkMode, onToggleTheme, language 
     }
   };
   return (
-    <div style={{minHeight:"100vh",background:C.bg,color:C.text,fontFamily:"'DM Sans',sans-serif",transition:"background 0.3s,color 0.3s"}}>
+    <div style={{minHeight:embedded?"auto":"100vh",background:embedded?"transparent":C.bg,color:C.text,fontFamily:"'DM Sans',sans-serif",transition:"background 0.3s,color 0.3s"}}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@400;500;600&display=swap');*{box-sizing:border-box;}button{outline:none;font-family:inherit;}::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:${C.accent}40;border-radius:2px;}`}</style>
-      <div style={{background:C.navBg,backdropFilter:"blur(20px)",borderBottom:"1px solid "+C.border,padding:"20px 24px 0",position:"sticky",top:0,zIndex:50,boxShadow:C.shadow}}>
+      <div style={{display:embedded?"none":"block",background:C.navBg,backdropFilter:"blur(20px)",borderBottom:"1px solid "+C.border,padding:"20px 24px 0",position:"sticky",top:0,zIndex:50,boxShadow:C.shadow}}>
         <div style={{maxWidth:1080,margin:"0 auto"}}>
           <div style={{opacity:ready?1:0,transform:ready?"none":"translateY(-10px)",transition:"all 0.5s"}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:12,marginBottom:14}}>
@@ -339,7 +341,7 @@ export default function PartnerFeedingGuide({ darkMode, onToggleTheme, language 
           </div>
         </div>
       </div>
-      <div style={{maxWidth:1080,margin:"0 auto",padding:"26px 20px 80px"}}>
+      <div style={{maxWidth:embedded?"none":1080,margin:"0 auto",padding:embedded?0:"26px 20px 80px"}}>
         <div style={{opacity:ready?1:0,transform:ready?"none":"translateY(14px)",transition:"all 0.5s ease 0.08s"}}>
           <div style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:22}}>
             {kpis.map((k,i)=><div key={i} style={{background:C.card,border:"1px solid "+C.border,borderRadius:14,padding:"14px 18px",flex:"1 1 160px"}}>
@@ -358,11 +360,11 @@ export default function PartnerFeedingGuide({ darkMode, onToggleTheme, language 
           <div style={{background:dark?C.accent+"03":C.card,border:"1px solid "+C.border,borderRadius:22,padding:"24px 22px",boxShadow:dark?"none":C.shadow}}>
             {renderSection()}
           </div>
-          <div style={{display:"flex",justifyContent:"space-between",marginTop:22,paddingTop:18,borderTop:"1px solid "+C.border}}>
+          <div style={{display:embedded?"none":"flex",justifyContent:"space-between",marginTop:22,paddingTop:18,borderTop:"1px solid "+C.border}}>
             {section>0?<button onClick={()=>setSection(s=>s-1)} style={{background:C.inputBg,border:"1px solid "+C.border,borderRadius:10,padding:"8px 18px",color:C.muted,fontSize:11.5,fontFamily:"'DM Mono',monospace",cursor:"pointer"}}>{ICONS[section-1]} {navLabels[section-1]}</button>:<div/>}
             {section<navLabels.length-1?<button onClick={()=>setSection(s=>s+1)} style={{background:C.accent+"18",border:"1px solid "+C.accent+"45",borderRadius:10,padding:"8px 18px",color:C.accent,fontSize:11.5,fontFamily:"'DM Mono',monospace",cursor:"pointer"}}>{navLabels[section+1]} {ICONS[section+1]} &rarr;</button>:<div/>}
           </div>
-          <div style={{textAlign:"center",fontSize:10.5,marginTop:24,lineHeight:1.7,color:dark?"rgba(148,163,184,0.22)":"rgba(30,41,59,0.35)",fontFamily:"'DM Mono',monospace"}}>Dieudonne Partner Hub · Created by and Researched by Chery Talent Management Agency</div>
+          <div style={{display:embedded?"none":"block",textAlign:"center",fontSize:10.5,marginTop:24,lineHeight:1.7,color:dark?"rgba(148,163,184,0.22)":"rgba(30,41,59,0.35)",fontFamily:"'DM Mono',monospace"}}>Dieudonne Partner Hub · Created by and Researched by Chery Talent Management Agency</div>
         </div>
       </div>
     </div>

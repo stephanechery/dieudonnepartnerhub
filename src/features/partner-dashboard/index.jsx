@@ -60,10 +60,14 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   const showAdminDashboard = isConfiguredOwnerUser(authUser, profile);
 
   useEffect(() => {
-    if (!authUser || lastTrackedPath.current === subPath) return;
+    if (!authUser) return;
 
     const lessonMatchForTracking = subPath.match(/^\/module\/([a-z0-9-]+)\/lesson\/([a-z0-9-]+)$/i);
-    const guideMatchForTracking = subPath.match(/^\/guides(?:\/([a-z0-9-]+))?$/i);
+    const guideMatchForTracking = subPath.match(/^\/guides(?:\/([a-z0-9-]+)(?:\/[a-z0-9-]+)?)?$/i);
+    const trackingPath = guideMatchForTracking?.[1]
+      ? `/guides/${guideMatchForTracking[1]}`
+      : subPath;
+    if (lastTrackedPath.current === trackingPath) return;
 
     if (lessonMatchForTracking) {
       trackPartnerEvent("lesson_start", {
@@ -90,7 +94,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
       });
     }
 
-    lastTrackedPath.current = subPath;
+    lastTrackedPath.current = trackingPath;
   }, [authUser, subPath]);
 
   if (authLoading) {
@@ -146,6 +150,8 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   };
   const openMore = () => navigate(`${BASE_PATH}/more`);
   const openGuide = (guideId) => navigate(`${BASE_PATH}/guides/${guideId}`);
+  const openGuideSection = (guideId, sectionId, { replace = false } = {}) =>
+    navigate(`${BASE_PATH}/guides/${guideId}/${sectionId}`, replace);
   const openVideoHub = (videoId) => {
     const videoParam = videoId ? `?video=${encodeURIComponent(videoId)}` : "";
     navigate(`${BASE_PATH}/video-hub${videoParam}`);
@@ -170,7 +176,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   };
   const moduleMatch = subPath.match(/^\/module\/([a-z0-9-]+)$/i);
   const lessonMatch = subPath.match(/^\/module\/([a-z0-9-]+)\/lesson\/([a-z0-9-]+)$/i);
-  const guidesMatch = subPath.match(/^\/guides(?:\/([a-z0-9-]+))?$/i);
+  const guidesMatch = subPath.match(/^\/guides(?:\/([a-z0-9-]+)(?:\/([a-z0-9-]+))?)?$/i);
   const navigateSiteHome = () => {
     if (embedded && onExit) {
       onExit();
@@ -248,14 +254,17 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     page = (
       <InteractiveGuidesPage
         guideId={guidesMatch[1] || null}
+        sectionId={guidesMatch[2] || null}
         onBack={openGuides}
         onBackToDashboard={openOverview}
         onOpenGuide={openGuide}
+        onNavigateSection={openGuideSection}
         darkMode={darkMode}
         onToggleTheme={onToggleTheme}
         language={language}
         onLanguageChange={onLanguageChange}
         translateText={translateText}
+        progressScope={authUser?.provider === "demo-org" ? "demo" : "learner"}
       />
     );
   } else if (moduleMatch) {
