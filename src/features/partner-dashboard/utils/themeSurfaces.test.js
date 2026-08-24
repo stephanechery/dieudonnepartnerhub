@@ -75,7 +75,23 @@ test("Video Hub receives the shared theme controls", async () => {
     /<VideoHubPage[\s\S]*?darkMode=\{darkMode\}[\s\S]*?onToggleTheme=\{onToggleTheme\}/
   );
   assert.match(videoHub, /<ThemeToggle[\s\S]*?darkMode=\{darkMode\}/);
-  assert.match(videoHub, /darkMode \? "bg-\[#050914\] text-slate-100" : "bg-slate-50 text-slate-900"/);
+  assert.match(videoHub, /darkMode \? "bg-slate-900 text-slate-100" : "bg-slate-50 text-slate-900"/);
+});
+
+test("dark mode uses the lighter shared slate canvas and elevated surfaces", async () => {
+  const [app, shell, desktopNav, publicStyles] = await Promise.all([
+    readFile(path.join(dashboardRoot, "..", "..", "App.jsx"), "utf8"),
+    readDashboardFile("components", "DashboardShell.jsx"),
+    readDashboardFile("components", "DesktopPlatformNav.jsx"),
+    readFile(path.join(dashboardRoot, "..", "..", "index.css"), "utf8"),
+  ]);
+
+  assert.match(app, /darkMode \? 'bg-slate-900' : 'bg-slate-50'/);
+  assert.match(shell, /darkMode \? "bg-slate-900" : "bg-slate-50"/);
+  assert.match(shell, /border-slate-700 bg-slate-800\/94/);
+  assert.match(desktopNav, /border-slate-700 bg-slate-900 text-slate-100/);
+  assert.match(publicStyles, /\.public-page-dark \{\s*background: #0f172a;/);
+  assert.match(publicStyles, /background: rgba\(30, 41, 59, 0\.9\)/);
 });
 
 test("compact Today surfaces preserve explicit light and dark theme pairs", async () => {
@@ -88,8 +104,8 @@ test("compact Today surfaces preserve explicit light and dark theme pairs", asyn
   assert.match(overview, /border-slate-200 bg-gradient-to-br from-white to-cyan-50\/60/);
   assert.match(overview, /darkMode \? "text-white" : "text-slate-950"/);
   assert.match(overview, /darkMode \? "text-slate-400" : "text-slate-600"/);
-  assert.match(discovery, /dark:border-slate-800 dark:bg-slate-950/);
-  assert.match(discovery, /dark:from-slate-950 dark:via-slate-950 dark:to-cyan-950\/30/);
+  assert.match(discovery, /dark:border-slate-700 dark:bg-slate-800\/90/);
+  assert.match(discovery, /dark:from-slate-800 dark:via-slate-800 dark:to-cyan-900\/30/);
 });
 
 test("admin dashboard applies the selected range and reports persisted completions", async () => {

@@ -98,5 +98,5 @@ test("discovery and maternal data follow the persisted Partner Platform theme se
   const tailwind = read("../../../../tailwind.config.js");
   const page = read("../pages/MaternalDataPage.jsx");
   assert.match(tailwind, /darkMode:\s*\["selector", '\[data-theme="dark"\]'\]/);
-  assert.match(page, /dark:bg-slate-950/);
+  assert.match(page, /dark:bg-slate-800/);
 });

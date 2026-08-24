@@ -86,7 +86,7 @@ export default function TrainingPage({
         ) : (
           <ul className="mt-3 space-y-3">
             {metrics.recentlyCompleted.slice(0, 6).map((item) => (
-              <li key={`${item.moduleId}-${item.lessonId}-${item.completedAt}`} className={`rounded-xl border p-3 ${darkMode ? "border-slate-800 bg-slate-950/60" : "border-slate-200 bg-slate-50"}`}>
+              <li key={`${item.moduleId}-${item.lessonId}-${item.completedAt}`} className={`rounded-xl border p-3 ${darkMode ? "border-slate-700 bg-slate-800/72" : "border-slate-200 bg-slate-50"}`}>
                 <p className={`text-sm font-black ${darkMode ? "text-slate-100" : "text-slate-900"}`}>{tx(item.lessonTitle)}</p>
                 <p className={`mt-1 text-xs ${darkMode ? "text-slate-400" : "text-slate-500"}`}>{tx(item.moduleTitle)}</p>
                 <button

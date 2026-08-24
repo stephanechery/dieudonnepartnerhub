@@ -5356,7 +5356,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
   ];
 
   return (
-    <div ref={appRootRef} data-main-guide-app className={`min-h-screen p-4 font-sans transition-colors duration-500 md:p-8 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
+    <div ref={appRootRef} data-main-guide-app className={`min-h-screen p-4 font-sans transition-colors duration-500 md:p-8 ${darkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
       {aiResult && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-md">
           <div className={`flex min-h-0 max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl shadow-2xl ${darkMode ? 'border border-slate-800 bg-slate-900' : 'border border-slate-200 bg-white'}`}>
@@ -5431,7 +5431,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
 
       <header className={`hero-topbar relative z-50 mx-auto mb-6 flex max-w-7xl flex-col justify-between gap-3 rounded-[1.75rem] border px-4 py-3 shadow-2xl sm:mb-8 sm:flex-row sm:items-center sm:gap-4 sm:rounded-[2.25rem] sm:px-6 ${
         darkMode
-          ? 'border-slate-700/70 bg-slate-950/86 text-slate-100 shadow-cyan-950/20'
+          ? 'border-slate-600/70 bg-slate-900/92 text-slate-100 shadow-slate-950/20'
           : 'border-white/80 bg-white/86 text-slate-900 shadow-slate-200/70 backdrop-blur-xl'
       }`}>
         <div className="flex items-center gap-4">
@@ -5547,7 +5547,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
 
       <section
         className={`hero-premium-section mx-auto mb-8 max-w-7xl overflow-hidden rounded-[1.5rem] border px-4 py-6 sm:px-8 sm:py-10 md:min-h-[72vh] md:rounded-[2.25rem] lg:px-12 lg:py-12 ${
-          darkMode ? 'hero-premium-section-dark border-slate-800 bg-slate-950' : 'hero-premium-section-light border-slate-200 bg-white'
+          darkMode ? 'hero-premium-section-dark border-slate-700 bg-slate-900' : 'hero-premium-section-light border-slate-200 bg-white'
         }`}
       >
         <div className="relative">
@@ -5617,7 +5617,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
 
               <div className={`hero-action-dock hidden w-full max-w-xl rounded-[1.35rem] border p-2 sm:block ${
                 darkMode
-                  ? 'border-slate-600/80 bg-slate-950/55 shadow-black/20'
+                  ? 'border-slate-600/80 bg-slate-800/72 shadow-slate-950/20'
                   : 'border-slate-200 bg-white/75 shadow-slate-200/70'
               }`}>
                 <div className="grid gap-2 md:grid-cols-[1.08fr_0.92fr]">
@@ -5634,7 +5634,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
                     onClick={handleHeroExploreGuide}
                     className={`hero-cta-button inline-flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-base font-extrabold transition-colors ${
                       darkMode
-                        ? 'border-slate-700 bg-slate-950/50 text-slate-100 hover:border-slate-500'
+                        ? 'border-slate-600 bg-slate-800/74 text-slate-100 hover:border-slate-500'
                         : 'border-slate-300 bg-white/85 text-slate-800 hover:bg-slate-100'
                     }`}
                   >
@@ -5666,7 +5666,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
             </div>
 
             <div className="relative lg:self-center">
-              <div className={`hero-media-card overflow-hidden rounded-[1.6rem] border sm:rounded-[2rem] ${darkMode ? 'border-slate-700 bg-slate-950/70' : 'border-slate-200 bg-slate-100'}`}>
+              <div className={`hero-media-card overflow-hidden rounded-[1.6rem] border sm:rounded-[2rem] ${darkMode ? 'border-slate-600 bg-slate-800/78' : 'border-slate-200 bg-slate-100'}`}>
                 <img
                   src={heroImageSrc}
                   alt={translateText('Partner support journey illustration')}
@@ -5678,11 +5678,11 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
                     }
                   }}
                 />
-                <div className={`pointer-events-none absolute inset-0 ${darkMode ? 'bg-gradient-to-t from-slate-950/60 via-transparent to-transparent' : 'bg-gradient-to-t from-slate-100/60 via-transparent to-transparent'}`} />
+                <div className={`pointer-events-none absolute inset-0 ${darkMode ? 'bg-gradient-to-t from-slate-900/45 via-transparent to-transparent' : 'bg-gradient-to-t from-slate-100/60 via-transparent to-transparent'}`} />
               </div>
 
               <div className={`hero-feature-rail mt-4 grid gap-2 rounded-[1.4rem] border p-3 sm:grid-cols-4 ${
-                darkMode ? 'border-indigo-500/35 bg-slate-950/78 text-slate-100' : 'border-indigo-200 bg-white/86 text-slate-900'
+                darkMode ? 'border-indigo-400/35 bg-slate-800/84 text-slate-100' : 'border-indigo-200 bg-white/86 text-slate-900'
               }`}>
                 {[
                   { icon: <ShieldCheck className="h-5 w-5" />, label: 'Evidence-Informed', detail: 'Clinically reviewed content you can trust.' },
@@ -5690,7 +5690,7 @@ ${card.scenario || 'Pick one support action and do it before she has to ask.'}`;
                   { icon: <MessageSquare className="h-5 w-5" />, label: 'Smart Coaching', detail: 'Guidance when it matters most.' },
                   { icon: <CheckSquare className="h-5 w-5" />, label: 'Real-Time Support', detail: 'Tools for every moment.' }
                 ].map((item) => (
-                  <div key={item.label} className={`rounded-2xl px-3 py-3 text-center ${darkMode ? 'bg-slate-900/70' : 'bg-slate-50'}`}>
+                  <div key={item.label} className={`rounded-2xl px-3 py-3 text-center ${darkMode ? 'bg-slate-700/58' : 'bg-slate-50'}`}>
                     <div className={`mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-2xl ${
                       darkMode ? 'bg-indigo-500/12 text-cyan-300' : 'bg-indigo-100 text-indigo-700'
                     }`}>

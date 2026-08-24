@@ -132,7 +132,7 @@ function SidebarNav({
       <aside
         className={`fixed inset-y-0 left-0 z-40 w-[286px] border-r px-4 py-5 shadow-2xl transition-transform duration-300 lg:sticky lg:top-0 lg:z-auto lg:h-[calc(100dvh-2rem)] lg:translate-x-0 lg:rounded-[1.75rem] lg:border lg:shadow-none ${themeClass(
           darkMode,
-          "border-white/10 bg-slate-950/95 shadow-slate-950/60 lg:bg-slate-950/70",
+          "border-slate-600/70 bg-slate-900/96 shadow-slate-950/40 lg:bg-slate-900/88",
           "border-slate-200 bg-white/95 shadow-slate-300/40 lg:bg-white/90"
         )} ${
           open ? "translate-x-0" : "-translate-x-full"
@@ -238,7 +238,7 @@ function TopSearchBar({
   showAdminDashboard,
 }) {
   return (
-    <div className={`sticky top-0 z-20 border-b px-4 py-4 backdrop-blur-xl lg:rounded-t-[1.75rem] ${darkMode ? "border-white/10 bg-slate-950/86" : "border-slate-200 bg-white/90"}`}>
+    <div className={`sticky top-0 z-20 border-b px-4 py-4 backdrop-blur-xl lg:rounded-t-[1.75rem] ${darkMode ? "border-slate-600/70 bg-slate-800/90" : "border-slate-200 bg-white/90"}`}>
       <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <button
@@ -308,7 +308,7 @@ function TopSearchBar({
 function HeroVisualCard({ darkMode }) {
   return (
     <section
-      className={`relative w-full overflow-hidden rounded-[2rem] border p-3 md:p-4 ${darkMode ? "border-white/10 bg-[#070d1d] shadow-[0_30px_90px_rgba(0,0,0,0.45)]" : "border-slate-200 bg-white shadow-lg shadow-slate-300/40"}`}
+      className={`relative w-full overflow-hidden rounded-[2rem] border p-3 md:p-4 ${darkMode ? "border-slate-600/70 bg-slate-800/90 shadow-[0_24px_70px_rgba(2,6,23,0.32)]" : "border-slate-200 bg-white shadow-lg shadow-slate-300/40"}`}
       aria-label="Dieudonne Partner Video Hub visual"
     >
       <img
@@ -322,7 +322,7 @@ function HeroVisualCard({ darkMode }) {
 
 function HeroVideoSection({ onPrimary, onExplore, darkMode }) {
   return (
-    <section className={`m-4 grid gap-5 overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:m-5 sm:p-5 lg:mx-7 lg:mb-6 lg:mt-7 lg:grid-cols-[0.92fr_1.08fr] ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-950 to-cyan-950/35" : "border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55"}`}>
+    <section className={`m-4 grid gap-5 overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:m-5 sm:p-5 lg:mx-7 lg:mb-6 lg:mt-7 lg:grid-cols-[0.92fr_1.08fr] ${darkMode ? "border-slate-700 bg-gradient-to-br from-slate-800 via-slate-800 to-cyan-900/35" : "border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55"}`}>
       <div className="flex min-w-0 flex-col justify-center">
         <p className={`mb-3 w-fit rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] ${darkMode ? "border-cyan-300/20 bg-cyan-300/10 text-cyan-200" : "border-cyan-200 bg-cyan-50 text-cyan-800"}`}>
           Dieudonne Partner Video Hub
@@ -1040,8 +1040,8 @@ export default function VideoHubPage({
   };
 
   return (
-    <div className={`relative min-h-[100dvh] overflow-hidden ${darkMode ? "bg-[#050914] text-slate-100" : "bg-slate-50 text-slate-900"}`}>
-      <div className={`pointer-events-none absolute inset-0 ${darkMode ? "bg-[radial-gradient(circle_at_18%_8%,rgba(34,211,238,0.14),transparent_30%),radial-gradient(circle_at_80%_18%,rgba(217,70,239,0.14),transparent_28%),linear-gradient(180deg,rgba(15,23,42,0.4),rgba(2,6,23,0.9))]" : "bg-[radial-gradient(circle_at_18%_8%,rgba(14,165,233,0.12),transparent_30%),radial-gradient(circle_at_80%_18%,rgba(192,38,211,0.08),transparent_28%),linear-gradient(180deg,rgba(248,250,252,0.72),rgba(241,245,249,0.96))]"}`} />
+    <div className={`relative min-h-[100dvh] overflow-hidden ${darkMode ? "bg-slate-900 text-slate-100" : "bg-slate-50 text-slate-900"}`}>
+      <div className={`pointer-events-none absolute inset-0 ${darkMode ? "bg-[radial-gradient(circle_at_18%_8%,rgba(34,211,238,0.16),transparent_30%),radial-gradient(circle_at_80%_18%,rgba(217,70,239,0.14),transparent_28%),linear-gradient(180deg,rgba(30,41,59,0.38),rgba(15,23,42,0.82))]" : "bg-[radial-gradient(circle_at_18%_8%,rgba(14,165,233,0.12),transparent_30%),radial-gradient(circle_at_80%_18%,rgba(192,38,211,0.08),transparent_28%),linear-gradient(180deg,rgba(248,250,252,0.72),rgba(241,245,249,0.96))]"}`} />
       <div className="relative grid min-h-[100dvh] gap-0 lg:grid-cols-[286px_1fr] lg:p-4">
         <SidebarNav
           open={sidebarOpen}
@@ -1053,7 +1053,7 @@ export default function VideoHubPage({
           libraryView={libraryView}
           onItemSelect={handleSidebarItem}
         />
-        <main className={`min-w-0 overflow-hidden backdrop-blur-xl lg:rounded-[1.75rem] lg:border ${darkMode ? "border-white/10 bg-slate-950/40" : "border-slate-200 bg-white/80 shadow-sm"}`}>
+        <main className={`min-w-0 overflow-hidden backdrop-blur-xl lg:rounded-[1.75rem] lg:border ${darkMode ? "border-slate-600/60 bg-slate-800/60" : "border-slate-200 bg-white/80 shadow-sm"}`}>
           <TopSearchBar
             query={query}
             onQueryChange={setQuery}

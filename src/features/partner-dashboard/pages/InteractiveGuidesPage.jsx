@@ -176,7 +176,7 @@ export default function InteractiveGuidesPage({
   if (selectedGuide && SelectedGuideComponent) {
     return (
       <div className="space-y-4">
-        <section className={`rounded-[1.5rem] border p-4 ${darkMode ? "border-slate-800 bg-slate-950 shadow-xl shadow-black/20" : "border-slate-200 bg-white shadow-sm"}`}>
+        <section className={`rounded-[1.5rem] border p-4 ${darkMode ? "border-slate-700 bg-slate-800/90 shadow-xl shadow-slate-950/20" : "border-slate-200 bg-white shadow-sm"}`}>
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
@@ -199,10 +199,10 @@ export default function InteractiveGuidesPage({
           </div>
         </section>
 
-        <div className={`overflow-hidden rounded-[1.5rem] border ${darkMode ? "border-slate-800 bg-slate-950 shadow-2xl shadow-black/30" : "border-slate-200 bg-white shadow-sm"}`}>
+        <div className={`overflow-hidden rounded-[1.5rem] border ${darkMode ? "border-slate-700 bg-slate-800/90 shadow-2xl shadow-slate-950/25" : "border-slate-200 bg-white shadow-sm"}`}>
           <Suspense
             fallback={
-              <div className={`flex min-h-[420px] items-center justify-center text-sm font-bold ${darkMode ? "bg-slate-950 text-slate-400" : "bg-white text-slate-600"}`}>
+              <div className={`flex min-h-[420px] items-center justify-center text-sm font-bold ${darkMode ? "bg-slate-800 text-slate-300" : "bg-white text-slate-600"}`}>
                 {tx("Loading interactive guide...")}
               </div>
             }
@@ -219,7 +219,7 @@ export default function InteractiveGuidesPage({
 
   return (
     <div className="space-y-5 pb-20 sm:pb-0">
-      <section className={`overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-950 to-cyan-950/35" : "border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55"}`}>
+      <section className={`overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:p-5 ${darkMode ? "border-slate-700 bg-gradient-to-br from-slate-800 via-slate-800 to-cyan-900/35" : "border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55"}`}>
         <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
           <div className="max-w-3xl">
             <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>

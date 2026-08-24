@@ -80,7 +80,7 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
   return (
     <article
       id={`maternal-highlight-${highlight.id}`}
-      className={`scroll-mt-28 self-start overflow-hidden rounded-[1.35rem] border bg-white shadow-sm dark:bg-slate-900 ${expanded ? "lg:col-span-2" : ""} ${tone.border}`}
+      className={`scroll-mt-28 self-start overflow-hidden rounded-[1.35rem] border bg-white shadow-sm dark:bg-slate-800/90 ${expanded ? "lg:col-span-2" : ""} ${tone.border}`}
     >
       <button
         type="button"
@@ -172,7 +172,7 @@ export default function MaternalDataPage({
 
   return (
     <div className="space-y-4 sm:space-y-5">
-      <section className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55 p-4 shadow-sm sm:p-5 dark:border-slate-800 dark:from-slate-950 dark:via-slate-950 dark:to-cyan-950/35">
+      <section className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55 p-4 shadow-sm sm:p-5 dark:border-slate-700 dark:from-slate-800 dark:via-slate-800 dark:to-cyan-900/35">
         <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
           <div className="min-w-0">
             <h2 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
@@ -191,7 +191,7 @@ export default function MaternalDataPage({
           </div>
         </div>
 
-        <div className="mt-4 border-t border-slate-200/80 pt-4 dark:border-slate-800">
+        <div className="mt-4 border-t border-slate-200/80 pt-4 dark:border-slate-700">
           <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3" role="group" aria-label={tx("Choose maternal data view")}>
             {groupOptions.map(({ id, label, Icon }) => {
               const active = activeGroup === id;
@@ -209,7 +209,7 @@ export default function MaternalDataPage({
                   className={`flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-xl border px-2 py-2 text-xs font-black leading-tight transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:min-h-12 sm:gap-2 sm:rounded-2xl sm:px-3 sm:text-sm ${
                     active
                       ? "border-slate-950 bg-slate-950 text-white dark:border-cyan-300 dark:bg-cyan-300 dark:text-slate-950"
-                      : "border-slate-200 bg-slate-50 text-slate-700 hover:border-cyan-300 hover:text-cyan-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-400/40 dark:hover:text-cyan-200"
+                      : "border-slate-200 bg-slate-50 text-slate-700 hover:border-cyan-300 hover:text-cyan-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-cyan-400/40 dark:hover:text-cyan-200"
                   }`}
                 >
                   <Icon className="h-4 w-4" aria-hidden="true" /> {tx(label)}
@@ -256,7 +256,7 @@ export default function MaternalDataPage({
         </div>
       </section>
 
-      <details className="group rounded-2xl border border-slate-200 bg-slate-50 text-sm leading-relaxed text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+      <details className="group rounded-2xl border border-slate-200 bg-slate-50 text-sm leading-relaxed text-slate-600 dark:border-slate-600 dark:bg-slate-800/88 dark:text-slate-300">
         <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 font-black text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-white">
           {tx("How to read and compare these numbers")}
           <ChevronDown className="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
@@ -276,7 +276,7 @@ export default function MaternalDataPage({
               href={maternalHealthSources.hearHer.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-3 text-xs font-black text-slate-700 hover:border-cyan-300 hover:text-cyan-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-cyan-400/40 dark:hover:text-cyan-200"
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-3 text-xs font-black text-slate-700 hover:border-cyan-300 hover:text-cyan-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-cyan-400/40 dark:hover:text-cyan-200"
             >
               {tx("Open CDC warning signs and support guidance")}
               <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />

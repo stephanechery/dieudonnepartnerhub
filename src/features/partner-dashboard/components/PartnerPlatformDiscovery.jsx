@@ -55,7 +55,7 @@ function SearchResult({ result, onSelect, translateText, mobileHidden = false })
       <span
         className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${
           result.safety
-            ? "border-rose-200 bg-white text-rose-700 dark:border-rose-400/25 dark:bg-slate-950 dark:text-rose-200"
+            ? "border-rose-200 bg-white text-rose-700 dark:border-rose-400/25 dark:bg-slate-800 dark:text-rose-200"
             : "border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-200"
         }`}
       >
@@ -170,8 +170,8 @@ export default function PartnerPlatformDiscovery({
   };
 
   return (
-    <section className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:shadow-xl">
-      <div className="bg-gradient-to-br from-white via-cyan-50/45 to-indigo-50/50 p-4 sm:p-6 dark:from-slate-950 dark:via-slate-950 dark:to-cyan-950/30">
+    <section className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800/90 dark:shadow-xl">
+      <div className="bg-gradient-to-br from-white via-cyan-50/45 to-indigo-50/50 p-4 sm:p-6 dark:from-slate-800 dark:via-slate-800 dark:to-cyan-900/30">
         <div className="max-w-3xl">
           <h2 className="text-xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
             {tx("What do you need right now?")}
@@ -282,7 +282,7 @@ export default function PartnerPlatformDiscovery({
                       <a
                         key={citation.id}
                         href={citation.href}
-                        className="flex min-h-11 items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-black text-slate-800 transition hover:border-cyan-300 hover:text-cyan-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:hover:border-cyan-400/50 dark:hover:text-cyan-200"
+                        className="flex min-h-11 items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-black text-slate-800 transition hover:border-cyan-300 hover:text-cyan-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-cyan-400/50 dark:hover:text-cyan-200"
                       >
                         <span>{tx(citation.title)}</span>
                         <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />

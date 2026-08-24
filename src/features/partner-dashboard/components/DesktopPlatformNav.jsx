@@ -53,7 +53,7 @@ export default function DesktopPlatformNav({
       id="partner-platform-sidebar"
       className={`sticky top-0 hidden h-screen w-[272px] shrink-0 flex-col border-r px-5 py-7 md:flex ${
         darkMode
-          ? "border-slate-800 bg-slate-950 text-slate-100"
+          ? "border-slate-700 bg-slate-900 text-slate-100"
           : "border-slate-200 bg-white text-slate-950"
       }`}
     >
@@ -86,7 +86,7 @@ export default function DesktopPlatformNav({
           aria-expanded="true"
           className={`inline-flex min-h-11 items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
             darkMode
-              ? "text-slate-300 hover:bg-slate-900 focus-visible:ring-offset-slate-950"
+              ? "text-slate-300 hover:bg-slate-800 focus-visible:ring-offset-slate-900"
               : "text-slate-600 hover:bg-slate-100 focus-visible:ring-offset-white"
           }`}
         >
@@ -107,10 +107,10 @@ export default function DesktopPlatformNav({
               className={`flex min-h-12 w-full items-center gap-3 rounded-2xl px-2 py-2 text-left text-sm font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 ${
                 active
                   ? darkMode
-                    ? "bg-slate-900 text-cyan-200 focus-visible:ring-offset-slate-950"
+                    ? "bg-slate-800 text-cyan-200 focus-visible:ring-offset-slate-900"
                     : "bg-cyan-50 text-cyan-800 focus-visible:ring-offset-white"
                   : darkMode
-                    ? "text-slate-300 hover:bg-slate-900 hover:text-white focus-visible:ring-offset-slate-950"
+                    ? "text-slate-300 hover:bg-slate-800 hover:text-white focus-visible:ring-offset-slate-900"
                     : "text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-offset-white"
               }`}
             >
@@ -120,7 +120,7 @@ export default function DesktopPlatformNav({
                     ? "bg-cyan-300 text-slate-950"
                     : "bg-slate-950 text-white"
                   : darkMode
-                    ? "bg-slate-900 text-slate-400"
+                    ? "bg-slate-800 text-slate-300"
                     : "bg-slate-100 text-slate-600"
               }`}>
                 <Icon className="h-4 w-4" aria-hidden="true" />
@@ -132,7 +132,7 @@ export default function DesktopPlatformNav({
       </nav>
 
       <div className="mt-auto space-y-3 pt-6">
-        <section className={`rounded-3xl border p-4 ${darkMode ? "border-slate-800 bg-slate-900" : "border-slate-200 bg-slate-50"}`}>
+        <section className={`rounded-3xl border p-4 ${darkMode ? "border-slate-700 bg-slate-800/85" : "border-slate-200 bg-slate-50"}`}>
           <p className={`text-[10px] font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
             {tx("Your progress")}
           </p>
@@ -157,7 +157,7 @@ export default function DesktopPlatformNav({
           onClick={() => onNavigate("more")}
           className={`flex min-h-14 w-full items-center gap-3 rounded-3xl p-2 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 ${
             darkMode
-              ? "bg-cyan-300/10 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-950"
+              ? "bg-cyan-300/10 hover:bg-cyan-300/15 focus-visible:ring-offset-slate-900"
               : "bg-cyan-50 hover:bg-cyan-100 focus-visible:ring-offset-white"
           }`}
         >

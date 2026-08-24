@@ -57,7 +57,7 @@ export default function DashboardShell({
       <img
         src={dieudonneDarkLogo}
         alt="Dieudonne logo"
-        className={`h-9 w-auto rounded-lg border p-1 sm:h-12 md:hidden ${darkMode ? "border-slate-700 bg-slate-950" : "border-slate-200 bg-slate-50"}`}
+        className={`h-9 w-auto rounded-lg border p-1 sm:h-12 md:hidden ${darkMode ? "border-slate-600 bg-slate-800" : "border-slate-200 bg-slate-50"}`}
       />
       <div className="min-w-0">
         <p className={`hidden text-[10px] font-black uppercase tracking-[0.18em] md:block ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
@@ -165,7 +165,7 @@ export default function DashboardShell({
       className={
         embedded
           ? "relative w-full"
-          : `relative min-h-[100dvh] px-3 py-4 sm:px-4 sm:py-6 md:min-h-screen md:px-0 md:py-0 ${darkMode ? "bg-slate-950" : "bg-slate-50"}`
+          : `relative min-h-[100dvh] px-3 py-4 sm:px-4 sm:py-6 md:min-h-screen md:px-0 md:py-0 ${darkMode ? "bg-slate-900" : "bg-slate-50"}`
       }
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-cyan-500/10 via-rose-500/5 to-transparent" />
@@ -192,7 +192,7 @@ export default function DashboardShell({
           <header
             className={`${useMaternalDataHeaderTreatment ? "mb-4 block px-3 py-3 sm:px-4 sm:py-4" : "mb-4 flex flex-col justify-between gap-3 px-3 py-3 sm:mb-6 sm:gap-4 sm:px-5 sm:py-5 md:flex-row md:items-center"} rounded-[1.5rem] border sm:rounded-[1.75rem] ${
               darkMode
-                ? "border-slate-800 bg-slate-900/95 shadow-xl shadow-black/20"
+                ? "border-slate-700 bg-slate-800/94 shadow-xl shadow-slate-950/20"
                 : "border-slate-200 bg-white/95 shadow-sm"
             }`}
           >
@@ -209,7 +209,7 @@ export default function DashboardShell({
                     {logoutControl}
                   </div>
                 </div>
-                <div className={`flex flex-col gap-3 border-t pt-3 sm:flex-row sm:items-center sm:justify-between ${darkMode ? "border-slate-800" : "border-slate-200"}`}>
+                <div className={`flex flex-col gap-3 border-t pt-3 sm:flex-row sm:items-center sm:justify-between ${darkMode ? "border-slate-700" : "border-slate-200"}`}>
                   {identityBlock}
                   {progressStatus}
                 </div>

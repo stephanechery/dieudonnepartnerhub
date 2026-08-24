@@ -36,7 +36,7 @@ export default function MorePage({
 
   return (
     <div className="space-y-5">
-      <section className={`overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:p-5 ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-950 via-slate-950 to-cyan-950/35" : "border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55"}`}>
+      <section className={`overflow-hidden rounded-[1.75rem] border p-4 shadow-sm sm:p-5 ${darkMode ? "border-slate-700 bg-gradient-to-br from-slate-800 via-slate-800 to-cyan-900/35" : "border-slate-200 bg-gradient-to-br from-white via-cyan-50/55 to-indigo-50/55"}`}>
         <p className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
           <UserRound className="h-4 w-4" aria-hidden="true" /> {tx("More")}
         </p>
@@ -72,7 +72,7 @@ export default function MorePage({
                 setSaved(false);
               }}
               placeholder={tx("Optional")}
-              className={`mt-1 h-12 w-full rounded-xl border px-4 text-base font-semibold outline-none transition focus:border-cyan-400 ${darkMode ? "border-slate-700 bg-slate-950 text-slate-100 placeholder:text-slate-600" : "border-slate-300 bg-white text-slate-900 placeholder:text-slate-400"}`}
+              className={`mt-1 h-12 w-full rounded-xl border px-4 text-base font-semibold outline-none transition focus:border-cyan-400 ${darkMode ? "border-slate-600 bg-slate-800 text-slate-100 placeholder:text-slate-500" : "border-slate-300 bg-white text-slate-900 placeholder:text-slate-400"}`}
             />
           </label>
           <button type="submit" className={`mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-black text-white transition ${darkMode ? "bg-cyan-700 hover:bg-cyan-800" : "bg-slate-900 hover:bg-slate-800"}`}>

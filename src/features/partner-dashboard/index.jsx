@@ -99,7 +99,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         className={
           embedded
             ? `rounded-[2rem] border px-4 py-10 text-center ${darkMode ? "border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 text-slate-300 shadow-xl" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 text-slate-600 shadow-sm"}`
-            : `min-h-screen px-4 py-10 text-center ${darkMode ? "bg-slate-950 text-slate-300" : "bg-slate-50 text-slate-600"}`
+            : `min-h-screen px-4 py-10 text-center ${darkMode ? "bg-slate-900 text-slate-300" : "bg-slate-50 text-slate-600"}`
         }
       >
         <div className="mx-auto flex max-w-md flex-col items-center gap-3">
@@ -112,7 +112,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
 
   if (!authUser) {
     return (
-      <div className={embedded ? "w-full" : `min-h-screen px-4 py-8 md:px-8 ${darkMode ? "bg-slate-950" : "bg-slate-50"}`}>
+      <div className={embedded ? "w-full" : `min-h-screen px-4 py-8 md:px-8 ${darkMode ? "bg-slate-900" : "bg-slate-50"}`}>
         <AuthPanel darkMode={darkMode} onToggleTheme={onToggleTheme} translateText={translateText} />
       </div>
     );
