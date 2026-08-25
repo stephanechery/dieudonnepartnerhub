@@ -4,6 +4,7 @@ import {
   GraduationCap,
   House,
   Library,
+  LifeBuoy,
   Menu,
   PanelLeftClose,
   Video,
@@ -16,6 +17,7 @@ const navItems = [
   { id: "training", label: "Training", Icon: GraduationCap },
   { id: "guides", label: "Guides", Icon: Library },
   { id: "data", label: "Maternal Data", Icon: BarChart3 },
+  { id: "resources", label: "Resources", Icon: LifeBuoy },
   { id: "videos", label: "Videos", Icon: Video },
   { id: "more", label: "More", Icon: Menu },
 ];

@@ -7,6 +7,7 @@ import partnerPlatformTranslationPack from './features/language/partner-platform
 import partnerContentTranslationPack from './features/language/partner-content-translations.json';
 import supplementalTranslationPack from './features/language/supplemental-translations.json';
 import discoveryTranslationPack from './features/language/discovery-translations.json';
+import resourcesTranslationPack from './features/language/resources-translations.json';
 import {
   Heart,
   Brain,
@@ -1785,7 +1786,8 @@ const LOCAL_LANGUAGE_PACKS = {
   partnerPlatform: partnerPlatformTranslationPack,
   partnerContent: partnerContentTranslationPack,
   supplemental: supplementalTranslationPack,
-  discovery: discoveryTranslationPack
+  discovery: discoveryTranslationPack,
+  resources: resourcesTranslationPack
 };
 
 const VALID_LANGUAGE_CODES = new Set(LANGUAGE_OPTIONS.map((option) => option.code));
@@ -3351,7 +3353,8 @@ const getStaticTranslationMap = (locale) => ({
   ...(LOCAL_LANGUAGE_PACKS.supplemental?.[locale] || {}),
   ...(LOCAL_LANGUAGE_PACKS.partnerPlatform?.[locale] || {}),
   ...(LOCAL_LANGUAGE_PACKS.partnerContent?.[locale] || {}),
-  ...(LOCAL_LANGUAGE_PACKS.discovery?.[locale] || {})
+  ...(LOCAL_LANGUAGE_PACKS.discovery?.[locale] || {}),
+  ...(LOCAL_LANGUAGE_PACKS.resources?.[locale] || {})
 });
 
 const localizeUiString = (value, locale, translationMap) => {

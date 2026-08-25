@@ -19,6 +19,7 @@ const pageLabels = {
   training: "Training",
   guides: "Guides",
   data: "Maternal Data",
+  resources: "Resources",
   videos: "Videos",
   more: "More",
 };

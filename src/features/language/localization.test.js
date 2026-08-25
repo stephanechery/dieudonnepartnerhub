@@ -14,6 +14,7 @@ const catalogs = [
   parse("./partner-content-translations.json"),
   parse("./supplemental-translations.json"),
   parse("./discovery-translations.json"),
+  parse("./resources-translations.json"),
 ];
 
 const mergedCatalog = (locale) =>
@@ -31,6 +32,13 @@ test("committed catalogs cover critical navigation and safety text", () => {
       "Guides",
       "Videos",
       "More",
+      "Resources",
+      "Find the right next contact",
+      "Urgent help",
+      "Warning signs",
+      "Mental health",
+      "Practical support",
+      "Benefits & planning",
       "Search Partner Platform",
       "Recent maternal health data",
       "National overview and disparities",
@@ -95,6 +103,26 @@ test("maternal data and discovery interface are translated in every supported la
     const catalog = mergedCatalog(locale);
     for (const source of new Set([...interfaceStrings, ...pageDataStrings, ...dataStrings])) {
       assert.ok(catalog[source], `${locale} is missing maternal or discovery text: ${source}`);
+    }
+  }
+});
+
+test("Resources Dashboard interface and verified resource copy are translated in every supported language", () => {
+  const resourcesPageSource = read("../partner-dashboard/pages/ResourcesDashboardPage.jsx");
+  const resourcesDataSource = read("../partner-dashboard/data/resourcesDashboard.js");
+  const interfaceStrings = Array.from(
+    resourcesPageSource.matchAll(/tx\("([^"]+)"\)/g),
+    (match) => match[1]
+  );
+  const dataStrings = Array.from(
+    resourcesDataSource.matchAll(/(?:label|title|description):\s*"([^"]+)"/g),
+    (match) => match[1]
+  );
+
+  for (const locale of ["es", "fr", "ht"]) {
+    const catalog = mergedCatalog(locale);
+    for (const source of new Set([...interfaceStrings, ...dataStrings])) {
+      assert.ok(catalog[source], `${locale} is missing Resources Dashboard text: ${source}`);
     }
   }
 });

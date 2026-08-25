@@ -31,7 +31,7 @@ test("desktop navigation exposes the approved workspace destinations", async () 
     readDashboardFile("index.jsx"),
   ]);
 
-  for (const label of ["Today", "Training", "Guides", "Maternal Data", "Videos", "More"]) {
+  for (const label of ["Today", "Training", "Guides", "Maternal Data", "Resources", "Videos", "More"]) {
     assert.match(nav, new RegExp(`label: "${label}"`));
   }
 
@@ -41,6 +41,7 @@ test("desktop navigation exposes the approved workspace destinations", async () 
   assert.match(router, /<DashboardShell[\s\S]*?activeItem=\{activePlatformItem\}/);
   assert.match(router, /onNavigatePlatform=\{\(item\) =>/);
   assert.match(router, /item === "data"\) openMaternalData\(\)/);
+  assert.match(router, /item === "resources"\) openResources\(\)/);
   assert.match(router, /maternalDataMatch = subPath\.match[\s\S]*?else if \(maternalDataMatch\)[\s\S]*?<MaternalDataPage/);
 });
 

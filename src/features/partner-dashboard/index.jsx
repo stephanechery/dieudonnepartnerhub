@@ -10,6 +10,7 @@ import LessonPage from "./pages/LessonPage";
 import InteractiveGuidesPage from "./pages/InteractiveGuidesPage";
 import MaternalDataPage from "./pages/MaternalDataPage";
 import MorePage from "./pages/MorePage";
+import ResourcesDashboardPage from "./pages/ResourcesDashboardPage";
 import TrainingPage from "./pages/TrainingPage";
 import VideoHubPage from "./pages/VideoHubPage";
 import LocalizedDomBoundary from "../language/LocalizedDomBoundary";
@@ -150,6 +151,9 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   };
   const openMaternalDataSection = (sectionId) =>
     navigate(`${BASE_PATH}/maternal-data/${sectionId}`);
+  const openResources = () => navigate(`${BASE_PATH}/resources`);
+  const openResourcesSection = (sectionId) =>
+    navigate(`${BASE_PATH}/resources/${sectionId}`);
   const openMore = () => navigate(`${BASE_PATH}/more`);
   const openGuide = (guideId) => navigate(`${BASE_PATH}/guides/${guideId}`);
   const openGuideSection = (guideId, sectionId, { replace = false } = {}) =>
@@ -180,6 +184,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   const lessonMatch = subPath.match(/^\/module\/([a-z0-9-]+)\/lesson\/([a-z0-9-]+)$/i);
   const guidesMatch = subPath.match(/^\/guides(?:\/([a-z0-9-]+)(?:\/([a-z0-9-]+))?)?$/i);
   const maternalDataMatch = subPath.match(/^\/maternal-data(?:\/([a-z0-9-]+))?$/i);
+  const resourcesMatch = subPath.match(/^\/resources(?:\/([a-z0-9-]+))?$/i);
   const navigateSiteHome = () => {
     if (embedded && onExit) {
       onExit();
@@ -237,6 +242,14 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         translateText={translateText}
       />
     );
+  } else if (resourcesMatch) {
+    page = (
+      <ResourcesDashboardPage
+        routeSectionId={resourcesMatch[1] || ""}
+        onNavigateSection={openResourcesSection}
+        translateText={translateText}
+      />
+    );
   } else if (subPath === "/more") {
     page = (
       <MorePage
@@ -249,6 +262,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
           openOverview();
         }}
         onOpenMaternalData={openMaternalData}
+        onOpenResources={openResources}
         onNavigateSiteHome={navigateSiteHome}
         onLogout={logout}
         darkMode={darkMode}
@@ -379,12 +393,14 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
       ? "guides"
       : subPath.startsWith("/maternal-data")
         ? "data"
+        : subPath.startsWith("/resources")
+          ? "resources"
         : subPath === "/more"
           ? "more"
           : subPath === "/training" || subPath.startsWith("/module/")
             ? "training"
             : "today";
-  const mobileActiveItem = activePlatformItem === "data" ? "more" : activePlatformItem;
+  const mobileActiveItem = ["data", "resources"].includes(activePlatformItem) ? "more" : activePlatformItem;
   const mobileNav = !embedded ? (
     <MobilePlatformNav
       activeItem={mobileActiveItem}
@@ -393,6 +409,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         if (item === "training") openTraining();
         if (item === "guides") openGuides();
         if (item === "data") openMaternalData();
+        if (item === "resources") openResources();
         if (item === "videos") openVideoHub();
         if (item === "more") openMore();
       }}
@@ -423,6 +440,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         if (item === "training") openTraining();
         if (item === "guides") openGuides();
         if (item === "data") openMaternalData();
+        if (item === "resources") openResources();
         if (item === "videos") openVideoHub();
         if (item === "more") openMore();
       }}

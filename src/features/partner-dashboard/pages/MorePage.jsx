@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ArrowLeft, BarChart3, Building2, LayoutDashboard, LogOut, Save, SlidersHorizontal, UserRound } from "lucide-react";
+import { ArrowLeft, BarChart3, Building2, LayoutDashboard, LifeBuoy, LogOut, Save, SlidersHorizontal, UserRound } from "lucide-react";
 
 export default function MorePage({
   authUser,
@@ -8,6 +8,7 @@ export default function MorePage({
   onSaveProfileDetails,
   onEditPersonalization,
   onOpenMaternalData,
+  onOpenResources,
   onNavigateSiteHome,
   onLogout,
   darkMode = false,
@@ -86,6 +87,9 @@ export default function MorePage({
         <div className="mt-3 space-y-2">
           <button type="button" onClick={() => onOpenMaternalData()} className={actionClass}>
             <span className="flex items-center gap-3"><BarChart3 className="h-5 w-5 text-cyan-500" aria-hidden="true" /> {tx("Maternal Data")}</span>
+          </button>
+          <button type="button" onClick={() => onOpenResources()} className={actionClass}>
+            <span className="flex items-center gap-3"><LifeBuoy className="h-5 w-5 text-cyan-500" aria-hidden="true" /> {tx("Resources")}</span>
           </button>
           {showAdminDashboard && (
             <a href="/owner-admin" aria-label={tx("Open Admin Dashboard")} className={actionClass}>
