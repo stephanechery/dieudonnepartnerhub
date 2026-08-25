@@ -41,7 +41,7 @@ test("desktop navigation exposes the approved workspace destinations", async () 
   assert.match(router, /<DashboardShell[\s\S]*?activeItem=\{activePlatformItem\}/);
   assert.match(router, /onNavigatePlatform=\{\(item\) =>/);
   assert.match(router, /item === "data"\) openMaternalData\(\)/);
-  assert.match(router, /subPath === "\/maternal-data"[\s\S]*?<MaternalDataPage/);
+  assert.match(router, /maternalDataMatch = subPath\.match[\s\S]*?else if \(maternalDataMatch\)[\s\S]*?<MaternalDataPage/);
 });
 
 test("desktop sidebar visibility defaults on and persists both choices", () => {

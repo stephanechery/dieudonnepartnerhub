@@ -75,7 +75,6 @@ test("committed catalogs cover critical navigation and safety text", () => {
 });
 
 test("maternal data and discovery interface are translated in every supported language", () => {
-  const discoveryCatalog = parse("./discovery-translations.json");
   const discoverySource = read("../partner-dashboard/components/PartnerPlatformDiscovery.jsx");
   const maternalPageSource = read("../partner-dashboard/pages/MaternalDataPage.jsx");
   const dataSource = read("../partner-dashboard/data/maternalHealthData.js");
@@ -93,8 +92,9 @@ test("maternal data and discovery interface are translated in every supported la
   );
 
   for (const locale of ["es", "fr", "ht"]) {
+    const catalog = mergedCatalog(locale);
     for (const source of new Set([...interfaceStrings, ...pageDataStrings, ...dataStrings])) {
-      assert.ok(discoveryCatalog[locale]?.[source], `${locale} is missing discovery text: ${source}`);
+      assert.ok(catalog[source], `${locale} is missing maternal or discovery text: ${source}`);
     }
   }
 });

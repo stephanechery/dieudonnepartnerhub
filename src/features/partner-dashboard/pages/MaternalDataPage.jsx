@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  ArrowLeft,
+  ArrowRight,
   BarChart3,
+  BookOpen,
   ChevronDown,
   ExternalLink,
   HeartHandshake,
@@ -15,6 +18,7 @@ import {
 const groupOptions = [
   {
     id: "partner",
+    routeId: "your-impact",
     label: "Your impact",
     title: "What equipped fathers and support people can change",
     description:
@@ -23,6 +27,7 @@ const groupOptions = [
   },
   {
     id: "national",
+    routeId: "united-states",
     label: "United States",
     title: "National access, outcomes, and disparities",
     description:
@@ -31,6 +36,7 @@ const groupOptions = [
   },
   {
     id: "indiana",
+    routeId: "indiana",
     label: "Indiana",
     title: "What Hoosier families should know",
     description:
@@ -71,6 +77,72 @@ const groupForHighlight = (highlightId) =>
   Object.entries(maternalHealthGroups).find(([, highlights]) =>
     highlights.some((highlight) => highlight.id === highlightId)
   )?.[0] || "national";
+
+const groupForRoute = (routeSectionId) =>
+  groupOptions.find((option) => option.routeId === routeSectionId)?.id || "";
+
+const firstHighlightForGroup = (groupId) =>
+  maternalHealthGroups[groupId]?.find((highlight) => highlight.priority)
+    || maternalHealthGroups[groupId]?.[0];
+
+function MaternalDataMap({ activeGroup, onSelectGroup, translateText }) {
+  const tx = (value) => translateText(value);
+  const activeIndex = Math.max(0, groupOptions.findIndex((option) => option.id === activeGroup));
+  const activeOption = groupOptions[activeIndex];
+
+  const mapButtons = groupOptions.map(({ id, label, Icon }, index) => {
+    const active = activeGroup === id;
+    return (
+      <button
+        key={id}
+        type="button"
+        onClick={() => onSelectGroup(id)}
+        aria-current={active ? "step" : undefined}
+        className={`flex min-h-12 min-w-0 items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ${
+          active
+            ? "border-cyan-300 bg-cyan-50 text-cyan-950 ring-1 ring-cyan-200 dark:border-cyan-400/60 dark:bg-cyan-400/10 dark:text-cyan-100 dark:ring-cyan-400/20"
+            : "border-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-50 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+        }`}
+      >
+        <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${
+          active
+            ? "border-cyan-400 bg-cyan-400 text-slate-950"
+            : "border-slate-300 text-slate-500 dark:border-slate-600 dark:text-slate-400"
+        }`}>
+          <Icon className="h-4 w-4" aria-hidden="true" />
+        </span>
+        <span className="min-w-0 flex-1 leading-snug">{tx(label)}</span>
+        <span className="text-xs font-black tabular-nums text-slate-400 dark:text-slate-500" aria-hidden="true">
+          {index + 1}
+        </span>
+      </button>
+    );
+  });
+
+  return (
+    <>
+      <details className="group rounded-2xl border border-slate-200 bg-white lg:hidden dark:border-slate-700 dark:bg-slate-800">
+        <summary className="flex min-h-12 cursor-pointer list-none items-center gap-3 rounded-2xl px-4 py-3 font-black text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-slate-100">
+          <BookOpen className="h-5 w-5 shrink-0 text-cyan-500 dark:text-cyan-300" aria-hidden="true" />
+          <span className="min-w-0 flex-1 truncate">
+            {tx("Guide Map")} · {tx(activeOption.label)} · {activeIndex + 1}/{groupOptions.length}
+          </span>
+          <ChevronDown className="h-5 w-5 shrink-0 transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
+        </summary>
+        <nav aria-label={tx("Guide Map")} className="space-y-2 border-t border-slate-200 p-3 dark:border-slate-700">
+          {mapButtons}
+        </nav>
+      </details>
+
+      <nav
+        aria-label={tx("Guide Map")}
+        className="hidden grid-cols-3 gap-2 rounded-2xl border border-slate-200 bg-white p-2 lg:grid dark:border-slate-700 dark:bg-slate-800"
+      >
+        {mapButtons}
+      </nav>
+    </>
+  );
+}
 
 function DataHighlight({ highlight, expanded, onToggle, translateText }) {
   const tx = (value) => translateText(value);
@@ -148,16 +220,29 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
 
 export default function MaternalDataPage({
   initialHighlightId = "",
+  routeSectionId = "",
+  onNavigateSection = () => {},
   translateText = (value) => value,
 }) {
   const tx = (value) => translateText(value);
-  const [activeGroup, setActiveGroup] = useState(() => groupForHighlight(initialHighlightId));
-  const [expandedIds, setExpandedIds] = useState(() =>
-    initialHighlightId ? [initialHighlightId] : ["national-preventability"]
-  );
+  const initialGroup = groupForRoute(routeSectionId) || groupForHighlight(initialHighlightId);
+  const [activeGroup, setActiveGroup] = useState(initialGroup);
+  const [expandedIds, setExpandedIds] = useState(() => {
+    if (initialHighlightId) return [initialHighlightId];
+    const initialHighlight = firstHighlightForGroup(initialGroup);
+    return initialHighlight ? [initialHighlight.id] : [];
+  });
   const currentOption = groupOptions.find((option) => option.id === activeGroup) || groupOptions[1];
   const highlights = useMemo(() => maternalHealthGroups[activeGroup] || [], [activeGroup]);
   const allExpanded = highlights.length > 0 && highlights.every((highlight) => expandedIds.includes(highlight.id));
+
+  useEffect(() => {
+    const routedGroup = groupForRoute(routeSectionId);
+    if (!routedGroup || routedGroup === activeGroup) return;
+    setActiveGroup(routedGroup);
+    const firstPriority = firstHighlightForGroup(routedGroup);
+    setExpandedIds(firstPriority ? [firstPriority.id] : []);
+  }, [activeGroup, routeSectionId]);
 
   useEffect(() => {
     if (!initialHighlightId) return;
@@ -169,6 +254,21 @@ export default function MaternalDataPage({
     });
     return () => window.cancelAnimationFrame(frame);
   }, [initialHighlightId]);
+
+  const selectGroup = (groupId) => {
+    if (groupId === activeGroup) return;
+    const option = groupOptions.find(({ id }) => id === groupId);
+    if (!option) return;
+    setActiveGroup(groupId);
+    const firstPriority = firstHighlightForGroup(groupId);
+    setExpandedIds(firstPriority ? [firstPriority.id] : []);
+    onNavigateSection(option.routeId);
+  };
+
+  const activeIndex = Math.max(0, groupOptions.findIndex((option) => option.id === activeGroup));
+  const previousOption = groupOptions[activeIndex - 1];
+  const nextOption = groupOptions[activeIndex + 1];
+  const CurrentIcon = currentOption.Icon;
 
   return (
     <div className="space-y-4 sm:space-y-5">
@@ -192,40 +292,28 @@ export default function MaternalDataPage({
         </div>
 
         <div className="mt-4 border-t border-slate-200/80 pt-4 dark:border-slate-700">
-          <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3" role="group" aria-label={tx("Choose maternal data view")}>
-            {groupOptions.map(({ id, label, Icon }) => {
-              const active = activeGroup === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => {
-                    setActiveGroup(id);
-                    const firstPriority = maternalHealthGroups[id]?.find((highlight) => highlight.priority)
-                      || maternalHealthGroups[id]?.[0];
-                    setExpandedIds(firstPriority ? [firstPriority.id] : []);
-                  }}
-                  aria-pressed={active}
-                  className={`flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-xl border px-2 py-2 text-xs font-black leading-tight transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:min-h-12 sm:gap-2 sm:rounded-2xl sm:px-3 sm:text-sm ${
-                    active
-                      ? "border-slate-950 bg-slate-950 text-white dark:border-cyan-300 dark:bg-cyan-300 dark:text-slate-950"
-                      : "border-slate-200 bg-slate-50 text-slate-700 hover:border-cyan-300 hover:text-cyan-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-cyan-400/40 dark:hover:text-cyan-200"
-                  }`}
-                >
-                  <Icon className="h-4 w-4" aria-hidden="true" /> {tx(label)}
-                </button>
-              );
-            })}
-          </div>
+          <MaternalDataMap
+            activeGroup={activeGroup}
+            onSelectGroup={selectGroup}
+            translateText={translateText}
+          />
 
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h3 id="maternal-data-group-heading" className="text-lg font-black tracking-tight text-slate-950 sm:text-2xl dark:text-white">
-                {tx(currentOption.title)}
-              </h3>
-              <p className="mt-1 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                {tx(currentOption.description)}
-              </p>
+          <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white/80 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-700 dark:bg-slate-900/35">
+            <div className="flex min-w-0 items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-200">
+                <CurrentIcon className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">
+                  {tx("Section")} {activeIndex + 1} {tx("of")} {groupOptions.length}
+                </p>
+                <h3 id="maternal-data-group-heading" className="text-lg font-black tracking-tight text-slate-950 sm:text-2xl dark:text-white">
+                  {tx(currentOption.title)}
+                </h3>
+                <p className="mt-1 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  {tx(currentOption.description)}
+                </p>
+              </div>
             </div>
             <button
               type="button"
@@ -239,7 +327,7 @@ export default function MaternalDataPage({
       </section>
 
       <section aria-labelledby="maternal-data-group-heading">
-        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+        <div className="grid gap-3 lg:grid-cols-2">
           {highlights.map((highlight) => (
             <DataHighlight
               key={highlight.id}
@@ -255,6 +343,25 @@ export default function MaternalDataPage({
           ))}
         </div>
       </section>
+
+      <nav aria-label={tx("Guide Map")} className="grid grid-cols-2 gap-3 rounded-2xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800">
+        <button
+          type="button"
+          disabled={!previousOption}
+          onClick={() => previousOption && selectGroup(previousOption.id)}
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-300 px-3 text-sm font-black text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-700"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> {tx("Previous")}
+        </button>
+        <button
+          type="button"
+          disabled={!nextOption}
+          onClick={() => nextOption && selectGroup(nextOption.id)}
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-3 text-sm font-black text-white shadow-lg shadow-cyan-950/15 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {tx("Next")} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </button>
+      </nav>
 
       <details className="group rounded-2xl border border-slate-200 bg-slate-50 text-sm leading-relaxed text-slate-600 dark:border-slate-600 dark:bg-slate-800/88 dark:text-slate-300">
         <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 font-black text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-white">

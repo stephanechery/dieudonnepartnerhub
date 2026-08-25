@@ -148,6 +148,8 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     const highlightParam = highlightId ? `?highlight=${encodeURIComponent(highlightId)}` : "";
     navigate(`${BASE_PATH}/maternal-data${highlightParam}`);
   };
+  const openMaternalDataSection = (sectionId) =>
+    navigate(`${BASE_PATH}/maternal-data/${sectionId}`);
   const openMore = () => navigate(`${BASE_PATH}/more`);
   const openGuide = (guideId) => navigate(`${BASE_PATH}/guides/${guideId}`);
   const openGuideSection = (guideId, sectionId, { replace = false } = {}) =>
@@ -177,6 +179,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   const moduleMatch = subPath.match(/^\/module\/([a-z0-9-]+)$/i);
   const lessonMatch = subPath.match(/^\/module\/([a-z0-9-]+)\/lesson\/([a-z0-9-]+)$/i);
   const guidesMatch = subPath.match(/^\/guides(?:\/([a-z0-9-]+)(?:\/([a-z0-9-]+))?)?$/i);
+  const maternalDataMatch = subPath.match(/^\/maternal-data(?:\/([a-z0-9-]+))?$/i);
   const navigateSiteHome = () => {
     if (embedded && onExit) {
       onExit();
@@ -225,10 +228,12 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
         translateText={translateText}
       />
     );
-  } else if (subPath === "/maternal-data") {
+  } else if (maternalDataMatch) {
     page = (
       <MaternalDataPage
         initialHighlightId={new URLSearchParams(window.location.search).get("highlight") || ""}
+        routeSectionId={maternalDataMatch[1] || ""}
+        onNavigateSection={openMaternalDataSection}
         translateText={translateText}
       />
     );
@@ -372,7 +377,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     ? "videos"
     : subPath.startsWith("/guides")
       ? "guides"
-      : subPath === "/maternal-data"
+      : subPath.startsWith("/maternal-data")
         ? "data"
         : subPath === "/more"
           ? "more"

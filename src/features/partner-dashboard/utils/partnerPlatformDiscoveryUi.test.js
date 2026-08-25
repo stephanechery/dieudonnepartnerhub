@@ -86,8 +86,9 @@ test("maternal data page uses accessible disclosure and compact responsive contr
   const page = read("../pages/MaternalDataPage.jsx");
   assert.match(page, /aria-expanded=\{expanded\}/);
   assert.match(page, /aria-controls=\{panelId\}/);
-  assert.match(page, /aria-pressed=\{active\}/);
-  assert.match(page, /grid grid-cols-1 gap-2 min-\[360px\]:grid-cols-3/);
+  assert.match(page, /aria-current=\{active \? "step" : undefined\}/);
+  assert.match(page, /<details className="group rounded-2xl[\s\S]*?lg:hidden/);
+  assert.match(page, /className="hidden grid-cols-3[\s\S]*?lg:grid/);
   assert.match(page, /grid gap-3 lg:grid-cols-2/);
   assert.match(page, /focus-visible:outline/);
   assert.match(page, /rel="noopener noreferrer"/);
@@ -99,4 +100,5 @@ test("discovery and maternal data follow the persisted Partner Platform theme se
   const page = read("../pages/MaternalDataPage.jsx");
   assert.match(tailwind, /darkMode:\s*\["selector", '\[data-theme="dark"\]'\]/);
   assert.match(page, /dark:bg-slate-800/);
+  assert.match(page, /dark:border-slate-700/);
 });
