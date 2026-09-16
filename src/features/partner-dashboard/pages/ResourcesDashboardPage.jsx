@@ -83,7 +83,7 @@ function ResourceMap({ activeSection, onSelect, translateText }) {
       <details className="group rounded-2xl border border-slate-200 bg-white lg:hidden dark:border-slate-700 dark:bg-slate-800">
         <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 rounded-2xl px-4 py-3 font-black text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-slate-100">
           <ActiveIcon className="h-5 w-5 shrink-0 text-cyan-600 dark:text-cyan-300" aria-hidden="true" />
-          <span className="min-w-0 flex-1 truncate">{tx(activeSection.label)} · {activeIndex + 1}/{resourceSections.length}</span>
+          <span className="min-w-0 flex-1">{tx(activeSection.label)} · {activeIndex + 1}/{resourceSections.length}</span>
           <ChevronDown className="h-5 w-5 shrink-0 transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
         </summary>
         <nav aria-label={tx("Resource Guide Map")} className="space-y-2 border-t border-slate-200 p-3 dark:border-slate-700">{buttons}</nav>
@@ -145,16 +145,19 @@ function ResourceCard({ resource, expanded, onToggle, urgent, pinned = false, tr
         <span className="min-w-0">
           <span className="block text-lg font-black leading-snug text-slate-950 dark:text-white">{tx(resource.title)}</span>
           <span className="mt-1.5 block text-sm leading-relaxed text-slate-600 dark:text-slate-300">{tx(resource.description)}</span>
+          {resource.source.checkedOn && <span className="mt-2 block text-xs font-semibold text-slate-500 dark:text-slate-400">{tx("Indiana")} · {tx("Last checked")}: <time dateTime={resource.source.checkedOn}>{resource.source.checkedOn}</time></span>}
+          <span className="mt-2 block text-xs font-bold text-cyan-700 dark:text-cyan-200">{tx(expanded ? "Hide details" : "View details")}</span>
         </span>
         <ChevronDown className={`mt-1 h-5 w-5 shrink-0 text-slate-500 transition-transform motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`} aria-hidden="true" />
       </button>
+      <div className="flex flex-col gap-2 px-4 pb-4 sm:flex-row sm:flex-wrap">
+        {resource.actions.map((action) => <ActionLink key={`${resource.id}-${action.href}-${action.label}`} action={action} translateText={translateText} />)}
+      </div>
       {expanded && (
         <div id={panelId} className="border-t border-slate-200 px-4 pb-4 pt-3 dark:border-slate-700">
-          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-            {resource.actions.map((action) => <ActionLink key={`${resource.id}-${action.href}-${action.label}`} action={action} translateText={translateText} />)}
-          </div>
+          <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{tx(resource.source.kind === "internal" ? "Partner Hub guide" : "External resource")}</p>
           <p className="mt-3 text-xs font-semibold leading-relaxed text-slate-500 dark:text-slate-400">
-            {tx("Verified from")} {tx(resource.source.label)}
+            {tx("Verified from")} <a className="inline-flex min-h-11 items-center underline underline-offset-4 focus-visible:outline focus-visible:outline-2" href={resource.source.href} target={resource.source.kind === "external" ? "_blank" : undefined} rel={resource.source.kind === "external" ? "noopener noreferrer" : undefined}>{tx(resource.source.label)}</a>
           </p>
         </div>
       )}
@@ -204,9 +207,12 @@ export default function ResourcesDashboardPage({ routeSectionId = "", onNavigate
           </div>
         </div>
         <div className="mt-4 border-t border-slate-200/80 pt-4 dark:border-slate-700">
+          <h3 className="mb-3 text-sm font-black text-slate-800 dark:text-slate-100">{tx("What help do you need?")}</h3>
           <ResourceMap activeSection={activeSection} onSelect={selectSection} translateText={translateText} />
         </div>
       </section>
+
+      {activeSection.id !== "urgent-help" && <button type="button" onClick={() => selectSection("urgent-help")} className="flex min-h-12 w-full items-center justify-between gap-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-left text-sm font-bold text-rose-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500 dark:border-rose-400/30 dark:bg-rose-400/10 dark:text-rose-100"><span>{tx("Urgent help")}</span><ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" /></button>}
 
       <section aria-labelledby="resources-section-heading" className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm sm:p-5 dark:border-slate-700 dark:bg-slate-800/75">
         <div className="flex items-start gap-3">

@@ -14,6 +14,9 @@ import {
   maternalHealthGroups,
   maternalHealthSources,
 } from "../data/maternalHealthData";
+import { evidenceResourcePaths } from "../data/evidenceResourcePaths";
+import { getResourceSection } from "../data/resourcesDashboard";
+import FacilitatorPacks from "../components/FacilitatorPacks";
 
 const groupOptions = [
   {
@@ -124,7 +127,7 @@ function MaternalDataMap({ activeGroup, onSelectGroup, translateText }) {
       <details className="group rounded-2xl border border-slate-200 bg-white lg:hidden dark:border-slate-700 dark:bg-slate-800">
         <summary className="flex min-h-12 cursor-pointer list-none items-center gap-3 rounded-2xl px-4 py-3 font-black text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-slate-100">
           <BookOpen className="h-5 w-5 shrink-0 text-cyan-500 dark:text-cyan-300" aria-hidden="true" />
-          <span className="min-w-0 flex-1 truncate">
+          <span className="min-w-0 flex-1">
             {tx("Guide Map")} · {tx(activeOption.label)} · {activeIndex + 1}/{groupOptions.length}
           </span>
           <ChevronDown className="h-5 w-5 shrink-0 transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
@@ -148,6 +151,7 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
   const tx = (value) => translateText(value);
   const tone = toneClasses[highlight.tone] || toneClasses.cyan;
   const panelId = `maternal-data-panel-${highlight.id}`;
+  const resourceSection = getResourceSection(evidenceResourcePaths[highlight.id]);
 
   return (
     <article
@@ -188,11 +192,13 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
         <span className="mt-3 block text-sm font-black leading-snug text-slate-950 sm:text-base dark:text-white">
           {tx(highlight.title)}
         </span>
+        <span className="mt-2 block text-xs font-bold text-slate-600 dark:text-slate-300">{tx(expanded ? "Hide details" : "View details")}</span>
       </button>
 
       {expanded && (
         <div id={panelId} className="border-t border-slate-200 px-4 pb-4 pt-3 sm:px-5 sm:pb-5 dark:border-slate-700">
-          <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          <h4 className="text-sm font-black text-slate-900 dark:text-white">{tx("What it means")}</h4>
+          <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">
             {tx(highlight.detail)}
           </p>
           <div className={`mt-3 rounded-xl border p-3.5 sm:p-4 ${tone.panel}`}>
@@ -202,7 +208,16 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
             <p className="mt-1.5 text-sm font-semibold leading-relaxed">
               {tx(highlight.supportAction)}
             </p>
+            <a href={`/partner-dashboard/resources/${resourceSection.id}`} onClick={() => {
+              const returnUrl = new URL(window.location.href);
+              returnUrl.searchParams.set("highlight", highlight.id);
+              window.history.replaceState(window.history.state, "", returnUrl);
+            }} className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-lg border border-current px-3 py-2 text-sm font-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+              {tx("Find help")}: {tx(resourceSection.label)} <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+            </a>
           </div>
+          <details className="mt-3 rounded-xl border border-slate-200 px-3 dark:border-slate-600">
+            <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500 dark:text-slate-200">{tx("Source details")}</summary>
           <a
             href={highlight.source.href}
             target="_blank"
@@ -212,6 +227,7 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
             {tx(highlight.source.label)}
             <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
           </a>
+          </details>
         </div>
       )}
     </article>
@@ -248,7 +264,7 @@ export default function MaternalDataPage({
     if (!initialHighlightId) return;
     const frame = window.requestAnimationFrame(() => {
       document.getElementById(`maternal-highlight-${initialHighlightId}`)?.scrollIntoView({
-        behavior: "smooth",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
         block: "center",
       });
     });
@@ -343,6 +359,8 @@ export default function MaternalDataPage({
           ))}
         </div>
       </section>
+
+      <FacilitatorPacks translateText={translateText} />
 
       <nav aria-label={tx("Guide Map")} className="grid grid-cols-2 gap-3 rounded-2xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800">
         <button

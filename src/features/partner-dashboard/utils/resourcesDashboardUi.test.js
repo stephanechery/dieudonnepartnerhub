@@ -61,7 +61,7 @@ test("Resources mobile entry stays inside More and owner controls remain isolate
 
 test("resource contact paths are source-bound and limited to approved destinations", () => {
   const sourceValues = Object.values(resourceSources);
-  const allowedExternalHosts = new Set(["www.cdc.gov", "dieudonnematch.org"]);
+  const allowedExternalHosts = new Set(["www.cdc.gov", "dieudonnematch.org", "www.in.gov"]);
   const allowedInternalPrefix = "/partner-dashboard/guides/";
 
   for (const source of sourceValues) {
@@ -80,6 +80,12 @@ test("resource contact paths are source-bound and limited to approved destinatio
       assert.ok(sourceValues.includes(item.source), `${item.id} must use a registered source`);
       for (const action of item.actions) {
         if (action.href.startsWith("tel:") || action.href.startsWith("sms:")) {
+          if (item.id === "indiana-211") {
+            assert.equal(action.href, "tel:8662119966");
+            assert.equal(item.source, resourceSources.indiana211);
+            assert.equal(item.source.checkedOn, "2026-09-16");
+            continue;
+          }
           assert.match(action.href, /^(?:tel|sms):(911|988)$/);
           continue;
         }

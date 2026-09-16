@@ -1,4 +1,16 @@
 export const resourceSources = {
+  indiana211: {
+    label: "Indiana FSSA · Indiana 211",
+    href: "https://www.in.gov/fssa/indiana-211/",
+    kind: "external",
+    checkedOn: "2026-09-16",
+  },
+  indianaWic: {
+    label: "Indiana Department of Health · WIC applications",
+    href: "https://www.in.gov/health/wic/how-do-i-apply-for-wic",
+    kind: "external",
+    checkedOn: "2026-09-16",
+  },
   partnerSafetyGuide: {
     label: "Partner Hub · Complications and Warning Signs Guide",
     href: "/partner-dashboard/guides/partner-complications-guide/finding-support",
@@ -172,6 +184,16 @@ export const resourceSections = [
     tone: "support",
     resources: [
       resource({
+        id: "indiana-211",
+        title: "Indiana 211 · Find local support",
+        description: "Indiana residents can connect with a navigator for health and human-service resources. Ask about options near you; services and eligibility vary.",
+        source: resourceSources.indiana211,
+        actions: [
+          { label: "Call Indiana 211", href: "tel:8662119966", kind: "call" },
+          { label: "Visit Indiana 211", href: resourceSources.indiana211.href, kind: "external" },
+        ],
+      }),
+      resource({
         id: "doula-support",
         title: "Match mom with a doula",
         description:
@@ -205,6 +227,13 @@ export const resourceSections = [
       "Partner Hub can help you prepare questions for an employer, insurer, or care team. Eligibility and local contacts still need confirmation from the responsible organization.",
     tone: "planning",
     resources: [
+      resource({
+        id: "indiana-wic",
+        title: "Indiana WIC · Application help",
+        description: "Review eligibility, contact a local WIC clinic, and prepare for a certification appointment. A parent, guardian, or caregiver can help an infant or child apply. The clinic confirms eligibility.",
+        source: resourceSources.indianaWic,
+        actions: [{ label: "Review WIC application steps", href: resourceSources.indianaWic.href, kind: "external" }],
+      }),
       resource({
         id: "insurance-benefits",
         title: "Insurance and benefits checklist",
