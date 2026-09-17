@@ -1,4 +1,14 @@
 export const resourceSources = {
+  maternalMentalHealth: {
+    label: "HRSA · National Maternal Mental Health Hotline",
+    href: "https://mchb.hrsa.gov/programs-impact/national-maternal-mental-health-hotline",
+    kind: "external", checkedOn: "2026-09-16", region: "United States",
+  },
+  indianaMoms: {
+    label: "Indiana Department of Health · Moms Helpline",
+    href: "https://www.in.gov/health/mch/moms-helpline/",
+    kind: "external", checkedOn: "2026-09-16", region: "Indiana",
+  },
   indiana211: {
     label: "Indiana FSSA · Indiana 211",
     href: "https://www.in.gov/fssa/indiana-211/",
@@ -147,6 +157,17 @@ export const resourceSections = [
     tone: "mental",
     resources: [
       resource({
+        id: "maternal-mental-health-hotline",
+        title: "National Maternal Mental Health Hotline",
+        description: "Free, confidential support, 24/7. Pregnant and postpartum people, partners, and family can call or text. This does not replace emergency care.",
+        source: resourceSources.maternalMentalHealth,
+        actions: [
+          { label: "Call 1-833-852-6262", href: "tel:18338526262", kind: "call" },
+          { label: "Text 1-833-852-6262", href: "sms:18338526262", kind: "text" },
+          { label: "Visit hotline website", href: resourceSources.maternalMentalHealth.href, kind: "external" },
+        ],
+      }),
+      resource({
         id: "mental-health-988",
         title: "988 Suicide & Crisis Lifeline",
         description:
@@ -183,6 +204,15 @@ export const resourceSections = [
       "Use the tools already verified in Partner Hub to plan professional and everyday support before the family is overwhelmed.",
     tone: "support",
     resources: [
+      resource({
+        id: "indiana-moms-helpline", title: "Indiana Moms Helpline",
+        description: "Find prenatal care, baby supplies, insurance, and local support. Anyone in Indiana age 16 or older can contact this free service. Check the website for hours and availability.",
+        source: resourceSources.indianaMoms,
+        actions: [
+          { label: "Call 1-844-624-6667", href: "tel:18446246667", kind: "call" },
+          { label: "Visit Moms Helpline", href: resourceSources.indianaMoms.href, kind: "external" },
+        ],
+      }),
       resource({
         id: "indiana-211",
         title: "Indiana 211 · Find local support",

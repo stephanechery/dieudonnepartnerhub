@@ -89,7 +89,7 @@ test("maternal data page uses accessible disclosure and compact responsive contr
   assert.match(page, /aria-current=\{active \? "step" : undefined\}/);
   assert.match(page, /<details className="group rounded-2xl[\s\S]*?lg:hidden/);
   assert.match(page, /className="hidden grid-cols-3[\s\S]*?lg:grid/);
-  assert.match(page, /grid gap-3 lg:grid-cols-2/);
+  assert.match(page, /grid items-start gap-3 lg:grid-cols-3/);
   assert.match(page, /focus-visible:outline/);
   assert.match(page, /rel="noopener noreferrer"/);
   assert.doesNotMatch(page, /overflow-x-auto|snap-x|min-w-\[/);

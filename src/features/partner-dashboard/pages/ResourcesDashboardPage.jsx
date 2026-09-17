@@ -145,7 +145,7 @@ function ResourceCard({ resource, expanded, onToggle, urgent, pinned = false, tr
         <span className="min-w-0">
           <span className="block text-lg font-black leading-snug text-slate-950 dark:text-white">{tx(resource.title)}</span>
           <span className="mt-1.5 block text-sm leading-relaxed text-slate-600 dark:text-slate-300">{tx(resource.description)}</span>
-          {resource.source.checkedOn && <span className="mt-2 block text-xs font-semibold text-slate-500 dark:text-slate-400">{tx("Indiana")} · {tx("Last checked")}: <time dateTime={resource.source.checkedOn}>{resource.source.checkedOn}</time></span>}
+          {resource.source.checkedOn && <span className="mt-2 block text-xs font-semibold text-slate-500 dark:text-slate-400">{tx(resource.source.region || "Indiana")} · {tx("Last checked")}: <time dateTime={resource.source.checkedOn}>{resource.source.checkedOn}</time></span>}
           <span className="mt-2 block text-xs font-bold text-cyan-700 dark:text-cyan-200">{tx(expanded ? "Hide details" : "View details")}</span>
         </span>
         <ChevronDown className={`mt-1 h-5 w-5 shrink-0 text-slate-500 transition-transform motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`} aria-hidden="true" />

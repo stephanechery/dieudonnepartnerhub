@@ -35,7 +35,7 @@ test("Maternal Data keeps one compact intro and places the guide map before evid
   const nationalIndex = page.indexOf('id: "national"');
   const indianaIndex = page.indexOf('id: "indiana"');
   assert.ok(partnerIndex < nationalIndex && nationalIndex < indianaIndex);
-  assert.match(page, /const initialHighlight = firstHighlightForGroup\(initialGroup\)/);
+  assert.match(page, /showMore \? highlights : highlights.slice\(0, 3\)/);
 });
 
 test("Maternal Data sections are addressable and retain browser history navigation", async () => {
@@ -56,7 +56,7 @@ test("Maternal Data sections are addressable and retain browser history navigati
 test("expanded evidence spans the desktop grid while collapsed cards stay compact", async () => {
   const page = await readDashboardFile("pages", "MaternalDataPage.jsx");
 
-  assert.match(page, /self-start[\s\S]*?expanded \? "lg:col-span-2" : ""/);
+  assert.match(page, /self-start[\s\S]*?expanded \? "lg:col-span-3" : ""/);
   assert.match(page, /className="block min-h-28 w-full/);
   assert.match(page, /allExpanded \? "Collapse all" : "Expand all"/);
   assert.match(page, /href=\{highlight\.source\.href\}/);

@@ -1,4 +1,8 @@
 export const maternalHealthSources = {
+  mentalHealthStudy: {
+    label: "CDC MMWR · 2018 PRAMS, published 2020",
+    href: "https://www.cdc.gov/mmwr/volumes/69/wr/mm6919a2.htm",
+  },
   fatherTraining: {
     label: "PubMed · Controlled father-training trial",
     href: "https://pubmed.ncbi.nlm.nih.gov/16199676/",
@@ -34,6 +38,24 @@ export const maternalHealthSources = {
 };
 
 export const maternalHealthHighlights = [
+  {
+    id: "national-postpartum-depression", group: "national",
+    scope: "United States · 2018 PRAMS · 31 sites",
+    title: "Emotional support belongs in postpartum care",
+    value: "13.2%", unit: "reported postpartum depressive symptoms",
+    detail: "In this 2018 survey across 31 PRAMS sites, women with a recent live birth reported depressive symptoms. This is not a diagnosis or a current national estimate.",
+    supportAction: "Listen without judgment and help her contact the care team. Partners can also contact the National Maternal Mental Health Hotline for support.",
+    source: maternalHealthSources.mentalHealthStudy, tone: "cyan",
+  },
+  {
+    id: "national-depression-screening", group: "national",
+    scope: "United States · 2018 PRAMS · 31 sites",
+    title: "Make space to ask about emotional health",
+    value: "20.9%", unit: "were not asked about depression at prenatal visits",
+    detail: "Among surveyed women who received prenatal care, 79.1% reported a provider asking about depression. The remaining 20.9% did not. These are self-reported 2018 findings, not current screening rates.",
+    supportAction: "Ask whether emotional health can be discussed at the next visit. Let her decide what to share and offer help arranging support.",
+    source: maternalHealthSources.mentalHealthStudy, tone: "cyan",
+  },
   {
     id: "partner-breastfeeding",
     group: "partner",
