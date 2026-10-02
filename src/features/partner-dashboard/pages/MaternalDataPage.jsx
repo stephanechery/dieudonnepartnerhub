@@ -17,6 +17,7 @@ import { evidenceResourcePaths, evidenceResourceTargets } from "../data/evidence
 import { getResourceSection, findResourceTarget } from "../data/resourcesDashboard";
 import FacilitatorPacks from "../components/FacilitatorPacks";
 import { evidenceTopics, filterEvidence } from "../data/evidenceTopics";
+import { evidenceLimit, pathwayForEvidence } from "../data/supportPathways";
 
 const groupOptions = [
   {
@@ -126,6 +127,7 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
   const panelId = `maternal-data-panel-${highlight.id}`;
   const resourceSection = getResourceSection(evidenceResourcePaths[highlight.id]);
   const resource = findResourceTarget(resourceSection.id, evidenceResourceTargets[highlight.id]);
+  const pathway = pathwayForEvidence(highlight.id);
 
   return (
     <article
@@ -182,6 +184,9 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
           <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">
             {tx(highlight.detail)}
           </p>
+          <h4 className="mt-4 text-sm font-black text-slate-900 dark:text-white">{tx("What this does not prove")}</h4>
+          <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">{tx(evidenceLimit(highlight))}</p>
+          {pathway && <a href={`/partner-dashboard/resources/path-${pathway.id}`} className="mt-3 inline-flex min-h-11 items-center rounded-lg text-sm font-bold text-cyan-800 underline dark:text-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500">{tx("Make a support plan")}: {tx(pathway.title)}</a>}
           <details className="mt-3 rounded-xl border border-slate-200 px-3 dark:border-slate-600">
             <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500 dark:text-slate-200">{tx("Source details")}</summary>
           <a

@@ -245,6 +245,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   } else if (resourcesMatch) {
     page = (
       <ResourcesDashboardPage
+        savedScope={authUser?.provider === "demo-org" ? "demo" : "device"}
         initialResourceId={new URLSearchParams(window.location.search).get("resource") || ""}
         routeSectionId={resourcesMatch[1] || ""}
         onNavigateSection={openResourcesSection}

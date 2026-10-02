@@ -1,4 +1,7 @@
 export const resourceSources = {
+  foodBank: { label: "Feeding America · Find a food bank", href: "https://www.feedingamerica.org/find-your-local-foodbank", kind: "external", checkedOn: "2026-10-02", region: "United States" },
+  healthCenter: { label: "HRSA · Find a Health Center", href: "https://findahealthcenter.hrsa.gov/", kind: "external", checkedOn: "2026-10-02", region: "United States" },
+  transportation: { label: "Indiana Medicaid · Member resources", href: "https://www.in.gov/medicaid/members/member-resources/", kind: "external", checkedOn: "2026-10-02", region: "Indiana" },
   psiDads: {
     label: "Postpartum Support International · Help for Dads",
     href: "https://postpartum.net/get-help/help-for-dads/",
@@ -232,6 +235,9 @@ export const resourceSections = [
       "Use the tools already verified in Partner Hub to plan professional and everyday support before the family is overwhelmed.",
     tone: "support",
     resources: [
+      resource({ id: "food-bank", title: "Find food support", description: "Search Feeding America's network by ZIP code. Contact the local provider to confirm hours, services and requirements.", source: resourceSources.foodBank, actions: [{ label: "Find a food bank", href: resourceSources.foodBank.href, kind: "external" }] }),
+      resource({ id: "health-center", title: "Find a health center", description: "Use HRSA's locator to find nearby health centers. Ask the center about prenatal services, appointments and costs.", source: resourceSources.healthCenter, actions: [{ label: "Open health center finder", href: resourceSources.healthCenter.href, kind: "external" }] }),
+      resource({ id: "indiana-transport", title: "Plan transportation to care", description: "Indiana Medicaid's member resources explain non-emergency transportation for Traditional Medicaid. If you have a managed care plan, ask your plan about its transport service. Confirm coverage before booking.", source: resourceSources.transportation, actions: [{ label: "Review transportation guidance", href: resourceSources.transportation.href, kind: "external" }] }),
       resource({
         id: "feeding-support", title: "Feeding support",
         description: "Support her feeding decisions, share preparation and cleanup, and prepare questions for skilled feeding support.",

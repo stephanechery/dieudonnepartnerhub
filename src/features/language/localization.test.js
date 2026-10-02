@@ -15,6 +15,7 @@ const catalogs = [
   parse("./supplemental-translations.json"),
   parse("./discovery-translations.json"),
   parse("./resources-translations.json"),
+  parse("./support-translations.json"),
 ];
 
 const mergedCatalog = (locale) =>

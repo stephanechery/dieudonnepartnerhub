@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ArrowRight, ExternalLink, Phone, MessageCircle, AlertTriangle } from "lucide-react";
 import { resourceSections, resourceRegion, filterResources } from "../data/resourcesDashboard";
+import useSavedResources from "../hooks/useSavedResources";
+import SupportPathways from "../components/SupportPathways";
+import { supportPathways } from "../data/supportPathways";
 
 const focus = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500";
 const regions = ["All resources", "Indiana", "United States", "Partner Hub guide"];
@@ -14,7 +17,7 @@ function ActionLink({ action, translateText }) {
   </a>;
 }
 
-function ResourceCard({ resource, translateText }) {
+function ResourceCard({ resource, translateText, saved, onToggleSave, savingAvailable }) {
   const tx = translateText;
   return <article id={`resource-${resource.id}`} tabIndex={-1} className={`scroll-mt-6 self-start rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-800 ${focus}`}>
     <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">{tx(resourceRegion(resource))}</p>
@@ -23,6 +26,7 @@ function ResourceCard({ resource, translateText }) {
     <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
       {resource.actions.map(action => <ActionLink key={`${action.href}-${action.label}`} action={action} translateText={tx} />)}
     </div>
+    <button type="button" aria-pressed={saved} disabled={!savingAvailable} onClick={() => onToggleSave(resource.id)} className={`mt-2 min-h-11 rounded-lg text-xs font-bold text-cyan-800 underline disabled:opacity-50 dark:text-cyan-200 ${focus}`}>{tx(saved ? "Remove from saved" : "Save on this device")}<span className="sr-only">: {tx(resource.title)}</span></button>
     <details className="mt-3 border-t border-slate-100 pt-1 dark:border-slate-700">
       <summary className={`min-h-11 cursor-pointer rounded-lg py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 ${focus}`}>{tx("Source details")}</summary>
       <a href={resource.source.href} target={resource.source.kind === "external" ? "_blank" : undefined} rel={resource.source.kind === "external" ? "noopener noreferrer" : undefined} className={`inline-flex min-h-11 items-center text-xs leading-relaxed text-cyan-800 underline dark:text-cyan-200 ${focus}`}>{tx(resource.source.label)}</a>
@@ -33,9 +37,12 @@ function ResourceCard({ resource, translateText }) {
   </article>;
 }
 
-export default function ResourcesDashboardPage({ routeSectionId = "", initialResourceId = "", onNavigateSection = () => {}, translateText = value => value }) {
+export default function ResourcesDashboardPage({ routeSectionId = "", initialResourceId = "", savedScope = "device", onNavigateSection = () => {}, translateText = value => value }) {
   const tx = translateText;
   const activeSection = resourceSections.find(({ id }) => id === routeSectionId);
+  const saved = useSavedResources(savedScope);
+  const savedView = routeSectionId === "saved";
+  const pathView = routeSectionId === "pathways" || supportPathways.some(path => `path-${path.id}` === routeSectionId);
   const [region, setRegion] = useState("All resources");
   const targetId = activeSection?.resources.find(item => item.id === initialResourceId)?.id || "";
   useEffect(() => {
@@ -61,6 +68,20 @@ export default function ResourcesDashboardPage({ routeSectionId = "", initialRes
         <p className="mt-1 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">{tx("Choose what is happening, then open the safest verified next step.")}</p></div>
       {activeSection?.id !== "urgent-help" && <button onClick={() => selectSection("urgent-help")} className={`inline-flex min-h-11 items-center gap-2 rounded-xl border border-rose-200 px-3 text-sm font-bold text-rose-800 dark:border-rose-400/30 dark:text-rose-200 ${focus}`}><AlertTriangle className="h-4 w-4" aria-hidden="true" />{tx("Urgent help")}</button>}
     </header>
+    <nav aria-label={tx("Resource tools")} className="flex flex-wrap gap-x-5 gap-y-1 border-b border-slate-200 pb-2 dark:border-slate-700">
+      <button onClick={() => selectSection("")} aria-current={!routeSectionId || activeSection ? "page" : undefined} className={`min-h-11 rounded-lg text-sm font-bold text-slate-700 aria-[current=page]:underline aria-[current=page]:underline-offset-8 dark:text-slate-200 ${focus}`}>{tx("All resources")}</button>
+      <button onClick={() => selectSection("pathways")} aria-current={pathView ? "page" : undefined} className={`min-h-11 rounded-lg text-sm font-bold text-cyan-800 aria-[current=page]:underline aria-[current=page]:underline-offset-8 dark:text-cyan-200 ${focus}`}>{tx("Make a support plan")}</button>
+      <button onClick={() => selectSection("saved")} aria-current={savedView ? "page" : undefined} className={`min-h-11 rounded-lg text-sm font-bold text-cyan-800 aria-[current=page]:underline aria-[current=page]:underline-offset-8 dark:text-cyan-200 ${focus}`}>{tx("Saved help")} ({saved.ids.length})</button>
+    </nav>
+    {!saved.available && <p role="status" className="text-sm text-amber-800 dark:text-amber-200">{tx("Saving is unavailable in this browser. You can still open every resource.")}</p>}
+    {pathView && <SupportPathways routeSectionId={routeSectionId} onNavigateSection={selectSection} translateText={tx} />}
+    {savedView && <section aria-label={tx("Saved help")}>
+      <h3 className="text-xl font-black text-slate-950 dark:text-white">{tx("Saved help")}</h3>
+      <p className="my-3 max-w-prose text-sm text-slate-600 dark:text-slate-300">{tx(savedScope === "demo" ? "Demo saves stay separate from your saved resources." : "Saved in this browser only, not your account. Other people using this browser can see them. Clearing browser data removes them.")}</p>
+      {!saved.ids.length && <p className="py-5 text-sm text-slate-600 dark:text-slate-300">{tx("No saved resources yet. Open a category and choose Save on this device.")}</p>}
+      <div className="grid items-start gap-3 lg:grid-cols-2">{resourceSections.flatMap(section => section.resources).filter(item => saved.ids.includes(item.id)).map(resource => <ResourceCard key={resource.id} resource={resource} translateText={tx} saved onToggleSave={saved.toggle} savingAvailable={saved.available} />)}</div>
+    </section>}
+    {!savedView && !pathView && <>
     <div className={activeSection ? "grid items-start gap-4 xl:grid-cols-[13rem_minmax(0,1fr)] xl:gap-6" : ""}>
       <nav aria-label={tx("What help do you need?")} className={activeSection ? "xl:sticky xl:top-6" : ""}>
         {activeSection ? <>
@@ -91,10 +112,11 @@ export default function ResourcesDashboardPage({ routeSectionId = "", initialRes
           </label>}
         </div>
         {activeSection.id === "urgent-help" && <p className="mb-4 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">{tx(activeSection.description)}</p>}
-        <div className="grid items-start gap-3 lg:grid-cols-2">{ordered.map(resource => <ResourceCard key={resource.id} resource={resource} translateText={tx} />)}</div>
+        <div className="grid items-start gap-3 lg:grid-cols-2">{ordered.map(resource => <ResourceCard key={resource.id} resource={resource} translateText={tx} saved={saved.ids.includes(resource.id)} onToggleSave={saved.toggle} savingAvailable={saved.available} />)}</div>
         {!items.length && <p role="status" className="rounded-xl bg-slate-100 p-4 text-sm text-slate-700 dark:bg-slate-800 dark:text-slate-200">{tx("No resources in this view. Choose All resources.")}</p>}
       </section>}
     </div>
+    </>}
     <p className="max-w-prose text-xs leading-relaxed text-slate-500 dark:text-slate-400">{tx("Partner Hub provides educational guidance, not diagnosis or a complete service directory. Confirm local contacts and eligibility with the responsible organization.")}</p>
   </div>;
 }
