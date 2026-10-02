@@ -19,7 +19,7 @@ const readDashboardFile = (...parts) =>
 test("Maternal Data keeps one compact intro and places the guide map before evidence", async () => {
   const page = await readDashboardFile("pages", "MaternalDataPage.jsx");
 
-  const introIndex = page.indexOf("Understand the data. Know how to help.");
+  const introIndex = page.indexOf("Understand the data. Take action.");
   const mapIndex = page.indexOf("<MaternalDataMap");
   const evidenceIndex = page.indexOf('<section aria-labelledby="maternal-data-group-heading">');
 
@@ -35,7 +35,7 @@ test("Maternal Data keeps one compact intro and places the guide map before evid
   const nationalIndex = page.indexOf('id: "national"');
   const indianaIndex = page.indexOf('id: "indiana"');
   assert.ok(partnerIndex < nationalIndex && nationalIndex < indianaIndex);
-  assert.match(page, /showMore \? highlights : highlights.slice\(0, 3\)/);
+  assert.match(page, /showMore \? filterEvidence\(highlights, topic\) : highlights.slice\(0, 3\)/);
 });
 
 test("Maternal Data sections are addressable and retain browser history navigation", async () => {

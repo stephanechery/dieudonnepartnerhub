@@ -23,4 +23,28 @@ export const evidenceResourcePaths = {
   "indiana-prenatal-care": "benefits-planning",
   "national-postpartum-depression": "mental-health",
   "national-depression-screening": "mental-health",
+  "partner-listening": "practical-support",
+  "partner-follow-up": "practical-support",
+};
+
+// Resource IDs are validated against the catalog, never accepted as arbitrary URLs.
+export const evidenceResourceTargets = {
+  "national-care-deserts": "insurance-benefits",
+  "national-desert-population": "insurance-benefits",
+  "national-access-preterm": "insurance-benefits",
+  "national-indigenous-access": "insurance-benefits",
+  "national-prenatal-disparity": "insurance-benefits",
+  "partner-breastfeeding": "feeding-support",
+  "partner-practical-help": "support-village",
+  "partner-labor-support": "birth-companion",
+  "partner-listening": "support-person-role",
+  "partner-follow-up": "support-village",
+  "national-overview": "support-person-role",
+  "national-racial-disparity": "support-person-role",
+  "national-travel-time": "support-person-role",
+  "indiana-overview": "indiana-moms-helpline",
+  "indiana-racial-disparity": "support-person-role",
+  "national-postpartum-depression": "maternal-mental-health-hotline",
+  "national-depression-screening": "maternal-mental-health-hotline",
+  "indiana-postpartum-timing": "maternal-mental-health-hotline",
 };

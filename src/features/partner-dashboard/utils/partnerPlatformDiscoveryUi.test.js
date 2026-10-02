@@ -60,9 +60,9 @@ test("maternal data uses the latest verified national, access, and Indiana evide
     "17.9",
     "44.8 vs 14.2",
     "62.3",
-    "35.1%",
-    "2.3M + 150K",
-    "2.6×",
+    "34.6%",
+    "2.4M + 149K",
+    "≈3×",
     "+13%",
     "1 in 5",
     "21.9% vs 11.1%",
@@ -77,7 +77,7 @@ test("maternal data uses the latest verified national, access, and Indiana evide
   assert.match(source, /2024 Nowhere to Go report/);
   assert.match(source, /2025 Annual Report/);
   assert.match(source, /2025 Indiana Report Card/);
-  assert.match(page, /We do not label it as a 2026 report/);
+  assert.match(page, /Access figures use the 2026 March of Dimes report/);
   assert.match(page, /should not be compared directly/);
   assert.match(page, /This platform does not diagnose/);
 });

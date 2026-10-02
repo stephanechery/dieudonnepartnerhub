@@ -7,6 +7,9 @@ import {
   getResourceSection,
   resourceSections,
   resourceSources,
+  filterResources,
+  resourceRegion,
+  findResourceTarget,
 } from "../data/resourcesDashboard.js";
 
 const dashboardRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -38,7 +41,7 @@ test("Resources navigation follows Maternal Data and keeps stable section routes
   assert.match(nav, /label: "Maternal Data"[\s\S]*?label: "Resources"[\s\S]*?label: "Videos"/);
   assert.match(router, /resourcesMatch = subPath\.match\(\/\^\\\/resources/);
   assert.match(router, /else if \(resourcesMatch\)[\s\S]*?<ResourcesDashboardPage/);
-  assert.match(router, /navigate\(`\$\{BASE_PATH\}\/resources\/\$\{sectionId\}`\)/);
+  assert.match(router, /sectionId \? `\$\{BASE_PATH\}\/resources\/\$\{sectionId\}` : `\$\{BASE_PATH\}\/resources`/);
   assert.match(router, /subPath\.startsWith\("\/resources"\)[\s\S]*?"resources"/);
   assert.match(shell, /resources: "Resources"/);
   assert.match(more, /onOpenResources/);
@@ -61,7 +64,7 @@ test("Resources mobile entry stays inside More and owner controls remain isolate
 
 test("resource contact paths are source-bound and limited to approved destinations", () => {
   const sourceValues = Object.values(resourceSources);
-  const allowedExternalHosts = new Set(["www.cdc.gov", "dieudonnematch.org", "www.in.gov", "mchb.hrsa.gov"]);
+  const allowedExternalHosts = new Set(["www.cdc.gov", "dieudonnematch.org", "www.in.gov", "mchb.hrsa.gov", "postpartum.net"]);
   const allowedInternalPrefix = "/partner-dashboard/guides/";
 
   for (const source of sourceValues) {
@@ -93,7 +96,7 @@ test("resource contact paths are source-bound and limited to approved destinatio
           if (item.id === "indiana-211") {
             assert.equal(action.href, "tel:8662119966");
             assert.equal(item.source, resourceSources.indiana211);
-            assert.equal(item.source.checkedOn, "2026-09-16");
+            assert.equal(item.source.checkedOn, "2026-10-02");
             continue;
           }
           assert.match(action.href, /^(?:tel|sms):(911|988)$/);
@@ -112,14 +115,14 @@ test("resource contact paths are source-bound and limited to approved destinatio
 test("Resources Dashboard uses accessible progressive disclosure and mobile-safe layout", async () => {
   const page = await readDashboardFile("pages", "ResourcesDashboardPage.jsx");
 
-  assert.match(page, /aria-current=\{active \? "step" : undefined\}/);
-  assert.match(page, /aria-expanded=\{expanded\}/);
-  assert.match(page, /aria-controls=\{panelId\}/);
-  assert.match(page, /min-h-14/);
-  assert.match(page, /lg:hidden/);
-  assert.match(page, /hidden grid-cols-5[\s\S]*?lg:grid/);
+  assert.match(page, /aria-current=\{activeSection.id === section.id \? "page" : undefined\}/);
+  assert.match(page, /<details[\s\S]*?<summary/);
+  assert.match(page, /min-h-11/);
+  assert.match(page, /xl:hidden/);
+  assert.match(page, /hidden space-y-1 xl:block/);
+  assert.match(page, /<select aria-label=\{tx\("What help do you need\?"\)\} value=\{activeSection.id\}/);
   assert.doesNotMatch(page, /overflow-x-auto|whitespace-nowrap|min-w-max/);
-  assert.match(page, /onNavigateSection\(next\.id\)/);
-  assert.match(page, /window\.scrollTo\(\{ top: 0, behavior: "smooth" \}\)/);
+  assert.doesNotMatch(page, /onNavigateSection\(next\.id\)|tx\("Previous"\)|tx\("Next"\)/);
+  assert.match(page, /window\.scrollTo\(\{ top: 0, behavior: "auto" \}\)/);
   assert.doesNotMatch(page, /!routeSectionId\s*\|\|\s*next\.id === activeSectionId/);
 });

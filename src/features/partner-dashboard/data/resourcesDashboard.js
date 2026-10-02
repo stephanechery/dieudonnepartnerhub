@@ -1,25 +1,47 @@
 export const resourceSources = {
+  psiDads: {
+    label: "Postpartum Support International · Help for Dads",
+    href: "https://postpartum.net/get-help/help-for-dads/",
+    kind: "external", checkedOn: "2026-10-02", region: "United States",
+  },
+  cdcSupport: {
+    label: "CDC Hear Her · Providing support",
+    href: "https://www.cdc.gov/hearher/caring/index.html",
+    kind: "external", checkedOn: "2026-10-02", region: "United States",
+  },
+  partnerFeeding: {
+    label: "Feeding Support Guide",
+    href: "/partner-dashboard/guides/partner-feeding-guide/supporting-her-decision",
+    kind: "internal",
+  },
+  partnerBirth: {
+    label: "Labor Readiness Guide",
+    href: "/partner-dashboard/guides/partner-labor-guide/being-her-advocate",
+    kind: "internal",
+  },
   maternalMentalHealth: {
     label: "HRSA · National Maternal Mental Health Hotline",
     href: "https://mchb.hrsa.gov/programs-impact/national-maternal-mental-health-hotline",
-    kind: "external", checkedOn: "2026-09-16", region: "United States",
+    kind: "external", checkedOn: "2026-10-02", region: "United States",
+    serviceLanguages: "English and Spanish; interpreters available for other languages.",
   },
   indianaMoms: {
     label: "Indiana Department of Health · Moms Helpline",
     href: "https://www.in.gov/health/mch/moms-helpline/",
-    kind: "external", checkedOn: "2026-09-16", region: "Indiana",
+    kind: "external", checkedOn: "2026-10-02", region: "Indiana",
+    serviceLanguages: "English and Spanish; interpreters available for other languages.",
   },
   indiana211: {
     label: "Indiana FSSA · Indiana 211",
     href: "https://www.in.gov/fssa/indiana-211/",
     kind: "external",
-    checkedOn: "2026-09-16",
+    checkedOn: "2026-10-02",
   },
   indianaWic: {
     label: "Indiana Department of Health · WIC applications",
     href: "https://www.in.gov/health/wic/how-do-i-apply-for-wic",
     kind: "external",
-    checkedOn: "2026-09-16",
+    checkedOn: "2026-10-02",
   },
   partnerSafetyGuide: {
     label: "Partner Hub · Complications and Warning Signs Guide",
@@ -157,6 +179,12 @@ export const resourceSections = [
     tone: "mental",
     resources: [
       resource({
+        id: "dad-support", title: "Support for dads",
+        description: "PSI offers peer support and resources for dads. Check current group times and registration. This is not emergency care.",
+        source: resourceSources.psiDads,
+        actions: [{ label: "Explore support for dads", href: resourceSources.psiDads.href, kind: "external" }],
+      }),
+      resource({
         id: "maternal-mental-health-hotline",
         title: "National Maternal Mental Health Hotline",
         description: "Free, confidential support, 24/7. Pregnant and postpartum people, partners, and family can call or text. This does not replace emergency care.",
@@ -205,6 +233,18 @@ export const resourceSections = [
     tone: "support",
     resources: [
       resource({
+        id: "feeding-support", title: "Feeding support",
+        description: "Support her feeding decisions, share preparation and cleanup, and prepare questions for skilled feeding support.",
+        source: resourceSources.partnerFeeding,
+        actions: [{ label: "Feeding Support Guide", href: resourceSources.partnerFeeding.href, kind: "internal" }],
+      }),
+      resource({
+        id: "birth-companion", title: "Prepare to be a birth companion",
+        description: "Practice listening, comfort measures and advocacy while respecting her choices and the care team's guidance.",
+        source: resourceSources.partnerBirth,
+        actions: [{ label: "Labor Readiness Guide", href: resourceSources.partnerBirth.href, kind: "internal" }],
+      }),
+      resource({
         id: "indiana-moms-helpline", title: "Indiana Moms Helpline",
         description: "Find prenatal care, baby supplies, insurance, and local support. Anyone in Indiana age 16 or older can contact this free service. Check the website for hours and availability.",
         source: resourceSources.indianaMoms,
@@ -244,8 +284,8 @@ export const resourceSections = [
         title: "Learn how support people can help",
         description:
           "CDC Hear Her offers practical guidance for listening, speaking up, and helping someone get care.",
-        source: resourceSources.cdcHearHer,
-        actions: [{ label: "Open CDC support guidance", href: resourceSources.cdcHearHer.href, kind: "external" }],
+        source: resourceSources.cdcSupport,
+        actions: [{ label: "Open CDC support guidance", href: resourceSources.cdcSupport.href, kind: "external" }],
       }),
     ],
   },
@@ -286,3 +326,16 @@ export const resourceSections = [
 
 export const getResourceSection = (sectionId = "") =>
   resourceSections.find((section) => section.id === sectionId) || resourceSections[0];
+
+export const resourceRegion = (item) => ["call-911", "call-text-988", "mental-health-988"].includes(item.id) ? "United States"
+  : item.source.kind === "internal" ? "Partner Hub guide"
+  : item.source.region || (item.source.href.includes("in.gov") ? "Indiana" : "External resource");
+
+export function filterResources(items, region = "All resources") {
+  return region === "All resources" ? items : items.filter(item => resourceRegion(item) === region);
+}
+
+export function findResourceTarget(sectionId, resourceId) {
+  const section = getResourceSection(sectionId);
+  return section.resources.find(item => item.id === resourceId) || section.resources[0];
+}

@@ -36,7 +36,7 @@ test("every new pack prompt and interface string has three translations", () => 
 test("new Indiana contacts are checked and source-bound with no new account collection", () => {
   for (const key of ["indiana211", "indianaWic"]) {
     assert.equal(new URL(resourceSources[key].href).hostname, "www.in.gov");
-    assert.equal(resourceSources[key].checkedOn, "2026-09-16");
+    assert.equal(resourceSources[key].checkedOn, "2026-10-02");
   }
   const component = read("../components/FacilitatorPacks.jsx");
   assert.doesNotMatch(component, /fetch\(|localStorage|sessionStorage|<input|<textarea|supabase/i);

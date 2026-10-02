@@ -3,7 +3,7 @@ import test from "node:test";
 import fs from "node:fs";
 import { maternalHealthHighlights } from "../data/maternalHealthData.js";
 import { resourceSections } from "../data/resourcesDashboard.js";
-import { evidenceResourcePaths } from "../data/evidenceResourcePaths.js";
+import { evidenceResourcePaths, evidenceResourceTargets } from "../data/evidenceResourcePaths.js";
 
 test("every evidence finding leads to an existing resource section", () => {
   assert.deepEqual(Object.keys(evidenceResourcePaths).sort(), maternalHealthHighlights.map(({ id }) => id).sort());
@@ -19,7 +19,7 @@ test("help destinations vary with the need instead of defaulting to warning sign
   assert.equal(evidenceResourcePaths["national-preventability"], "warning-signs");
   const page = fs.readFileSync(new URL("../pages/MaternalDataPage.jsx", import.meta.url), "utf8");
   assert.ok(page.indexOf('tx("Find help")') < page.indexOf("{expanded &&"));
-  assert.match(page, /showMore \? highlights : highlights.slice\(0, 3\)/);
+  assert.match(page, /showMore \? filterEvidence\(highlights, topic\) : highlights.slice\(0, 3\)/);
 });
 
 test("new evidence and contacts have complete translations and explicit reporting years", () => {
@@ -49,8 +49,8 @@ test("phase two interface labels are complete in every supported translation", (
 
 test("contact actions are outside disclosure and urgent help is available in other sections", () => {
   const page = fs.readFileSync(new URL("../pages/ResourcesDashboardPage.jsx", import.meta.url), "utf8");
-  const regularCard = page.slice(page.indexOf('return (\n    <article className={`self-start'));
-  assert.ok(regularCard.indexOf("<ActionLink") < regularCard.indexOf("{expanded &&"));
-  assert.match(page, /activeSection.id !== "urgent-help"[\s\S]*?selectSection\("urgent-help"\)/);
+  const regularCard = page.slice(page.indexOf("function ResourceCard"));
+  assert.ok(regularCard.indexOf("<ActionLink") < regularCard.indexOf("<details"));
+  assert.match(page, /activeSection\?\.id !== "urgent-help"[\s\S]*?selectSection\("urgent-help"\)/);
   assert.doesNotMatch(page, /truncate|overflow-x-auto/);
 });

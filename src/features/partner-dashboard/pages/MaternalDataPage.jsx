@@ -13,9 +13,10 @@ import {
   maternalHealthGroups,
   maternalHealthSources,
 } from "../data/maternalHealthData";
-import { evidenceResourcePaths } from "../data/evidenceResourcePaths";
-import { getResourceSection } from "../data/resourcesDashboard";
+import { evidenceResourcePaths, evidenceResourceTargets } from "../data/evidenceResourcePaths";
+import { getResourceSection, findResourceTarget } from "../data/resourcesDashboard";
 import FacilitatorPacks from "../components/FacilitatorPacks";
+import { evidenceTopics, filterEvidence } from "../data/evidenceTopics";
 
 const groupOptions = [
   {
@@ -100,7 +101,7 @@ function MaternalDataMap({ activeGroup, onSelectGroup, translateText }) {
         <summary className="flex min-h-12 cursor-pointer list-none items-center gap-3 rounded-2xl px-4 py-3 font-black text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-slate-100">
           <BookOpen className="h-5 w-5 shrink-0 text-cyan-500 dark:text-cyan-300" aria-hidden="true" />
           <span className="min-w-0 flex-1">
-            {tx("Guide Map")} · {tx(activeOption.label)} · {activeIndex + 1}/{groupOptions.length}
+            {tx(activeOption.label)}
           </span>
           <ChevronDown className="h-5 w-5 shrink-0 transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
         </summary>
@@ -124,6 +125,7 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
   const tone = toneClasses[highlight.tone] || toneClasses.cyan;
   const panelId = `maternal-data-panel-${highlight.id}`;
   const resourceSection = getResourceSection(evidenceResourcePaths[highlight.id]);
+  const resource = findResourceTarget(resourceSection.id, evidenceResourceTargets[highlight.id]);
 
   return (
     <article
@@ -162,13 +164,14 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
         </span>
         <span className="mt-2 block text-xs font-bold text-slate-600 dark:text-slate-300">{tx(expanded ? "Hide details" : "View details")}</span>
       </button>
-      <div className="px-4 pb-3 sm:px-5">
-            <a href={`/partner-dashboard/resources/${resourceSection.id}`} onClick={() => {
+      <div className="px-4 pb-4 sm:px-5">
+            <p className="mb-2 border-l-2 border-cyan-300 pl-3 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{tx(highlight.supportAction)}</p>
+            <a href={`/partner-dashboard/resources/${resourceSection.id}?resource=${resource.id}`} onClick={() => {
               const returnUrl = new URL(window.location.href);
               returnUrl.searchParams.set("highlight", highlight.id);
               window.history.replaceState(window.history.state, "", returnUrl);
             }} className="inline-flex min-h-11 items-center gap-2 rounded-lg text-xs font-bold text-cyan-800 underline underline-offset-4 dark:text-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
-              {tx("Find help")}: {tx(resourceSection.label)} <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+              {tx("Find help")}: {tx(resource.title)} <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
             </a>
 
       </div>
@@ -179,14 +182,6 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
           <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">
             {tx(highlight.detail)}
           </p>
-          <div className={`mt-3 rounded-xl border p-3.5 sm:p-4 ${tone.panel}`}>
-            <p className="text-[10px] font-black uppercase tracking-[0.15em]">
-              {tx("What you can do")}
-            </p>
-            <p className="mt-1.5 text-sm font-semibold leading-relaxed">
-              {tx(highlight.supportAction)}
-            </p>
-         </div>
           <details className="mt-3 rounded-xl border border-slate-200 px-3 dark:border-slate-600">
             <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500 dark:text-slate-200">{tx("Source details")}</summary>
           <a
@@ -198,6 +193,7 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
             {tx(highlight.source.label)}
             <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
           </a>
+          <p className="pb-3 text-xs text-slate-500 dark:text-slate-400">{tx("Source link checked")}: <time dateTime={highlight.source.checkedOn}>{highlight.source.checkedOn}</time></p>
           </details>
         </div>
       )}
@@ -219,27 +215,31 @@ export default function MaternalDataPage({
     return [];
   });
   const [showMore, setShowMore] = useState(Boolean(initialHighlightId));
+  const [topic, setTopic] = useState("All topics");
   const currentOption = groupOptions.find((option) => option.id === activeGroup) || groupOptions[1];
   const highlights = useMemo(() => {
     const first = activeGroup === "national"
       ? ["national-overview", "national-racial-disparity", "national-postpartum-depression"]
       : activeGroup === "indiana"
-        ? ["indiana-overview", "indiana-racial-disparity", "indiana-prenatal-care"] : [];
+        ? ["indiana-overview", "indiana-racial-disparity", "indiana-prenatal-care"] : ["partner-listening", "partner-breastfeeding", "partner-labor-support"];
     const all = maternalHealthGroups[activeGroup] || [];
     return [...first.map(id => all.find(item => item.id === id)).filter(Boolean), ...all.filter(item => !first.includes(item.id))];
   }, [activeGroup]);
   const allExpanded = highlights.length > 0 && highlights.every((highlight) => expandedIds.includes(highlight.id));
+  const visibleHighlights = showMore ? filterEvidence(highlights, topic) : highlights.slice(0, 3);
 
   useEffect(() => {
     const routedGroup = groupForRoute(routeSectionId);
     if (!routedGroup || routedGroup === activeGroup) return;
     setActiveGroup(routedGroup);
+    setTopic("All topics");
     setExpandedIds(initialHighlightId ? [initialHighlightId] : []);
     setShowMore(Boolean(initialHighlightId));
   }, [activeGroup, routeSectionId, initialHighlightId]);
 
   useEffect(() => {
     if (!initialHighlightId) return;
+    setTopic("All topics");
     const frame = window.requestAnimationFrame(() => {
       setShowMore(true);
       setExpandedIds([initialHighlightId]);
@@ -256,6 +256,7 @@ export default function MaternalDataPage({
     const option = groupOptions.find(({ id }) => id === groupId);
     if (!option) return;
     setActiveGroup(groupId);
+    setTopic("All topics");
     setExpandedIds([]);
     setShowMore(false);
     onNavigateSection(option.routeId);
@@ -267,40 +268,37 @@ export default function MaternalDataPage({
 
   return (
     <div className="space-y-4 sm:space-y-5">
-      <section className="space-y-4">
+      <section className="space-y-3">
         <div className="grid gap-3 lg:grid-cols-1 lg:items-start">
           <div className="min-w-0">
             <h2 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
-              {tx("Understand the data. Know how to help.")}
+              {tx("Understand the data. Take action.")}
             </h2>
             <p className="mt-1.5 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base dark:text-slate-300">
-              {tx("Plain-language national and Indiana maternal health evidence, with a practical role for fathers and support people beside every finding.")}
+              {tx("Evidence, a practical action, and the right next contact.")}
             </p>
           </div>
         </div>
 
-        <div className="mt-4 border-t border-slate-200/80 pt-4 dark:border-slate-700">
+        <div>
           <MaternalDataMap
             activeGroup={activeGroup}
             onSelectGroup={selectGroup}
             translateText={translateText}
           />
 
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-3 flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-start gap-3">
               <div className="min-w-0">
-                <h3 id="maternal-data-group-heading" className="text-lg font-black tracking-tight text-slate-950 sm:text-2xl dark:text-white">
-                  {tx(currentOption.title)}
+                <h3 id="maternal-data-group-heading" className="text-sm font-bold text-slate-700 dark:text-slate-200">
+                  {tx(currentOption.label)}
                 </h3>
-                {currentOption.description && <p className="mt-1 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                  {tx(currentOption.description)}
-                </p>}
               </div>
             </div>
             <button
               type="button"
-              onClick={() => { setShowMore(true); setExpandedIds(allExpanded ? [] : highlights.map((highlight) => highlight.id)); }}
-              className="min-h-11 shrink-0 self-start rounded-xl border border-cyan-300 bg-cyan-50 px-4 text-xs font-black text-cyan-900 transition-colors hover:bg-cyan-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-100 dark:hover:bg-cyan-400/15"
+              onClick={() => { setShowMore(true); setTopic("All topics"); setExpandedIds(allExpanded ? [] : highlights.map((highlight) => highlight.id)); }}
+              className="min-h-11 shrink-0 rounded-lg px-2 text-xs font-bold text-cyan-800 underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-cyan-200"
             >
               {tx(allExpanded ? "Collapse all" : "Expand all")}
             </button>
@@ -309,8 +307,14 @@ export default function MaternalDataPage({
       </section>
 
       <section aria-labelledby="maternal-data-group-heading">
+        {showMore && <label className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300">{tx("Evidence topic")}
+          <select aria-label={tx("Evidence topic")} value={topic} onChange={event => setTopic(event.target.value)} className="min-h-11 max-w-full rounded-xl border border-slate-300 bg-white px-3 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500">
+            <option value="All topics">{tx("All topics")}</option>
+            {Object.keys(evidenceTopics).filter(key => filterEvidence(highlights, key).length).map(key => <option key={key} value={key}>{tx(key)}</option>)}
+          </select>
+        </label>}
         <div className="grid items-start gap-3 lg:grid-cols-3">
-          {(showMore ? highlights : highlights.slice(0, 3)).map((highlight) => (
+          {visibleHighlights.map((highlight) => (
             <DataHighlight
               key={highlight.id}
               highlight={highlight}
@@ -355,7 +359,7 @@ export default function MaternalDataPage({
         </summary>
         <div className="space-y-3 border-t border-slate-200 px-4 pb-4 pt-3 dark:border-slate-700">
           <p>
-            {tx("The latest official March of Dimes maternity care desert report is the 2024 report. It uses access data collected in different source years, mainly 2022 and 2023. We do not label it as a 2026 report.")}
+            {tx("Access figures use the 2026 March of Dimes report where indicated. Older findings retain their original reporting periods. Study results and professional guidance are not individual outcome guarantees.")}
           </p>
           <p>
             {tx("National maternal mortality counts deaths during pregnancy or within 42 days from causes related to or aggravated by pregnancy. Indiana pregnancy-associated data include deaths from any cause during pregnancy or within one year. These measures should not be compared directly.")}

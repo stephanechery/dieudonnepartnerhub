@@ -52,6 +52,7 @@ export default function DashboardShell({
   // Keep the compact Maternal Data header treatment consistent across the
   // Partner Platform. Embedded uses retain their smaller host-controlled shell.
   const useMaternalDataHeaderTreatment = !embedded;
+  const evidencePage = ["data", "resources"].includes(activeItem) && !embedded;
 
   const identityBlock = (
     <div className="flex min-w-0 items-center gap-3 sm:items-start sm:gap-4">
@@ -65,7 +66,7 @@ export default function DashboardShell({
           {useMaternalDataHeaderTreatment ? tx("Partner Platform") : currentPageLabel}
         </p>
         <h1 className={`text-lg font-black leading-tight tracking-tight sm:text-2xl md:text-2xl xl:text-[1.75rem] ${darkMode ? "text-slate-100" : "text-slate-900"}`}>
-          <span className="md:hidden">{tx("Partner Platform")}</span>
+          <span className="md:hidden">{evidencePage ? currentPageLabel : tx("Partner Platform")}</span>
           <span className="hidden md:inline">
             {useMaternalDataHeaderTreatment
               ? currentPageLabel
@@ -197,7 +198,15 @@ export default function DashboardShell({
                 : "border-slate-200 bg-white/95 shadow-sm"
             }`}
           >
-            {useMaternalDataHeaderTreatment ? (
+            {evidencePage ? (
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                {identityBlock}
+                <div className="flex flex-wrap items-center gap-2">
+                  <nav aria-label={tx("Partner Platform navigation")} className="hidden items-center gap-2 md:flex">{showMenuControl}{homeControl}{adminControl}</nav>
+                  {themeControl}{logoutControl}
+                </div>
+              </div>
+            ) : useMaternalDataHeaderTreatment ? (
               <div className="space-y-3">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <nav aria-label={tx("Partner Platform navigation")} className="hidden min-w-0 flex-wrap items-center gap-2 md:flex">

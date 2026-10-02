@@ -1,38 +1,57 @@
 export const maternalHealthSources = {
+  supportGuidance: {
+    label: "CDC Hear Her · Support guidance, 2024",
+    checkedOn: "2026-10-02",
+    href: "https://www.cdc.gov/hearher/caring/index.html",
+  },
+  maternityAccess2026: {
+    label: "March of Dimes · 2026 Nowhere to Go report",
+    checkedOn: "2026-10-02",
+    href: "https://www.marchofdimes.org/maternity-care-deserts-report",
+  },
   mentalHealthStudy: {
     label: "CDC MMWR · 2018 PRAMS, published 2020",
+    checkedOn: "2026-10-02",
     href: "https://www.cdc.gov/mmwr/volumes/69/wr/mm6919a2.htm",
   },
   fatherTraining: {
     label: "PubMed · Controlled father-training trial",
+    checkedOn: "2026-10-02",
     href: "https://pubmed.ncbi.nlm.nih.gov/16199676/",
   },
   laborCompanion: {
     label: "WHO · Intrapartum care guideline",
+    checkedOn: "2026-10-02",
     href: "https://www.who.int/publications/i/item/9789241550215",
   },
   national: {
     label: "CDC NCHS · Final 2024 data, published March 2026",
+    checkedOn: "2026-10-02",
     href: "https://www.cdc.gov/nchs/data/hestat/hestat113.htm",
   },
   prevention: {
     label: "CDC · Pregnancy-related death prevention",
+    checkedOn: "2026-10-02",
     href: "https://www.cdc.gov/nccdphp/divisions-offices/about-the-division-of-reproductive-health.html",
   },
   hearHer: {
     label: "CDC Hear Her · Support people and warning signs",
+    checkedOn: "2026-10-02",
     href: "https://www.cdc.gov/hearher/index.html",
   },
   maternityAccess: {
     label: "March of Dimes · 2024 Nowhere to Go report",
+    checkedOn: "2026-10-02",
     href: "https://www.marchofdimes.org/sites/default/files/2024-09/2024_MoD_MCD_Report.pdf",
   },
   indiana: {
     label: "Indiana MMRC · 2025 Annual Report",
+    checkedOn: "2026-10-02",
     href: "https://www.in.gov/health/mch/files/MMRC%20Annual%20Report%202019-2023%20Data.pdf",
   },
   indianaReportCard: {
     label: "March of Dimes · 2025 Indiana Report Card",
+    checkedOn: "2026-10-02",
     href: "https://www.marchofdimes.org/peristats/assets/s3/reports/reportcard/MarchofDimesReportCard-Indiana.pdf",
   },
 };
@@ -59,12 +78,12 @@ export const maternalHealthHighlights = [
   {
     id: "partner-breastfeeding",
     group: "partner",
-    scope: "Equipped fathers · Feeding support",
+    scope: "Fathers · 2005 controlled trial · Italy",
     title: "Father training helped sustain full breastfeeding",
     value: "25% vs 15%",
     unit: "full breastfeeding at 6 months",
     detail:
-      "In a controlled trial of 280 couples, full breastfeeding at 6 months was higher when fathers received a breastfeeding-management session.",
+      "A 2005 controlled trial in Naples included 280 couples considering breastfeeding. This single study is not a current population estimate or a guarantee for every family.",
     supportAction:
       "Learn the feeding plan, watch for common challenges, and help connect mom with skilled lactation support early.",
     source: maternalHealthSources.fatherTraining,
@@ -74,7 +93,7 @@ export const maternalHealthHighlights = [
   {
     id: "partner-practical-help",
     group: "partner",
-    scope: "Equipped fathers · Practical help",
+    scope: "Fathers · Same 2005 trial · Italy",
     title: "More mothers reported useful partner help",
     value: "91% vs 34%",
     unit: "mothers reporting help with infant feeding",
@@ -88,7 +107,7 @@ export const maternalHealthHighlights = [
   {
     id: "partner-labor-support",
     group: "partner",
-    scope: "Equipped companions · Labor support",
+    scope: "Birth companions · WHO guideline, 2018",
     title: "Continuous support was linked to shorter labor",
     value: "≈41 min",
     unit: "shorter labor on average",
@@ -100,9 +119,27 @@ export const maternalHealthHighlights = [
     tone: "indigo",
   },
   {
+    id: "partner-listening", group: "partner",
+    scope: "Support people · CDC guidance, 2024",
+    title: "Take her concerns seriously",
+    value: "Listen first", unit: "professional guidance, not an effect estimate",
+    detail: "CDC recommends listening, helping her ask questions and supporting access to care. Partner support complements clinical care; it cannot remove systemic inequities on its own.",
+    supportAction: "Ask what she needs. Help her get immediate medical care for urgent warning signs and tell the team about a pregnancy within the past year.",
+    source: maternalHealthSources.supportGuidance, tone: "cyan",
+  },
+  {
+    id: "partner-follow-up", group: "partner",
+    scope: "Support people · CDC guidance, 2024",
+    title: "Keep showing up after the appointment",
+    value: "Follow through", unit: "professional guidance, not an effect estimate",
+    detail: "CDC includes help with visits, questions and follow-up care in the support person's role. There is no percentage outcome claim attached to this guidance.",
+    supportAction: "With her agreement, help organize follow-up visits and write down questions for the care team.",
+    source: maternalHealthSources.supportGuidance, tone: "cyan",
+  },
+  {
     id: "national-preventability",
     group: "national",
-    scope: "United States · Pregnancy-related deaths",
+    scope: "United States · Review findings released 2022",
     title: "Most pregnancy-related deaths have a prevention opportunity",
     value: ">80%",
     unit: "determined preventable by maternal mortality review committees",
@@ -159,50 +196,50 @@ export const maternalHealthHighlights = [
   {
     id: "national-care-deserts",
     group: "national",
-    scope: "United States · Maternity care access",
+    scope: "United States · 2026 access report",
     title: "More than one third of U.S. counties are maternity care deserts",
-    value: "35.1%",
-    unit: "1,104 counties with no birthing facility or obstetric clinician",
+    value: "34.6%",
+    unit: "of counties have no birthing facility or obstetric clinician",
     detail:
-      "The latest official March of Dimes report is the 2024 Nowhere to Go report. Its access measures use source data through 2022 and 2023.",
+      "The 2026 March of Dimes report classifies about one third of U.S. counties as maternity care deserts. This is a share of counties, not a share of people.",
     supportAction:
       "Confirm the planned birth location, backup hospital, travel time, and transportation plan before labor begins.",
-    source: maternalHealthSources.maternityAccess,
+    source: maternalHealthSources.maternityAccess2026,
     tone: "amber",
     priority: true,
   },
   {
     id: "national-desert-population",
     group: "national",
-    scope: "United States · Maternity care access",
+    scope: "United States · 2026 access report",
     title: "Millions live where maternity care is unavailable",
-    value: "2.3M + 150K",
+    value: "2.4M + 149K",
     unit: "women of reproductive age and babies born in maternity care deserts",
     detail:
-      "More than 2.3 million women of reproductive age lived in maternity care deserts, and more than 150,000 babies were born to residents of those counties in 2022.",
+      "The 2026 report describes 2.4 million women of reproductive age living in maternity care deserts and about 149,000 births annually. These are different population measures, not a combined total.",
     supportAction:
       "Ask the care team when to leave for the hospital and where to go if the planned facility cannot receive patients.",
-    source: maternalHealthSources.maternityAccess,
+    source: maternalHealthSources.maternityAccess2026,
     tone: "indigo",
   },
   {
     id: "national-travel-time",
     group: "national",
-    scope: "United States · Travel to care",
+    scope: "United States · 2026 access report",
     title: "Families in maternity care deserts travel much longer for birth care",
-    value: "2.6×",
+    value: "≈3×",
     unit: "longer travel time than families in full-access counties",
     detail:
-      "Average travel time was 38.0 minutes in maternity care deserts versus 14.4 minutes in full-access counties. Two thirds of people in deserts lived more than 30 minutes from a birthing hospital.",
+      "The 2026 report describes roughly three times longer travel to labor and delivery care in maternity care deserts than in full-access counties. This is not a travel estimate for your address.",
     supportAction:
       "Save the route, fuel the car, arrange a backup ride, and keep the hospital bag and key phone numbers ready.",
-    source: maternalHealthSources.maternityAccess,
+    source: maternalHealthSources.maternityAccess2026,
     tone: "amber",
   },
   {
     id: "national-access-preterm",
     group: "national",
-    scope: "United States · Access and birth outcomes",
+    scope: "United States · 2020–2022 · 2024 report",
     title: "Living in a maternity care desert is linked to higher preterm birth risk",
     value: "+13%",
     unit: "higher risk than living in a full-access county",
@@ -216,7 +253,7 @@ export const maternalHealthHighlights = [
   {
     id: "national-indigenous-access",
     group: "national",
-    scope: "United States · Access disparity",
+    scope: "United States · 2022 · 2024 report",
     title: "American Indian and Alaska Native families face major access gaps",
     value: "1 in 5",
     unit: "births were to people living in counties without full maternity care access",
@@ -331,7 +368,7 @@ export const maternalHealthHighlights = [
   {
     id: "indiana-prenatal-care",
     group: "indiana",
-    scope: "Indiana · 2022–2024 prenatal care",
+    scope: "Indiana · 2024 prenatal care",
     title: "Too many Indiana families started care late or received too few visits",
     value: "16.1%",
     unit: "of births involved inadequate prenatal care",

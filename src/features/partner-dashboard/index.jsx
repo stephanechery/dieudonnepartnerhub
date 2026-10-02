@@ -153,7 +153,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
     navigate(`${BASE_PATH}/maternal-data/${sectionId}`);
   const openResources = () => navigate(`${BASE_PATH}/resources`);
   const openResourcesSection = (sectionId) =>
-    navigate(`${BASE_PATH}/resources/${sectionId}`);
+    navigate(sectionId ? `${BASE_PATH}/resources/${sectionId}` : `${BASE_PATH}/resources`);
   const openMore = () => navigate(`${BASE_PATH}/more`);
   const openGuide = (guideId) => navigate(`${BASE_PATH}/guides/${guideId}`);
   const openGuideSection = (guideId, sectionId, { replace = false } = {}) =>
@@ -245,6 +245,7 @@ const DashboardRouter = ({ pathname, navigate, embedded = false, onExit, darkMod
   } else if (resourcesMatch) {
     page = (
       <ResourcesDashboardPage
+        initialResourceId={new URLSearchParams(window.location.search).get("resource") || ""}
         routeSectionId={resourcesMatch[1] || ""}
         onNavigateSection={openResourcesSection}
         translateText={translateText}
