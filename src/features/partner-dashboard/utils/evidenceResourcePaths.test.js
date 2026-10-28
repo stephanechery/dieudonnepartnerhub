@@ -18,7 +18,8 @@ test("help destinations vary with the need instead of defaulting to warning sign
   assert.equal(evidenceResourcePaths["national-racial-disparity"], "practical-support");
   assert.equal(evidenceResourcePaths["national-preventability"], "warning-signs");
   const page = fs.readFileSync(new URL("../pages/MaternalDataPage.jsx", import.meta.url), "utf8");
-  assert.ok(page.indexOf('tx("Find help")') < page.indexOf("{expanded &&"));
+  assert.ok(page.indexOf('"Make a support plan" : "Find help"') > page.indexOf("{expanded &&"));
+  assert.match(page, /pathway \? pathway.title : resource.title/);
   assert.match(page, /showMore \? filterEvidence\(highlights, topic\) : highlights.slice\(0, 3\)/);
 });
 

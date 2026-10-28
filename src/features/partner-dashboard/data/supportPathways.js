@@ -5,9 +5,10 @@ export const supportPathways = [
   { id: "advocacy", title: "Help her be heard", evidenceId: "partner-listening", resources: ["support-person-role", "cdc-hear-her"], steps: ["Listen without minimizing her concerns.", "Help her describe what has changed to the care team.", "For urgent warning signs, seek medical care immediately."] },
 ];
 
-export const pathwayForEvidence = id => supportPathways.find(path => path.evidenceId === id);
+export const pathwayForEvidence = id => supportPathways.find(path => path.evidenceId === id || (path.id === "advocacy" && ["national-unspoken-concerns", "national-care-discrimination"].includes(id)));
 
 export const evidenceLimit = highlight => {
+  if (highlight.limitation) return highlight.limitation;
   const href = highlight.source.href;
   if (href.includes("16199676")) return "This was one father-training study in Italy, not proof that every family will have the same result.";
   if (href.includes("9789241550215")) return "This evidence concerns birth companions, not only fathers. It does not guarantee a shorter labor.";

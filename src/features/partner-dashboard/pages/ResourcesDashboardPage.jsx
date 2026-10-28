@@ -3,6 +3,7 @@ import { ArrowRight, ExternalLink, Phone, MessageCircle, AlertTriangle } from "l
 import { resourceSections, resourceRegion, filterResources } from "../data/resourcesDashboard";
 import useSavedResources from "../hooks/useSavedResources";
 import SupportPathways from "../components/SupportPathways";
+import ResourceSearch from "../components/ResourceSearch";
 import { supportPathways } from "../data/supportPathways";
 
 const focus = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500";
@@ -81,7 +82,7 @@ export default function ResourcesDashboardPage({ routeSectionId = "", initialRes
       {!saved.ids.length && <p className="py-5 text-sm text-slate-600 dark:text-slate-300">{tx("No saved resources yet. Open a category and choose Save on this device.")}</p>}
       <div className="grid items-start gap-3 lg:grid-cols-2">{resourceSections.flatMap(section => section.resources).filter(item => saved.ids.includes(item.id)).map(resource => <ResourceCard key={resource.id} resource={resource} translateText={tx} saved onToggleSave={saved.toggle} savingAvailable={saved.available} />)}</div>
     </section>}
-    {!savedView && !pathView && <>
+    {!savedView && !pathView && <ResourceSearch key={`${routeSectionId}:${initialResourceId}`} translateText={tx} renderResource={resource => <ResourceCard key={resource.id} resource={resource} translateText={tx} saved={saved.ids.includes(resource.id)} onToggleSave={saved.toggle} savingAvailable={saved.available} />}>
     <div className={activeSection ? "grid items-start gap-4 xl:grid-cols-[13rem_minmax(0,1fr)] xl:gap-6" : ""}>
       <nav aria-label={tx("What help do you need?")} className={activeSection ? "xl:sticky xl:top-6" : ""}>
         {activeSection ? <>
@@ -116,7 +117,7 @@ export default function ResourcesDashboardPage({ routeSectionId = "", initialRes
         {!items.length && <p role="status" className="rounded-xl bg-slate-100 p-4 text-sm text-slate-700 dark:bg-slate-800 dark:text-slate-200">{tx("No resources in this view. Choose All resources.")}</p>}
       </section>}
     </div>
-    </>}
+    </ResourceSearch>}
     <p className="max-w-prose text-xs leading-relaxed text-slate-500 dark:text-slate-400">{tx("Partner Hub provides educational guidance, not diagnosis or a complete service directory. Confirm local contacts and eligibility with the responsible organization.")}</p>
   </div>;
 }

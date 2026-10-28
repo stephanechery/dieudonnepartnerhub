@@ -53,11 +53,13 @@ test("Maternal Data sections are addressable and retain browser history navigati
   assert.doesNotMatch(page, /localStorage|sessionStorage/);
 });
 
-test("expanded evidence spans the desktop grid while collapsed cards stay compact", async () => {
+test("evidence uses compact rows with responsive reading panels", async () => {
   const page = await readDashboardFile("pages", "MaternalDataPage.jsx");
 
-  assert.match(page, /self-start[\s\S]*?expanded \? "lg:col-span-3" : ""/);
-  assert.match(page, /className="block min-h-28 w-full/);
+  assert.match(page, /self-start border-b last:border-b-0/);
+  assert.match(page, /className="grid min-h-28 w-full/);
+  assert.match(page, /lg:grid-cols-2 lg:gap-8/);
+  assert.match(page, /: \[highlight.id\]/);
   assert.match(page, /allExpanded \? "Collapse all" : "Expand all"/);
   assert.match(page, /href=\{highlight\.source\.href\}/);
   assert.match(page, /rel="noopener noreferrer"/);

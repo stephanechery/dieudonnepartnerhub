@@ -1,5 +1,6 @@
 // Editorial filters, not clinical categories or risk scores.
 export const evidenceTopics = {
+  "Respectful care": ["national-unspoken-concerns", "national-care-discrimination"],
   "Your support": ["partner-breastfeeding", "partner-practical-help", "partner-labor-support", "partner-listening", "partner-follow-up"],
   "Access to care": ["national-care-deserts", "national-desert-population", "national-travel-time", "national-access-preterm", "national-indigenous-access", "national-prenatal-disparity", "indiana-medicaid-disparity", "indiana-prenatal-care"],
   "Outcomes and disparities": ["national-preventability", "national-overview", "national-racial-disparity", "national-age-disparity", "indiana-overview", "indiana-preventability", "indiana-postpartum-timing", "indiana-racial-disparity", "indiana-maternal-mortality"],

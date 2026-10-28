@@ -1,4 +1,9 @@
 export const maternalHealthSources = {
+  respectfulCare: {
+    label: "CDC MMWR · Maternity care experiences, April 2023",
+    checkedOn: "2026-10-27",
+    href: "https://www.cdc.gov/mmwr/volumes/72/wr/mm7235e1.htm",
+  },
   supportGuidance: {
     label: "CDC Hear Her · Support guidance, 2024",
     checkedOn: "2026-10-02",
@@ -57,6 +62,26 @@ export const maternalHealthSources = {
 };
 
 export const maternalHealthHighlights = [
+  {
+    id: "national-unspoken-concerns", group: "national",
+    scope: "United States · April 2023 survey · 2,402 respondents",
+    title: "Many mothers held back questions or concerns",
+    value: "44.7%", unit: "held back during maternity care",
+    detail: "Respondents recalled care for their youngest child. This finding helps explain why making space for questions matters.",
+    limitation: "This English-only, opt-in survey was not nationally representative. Many births were years earlier; it does not measure today's care or the effect of partner support.",
+    supportAction: "With her permission, help write down questions and ask the care team to address any unanswered concerns.",
+    source: maternalHealthSources.respectfulCare, tone: "cyan",
+  },
+  {
+    id: "national-care-discrimination", group: "national",
+    scope: "United States · April 2023 survey · 2,402 respondents",
+    title: "Black respondents reported the most discrimination",
+    value: "40.1%", unit: "of Black respondents reported discrimination during maternity care",
+    detail: "The survey found 28.9% overall, 39.4% among multiracial respondents and 36.6% among Hispanic respondents. Discrimination included several reasons, not only race.",
+    limitation: "This English-only, opt-in survey was not nationally representative. Many births were years earlier; it does not measure today's care or the effect of partner support.",
+    supportAction: "Listen if she feels dismissed. Support her questions and choices; respectful care is the health system's responsibility, not a burden she or her partner should carry alone.",
+    source: maternalHealthSources.respectfulCare, tone: "cyan",
+  },
   {
     id: "national-postpartum-depression", group: "national",
     scope: "United States · 2018 PRAMS · 31 sites",

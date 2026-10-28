@@ -1,6 +1,8 @@
 // Editorial navigation only. Evidence, contact details and access rules stay in
 // their existing sources; these links do not imply a referral or eligibility.
 export const evidenceResourcePaths = {
+  "national-unspoken-concerns": "practical-support",
+  "national-care-discrimination": "practical-support",
   "partner-breastfeeding": "practical-support",
   "partner-practical-help": "practical-support",
   "partner-labor-support": "practical-support",
@@ -29,6 +31,8 @@ export const evidenceResourcePaths = {
 
 // Resource IDs are validated against the catalog, never accepted as arbitrary URLs.
 export const evidenceResourceTargets = {
+  "national-unspoken-concerns": "support-person-role",
+  "national-care-discrimination": "support-person-role",
   "national-care-deserts": "insurance-benefits",
   "national-desert-population": "insurance-benefits",
   "national-access-preterm": "insurance-benefits",

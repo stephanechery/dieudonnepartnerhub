@@ -132,25 +132,22 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
   return (
     <article
       id={`maternal-highlight-${highlight.id}`}
-      className={`scroll-mt-28 self-start overflow-hidden rounded-[1.35rem] border bg-white dark:bg-slate-800 ${expanded ? "lg:col-span-3" : ""} ${tone.border}`}
+      className={`scroll-mt-28 self-start border-b last:border-b-0 ${tone.border}`}
     >
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
         aria-controls={panelId}
-        className="block min-h-28 w-full p-4 text-left transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:p-5 dark:hover:bg-white/[0.03]"
+        className="grid min-h-28 w-full gap-3 rounded-xl px-4 py-5 text-left transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:grid-cols-[minmax(0,1fr)_minmax(10rem,0.6fr)_auto] sm:items-center sm:gap-6 sm:px-5 dark:hover:bg-white/[0.03]"
       >
-        <span className="flex items-start justify-between gap-3">
-          <span className={`text-[10px] font-black uppercase leading-relaxed tracking-[0.15em] sm:text-[11px] ${tone.accent}`}>
+        <span className="min-w-0">
+          <span className={`block text-xs font-medium leading-relaxed ${tone.accent}`}>
             {tx(highlight.scope)}
           </span>
-          <ChevronDown
-            className={`mt-0.5 h-5 w-5 shrink-0 text-slate-500 transition-transform ${expanded ? "rotate-180" : ""}`}
-            aria-hidden="true"
-          />
+          <span className="mt-2 block max-w-prose text-base font-bold leading-snug text-slate-950 sm:text-lg dark:text-white">{tx(highlight.title)}</span>
         </span>
-        <span className="mt-3 flex items-end justify-between gap-4">
+        <span className="flex items-end justify-between gap-4">
           <span className="min-w-0">
             <span className="block text-2xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
               {tx(highlight.value)}
@@ -161,33 +158,30 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
           </span>
 
         </span>
-        <span className="mt-3 block text-sm font-black leading-snug text-slate-950 sm:text-base dark:text-white">
-          {tx(highlight.title)}
-        </span>
-        <span className="mt-2 block text-xs font-bold text-slate-600 dark:text-slate-300">{tx(expanded ? "Hide details" : "View details")}</span>
+        <span className="flex items-center gap-2 text-xs font-semibold text-cyan-800 sm:max-w-28 dark:text-cyan-200">{tx(expanded ? "Hide details" : "Understand this finding")}<ChevronDown className={`h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`} aria-hidden="true" /></span>
       </button>
-      <div className="px-4 pb-4 sm:px-5">
-            <p className="mb-2 border-l-2 border-cyan-300 pl-3 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{tx(highlight.supportAction)}</p>
-            <a href={`/partner-dashboard/resources/${resourceSection.id}?resource=${resource.id}`} onClick={() => {
-              const returnUrl = new URL(window.location.href);
-              returnUrl.searchParams.set("highlight", highlight.id);
-              window.history.replaceState(window.history.state, "", returnUrl);
-            }} className="inline-flex min-h-11 items-center gap-2 rounded-lg text-xs font-bold text-cyan-800 underline underline-offset-4 dark:text-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
-              {tx("Find help")}: {tx(resource.title)} <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
-            </a>
-
-      </div>
-
       {expanded && (
-        <div id={panelId} className="border-t border-slate-200 px-4 pb-4 pt-3 sm:px-5 sm:pb-5 dark:border-slate-700">
+        <div id={panelId} className="grid gap-5 px-4 pb-5 sm:px-5 lg:grid-cols-2 lg:gap-8">
+          <div>
           <h4 className="text-sm font-black text-slate-900 dark:text-white">{tx("What it means")}</h4>
           <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">
             {tx(highlight.detail)}
           </p>
           <h4 className="mt-4 text-sm font-black text-slate-900 dark:text-white">{tx("What this does not prove")}</h4>
           <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">{tx(evidenceLimit(highlight))}</p>
-          {pathway && <a href={`/partner-dashboard/resources/path-${pathway.id}`} className="mt-3 inline-flex min-h-11 items-center rounded-lg text-sm font-bold text-cyan-800 underline dark:text-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500">{tx("Make a support plan")}: {tx(pathway.title)}</a>}
-          <details className="mt-3 rounded-xl border border-slate-200 px-3 dark:border-slate-600">
+          </div>
+          <div className="border-l-2 border-cyan-300 pl-4 dark:border-cyan-700">
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white">{tx("One next step")}</h4>
+            <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-700 dark:text-slate-200">{tx(highlight.supportAction)}</p>
+            <a href={pathway ? `/partner-dashboard/resources/path-${pathway.id}` : `/partner-dashboard/resources/${resourceSection.id}?resource=${resource.id}`} onClick={() => {
+              const returnUrl = new URL(window.location.href);
+              returnUrl.searchParams.set("highlight", highlight.id);
+              window.history.replaceState(window.history.state, "", returnUrl);
+            }} className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-bold text-cyan-800 underline underline-offset-4 dark:text-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+              {tx(pathway ? "Make a support plan" : "Find help")}: {tx(pathway ? pathway.title : resource.title)} <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+            </a>
+          </div>
+          <details className="border-t border-slate-200 lg:col-span-2 dark:border-slate-600">
             <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500 dark:text-slate-200">{tx("Source details")}</summary>
           <a
             href={highlight.source.href}
@@ -300,13 +294,13 @@ export default function MaternalDataPage({
                 </h3>
               </div>
             </div>
-            <button
+            {showMore && <button
               type="button"
               onClick={() => { setShowMore(true); setTopic("All topics"); setExpandedIds(allExpanded ? [] : highlights.map((highlight) => highlight.id)); }}
               className="min-h-11 shrink-0 rounded-lg px-2 text-xs font-bold text-cyan-800 underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 dark:text-cyan-200"
             >
               {tx(allExpanded ? "Collapse all" : "Expand all")}
-            </button>
+            </button>}
           </div>
         </div>
       </section>
@@ -318,7 +312,7 @@ export default function MaternalDataPage({
             {Object.keys(evidenceTopics).filter(key => filterEvidence(highlights, key).length).map(key => <option key={key} value={key}>{tx(key)}</option>)}
           </select>
         </label>}
-        <div className="grid items-start gap-3 lg:grid-cols-3">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
           {visibleHighlights.map((highlight) => (
             <DataHighlight
               key={highlight.id}
@@ -327,7 +321,7 @@ export default function MaternalDataPage({
               onToggle={() => setExpandedIds((current) =>
                 current.includes(highlight.id)
                   ? current.filter((id) => id !== highlight.id)
-                  : [...current, highlight.id]
+                  : [highlight.id]
               )}
               translateText={translateText}
             />
