@@ -18,7 +18,7 @@
 
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: min(320px, 100%);
   font-family: "Manrope", system-ui, sans-serif;
   background:
     radial-gradient(circle at 15% 20%, rgba(251, 113, 133, 0.14), transparent 40%),
@@ -28,6 +28,35 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+/* Maternal evidence is a reading surface, not a training-progress dashboard. */
+.maternal-data-shell .training-progress-summary { display: none; }
+.maternal-data-shell header { box-shadow: none; border-radius: 1rem; }
+.maternal-data-shell header h1 { font-size: 1.25rem; }
+.maternal-data-shell header h1 + p { display: none; }
+.maternal-data-shell header { padding-block: .75rem; }
+.indiana-data-view h2 { font-size: 1.375rem; font-weight: 700; }
+.indiana-data-view nav[aria-label] button { font-weight: 600; }
+.indiana-data-view nav[aria-label] button > span.rounded-full { border: 0; background: transparent; color: inherit; }
+.indiana-data-view nav[aria-label] button > span:last-child[aria-hidden] { display: none; }
+.indiana-evidence-grid { display: grid; gap: 1rem; border: 0; background: transparent; overflow: visible; }
+.indiana-evidence-card { min-width: 0; border: 1px solid #e2e8f0; border-radius: 1rem; background: #fff; }
+.indiana-evidence-card:last-child { border-bottom-width: 1px; }
+.indiana-evidence-card > button { display: flex; flex-direction: column; align-items: stretch; gap: .875rem; padding: 1.25rem; }
+.indiana-evidence-card > button > span:first-child > span:last-child { font-size: 1rem; font-weight: 650; }
+.indiana-evidence-card .evidence-stat { order: 1; }
+.indiana-evidence-card .evidence-disclosure { order: 2; max-width: none; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: .75rem; }
+.indiana-evidence-card .evidence-stat > span { width: 100%; }
+.indiana-evidence-card .evidence-stat > span > span:first-child { font-variant-numeric: tabular-nums; }
+:root[data-theme="dark"] .indiana-evidence-grid { background: transparent; }
+:root[data-theme="dark"] .indiana-evidence-card { background: #1e293b; border-color: #334155; }
+:root[data-theme="dark"] .indiana-evidence-card .evidence-disclosure { border-color: #334155; }
+@media (min-width: 1024px) {
+  .indiana-evidence-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .indiana-evidence-card.is-expanded { grid-column: 1 / -1; }
+  .indiana-data-view > section:first-child { display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+  .indiana-data-view > section:first-child nav { padding: .25rem; border-radius: .75rem; }
 }
 
 @keyframes win-toast {

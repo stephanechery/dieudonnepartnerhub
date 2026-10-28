@@ -128,11 +128,13 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
   const resourceSection = getResourceSection(evidenceResourcePaths[highlight.id]);
   const resource = findResourceTarget(resourceSection.id, evidenceResourceTargets[highlight.id]);
   const pathway = pathwayForEvidence(highlight.id);
+  const editorial = highlight.group === "indiana";
+  const comparison = highlight.id === "indiana-racial-disparity" ? ["13%", "21%"] : highlight.id === "indiana-medicaid-disparity" ? ["40%", "65%"] : null;
 
   return (
     <article
       id={`maternal-highlight-${highlight.id}`}
-      className={`scroll-mt-28 self-start border-b last:border-b-0 ${tone.border}`}
+      className={`scroll-mt-28 self-start border-b last:border-b-0 ${tone.border} ${editorial ? `indiana-evidence-card ${expanded ? "is-expanded" : ""}` : ""}`}
     >
       <button
         type="button"
@@ -147,18 +149,24 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
           </span>
           <span className="mt-2 block max-w-prose text-base font-bold leading-snug text-slate-950 sm:text-lg dark:text-white">{tx(highlight.title)}</span>
         </span>
-        <span className="flex items-end justify-between gap-4">
+        <span className="evidence-stat flex items-end justify-between gap-4">
           <span className="min-w-0">
+            {comparison ? <span className="grid grid-cols-2 gap-5">
+              <span><span className="block text-3xl font-bold tabular-nums tracking-tight text-slate-950 dark:text-white">{comparison[0]}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600 dark:text-slate-300">{tx("Share of live births")}</span></span>
+              <span><span className="block text-3xl font-bold tabular-nums tracking-tight text-slate-950 dark:text-white">{comparison[1]}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600 dark:text-slate-300">{tx("Share of pregnancy-associated deaths")}</span></span>
+            </span> : <>
             <span className="block text-2xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
               {tx(highlight.value)}
             </span>
             <span className="mt-1 block text-xs font-bold leading-relaxed text-slate-600 sm:text-sm dark:text-slate-300">
               {tx(highlight.unit)}
             </span>
+            </>}
+            {comparison && <span className="mt-2 block text-xs leading-relaxed text-slate-500 dark:text-slate-400">{tx(highlight.unit)}</span>}
           </span>
 
         </span>
-        <span className="flex items-center gap-2 text-xs font-semibold text-cyan-800 sm:max-w-28 dark:text-cyan-200">{tx(expanded ? "Hide details" : "Understand this finding")}<ChevronDown className={`h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`} aria-hidden="true" /></span>
+        <span className="evidence-disclosure flex items-center gap-2 text-xs font-semibold text-cyan-800 sm:max-w-28 dark:text-cyan-200">{tx(expanded ? "Hide details" : editorial ? "View details" : "Understand this finding")}<ChevronDown className={`h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`} aria-hidden="true" /></span>
       </button>
       {expanded && (
         <div id={panelId} className="grid gap-5 px-4 pb-5 sm:px-5 lg:grid-cols-2 lg:gap-8">
@@ -266,7 +274,7 @@ export default function MaternalDataPage({
   const nextOption = groupOptions[activeIndex + 1];
 
   return (
-    <div className="space-y-4 sm:space-y-5">
+    <div className={`space-y-4 sm:space-y-5 ${activeGroup === "indiana" ? "indiana-data-view" : ""}`}>
       <section className="space-y-3">
         <div className="grid gap-3 lg:grid-cols-1 lg:items-start">
           <div className="min-w-0">
@@ -286,7 +294,7 @@ export default function MaternalDataPage({
             translateText={translateText}
           />
 
-          <div className="mt-3 flex items-center justify-between gap-3">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
             <div className="flex min-w-0 items-start gap-3">
               <div className="min-w-0">
                 <h3 id="maternal-data-group-heading" className="text-sm font-bold text-slate-700 dark:text-slate-200">
@@ -294,6 +302,12 @@ export default function MaternalDataPage({
                 </h3>
               </div>
             </div>
+            {showMore && <label className="flex min-w-0 flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 sm:ml-auto dark:text-slate-300">{tx("Evidence topic")}
+              <select aria-label={tx("Evidence topic")} value={topic} onChange={event => setTopic(event.target.value)} className="min-h-11 min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500">
+                <option value="All topics">{tx("All topics")}</option>
+                {Object.keys(evidenceTopics).filter(key => filterEvidence(highlights, key).length).map(key => <option key={key} value={key}>{tx(key)}</option>)}
+              </select>
+            </label>}
             {showMore && <button
               type="button"
               onClick={() => { setShowMore(true); setTopic("All topics"); setExpandedIds(allExpanded ? [] : highlights.map((highlight) => highlight.id)); }}
@@ -306,13 +320,7 @@ export default function MaternalDataPage({
       </section>
 
       <section aria-labelledby="maternal-data-group-heading">
-        {showMore && <label className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300">{tx("Evidence topic")}
-          <select aria-label={tx("Evidence topic")} value={topic} onChange={event => setTopic(event.target.value)} className="min-h-11 max-w-full rounded-xl border border-slate-300 bg-white px-3 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500">
-            <option value="All topics">{tx("All topics")}</option>
-            {Object.keys(evidenceTopics).filter(key => filterEvidence(highlights, key).length).map(key => <option key={key} value={key}>{tx(key)}</option>)}
-          </select>
-        </label>}
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+        <div className={`overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 ${activeGroup === "indiana" ? "indiana-evidence-grid" : ""}`}>
           {visibleHighlights.map((highlight) => (
             <DataHighlight
               key={highlight.id}

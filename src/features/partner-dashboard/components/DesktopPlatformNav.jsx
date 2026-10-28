@@ -134,7 +134,7 @@ export default function DesktopPlatformNav({
       </nav>
 
       <div className="mt-auto space-y-3 pt-6">
-        <section className={`rounded-3xl border p-4 ${darkMode ? "border-slate-700 bg-slate-800/85" : "border-slate-200 bg-slate-50"}`}>
+        <section className={`training-progress-summary rounded-3xl border p-4 ${darkMode ? "border-slate-700 bg-slate-800/85" : "border-slate-200 bg-slate-50"}`}>
           <p className={`text-[10px] font-black uppercase tracking-[0.18em] ${darkMode ? "text-cyan-300" : "text-cyan-700"}`}>
             {tx("Your progress")}
           </p>

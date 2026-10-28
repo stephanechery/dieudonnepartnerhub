@@ -1,5 +1,7 @@
 {
   "es": {
+    "Share of live births": "Proporción de nacidos vivos",
+    "Share of pregnancy-associated deaths": "Proporción de muertes asociadas al embarazo",
     "Search resources": "Buscar recursos",
     "Try food, transport or feeding": "Prueba alimentos, transporte o lactancia",
     "Search stays in this browser. Use a topic, not personal or medical details.": "La búsqueda se queda en este navegador. Usa un tema, no datos personales ni médicos.",
@@ -67,6 +69,8 @@
     "Review transportation guidance": "Consultar orientación sobre transporte"
   },
   "fr": {
+    "Share of live births": "Part des naissances vivantes",
+    "Share of pregnancy-associated deaths": "Part des décès associés à la grossesse",
     "Search resources": "Rechercher des ressources",
     "Try food, transport or feeding": "Essayez alimentation, transport ou allaitement",
     "Search stays in this browser. Use a topic, not personal or medical details.": "La recherche reste dans ce navigateur. Utilisez un sujet, sans renseignements personnels ou médicaux.",
@@ -134,6 +138,8 @@
     "Review transportation guidance": "Consulter les conseils sur le transport"
   },
   "ht": {
+    "Share of live births": "Pati nan nesans vivan yo",
+    "Share of pregnancy-associated deaths": "Pati nan lanmò ki asosye ak gwosès yo",
     "Search resources": "Chèche resous",
     "Try food, transport or feeding": "Eseye manje, transpò oswa bay tibebe manje",
     "Search stays in this browser. Use a topic, not personal or medical details.": "Rechèch la rete nan navigatè sa a. Sèvi ak yon sijè, pa detay pèsonèl oswa medikal.",
