@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ArrowRight, ExternalLink, Phone, MessageCircle, AlertTriangle } from "lucide-react";
-import { resourceSections, resourceRegion, filterResources } from "../data/resourcesDashboard";
+import { resourceSections, resourceRegion } from "../data/resourcesDashboard";
 import useSavedResources from "../hooks/useSavedResources";
 import SupportPathways from "../components/SupportPathways";
 import ResourceSearch from "../components/ResourceSearch";
 import { supportPathways } from "../data/supportPathways";
 
 const focus = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500";
-const regions = ["All resources", "Indiana", "United States", "Partner Hub guide"];
 
 function ActionLink({ action, translateText }) {
   const external = action.kind === "external";
@@ -44,10 +43,8 @@ export default function ResourcesDashboardPage({ routeSectionId = "", initialRes
   const saved = useSavedResources(savedScope);
   const savedView = routeSectionId === "saved";
   const pathView = routeSectionId === "pathways" || supportPathways.some(path => `path-${path.id}` === routeSectionId);
-  const [region, setRegion] = useState("All resources");
   const targetId = activeSection?.resources.find(item => item.id === initialResourceId)?.id || "";
   useEffect(() => {
-    setRegion("All resources");
     if (!targetId) return;
     const frame = window.requestAnimationFrame(() => {
       const node = document.getElementById(`resource-${targetId}`);
@@ -61,7 +58,7 @@ export default function ResourcesDashboardPage({ routeSectionId = "", initialRes
     onNavigateSection(id);
     window.scrollTo({ top: 0, behavior: "auto" });
   };
-  const items = activeSection ? filterResources(activeSection.resources, region) : [];
+  const items = activeSection?.resources || [];
   const ordered = [...items].sort((a, b) => Number(b.id === targetId) - Number(a.id === targetId));
   return <div className="space-y-4 sm:space-y-6">
     <header className="flex flex-wrap items-start justify-between gap-3">
@@ -82,7 +79,7 @@ export default function ResourcesDashboardPage({ routeSectionId = "", initialRes
       {!saved.ids.length && <p className="py-5 text-sm text-slate-600 dark:text-slate-300">{tx("No saved resources yet. Open a category and choose Save on this device.")}</p>}
       <div className="grid items-start gap-3 lg:grid-cols-2">{resourceSections.flatMap(section => section.resources).filter(item => saved.ids.includes(item.id)).map(resource => <ResourceCard key={resource.id} resource={resource} translateText={tx} saved onToggleSave={saved.toggle} savingAvailable={saved.available} />)}</div>
     </section>}
-    {!savedView && !pathView && <ResourceSearch key={`${routeSectionId}:${initialResourceId}`} translateText={tx} renderResource={resource => <ResourceCard key={resource.id} resource={resource} translateText={tx} saved={saved.ids.includes(resource.id)} onToggleSave={saved.toggle} savingAvailable={saved.available} />}>
+    {!savedView && !pathView && <ResourceSearch key={`${routeSectionId}:${initialResourceId}`} scopeNeed={activeSection?.id || ""} translateText={tx} renderResource={resource => <ResourceCard key={resource.id} resource={resource} translateText={tx} saved={saved.ids.includes(resource.id)} onToggleSave={saved.toggle} savingAvailable={saved.available} />}>
     <div className={activeSection ? "grid items-start gap-4 xl:grid-cols-[13rem_minmax(0,1fr)] xl:gap-6" : ""}>
       <nav aria-label={tx("What help do you need?")} className={activeSection ? "xl:sticky xl:top-6" : ""}>
         {activeSection ? <>
@@ -108,9 +105,6 @@ export default function ResourcesDashboardPage({ routeSectionId = "", initialRes
       {activeSection && <section aria-labelledby="resources-section-heading" className="min-w-0">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <h3 id="resources-section-heading" className="text-xl font-black text-slate-950 dark:text-white">{tx(activeSection.label)}</h3>
-          {activeSection.id !== "urgent-help" && <label className="flex max-w-full flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-300">{tx("Show resources")}
-            <select aria-label={tx("Show resources")} value={region} onChange={event => setRegion(event.target.value)} className={`min-h-11 max-w-full rounded-xl border border-slate-300 bg-white px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white ${focus}`}>{regions.map(value => <option key={value} value={value}>{tx(value)}</option>)}</select>
-          </label>}
         </div>
         {activeSection.id === "urgent-help" && <p className="mb-4 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">{tx(activeSection.description)}</p>}
         <div className="grid items-start gap-3 lg:grid-cols-2">{ordered.map(resource => <ResourceCard key={resource.id} resource={resource} translateText={tx} saved={saved.ids.includes(resource.id)} onToggleSave={saved.toggle} savingAvailable={saved.available} />)}</div>

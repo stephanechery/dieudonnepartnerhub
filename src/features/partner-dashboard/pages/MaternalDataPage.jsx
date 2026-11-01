@@ -128,26 +128,25 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
   const resourceSection = getResourceSection(evidenceResourcePaths[highlight.id]);
   const resource = findResourceTarget(resourceSection.id, evidenceResourceTargets[highlight.id]);
   const pathway = pathwayForEvidence(highlight.id);
-  const editorial = highlight.group === "indiana";
   const comparison = highlight.id === "indiana-racial-disparity" ? ["13%", "21%"] : highlight.id === "indiana-medicaid-disparity" ? ["40%", "65%"] : null;
 
   return (
     <article
       id={`maternal-highlight-${highlight.id}`}
-      className={`scroll-mt-28 self-start border-b last:border-b-0 ${tone.border} ${editorial ? `indiana-evidence-card ${expanded ? "is-expanded" : ""}` : ""}`}
+      className={`scroll-mt-28 self-start border-b last:border-b-0 ${tone.border}`}
     >
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
         aria-controls={panelId}
-        className="grid min-h-28 w-full gap-3 rounded-xl px-4 py-5 text-left transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:grid-cols-[minmax(0,1fr)_minmax(10rem,0.6fr)_auto] sm:items-center sm:gap-6 sm:px-5 dark:hover:bg-white/[0.03]"
+        className="grid min-h-24 w-full gap-3 rounded-xl px-4 py-4 text-left transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:grid-cols-[minmax(0,1fr)_minmax(10rem,0.7fr)_auto] sm:items-center sm:gap-5 sm:px-5 dark:hover:bg-white/[0.03]"
       >
         <span className="min-w-0">
           <span className={`block text-xs font-medium leading-relaxed ${tone.accent}`}>
             {tx(highlight.scope)}
           </span>
-          <span className="mt-2 block max-w-prose text-base font-bold leading-snug text-slate-950 sm:text-lg dark:text-white">{tx(highlight.title)}</span>
+          <span className="mt-1 block max-w-prose text-base font-semibold leading-snug text-slate-950 dark:text-white">{tx(highlight.title)}</span>
         </span>
         <span className="evidence-stat flex items-end justify-between gap-4">
           <span className="min-w-0">
@@ -155,7 +154,7 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
               <span><span className="block text-3xl font-bold tabular-nums tracking-tight text-slate-950 dark:text-white">{comparison[0]}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600 dark:text-slate-300">{tx("Share of live births")}</span></span>
               <span><span className="block text-3xl font-bold tabular-nums tracking-tight text-slate-950 dark:text-white">{comparison[1]}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600 dark:text-slate-300">{tx("Share of pregnancy-associated deaths")}</span></span>
             </span> : <>
-            <span className="block text-2xl font-black tracking-tight text-slate-950 sm:text-3xl dark:text-white">
+            <span className="block text-xl font-bold tabular-nums tracking-tight text-slate-950 sm:text-2xl dark:text-white">
               {tx(highlight.value)}
             </span>
             <span className="mt-1 block text-xs font-bold leading-relaxed text-slate-600 sm:text-sm dark:text-slate-300">
@@ -166,7 +165,7 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
           </span>
 
         </span>
-        <span className="evidence-disclosure flex items-center gap-2 text-xs font-semibold text-cyan-800 sm:max-w-28 dark:text-cyan-200">{tx(expanded ? "Hide details" : editorial ? "View details" : "Understand this finding")}<ChevronDown className={`h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`} aria-hidden="true" /></span>
+        <span className="evidence-disclosure flex items-center gap-2 text-xs font-semibold text-cyan-800 dark:text-cyan-200">{tx(expanded ? "Hide details" : "View details")}<ChevronDown className={`h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`} aria-hidden="true" /></span>
       </button>
       {expanded && (
         <div id={panelId} className="grid gap-5 px-4 pb-5 sm:px-5 lg:grid-cols-2 lg:gap-8">
@@ -274,7 +273,7 @@ export default function MaternalDataPage({
   const nextOption = groupOptions[activeIndex + 1];
 
   return (
-    <div className={`space-y-4 sm:space-y-5 ${activeGroup === "indiana" ? "indiana-data-view" : ""}`}>
+    <div className="maternal-summary-view space-y-4 sm:space-y-5">
       <section className="space-y-3">
         <div className="grid gap-3 lg:grid-cols-1 lg:items-start">
           <div className="min-w-0">
@@ -320,7 +319,8 @@ export default function MaternalDataPage({
       </section>
 
       <section aria-labelledby="maternal-data-group-heading">
-        <div className={`overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 ${activeGroup === "indiana" ? "indiana-evidence-grid" : ""}`}>
+        {!showMore && <p className="mb-3 text-sm text-slate-600 dark:text-slate-300">{tx("Start with three findings. Open one for context and a practical next step.")}</p>}
+        <div className="maternal-evidence-list overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
           {visibleHighlights.map((highlight) => (
             <DataHighlight
               key={highlight.id}

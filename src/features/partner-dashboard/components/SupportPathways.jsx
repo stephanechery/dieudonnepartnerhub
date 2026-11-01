@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import PreparationSheet from "./PreparationSheet";
 import { supportPathways, preparationPacks } from "../data/supportPathways";
 import { maternalHealthHighlights } from "../data/maternalHealthData";
 import { resourceSections } from "../data/resourcesDashboard";
@@ -8,6 +9,13 @@ export default function SupportPathways({ routeSectionId, onNavigateSection, tra
   const active = supportPathways.find(path => `path-${path.id}` === routeSectionId);
   const evidence = maternalHealthHighlights.find(item => item.id === active?.evidenceId);
   const pack = preparationPacks[active?.id];
+  const [printPlanId, setPrintPlanId] = useState("");
+  const printTriggerRef = useRef(null);
+  const closePrintPreview = () => {
+    setPrintPlanId("");
+    window.requestAnimationFrame(() => printTriggerRef.current?.focus());
+  };
+  const printResources = active?.resources.map(id => resourceSections.flatMap(section => section.resources).find(resource => resource.id === id)).filter(Boolean) || [];
   return <section aria-label={tx("Make a support plan")} className="grid items-start gap-5 lg:grid-cols-[15rem_minmax(0,1fr)]">
     <nav aria-label={tx("Support pathways")} className="space-y-2">
       <h3 className="text-lg font-black text-slate-950 dark:text-white">{tx("Make a support plan")}</h3>
@@ -24,6 +32,8 @@ export default function SupportPathways({ routeSectionId, onNavigateSection, tra
         <div className="mt-4 divide-y divide-slate-200 dark:divide-slate-700">{supportPathways.filter(path => preparationPacks[path.id]).map(path => <button key={path.id} onClick={() => onNavigateSection(`path-${path.id}`)} className={`flex min-h-14 w-full items-center justify-between gap-3 rounded-lg py-4 text-left text-sm font-bold text-cyan-800 dark:text-cyan-200 ${focus}`}>{tx(path.title)}<span aria-hidden="true">→</span></button>)}</div>
       </> : <>
         <h3 className="text-xl font-black text-slate-950 dark:text-white">{tx(active.title)}</h3>
+        {pack && <button ref={printTriggerRef} type="button" onClick={() => setPrintPlanId(active.id)} className={`mt-2 min-h-11 rounded-lg text-sm font-semibold text-cyan-800 underline underline-offset-4 dark:text-cyan-200 ${focus}`}>{tx("Printable preparation sheet")}</button>}
+        {pack && printPlanId === active.id && <PreparationSheet active={active} pack={pack} evidence={evidence} resources={printResources} translateText={tx} onClose={closePrintPreview} />}
         {pack ? <div key={active.id}>
           <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">{tx(pack.intro)}</p>
           <div className="my-5 border-l-2 border-cyan-400 pl-4"><h4 className="text-xs font-bold text-slate-600 dark:text-slate-300">{tx("Try asking")}</h4><p className="mt-2 text-lg font-semibold leading-relaxed text-slate-900 dark:text-white">{tx(pack.prompt)}</p></div>
