@@ -31,6 +31,12 @@ export const evidenceResourcePaths = {
 
 // Resource IDs are validated against the catalog, never accepted as arbitrary URLs.
 export const evidenceResourceTargets = {
+  "national-preventability": "cdc-hear-her",
+  "national-age-disparity": "pregnancy-warning-guide",
+  "indiana-preventability": "cdc-hear-her",
+  "indiana-maternal-mortality": "postpartum-warning-guide",
+  "indiana-medicaid-disparity": "insurance-benefits",
+  "indiana-prenatal-care": "insurance-benefits",
   "national-unspoken-concerns": "support-person-role",
   "national-care-discrimination": "support-person-role",
   "national-care-deserts": "health-center",

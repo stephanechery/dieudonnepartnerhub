@@ -180,13 +180,18 @@ function DataHighlight({ highlight, expanded, onToggle, translateText }) {
           <div className="border-l-2 border-cyan-300 pl-4 dark:border-cyan-700">
             <h4 className="text-sm font-bold text-slate-900 dark:text-white">{tx("One next step")}</h4>
             <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-700 dark:text-slate-200">{tx(highlight.supportAction)}</p>
-            <a href={pathway ? `/partner-dashboard/resources/path-${pathway.id}` : `/partner-dashboard/resources/${resourceSection.id}?resource=${resource.id}`} onClick={() => {
+            <a href={`/partner-dashboard/resources/${resourceSection.id}?resource=${resource.id}`} onClick={() => {
               const returnUrl = new URL(window.location.href);
               returnUrl.searchParams.set("highlight", highlight.id);
               window.history.replaceState(window.history.state, "", returnUrl);
             }} className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-bold text-cyan-800 underline underline-offset-4 dark:text-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
-              {tx(pathway ? "Make a support plan" : "Find help")}: {tx(pathway ? pathway.title : resource.title)} <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+              {tx("Find help")}: {tx(resource.title)} <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
             </a>
+            {pathway && <a href={`/partner-dashboard/resources/path-${pathway.id}`} onClick={() => {
+              const returnUrl = new URL(window.location.href);
+              returnUrl.searchParams.set("highlight", highlight.id);
+              window.history.replaceState(window.history.state, "", returnUrl);
+            }} className="block min-h-11 rounded-lg py-3 text-sm text-slate-600 underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500 dark:text-slate-300">{tx("Make a support plan")}: {tx(pathway.title)}</a>}
           </div>
           <details className="border-t border-slate-200 lg:col-span-2 dark:border-slate-600">
             <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500 dark:text-slate-200">{tx("Source details")}</summary>

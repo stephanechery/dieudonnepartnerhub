@@ -5,6 +5,7 @@ import useSavedResources from "../hooks/useSavedResources";
 import SupportPathways from "../components/SupportPathways";
 import ResourceSearch from "../components/ResourceSearch";
 import { supportPathways } from "../data/supportPathways";
+import { resourceContactDetails } from "../data/resourceContactDetails";
 
 const focus = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500";
 
@@ -19,6 +20,7 @@ function ActionLink({ action, translateText }) {
 
 function ResourceCard({ resource, translateText, saved, onToggleSave, savingAvailable }) {
   const tx = translateText;
+  const contact = resourceContactDetails[resource.id];
   return <article id={`resource-${resource.id}`} tabIndex={-1} className={`scroll-mt-6 self-start rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-800 ${focus}`}>
     <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">{tx(resourceRegion(resource))}</p>
     <h3 className="mt-2 text-lg font-black leading-snug text-slate-950 dark:text-white">{tx(resource.title)}</h3>
@@ -27,10 +29,17 @@ function ResourceCard({ resource, translateText, saved, onToggleSave, savingAvai
       {resource.actions.map(action => <ActionLink key={`${action.href}-${action.label}`} action={action} translateText={tx} />)}
     </div>
     <button type="button" aria-pressed={saved} disabled={!savingAvailable} onClick={() => onToggleSave(resource.id)} className={`mt-2 min-h-11 rounded-lg text-xs font-bold text-cyan-800 underline disabled:opacity-50 dark:text-cyan-200 ${focus}`}>{tx(saved ? "Remove from saved" : "Save on this device")}<span className="sr-only">: {tx(resource.title)}</span></button>
+    {contact && <details className="mt-3 border-t border-slate-100 dark:border-slate-700">
+      <summary className={`min-h-11 cursor-pointer rounded-lg py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 ${focus}`}>{tx("Before you contact")}<span className="sr-only">: {tx(resource.title)}</span></summary>
+      <dl className="space-y-3 pb-3 text-sm leading-relaxed">
+        <div><dt className="font-semibold text-slate-900 dark:text-white">{tx("Who it supports")}</dt><dd className="mt-1 text-slate-600 dark:text-slate-300">{tx(contact.audience)}</dd></div>
+        <div><dt className="font-semibold text-slate-900 dark:text-white">{tx("What to expect")}</dt><dd className="mt-1 text-slate-600 dark:text-slate-300">{tx(contact.expectation)}</dd></div>
+      </dl>
+    </details>}
     <details className="mt-3 border-t border-slate-100 pt-1 dark:border-slate-700">
       <summary className={`min-h-11 cursor-pointer rounded-lg py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 ${focus}`}>{tx("Source details")}</summary>
       <a href={resource.source.href} target={resource.source.kind === "external" ? "_blank" : undefined} rel={resource.source.kind === "external" ? "noopener noreferrer" : undefined} className={`inline-flex min-h-11 items-center text-xs leading-relaxed text-cyan-800 underline dark:text-cyan-200 ${focus}`}>{tx(resource.source.label)}</a>
-      {resource.source.checkedOn && <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{tx("Last checked")}: <time dateTime={resource.source.checkedOn}>{resource.source.checkedOn}</time></p>}
+      {(contact?.checkedOn || resource.source.checkedOn) && <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{tx("Last checked")}: <time dateTime={contact?.checkedOn || resource.source.checkedOn}>{contact?.checkedOn || resource.source.checkedOn}</time></p>}
       {resource.source.serviceLanguages && <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">{tx(resource.source.serviceLanguages)}</p>}
       {resource.source.kind === "external" && <p className="mt-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">{tx("Confirm hours, eligibility and service languages with the provider.")}</p>}
     </details>
