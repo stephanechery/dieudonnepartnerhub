@@ -64,7 +64,7 @@ test("Resources mobile entry stays inside More and owner controls remain isolate
 
 test("resource contact paths are source-bound and limited to approved destinations", () => {
   const sourceValues = Object.values(resourceSources);
-  const allowedExternalHosts = new Set(["www.cdc.gov", "dieudonnematch.org", "www.in.gov", "mchb.hrsa.gov", "postpartum.net", "www.feedingamerica.org", "findahealthcenter.hrsa.gov"]);
+  const allowedExternalHosts = new Set(["www.cdc.gov", "dieudonnematch.org", "www.in.gov", "mchb.hrsa.gov", "postpartum.net", "www.feedingamerica.org", "findahealthcenter.hrsa.gov", "www.4kira4dads.com"]);
   const allowedInternalPrefix = "/partner-dashboard/guides/";
 
   for (const source of sourceValues) {

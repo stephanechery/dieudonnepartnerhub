@@ -14,7 +14,7 @@ test("every evidence finding leads to an existing resource section", () => {
 
 test("help destinations vary with the need instead of defaulting to warning signs", () => {
   assert.equal(evidenceResourcePaths["national-postpartum-depression"], "mental-health");
-  assert.equal(evidenceResourcePaths["national-care-deserts"], "benefits-planning");
+  assert.equal(evidenceResourcePaths["national-care-deserts"], "practical-support");
   assert.equal(evidenceResourcePaths["national-racial-disparity"], "practical-support");
   assert.equal(evidenceResourcePaths["national-preventability"], "warning-signs");
   const page = fs.readFileSync(new URL("../pages/MaternalDataPage.jsx", import.meta.url), "utf8");

@@ -1,4 +1,6 @@
 export const resourceSources = {
+  psiLoss: { label: "PSI · Loss and grief support", href: "https://postpartum.net/get-help/loss-grief-in-pregnancy-postpartum/", kind: "external", checkedOn: "2026-11-01" },
+  fatherEducation: { label: "4Kira4Dads · Father education", href: "https://www.4kira4dads.com/news/quarter-2", kind: "external", checkedOn: "2026-11-01" },
   foodBank: { label: "Feeding America · Find a food bank", href: "https://www.feedingamerica.org/find-your-local-foodbank", kind: "external", checkedOn: "2026-10-02", region: "United States" },
   healthCenter: { label: "HRSA · Find a Health Center", href: "https://findahealthcenter.hrsa.gov/", kind: "external", checkedOn: "2026-10-02", region: "United States" },
   transportation: { label: "Indiana Medicaid · Member resources", href: "https://www.in.gov/medicaid/members/member-resources/", kind: "external", checkedOn: "2026-10-02", region: "Indiana" },
@@ -182,6 +184,12 @@ export const resourceSections = [
     tone: "mental",
     resources: [
       resource({
+        id: "loss-grief", title: "Support after pregnancy or infant loss",
+        description: "PSI lists grief support groups and support contacts for bereaved parents. Open the provider page to check current options and registration. This is not emergency care.",
+        source: resourceSources.psiLoss,
+        actions: [{ label: "Explore grief support", href: resourceSources.psiLoss.href, kind: "external" }],
+      }),
+      resource({
         id: "dad-support", title: "Support for dads",
         description: "PSI offers peer support and resources for dads. Check current group times and registration. This is not emergency care.",
         source: resourceSources.psiDads,
@@ -303,6 +311,12 @@ export const resourceSections = [
       "Partner Hub can help you prepare questions for an employer, insurer, or care team. Eligibility and local contacts still need confirmation from the responsible organization.",
     tone: "planning",
     resources: [
+      resource({
+        id: "father-education", title: "Father-focused learning with 4Kira4Dads",
+        description: "Explore their published father-education program overview, then check the learning hub for current courses and account requirements. External education, not a Partner Hub service or referral.",
+        source: resourceSources.fatherEducation,
+        actions: [{ label: "Explore father education", href: resourceSources.fatherEducation.href, kind: "external" }],
+      }),
       resource({
         id: "indiana-wic",
         title: "Indiana WIC · Application help",

@@ -3,6 +3,8 @@ import { ArrowRight, ExternalLink, GraduationCap, HeartHandshake } from "lucide-
 import PartnerPlatformDiscovery from "../components/PartnerPlatformDiscovery";
 import ProgressBar from "../components/ProgressBar";
 import TodaySupportCard from "../components/TodaySupportCard";
+import { preparationForContext } from "../data/supportPathways";
+import { getTodaySupportPlan } from "../data/todaySupport";
 
 const DOULA_MATCH_URL = "https://dieudonnematch.org";
 
@@ -24,6 +26,7 @@ export default function OverviewPage({
 }) {
   const tx = (value) => translateText(value);
   const nextLesson = metrics.nextLesson;
+  const preparation = preparationForContext(getTodaySupportPlan(profile?.todaySupport?.currentPlanId)?.context);
 
   return (
     <div className="space-y-4 sm:space-y-5">
@@ -35,6 +38,8 @@ export default function OverviewPage({
         darkMode={darkMode}
         translateText={translateText}
       />
+
+      {preparation && <a href={`/partner-dashboard/resources/path-${preparation.id}`} className="flex min-h-12 items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm font-bold text-cyan-800 hover:bg-cyan-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500 dark:text-cyan-200 dark:hover:bg-slate-800"><span>{tx("Prepare for what comes next")}: {tx(preparation.title)}</span><ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" /></a>}
 
       <section
         className={`rounded-[1.6rem] border p-4 shadow-sm sm:p-5 ${

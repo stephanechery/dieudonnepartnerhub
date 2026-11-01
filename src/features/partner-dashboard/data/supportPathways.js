@@ -5,6 +5,20 @@ export const supportPathways = [
   { id: "advocacy", title: "Help her be heard", evidenceId: "partner-listening", resources: ["support-person-role", "cdc-hear-her"], steps: ["Listen without minimizing her concerns.", "Help her describe what has changed to the care team.", "For urgent warning signs, seek medical care immediately."] },
 ];
 
+// Preparation packs extend the same routes and existing content, not Training progress.
+export const preparationPacks = {
+  appointment: { intro: "Bring her priorities into the conversation, then agree on the next step.", prompt: "Which questions would you like me to help you ask?", checklist: ["Ask which questions she wants help raising.", "Offer to attend and help her ask questions.", "Confirm the follow-up plan with the care team."] },
+  birth: { intro: "Prepare together before birth, while keeping her preferences at the center.", prompt: "How would you like me to support you during birth?", checklist: ["Review her support preferences together.", "Confirm the birth location and transport plan with the care team.", "Review leave and coverage questions before birth."] },
+  postpartum: { intro: "Share the practical work and make room for rest, follow-up care and emotional support.", prompt: "What can I take off your plate today?", checklist: ["Agree who can help with meals and household tasks.", "Support her feeding choices and follow-up care.", "Ask how she is feeling and listen without judgment."] },
+};
+supportPathways.splice(1, 0,
+  { id: "birth", title: "Preparing for birth", evidenceId: "partner-labor-support", resources: ["birth-companion", "parental-leave", "insurance-benefits"], steps: preparationPacks.birth.checklist },
+  { id: "postpartum", title: "The first weeks at home", evidenceId: "partner-practical-help", resources: ["support-village", "feeding-support", "maternal-mental-health-hotline", "dad-support"], steps: preparationPacks.postpartum.checklist },
+);
+
+export const preparationForContext = context => context === "urgent" ? null
+  : supportPathways.find(path => path.id === ({ "labor-prep": "birth", postpartum: "postpartum", feeding: "postpartum", "home-setup": "postpartum", mood: "postpartum" }[context] || "appointment"));
+
 export const pathwayForEvidence = id => supportPathways.find(path => path.evidenceId === id || (path.id === "advocacy" && ["national-unspoken-concerns", "national-care-discrimination"].includes(id)));
 
 export const evidenceLimit = highlight => {
